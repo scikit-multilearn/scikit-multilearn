@@ -10,10 +10,6 @@ class RakelD(object):
         super(RakelD, self).__init__()
         self.classifier = classifier
         self.labelset_size = labelset_size
-        self.clean()
-
-    def clean(self):
-        self.samples = []
 
     def sample_models(self, label_count):
         label_sets = []
