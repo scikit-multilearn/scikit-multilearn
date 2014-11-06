@@ -2,13 +2,13 @@ import copy
 import numpy as np
 import random
 
+class RakelO(object):
+    """docstring for RakelO"""
 
-class RakelD(object):
-    """docstring for RakelD"""
-
-    def __init__(self, classifier=None, labelset_size=None):
-        super(RakelD, self).__init__()
+    def __init__(self, classifier=None, models=None, labelset_size=None):
+        super(RakelO, self).__init__()
         self.classifier = classifier
+        self.models = np.min(models)
         self.labelset_size = labelset_size
 
     def sample_models(self):
@@ -17,13 +17,9 @@ class RakelD(object):
         self.model_count = np.ceil(self.label_count/self.labelset_size)
 
         while len(label_sets) <= self.model_count:
-            if len(free_labels) < self.labelset_size:
-                label_sets.append(free_labels)
-                continue
-
             label_set = random.sample(free_labels, self.labelset_size)
-            free_labels = list(set(free_labels).difference(set(label_set)))
-            label_sets.append(label_set)
+            if label_set not in label_sets:
+                label_sets.append(label_set)
 
         self.label_sets = label_sets
 
@@ -43,13 +39,27 @@ class RakelD(object):
 
         return self
 
+    def handle_voting(self, input_result):
+        result = []
+        sums  = [0.0 for i in xrange(self.label_count)]
+        votes = [0.0 for i in xrange(self.label_count)]
+        for i in xrange(self.model_count):
+            for label in input_result[i]:
+                sums[label] += 1.0
+
+            for label in self.label_sets[i]:
+                votes[label] += 1.0
+
+        for i in xrange(self.label_count):
+            if sums[i]/votes[i] > 0.5:
+                result.append(i)
+
     def predict(self, X):
-        results = np.zeros((len(X), self.label_count), dtype=numpy.int)
+        results = []
         for i in xrange(self.model_count):
             label_set = np.array(self.label_sets[i])
-            for y in self.classifiers[i].predict(X):
-                
-
+            result = [label_set[assigned_labels] for assigned_labels in self.classifiers[i].predict(X)]
+            results.append(result)
 
         row_results = []
         for row in len(X):
@@ -57,5 +67,3 @@ class RakelD(object):
             row_results.append(row_result)
 
         return row_results
-
-
