@@ -1,3 +1,4 @@
+from ..base import MLClassifierBase
 import copy
 import numpy as np
 import random
@@ -6,9 +7,8 @@ import random
 class RakelD(object):
     """docstring for RakelD"""
 
-    def __init__(self, classifier=None, labelset_size=None):
-        super(RakelD, self).__init__()
-        self.classifier = classifier
+    def __init__(self, classifier = None, labelset_size = None):
+        super(RakelD, self).__init__(classifier)
         self.labelset_size = labelset_size
 
     def sample_models(self):

@@ -1,13 +1,13 @@
+from ..base import MLClassifierBase
 import copy
 import numpy as np
 import random
 
-class RakelO(object):
+class RakelO(MLClassifierBase):
     """docstring for RakelO"""
 
-    def __init__(self, classifier=None, models=None, labelset_size=None):
-        super(RakelO, self).__init__()
-        self.classifier = classifier
+    def __init__(self, classifier = None, models = None, labelset_size = None):
+        super(RakelO, self).__init__(classifier)
         self.models = np.min(models)
         self.labelset_size = labelset_size
 

@@ -1,9 +1,8 @@
-class LabelPowerset(object):
+class LabelPowerset(MLClassifierBase):
     """docstring for LabelPowerset"""
-
-    def __init__(self, classifier=None):
-        super(LabelPowerset, self).__init__()
-        self.classifier = classifier
+    
+    def __init__(self, classifier = None):
+        super(LabelPowerset, self).__init__(classifier)
         self.clean()
 
     def clean(self):
