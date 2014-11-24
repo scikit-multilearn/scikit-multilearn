@@ -16,8 +16,8 @@ class LabelPowerset(MLClassifierBase):
         for label_vector in y:
             label_string = str(label_vector)
             if label_string not in self.unique_combinations:
-                self.unique_combinations[label_string] = self.last_id
-                self.reverse_combinations.append(label_string)
+                self.unique_combinations[label_string] = last_id
+                self.reverse_combinations.append(label_vector)
                 last_id += 1
 
             train_vector.append(self.unique_combinations[label_string])
@@ -29,5 +29,5 @@ class LabelPowerset(MLClassifierBase):
 
     def predict(self, X):
         lp_prediction = self.classifier.predict(X)
-        transformed_to_original_classes = [eval(self.reverse_combinations[lp_class_id]) for lp_class_id in lp_prediction]
+        transformed_to_original_classes = [np.array(self.reverse_combinations[lp_class_id]) for lp_class_id in lp_prediction]
         return transformed_to_original_classes
