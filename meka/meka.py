@@ -1,13 +1,14 @@
 import commands
+import numpy as np
 # import tempfile
 
 class Meka(object):
     """docstring for MekaClassifier"""
 
-    def __init__(self, meka_classifier=None, weka_classifier=None, threshold=0, verbosity=5,
-                 meka_classpath="/home/niedakh/pwr/old/meka-1.5/lib/"):
+    def __init__(self, meka_classifier = None, weka_classifier = None, java_command = '/usr/bin/java', meka_classpath = "/home/niedakh/icml/meka-1.7/lib/", threshold=0, verbosity=6):
         super(Meka, self).__init__()
 
+        self.java_command = java_command
         self.classpath = meka_classpath
         self.meka_classifier = meka_classifier
         self.threshold = threshold
@@ -18,19 +19,18 @@ class Meka(object):
         self.results = None
         self.statistics = None
 
-    def run(self, train_file, test_file, input_instance_count, input_features_count, label_count):
-        self.input_instance_count = input_instance_count
-        self.input_features_count = input_features_count
-        self.label_count = label_count
+    def run(self, train_file, test_file):
         self.output = None
         self.warnings = None
 
         # meka_command_string = 'java -cp "/home/niedakh/pwr/old/meka-1.5/lib/*" meka.classifiers.multilabel.MULAN -S RAkEL2  
         # -threshold 0 -t {train} -T {test} -verbosity {verbosity} -W weka.classifiers.bayes.NaiveBayes'
         # meka.classifiers.multilabel.LC, weka.classifiers.bayes.NaiveBayes
-        meka_command_string = 'java -cp "{classpath}*" {meka} -threshold {threshold} -t {train} -T {test} -verbosity {verbosity} -W {weka}'
+        meka_command_string = '{java} -cp "{classpath}*" {meka} -threshold {threshold} -t {train} -T {test} -verbosity {verbosity} -W {weka}'
+        
 
         input_files = {
+            'java': self.java_command,
             'meka': self.meka_classifier,
             'weka': self.weka_classifier,
             'train': train_file,
@@ -40,7 +40,12 @@ class Meka(object):
             'classpath': self.classpath
         }
         meka_command = meka_command_string.format(**input_files)
+        print(meka_command)
         status, output = commands.getstatusoutput(meka_command)
+        
+        if status != 0:
+            raise Exception, output
+        
         self.output = output
         self.parse_output()
         return self.results, self.statistics
@@ -51,26 +56,25 @@ class Meka(object):
             self.statistics = None
             return None
 
-        split_position = self.output.find('\n    0') + 1
-        self.output = self.output[split_position:]
+        predictions_split_head = "|==== PREDICTIONS ===============>\n"
+        predictions_split_foot = "|==============================<\n"
 
-        if split_position > 0:
-            self.warnings = self.output[:split_position]
+        self.warnings = self.output.split(predictions_split_head)[0]
 
-        self.parse_classification_results()
-        self.parse_statistics()
+        # predictions, first split
+        predictions = self.output.split(predictions_split_head)[1].split(predictions_split_foot)[0]
+        # then clean up and remove empty lines
+        predictions = filter(lambda x: len(x), predictions.replace('\n\n','\n').split('\n'))
+        # parse into list of row classifications
+        self.results = np.array(
+            [map(lambda x: int(float(x)),
+                 item.split('[ ')[2].split(' ]')[0].replace(',','.').split(' '))
+             for item in predictions])
 
-    def parse_classification_results(self):
-        self.results = [
-            self.output.split('\n')[i].split('[')[2].strip('] ').split(' ')
-            for i in range(self.input_instance_count)
-        ]
+        # split, cleanup, remove empty lines
+        statistics = self.output.split(predictions_split_head)[1].split(predictions_split_foot)[1]
+        statistics = filter(lambda x: len(x), statistics.replace(' ','').replace('\n\n','\n').split('\n'))
 
-        assert len(self.results) == self.input_instance_count
+        # remove per label stats, they can be calculated using python later, parse into a dict
+        self.statistics = dict([item.split(':') for item in statistics if ']:' not in item])
 
-
-    def parse_statistics(self):
-        self.statistics = dict(
-            item.split(':') for item in
-            self.output.replace(' ', '').replace('\n\n', '\n').split('\n')[self.input_instance_count:] if len(item) > 0
-        )
