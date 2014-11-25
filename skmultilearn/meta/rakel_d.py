@@ -1,10 +1,7 @@
-from ..base import MLClassifierBase
 import copy
 import numpy as np
-import random
 
-
-class RakelD(object):
+class RakelD(MLClassifierBase):
     """docstring for RakelD"""
 
     def __init__(self, classifier = None, labelset_size = None):
@@ -14,9 +11,11 @@ class RakelD(object):
     def sample_models(self):
         label_sets = []
         free_labels = xrange(self.label_count)
-        self.model_count = np.ceil(self.label_count/self.labelset_size)
+        self.model_count = int(np.ceil(self.label_count/self.labelset_size))
 
         while len(label_sets) <= self.model_count:
+            if len(free_labels) == 0:
+                break
             if len(free_labels) < self.labelset_size:
                 label_sets.append(free_labels)
                 continue
@@ -36,26 +35,22 @@ class RakelD(object):
         self.label_count = len(y[0])
         self.sample_models()
         for i in xrange(self.model_count):
-            classifier = copy.copy(self.classifier)
-            y_subset = self.subset(y,self.label_sets[i])
+            classifier = copy.deepcopy(self.classifier)
+            y_subset = self.generate_data_subset(y,self.label_sets[i])
             classifier.fit(X,y_subset)
             self.classifiers.append(classifier)
 
         return self
 
     def predict(self, X):
-        results = np.zeros((len(X), self.label_count), dtype=numpy.int)
-        for i in xrange(self.model_count):
-            label_set = np.array(self.label_sets[i])
-            for y in self.classifiers[i].predict(X):
-                
+        input_rows = len(X)
+        predictions = [self.classifiers[i].predict(X) for i in xrange(self.model_count)]
+        result = np.zeros((input_rows, self.label_count))
 
-
-        row_results = []
-        for row in len(X):
-            row_result = [results[i][row] for i in xrange(self.model_count)]
-            row_results.append(row_result)
-
-        return row_results
-
-
+        for row in xrange(input_rows):
+            for model in xrange(self.model_count):
+                for label_position in xrange(len(self.label_sets[model])):
+                    if predictions[model][row][label_position] == 1:
+                        label_id = self.label_sets[model][label_position]
+                        result[row][label_id] = 1
+        return result
