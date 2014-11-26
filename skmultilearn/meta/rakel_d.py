@@ -1,3 +1,4 @@
+from ..base import MLClassifierBase
 import copy
 import numpy as np
 
