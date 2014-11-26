@@ -1,3 +1,6 @@
+from ..base import MLClassifierBase
+import numpy as np
+
 class LabelPowerset(MLClassifierBase):
     """docstring for LabelPowerset"""
     
