@@ -21,10 +21,6 @@ class BinaryRelevance(MLClassifierBase):
 
         return self
 
-    def generate_data_subset(self, y, labels):
-        return [row[labels] for row in y]
-
-
     def predict(self, X):
         result = np.zeros((len(X), self.label_count), dtype='i8')
         

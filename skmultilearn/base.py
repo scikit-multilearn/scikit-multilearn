@@ -10,6 +10,9 @@ class MLClassifierBase(object):
 	def clean(self):
 		pass
 
+	def generate_data_subset(self, y, labels):
+        return [row[labels] for row in y]
+
 	def fit(self, X, y):
 		raise MethodNotImplementedException("In MLClassifierBase::fit()")
 

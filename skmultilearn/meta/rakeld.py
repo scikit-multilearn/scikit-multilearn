@@ -27,10 +27,6 @@ class RakelD(MLClassifierBase):
 
         self.label_sets = label_sets
 
-    def generate_data_subset(self, y, labels):
-        return [row[labels] for row in y]
-
-
     def fit(self, X, y):
         self.classifiers = []
         self.label_count = len(y[0])

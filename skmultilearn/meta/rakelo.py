@@ -22,10 +22,6 @@ class RakelO(MLClassifierBase):
 
         self.label_sets = label_sets
 
-    def generate_data_subset(self, y, labels):
-        return [row[labels] for row in y]
-
-
     def fit(self, X, y):
         self.classifiers = []
         self.label_count = len(y[0])
@@ -37,21 +33,6 @@ class RakelO(MLClassifierBase):
             self.classifiers.append(classifier)
 
         return self
-
-    def handle_voting(self, input_result):
-        result = []
-        sums  = [0.0 for i in xrange(self.label_count)]
-        votes = [0.0 for i in xrange(self.label_count)]
-        for i in xrange(self.model_count):
-            for label in input_result[i]:
-                sums[label] += 1.0
-
-            for label in self.label_sets[i]:
-                votes[label] += 1.0
-
-        for i in xrange(self.label_count):
-            if sums[i]/votes[i] > 0.5:
-                result.append(i)
 
     def predict(self, X):
         predictions = [c.predict(X) for c in self.classifiers]
