@@ -5,6 +5,7 @@ class MLClassifierBase(object):
  
     Parameters
     ----------
+
     classifier : scikit classifier type
         The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
     """
@@ -15,6 +16,7 @@ class MLClassifierBase(object):
 
     def generate_data_subset(self, y, labels):
         """This function subsets the array of binary label vectors to include only certain labels. 
+
         Parameters
         ----------
 
@@ -26,6 +28,7 @@ class MLClassifierBase(object):
 
         Returns
         -------
+
         multi-label binary label vector : array-like of array-likes of {0,1}
             array of binary label vectors including label data only for labels from parameter labels
         """
@@ -52,6 +55,7 @@ class MLClassifierBase(object):
 
     def predict(self, X):
         """Abstract class to implement to perform classification on an array of test vectors X.
+
         Parameters
         ----------
         
@@ -60,6 +64,7 @@ class MLClassifierBase(object):
 
         Returns
         -------
+
         y : array-like, shape = [n_samples, n_labels]
             Binary label vectors with 1 if label should be applied and 0 if not. n_labels is number of labels in the 
             multi-label instance that the classifier was fit to.

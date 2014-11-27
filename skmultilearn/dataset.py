@@ -6,6 +6,30 @@ import numpy as np
 class Dataset(object):
     @classmethod
     def load_arff_to_numpy(cls, filename, labelcount, endian = "big"):
+        """Method for loading ARFF files as numpy array
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to ARFF file
+        
+        labelcount: integer
+            Number of labels in the ARFF file
+
+        endian: string{"big", "little"}
+            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
+            or at the end ("little" endianness, MULAN format)
+
+        Returns
+        -------
+        
+        data: dictionary {'X': array-like of array-likes, 'y': array-like of binary label vectors }
+            The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
+            and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
+            then the input vector has label no. 5) 
+
+        """
         arff_frame = arff.load(open(filename ,'rb'))
         input_features_count = len(arff_frame['data'][0]) - labelcount
         input_space = None
@@ -25,6 +49,21 @@ class Dataset(object):
 
     @classmethod
     def save_dataset_dump(cls, filename, input_space, labels):
+        """Saves a compressed data set dump
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to dump file, if without .bz2, the .bz2 extension will be appended.
+
+        input_space: array-like of array-likes
+            Input space array-like of input feature vectors
+
+        labels: array-like of binary label vectors
+            Array-like of labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
+            then the input vector has label no. 5)
+        """
         if filename[-4:] != '.bz2':
             filename += ".bz2"
 
@@ -33,6 +72,23 @@ class Dataset(object):
 
     @classmethod
     def load_dataset_dump(cls, filename):
+        """Loads a compressed data set dump
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to dump file, if without .bz2, the .bz2 extension will be appended.
+
+        Returns
+        -------
+
+        data: dictionary {'X': array-like of array-likes, 'y': array-like of binary label vectors }
+            The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
+            and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
+            then the input vector has label no. 5) 
+
+        """
         data = None
 
         if filename[-4:] != '.bz2':

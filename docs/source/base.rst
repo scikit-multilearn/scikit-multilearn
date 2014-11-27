@@ -12,3 +12,5 @@ The predict method
 ------------------
 
 The ``predict(self ,X)`` expects an array-like of input feature vectors (rows) ``X`` that are to be classified. It should return an array-like of binary label vectors as described in :ref:`datasets`.
+
+

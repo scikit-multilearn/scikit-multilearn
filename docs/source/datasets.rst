@@ -4,10 +4,22 @@ Datasets: loading data sets for scikit-multilearn
 
 Loading from ARFF
 -----------------
-The class ``ArffHandler`` allows loading data from ``WEKA``, ``MULAN`` or ``MEKA`` provided data sets in `ARFF` format. The module depends on ``liac-arff`1 and apart from the file path it takes two arguments:
+The class :meth:`skmultilearn.dataset.Dataset` allows loading data from ``WEKA``, ``MULAN`` or ``MEKA`` provided data sets in `ARFF` format. The module depends on `liac-arff <https://pypi.python.org/pypi/liac-arff>`_ and apart from the file path it takes two arguments:
 
 - labelcount: integer, the number of labels in the data set
 - endian: enum{"big", "little"}: defiens whether to look for labels at the beginning of attributes in the ARFF file ("big" endian) such as the files used by MEKA or at the end ("little") endian such as the MULAN files.
+
+Example code for converting ARFF file to data dumps:
+
+.. code-block:: python
+
+	from skmultilearn.dataset import Dataset
+
+	input_features, labels = Dataset.load_arff_to_numpy("path_to/file.arff", labelcount, "big")
+
+	# will be saved to "path_to/output.dump.bz2"
+	Dataset.save_dataset_dump("path_to/output.dump", input_features, labels)
+
 
 
 Scikit-multilearn data set format
@@ -20,4 +32,32 @@ ex. a two-object set with each row being a small 1px x 1px image with rgb channe
 - y: the array-like of vector-likes, i.e. the array of binary label vectors of the same length (i.e. the label count) ex, for 3 labels: ``[[1,0,1], [0,1,0]]``
 
 
-The ``scikit-multilearn`` provided data sets are produced using ``ArffHandler`` and ``Dataset`` clasess and contain a dictionary with two keys: ``X``, ``y``, containing a data set in the format described above. The data sets are ``pickle`` dumps compressed using the ``bz2`` module. They can be loaded using the ``Dataset`` class.
+The ``scikit-multilearn`` provided data sets are produced using :meth:`skmultilearn.dataset.Dataset` class and contain a dictionary with two keys: ``X``, ``y``, containing a data set in the format described above. The data sets are ``pickle`` dumps compressed using the ``bz2`` module. They can be loaded using the ``Dataset`` class.
+
+Example use case of the data sets for classification:
+
+.. code-block:: python
+
+	from skmultilearn.dataset import Dataset
+	from skmultilearn.meta.br import BinaryRelevance
+	from sklearn.naive_bayes import GaussianNB
+	import sklearn.metrics
+
+	# load data
+	train_set = Dataset.load_dataset_dump("data/scene-train.dump.bz2")
+	test_set = Dataset.load_dataset_dump("data/scene-test.dump.bz2")
+
+	# initialize Binary Relevance multi-label classifier with gaussian naive bayes base classifier
+	classifier = BinaryRelevance(GaussianNB())
+	
+	# train
+	classifier.fit(train_set['X'],train_set['y'])
+	
+	# predict
+	predictions = classifier.predict(test_set['X'])
+
+	# measure
+	print(sklearn.metrics.hamming_loss(test_set['y'], predictions))
+
+
+
