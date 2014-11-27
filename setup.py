@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from distutils.core import setup
 
 setup(
@@ -6,8 +7,24 @@ setup(
     packages=['skmultilearn','meka',],
     author=u'Piotr Szymański',
     author_email='niedakh@gmail.com',
-    license='GPL',
+    license='BSD',
     long_description=open('README.md').read(),
     url='http://scikit-multilearn.github.io/scikit-multilearn/',
     description= 'A set of python modules for multi-label classification',
+    classifiers=[
+          'Development Status :: 4 - Beta',
+          'Environment :: Console',
+          'Environment :: Web Environment',
+          'Intended Audience :: Developers',
+          'Intended Audience :: Education',
+          'Intended Audience :: Science/Research',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: MacOS :: MacOS X',
+          'Operating System :: Microsoft :: Windows',
+          'Operating System :: POSIX',
+          'Programming Language :: Python',
+          'Topic :: Scientific/Engineering',
+          'Topic :: Scientific/Engineering :: Information Analysis',
+          'Topic :: Scientific/Engineering :: Bio-Informatics',
+          ],
 )

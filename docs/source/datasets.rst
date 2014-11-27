@@ -12,7 +12,7 @@ The class ``ArffHandler`` allows loading data from ``WEKA``, ``MULAN`` or ``MEKA
 
 Scikit-multilearn data set format
 ---------------------------------
-Following ``scikit-learn``'s approach we assume multilabel data to be divided into two sets:
+Following ``scikit-learn``'s `approach <http://scikit-learn.org/stable/modules/multiclass.html#multilabel-classification-format>`_ we assume multilabel data to be divided into two sets:
 
 - X: the array-like of vector-likes, i.e. the array of row vectors that consist of input features (same length, i.e. feature/attribute count), 
 ex. a two-object set with each row being a small 1px x 1px image with rgb channels (3 int8 describing red,blue,green colors per pixel): ``[[128,10,10,20,30,128], [10,155,30,10,155,10]]``

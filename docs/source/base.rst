@@ -1,0 +1,14 @@
+Implementing a multi-label classifier
+=====================================
+
+To implement a multi-label classifier you need to subclass ``MLClassifierBase`` from ``skmultilearn.base``. The constructor takes the underlying base classifier and sets it to ``self.classifier`` for future deep copying and access. In order to implement a new classifier you should implement the ``fit(self, X, y)`` and ``predict(self, X)`` methods.
+
+The fit method
+--------------
+
+The ``fit(self, X, y)`` expects classifier training data represented as an array-like of input feature vectors (rows) ``X`` and an array-like of binary label vectors as described in :ref:`datasets`. It should return ``self`` after the classifier has been fitted to training data.
+
+The predict method
+------------------
+
+The ``predict(self ,X)`` expects an array-like of input feature vectors (rows) ``X`` that are to be classified. It should return an array-like of binary label vectors as described in :ref:`datasets`.
