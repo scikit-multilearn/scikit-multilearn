@@ -13,12 +13,13 @@ Using the interface
 To use the interface class start with importing skmultilearn's module, then create an object of the ``Meka`` class using the constructor, such as in the example:
 
 
-.. code-block:
+.. code-block:: python
+
 	import meka from meka
 	meka = meka.Meka( 
 		meka_classifier = "meka.classifiers.multilabel.LC", 
 		weka_classifier = "weka.classifiers.bayes.NaiveBayes",
-		meka_classpath = "/home/niedakh/pwr/old/meka-1.5/lib/", 
+		meka_classpath = "/opy/meka-1.7/lib/", 
 		java_command = '/usr/bin/java')
 
 Where:
