@@ -4,7 +4,11 @@ import numpy as np
 import random
 
 class RakelO(MLClassifierBase):
-    """docstring for RakelO"""
+    """
+
+    Overlapping RAndom k-labELsets multi-label classifier.
+
+    """
 
     def __init__(self, classifier = None, models = None, labelset_size = None):
         super(RakelO, self).__init__(classifier)
@@ -12,6 +16,7 @@ class RakelO(MLClassifierBase):
         self.labelset_size = labelset_size
 
     def sample_models(self):
+        """Internal method for sampling k-labELsets"""
         label_sets = []
         free_labels = xrange(self.label_count)
         
@@ -23,6 +28,7 @@ class RakelO(MLClassifierBase):
         self.label_sets = label_sets
 
     def fit(self, X, y):
+        """Fit classifier according to X,y, see base method's documentation."""
         self.classifiers = []
         self.label_count = len(y[0])
         self.sample_models()
@@ -35,6 +41,7 @@ class RakelO(MLClassifierBase):
         return self
 
     def predict(self, X):
+        """Predict labels for X, see base method's documentation."""
         predictions = [c.predict(X) for c in self.classifiers]
         votes = np.zeros((len(X),self.label_count), dtype='i8')
         for row in xrange(len(X)):

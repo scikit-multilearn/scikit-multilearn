@@ -12,8 +12,10 @@ Contents:
    :maxdepth: 2
 
    datasets
+   classify
    base
    meka
+   api/modules
 
 
 Indices and tables

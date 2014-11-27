@@ -1,7 +1,7 @@
 Implementing a multi-label classifier
 =====================================
 
-To implement a multi-label classifier you need to subclass ``MLClassifierBase`` from ``skmultilearn.base``. The constructor takes the underlying base classifier and sets it to ``self.classifier`` for future deep copying and access. In order to implement a new classifier you should implement the ``fit(self, X, y)`` and ``predict(self, X)`` methods.
+To implement a multi-label classifier you need to subclass :meth:`skmultilearn.base.MLClassifierBase`. The constructor takes the underlying base classifier and sets it to ``self.classifier`` for future deep copying and access. In order to implement a new classifier you should implement the :meth:`skmultilearn.base.MLClassifierBase.fit` and :meth:`skmultilearn.base.MLClassifierBase.predict` methods.
 
 The fit method
 --------------

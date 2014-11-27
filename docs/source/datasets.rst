@@ -34,30 +34,9 @@ ex. a two-object set with each row being a small 1px x 1px image with rgb channe
 
 The ``scikit-multilearn`` provided data sets are produced using :meth:`skmultilearn.dataset.Dataset` class and contain a dictionary with two keys: ``X``, ``y``, containing a data set in the format described above. The data sets are ``pickle`` dumps compressed using the ``bz2`` module. They can be loaded using the ``Dataset`` class.
 
-Example use case of the data sets for classification:
-
+Example use case of loading data sets:
 .. code-block:: python
 
 	from skmultilearn.dataset import Dataset
-	from skmultilearn.meta.br import BinaryRelevance
-	from sklearn.naive_bayes import GaussianNB
-	import sklearn.metrics
 
-	# load data
 	train_set = Dataset.load_dataset_dump("data/scene-train.dump.bz2")
-	test_set = Dataset.load_dataset_dump("data/scene-test.dump.bz2")
-
-	# initialize Binary Relevance multi-label classifier with gaussian naive bayes base classifier
-	classifier = BinaryRelevance(GaussianNB())
-	
-	# train
-	classifier.fit(train_set['X'],train_set['y'])
-	
-	# predict
-	predictions = classifier.predict(test_set['X'])
-
-	# measure
-	print(sklearn.metrics.hamming_loss(test_set['y'], predictions))
-
-
-

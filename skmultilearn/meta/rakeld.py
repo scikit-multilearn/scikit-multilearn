@@ -3,13 +3,14 @@ import copy
 import numpy as np
 
 class RakelD(MLClassifierBase):
-    """docstring for RakelD"""
+    """Distinct RAndom k-labELsets multi-label classifier."""
 
     def __init__(self, classifier = None, labelset_size = None):
         super(RakelD, self).__init__(classifier)
         self.labelset_size = labelset_size
 
     def sample_models(self):
+        """Internal method for sampling k-labELsets"""
         label_sets = []
         free_labels = xrange(self.label_count)
         self.model_count = int(np.ceil(self.label_count/self.labelset_size))
@@ -28,6 +29,7 @@ class RakelD(MLClassifierBase):
         self.label_sets = label_sets
 
     def fit(self, X, y):
+        """Fit classifier according to X,y, see base method's documentation."""
         self.classifiers = []
         self.label_count = len(y[0])
         self.sample_models()
@@ -40,6 +42,7 @@ class RakelD(MLClassifierBase):
         return self
 
     def predict(self, X):
+        """Predict labels for X, see base method's documentation."""
         input_rows = len(X)
         predictions = [self.classifiers[i].predict(X) for i in xrange(self.model_count)]
         result = np.zeros((input_rows, self.label_count))

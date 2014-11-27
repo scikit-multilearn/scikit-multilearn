@@ -2,7 +2,7 @@ from ..base import MLClassifierBase
 import numpy as np
 
 class LabelPowerset(MLClassifierBase):
-    """docstring for LabelPowerset"""
+    """Label Powerset multi-label classifier."""
     
     def __init__(self, classifier = None):
         super(LabelPowerset, self).__init__(classifier)
@@ -14,6 +14,7 @@ class LabelPowerset(MLClassifierBase):
         self.labelcount = 0
 
     def fit(self, X, y):
+        """Fit classifier according to X,y, see base method's documentation."""
         self.clean()
         last_id = 0
         self.labelcount = len(y[0])
@@ -33,6 +34,7 @@ class LabelPowerset(MLClassifierBase):
 
 
     def predict(self, X):
+        """Predict labels for X, see base method's documentation."""
         lp_prediction = self.classifier.predict(X)
         
         transformed_to_original_classes = [np.array(self.reverse_combinations[lp_class_id]) for lp_class_id in lp_prediction]
