@@ -32,17 +32,14 @@ class LabelDistinctCommunitiesClassifier(LabelCooccurenceClassifier):
         self.label_sets = None
 
         if self.is_weighted:
-            self.label_sets = self.community_detection_method(self.coocurence_graph, weights = self.weights)
+            self.label_sets = self.community_detection_method(self.coocurence_graph, self.weights)
         else:
             self.label_sets = self.community_detection_method(self.coocurence_graph)
     
         self.model_count = len(self.label_sets)
         return self
-        
 
-    def fit(self, X, y):
-        """Fit classifier according to X,y, see base method's documentation."""
-        self.generate_clustering(y)
+    def fit_only(self, X, y):
         self.classifiers = []
 
         for i in xrange(self.model_count):
@@ -51,7 +48,12 @@ class LabelDistinctCommunitiesClassifier(LabelCooccurenceClassifier):
             classifier.fit(X,y_subset)
             self.classifiers.append(classifier)
         return self
+        
 
+    def fit(self, X, y):
+        """Fit classifier according to X,y, see base method's documentation."""
+        self.generate_clustering(y)
+        return self.fit_only(X,y)
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
