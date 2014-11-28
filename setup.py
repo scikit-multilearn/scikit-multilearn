@@ -9,7 +9,7 @@ setup(
     author_email='niedakh@gmail.com',
     license='BSD',
     long_description=open('README.md').read(),
-    url='http://scikit-multilearn.github.io/scikit-multilearn/',
+    url='http://scikit-multilearn.github.io/',
     description= 'A set of python modules for multi-label classification',
     classifiers=[
           'Development Status :: 4 - Beta',
