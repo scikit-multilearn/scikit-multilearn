@@ -5,7 +5,7 @@ import numpy as np
 
 class Dataset(object):
     @classmethod
-    def load_arff_to_numpy(cls, filename, labelcount, endian = "big"):
+    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'i8'):
         """Method for loading ARFF files as numpy array
 
         Parameters
@@ -20,6 +20,10 @@ class Dataset(object):
         endian: string{"big", "little"}
             Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
             or at the end ("little" endianness, MULAN format)
+
+        input_feature_type: numpy.type as string
+            The desire type of the contents of the return 'X' array-likes, default 'i8', 
+            should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
 
         Returns
         -------
@@ -45,10 +49,10 @@ class Dataset(object):
             # unknown endian
             return None
 
-        return input_space, labels.astype('i8')
+        return input_space.astype(input_feature_type), labels.astype('i8')
 
     @classmethod
-    def save_dataset_dump(cls, filename, input_space, labels):
+    def save_dataset_dump    (cls, filename, input_space, labels):
         """Saves a compressed data set dump
 
         Parameters
