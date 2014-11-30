@@ -10,7 +10,10 @@ class RakelD(MLClassifierBase):
         super(RakelD, self).__init__(classifier)
         self.labelset_size = labelset_size
 
-    def sample_models(self):
+    def sample_models(self, label_count = None):
+        if label_count is not None:
+            self.label_count = label_count
+
         """Internal method for sampling k-labELsets"""
         label_sets = []
         free_labels = xrange(self.label_count)
@@ -29,11 +32,9 @@ class RakelD(MLClassifierBase):
 
         self.label_sets = label_sets
 
-    def fit(self, X, y):
-        """Fit classifier according to X,y, see base method's documentation."""
+    def fit_only(self, X, y):
+        """Fit classifier according to X,y, without resampling models."""
         self.classifiers = []
-        self.label_count = len(y[0])
-        self.sample_models()
         for i in xrange(self.model_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y,self.label_sets[i])
@@ -41,6 +42,11 @@ class RakelD(MLClassifierBase):
             self.classifiers.append(classifier)
 
         return self
+
+    def fit(self, X, y):
+        """Fit classifier according to X,y, see base method's documentation."""
+        self.sample_models(len(y[0]))
+        return self.fit_only()
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
