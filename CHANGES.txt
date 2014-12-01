@@ -1,4 +1,4 @@
-scikit-multilearn 0.0.1 (released 2014-12-01)
+scikit-multilearn -1.0.1 (released 2014-12-01)
 
 - initial release
 - support for initial set of multi-label classification methods:
@@ -6,3 +6,4 @@ scikit-multilearn 0.0.1 (released 2014-12-01)
     - RAkEL both distinct and overlapping
     - label cooccurence based distinct partitioning classifiers
 - interface to meka 1.7
+- ARFF to numpy.array convertion classes and data set manipulation
