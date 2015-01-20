@@ -46,7 +46,7 @@ class RakelD(MLClassifierBase):
     def fit(self, X, y):
         """Fit classifier according to X,y, see base method's documentation."""
         self.sample_models(len(y[0]))
-        return self.fit_only()
+        return self.fit_only(X, y)
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
