@@ -23,22 +23,23 @@ class KNearestNeighbours(MLClassifierBase):
         c = [[0] * (self.k + 1) for label in range(0, self.num_labels)]
         cn = [[0] * (self.k + 1) for label in range(0, self.num_labels)]
         for instance in range(0, self.num_instances):
-            neighbors, _ = self.knn.kneighbors(X[instance], self.k)
+            neighbors = self.knn.kneighbors(X[instance], self.k, return_distance=False)
             for label in range(0, self.num_labels):
-                delta = sum(n == 1 for n in neighbors[0])
+                delta = sum(y[neighbor][label] == 1 for neighbor in neighbors[0])
                 (c if y[instance][label] == 1 else cn)[label][delta] += 1
 
         cond_prob_true = [[0] * (self.k + 1) for label in range(0, self.num_labels)]
         cond_prob_false = [[0] * (self.k + 1) for label in range(0, self.num_labels)]
         for label in range(0, self.num_labels):
-            for neighbor in range(0, self.k):
+            for neighbor in range(0, self.k + 1):
                 cond_prob_true[label][neighbor] = (self.s + c[label][neighbor]) / (self.s * (self.k + 1) + sum(c[label]))
                 cond_prob_false[label][neighbor] = (self.s + cn[label][neighbor]) / (self.s * (self.k + 1) + sum(cn[label]))
         return cond_prob_true, cond_prob_false
 
     def fit(self, X, y):
-        self.num_labels = len(y[0])
+        self.predictions = y;
         self.num_instances = len(y)
+        self.num_labels = len(y[0])
         # Computing the prior probabilities
         self.prior_prob_true, self.prior_prob_false = self.compute_prior(y)
         # Computing the posterior probabilities
@@ -47,9 +48,9 @@ class KNearestNeighbours(MLClassifierBase):
     def predict(self, X):
         result = np.zeros((len(X), self.num_labels))
         for instance in range(0, len(X)):
-            neighbors, _ = self.knn.kneighbors(X[instance], self.k)
+            neighbors = self.knn.kneighbors(X[instance], self.k, return_distance=False)
             for label in range(0, self.num_labels):
-                delta = sum(n == 1 for n in neighbors[0])
+                delta = sum(self.predictions[neighbor][label] == 1 for neighbor in neighbors[0])
                 p_true = self.prior_prob_true[label] * self.cond_prob_true[label][delta]
                 p_false = self.prior_prob_false[label] * self.cond_prob_false[label][delta]
                 prediction = (p_true >= p_false)
