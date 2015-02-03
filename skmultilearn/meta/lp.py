@@ -3,6 +3,7 @@ import numpy as np
 
 class LabelPowerset(MLClassifierBase):
     """Label Powerset multi-label classifier."""
+    BRIEFNAME = "LP"
     
     def __init__(self, classifier = None):
         super(LabelPowerset, self).__init__(classifier)
