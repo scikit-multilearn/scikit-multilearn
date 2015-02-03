@@ -4,10 +4,10 @@ import numpy as np
 
 class BinaryRelevance(MLClassifierBase):
     """Binary Relevance multi-label classifier."""
+    BRIEFNAME = "BR"
     
     def __init__(self, classifier = None):
         super(BinaryRelevance, self).__init__(classifier)
-        self.clean()
 
     def fit(self, X, y):
         """Fit classifier according to X,y, see base method's documentation."""

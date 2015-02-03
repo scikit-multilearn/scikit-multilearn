@@ -1,16 +1,17 @@
 from ..base import MLClassifierBase
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
-import math
 
 class BinaryRelevanceKNN(MLClassifierBase):
     """Binary Relevance multi-label classifier based on k Nearest Neighbours method."""
+    BRIEFNAME = "BRkNN"
 
     EXTENSION_A = 'BRkNN-a'
     EXTENSION_B = 'BRkNN-b'
 
     def __init__(self, k = 10, extension = None):
         super(BinaryRelevanceKNN, self).__init__(self.classifiers(extension))
+        self.BRIEFNAME = extension
         self.k = k # Number of neighbours
 
     def classifiers(self, extension):

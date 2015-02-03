@@ -9,6 +9,7 @@ class Config:
     root = '.'
     meka = 'meka'
     skmultilearn = 'skmultilearn'
+    tests = 'tests'
     utils = 'utils'
 
 # #######################################################
@@ -19,10 +20,11 @@ def test():
 def clean():
     files.removeFilesRecursive(Config.meka, (lambda f: f.endswith('.pyc')))
     files.removeFilesRecursive(Config.skmultilearn, (lambda f: f.endswith('.pyc')))
+    files.removeFilesRecursive(Config.tests, (lambda f: f.endswith('.pyc')))
     files.removeFilesRecursive(Config.utils, (lambda f: f.endswith('.pyc')))
 
 def package():
-    sourceDirs = [Config.meka, Config.skmultilearn, Config.utils]
+    sourceDirs = [Config.meka, Config.skmultilearn, Config.tests, Config.utils]
     for sourceDir in sourceDirs:
         for root, dirs, files in os.walk(sourceDir):
             for dir in dirs:
@@ -40,7 +42,7 @@ def lint(full=False):
     else:
         fullReport = 'n'
 
-    config = "--rcfile ./build/pylint.config --msg-template=\"{C}:{msg_id}:{line:3d},{column:2d}:{msg}({symbol})\" -r %s %s"
+    config = "--rcfile ./utils/pylint.config --msg-template=\"{C}:{msg_id}:{line:3d},{column:2d}:{msg}({symbol})\" -r %s %s"
     for dir in sources:
         print 'lint %s' %dir
         epylint.py_run(config % (fullReport, dir), script='pylint')

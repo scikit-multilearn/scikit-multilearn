@@ -4,6 +4,7 @@ import numpy as np
 
 class KNearestNeighbours(MLClassifierBase):
     """k Nearest Neighbours multi-label classifier."""
+    BRIEFNAME = "MLkNN"
 
     def __init__(self, k = 10, s = 1.0):
         super(KNearestNeighbours, self).__init__(None)
