@@ -25,6 +25,7 @@ class BinaryRelevanceKNN(MLClassifierBase):
         self.num_instances = len(y)
         self.num_labels = len(y[0])
         self.knn = NearestNeighbors(self.k).fit(X)
+        return self
 
     def predict(self, X):
         result = np.zeros((len(X), self.num_labels), dtype='i8')

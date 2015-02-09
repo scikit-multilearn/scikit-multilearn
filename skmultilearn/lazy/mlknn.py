@@ -45,6 +45,7 @@ class KNearestNeighbours(MLClassifierBase):
         self.prior_prob_true, self.prior_prob_false = self.compute_prior(y)
         # Computing the posterior probabilities
         self.cond_prob_true, self.cond_prob_false = self.compute_cond(X, y)
+        return self
 
     def predict(self, X):
         result = np.zeros((len(X), self.num_labels), dtype='i8')
