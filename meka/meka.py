@@ -1,4 +1,4 @@
-import commands
+import subprocess
 import numpy as np
 # import tempfile
 
@@ -77,9 +77,10 @@ class Meka(object):
         }
         meka_command = meka_command_string.format(**input_files)
         print(meka_command)
-        status, output = commands.getstatusoutput(meka_command)
-        
-        if status != 0:
+        pipes = subprocess.Popen(meka_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, error = pipes.communicate()
+
+        if pipes.returncode != 0:
             raise Exception, output
         
         self.output = output
@@ -110,7 +111,7 @@ class Meka(object):
 
         # split, cleanup, remove empty lines
         statistics = self.output.split(predictions_split_head)[1].split(predictions_split_foot)[1]
-        statistics = filter(lambda x: len(x), statistics.replace(' ','').replace('\n\n','\n').split('\n'))
+        statistics = filter(lambda x: len(x), statistics.replace(' ','').replace('\r','\n').replace('\n\n','\n').split('\n'))
 
         # remove per label stats, they can be calculated using python later, parse into a dict
         self.statistics = dict([item.split(':') for item in statistics if ']:' not in item])
