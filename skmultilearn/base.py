@@ -14,7 +14,7 @@ class MLClassifierBase(object):
         super(MLClassifierBase, self).__init__()
         self.classifier = classifier
 
-    def generate_data_subset(self, y, labels):
+    def generate_data_subset(self, y, subset, axis = 'labels'):
         """This function subsets the array of binary label vectors to include only certain labels. 
 
         Parameters
@@ -23,8 +23,11 @@ class MLClassifierBase(object):
         y : array-like of array-likes
             An array-like of binary label vectors.
         
-        labels: array-like of integers
+        subset: array-like of integers
             array of integers, indices that will be subsetted from array-likes in y
+
+        axis: enum{'labels', 'rows'}
+            control variable for whether to return rows or labels as indexed by subset
 
         Returns
         -------
@@ -32,7 +35,12 @@ class MLClassifierBase(object):
         multi-label binary label vector : array-like of array-likes of {0,1}
             array of binary label vectors including label data only for labels from parameter labels
         """
-        return [row[labels] for row in y]
+        if axis == 'labels':
+            return [row[subset] for row in y]
+        elif axis == 'rows':
+            return [y[i] for i in subset]
+        else:
+            return None
 
     def fit(self, X, y):
         """Abstract class to implement to fit classifier according to X,y.
