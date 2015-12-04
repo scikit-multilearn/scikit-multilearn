@@ -5,7 +5,7 @@ import numpy as np
 
 class Dataset(object):
     @classmethod
-    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'i8'):
+    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'float'):
         """Method for loading ARFF files as numpy array
 
         Parameters

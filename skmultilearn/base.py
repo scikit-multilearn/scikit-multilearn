@@ -1,4 +1,6 @@
+import copy
 import numpy as np
+
 
 class MLClassifierBase(object):
     """Base class providing API and common functions for all multi-label classifiers.
@@ -79,3 +81,16 @@ class MLClassifierBase(object):
 
         """
         raise NotImplementedError("MLClassifierBase::predict()")
+
+class RepeatClassifier(MLClassifierBase):
+
+    def __init__(self, value_to_repeat = None):
+        
+        super(RepeatClassifier, self).__init__()
+        self.value_to_repeat = copy.copy(value_to_repeat)
+
+    def fit(self, X, y):
+        return self
+
+    def predict(self, X):
+        return np.array([np.copy(self.value_to_repeat) for x in xrange(len(X))])
