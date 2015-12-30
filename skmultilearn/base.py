@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+from   .utils import get_matrix_in_format
 
 
 class MLClassifierBase(object):
@@ -87,9 +88,10 @@ class RepeatClassifier(MLClassifierBase):
     def __init__(self, value_to_repeat = None):
         
         super(RepeatClassifier, self).__init__()
-        self.value_to_repeat = copy.copy(value_to_repeat)
 
     def fit(self, X, y):
+        self.value_to_repeat = copy.copy(y.tocsr[0,:])
+        self.return_value = np.full(y)
         return self
 
     def predict(self, X):

@@ -3,9 +3,11 @@ import bz2
 import pickle
 import numpy as np
 
+from scipy import sparse
+
 class Dataset(object):
     @classmethod
-    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'float'):
+    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'float', encode_nominal = True, load_sparse = False):
         """Method for loading ARFF files as numpy array
 
         Parameters
@@ -25,34 +27,46 @@ class Dataset(object):
             The desire type of the contents of the return 'X' array-likes, default 'i8', 
             should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
 
+        encode_nominal: boolean
+            Whether convert categorical data into numeric factors - required for some scikit classifiers that can't handle non-numeric input featuers.
+
+        load_sparse: boolean
+            Whether to read arff file as a sparse file format, liac-arff breaks if sparse reading is enabled for non-sparse ARFFs.
+
         Returns
         -------
         
-        data: dictionary {'X': array-like of array-likes, 'y': array-like of binary label vectors }
+        data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
             The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
             and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-            then the input vector has label no. 5) 
+            then the input vector has label no. 5)
 
         """
-        arff_frame = arff.load(open(filename ,'rb'))
-        input_features_count = len(arff_frame['data'][0]) - labelcount
-        input_space = None
-        labels = None
+        matrix = None
+        if not load_sparse:
+            arff_frame = arff.load(open(filename,'rb'), encode_nominal = encode_nominal, return_type=arff.DENSE)
+            matrix = sparse.csr_matrix(arff_frame['data'], dtype=input_feature_type)
+        else:
+            arff_frame = arff.load(open(filename ,'rb'), encode_nominal = encode_nominal, return_type=arff.COO)
+            data = arff_frame['data'][0]
+            row  = arff_frame['data'][1]
+            col  = arff_frame['data'][2]
+            matrix = sparse.coo_matrix((data, (row, col)), shape=(max(row)+1, max(col)+1))
 
+        X, y = None, None
+        
         if endian == "big":
-            input_space = np.array([row[labelcount:] for row in arff_frame['data']])
-            labels      = np.array([row[:labelcount] for row in arff_frame['data']])
+            X, y = matrix.tocsc()[:,labelcount:].tolil(), matrix.tocsc()[:,:labelcount].astype(int).tolil()
         elif endian == "little":
-            input_space = np.array([row[:input_features_count] for row in arff_frame['data']])
-            labels      = np.array([row[-labelcount:] for row in arff_frame['data']])
+            X, y = matrix.tocsc()[:,:-labelcount].tolil(), matrix.tocsc()[:,-labelcount:].astype(int).tolil()
         else:
             # unknown endian
             return None
 
-        return input_space.astype(input_feature_type), labels.astype('i8')
+        return X, y
 
     @classmethod
-    def save_dataset_dump    (cls, filename, input_space, labels):
+    def save_dataset_dump(cls, filename, input_space, labels):
         """Saves a compressed data set dump
 
         Parameters

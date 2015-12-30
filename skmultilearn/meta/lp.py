@@ -1,5 +1,6 @@
 from ..base import MLClassifierBase
 import numpy as np
+from scipy import sparse
 
 class LabelPowerset(MLClassifierBase):
     """Label Powerset multi-label classifier."""
@@ -12,19 +13,21 @@ class LabelPowerset(MLClassifierBase):
     def clean(self):
         self.unique_combinations = {}
         self.reverse_combinations = []
-        self.labelcount = 0
+        self.label_count = None
 
     def fit(self, X, y):
         """Fit classifier according to X,y, see base method's documentation."""
         self.clean()
+        self.label_count = y.shape[1]
+        y_lil = y.tolil()
         last_id = 0
-        self.labelcount = len(y[0])
         train_vector    = []
-        for label_vector in y:
-            label_string = str(label_vector)
+        for labels_applied in y_lil.rows:
+            label_string = ",".join(map(str,labels_applied))
+
             if label_string not in self.unique_combinations:
                 self.unique_combinations[label_string] = last_id
-                self.reverse_combinations.append(label_vector)
+                self.reverse_combinations.append(labels_applied)
                 last_id += 1
 
             train_vector.append(self.unique_combinations[label_string])
@@ -36,7 +39,31 @@ class LabelPowerset(MLClassifierBase):
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
+        # this will be an np.array of integers representing classes
         lp_prediction = self.classifier.predict(X)
-        
-        transformed_to_original_classes = [np.array(self.reverse_combinations[lp_class_id]) for lp_class_id in lp_prediction]
-        return transformed_to_original_classes
+        result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='i8')
+
+        for row in xrange(len(lp_prediction)):
+            assignment = lp_prediction[row]
+            result[row, self.reverse_combinations[assignment]] = 1
+
+        return result
+
+    def transform(self, y):
+        """ Transform the label set to a multi-class problem """
+        return map(lambda x: int("".join(map(str,x))),y)
+
+    def inverse_transform(self, y):
+        return map(lambda x: map(int, str(x)),y)
+
+    def set_params(**params):
+        if self.classifier is not None:
+            self.classifier.set_params(params)
+
+        return self
+
+    def get_params(deep = False):
+        if deep and self.classifier is not None:
+            return self.classifier.get_params()
+
+        return dict()

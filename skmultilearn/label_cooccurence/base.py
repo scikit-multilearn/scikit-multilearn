@@ -1,4 +1,5 @@
 from   ..base import MLClassifierBase
+from   ..utils import get_matrix_in_format
 import numpy as np
 import igraph as ig
 
@@ -35,12 +36,13 @@ class LabelCooccurenceClassifier(MLClassifierBase):
         self: object
             Return self.
         """
-        self.label_count = len(y[0])
+        label_data = get_matrix_in_format(y, 'lil')
+        self.label_count = label_data.shape[1]
 
         edge_map = {}
-        for row in y:
-            classes = [i for i in xrange(self.label_count) if row[i] == 1]
-            pairs = [(a,b) for b in classes for a in classes if a < b]
+
+        for row in label_data.rows:
+            pairs = [(a,b) for b in row for a in row if a < b]
             for p in pairs:
                 if p not in edge_map:
                     edge_map[p] = 1.0
