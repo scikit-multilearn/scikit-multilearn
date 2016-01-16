@@ -5,7 +5,7 @@ import numpy as np
 class BinaryRelevance(MLClassifierBase):
     """Binary Relevance multi-label classifier."""
     BRIEFNAME = "BR"
-    
+
     def __init__(self, classifier = None):
         super(BinaryRelevance, self).__init__(classifier)
 
@@ -25,11 +25,11 @@ class BinaryRelevance(MLClassifierBase):
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
         result = np.zeros((len(X), self.label_count), dtype='i8')
-        
+
         for label in xrange(self.label_count):
             prediction = self.classifiers[label].predict(X)
 
             for row in xrange(len(X)):
                 result[row, label] = prediction[row]
 
-        return result
+        return np.array(result)

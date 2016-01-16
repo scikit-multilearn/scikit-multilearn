@@ -114,7 +114,13 @@ class MLClassifierBase(object):
         """
         Set parameters as returned by `get_params`.
 
-        œsee https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
+        Parameters
+        ----------
+
+        parameters : dict
+            Dictionary of parameters as returned by `get_params`. Sets each of the
+            classifiers parameters to the ones as given by the dictionary
+
         """
 
         if not params:
@@ -124,4 +130,3 @@ class MLClassifierBase(object):
             self.setattr(parameter, value)
 
         return self
-    
