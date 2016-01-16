@@ -38,4 +38,4 @@ class LabelPowerset(MLClassifierBase):
         lp_prediction = self.classifier.predict(X)
 
         transformed_to_original_classes = [np.array(self.reverse_combinations[lp_class_id]) for lp_class_id in lp_prediction]
-        return transformed_to_original_classes
+        return np.array(transformed_to_original_classes)

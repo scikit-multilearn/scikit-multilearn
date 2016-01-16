@@ -32,4 +32,4 @@ class BinaryRelevance(MLClassifierBase):
             for row in xrange(len(X)):
                 result[row, label] = prediction[row]
 
-        return np.array(result)
+        return result
