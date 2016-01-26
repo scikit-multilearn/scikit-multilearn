@@ -39,9 +39,9 @@ class MLClassifierBase(object):
             array of binary label vectors including label data only for labels from parameter labels
         """
         if axis == 'labels':
-            return [row[subset] for row in y]
+            return y[:,subset]
         elif axis == 'rows':
-            return [y[i] for i in subset]
+            return y[subset,:]
         else:
             return None
 
