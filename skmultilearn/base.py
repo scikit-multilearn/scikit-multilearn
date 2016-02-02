@@ -1,7 +1,7 @@
 import copy
 import numpy as np
-from   .utils import get_matrix_in_format
-
+from .utils import get_matrix_in_format
+from scipy.sparse import issparse, csr_matrix
 
 class MLClassifierBase(object):
     """Base class providing API and common functions for all multi-label classifiers.
@@ -11,13 +11,17 @@ class MLClassifierBase(object):
 
     classifier : scikit classifier type
         The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
+    require_dense : boolean
+        Whether the base classifier requires input as dense arrays, False by default
     """
-    def __init__(self, classifier = None):
+    def __init__(self, classifier = None, require_dense = False):
         
         super(MLClassifierBase, self).__init__()
         self.classifier = classifier
+        self.require_dense = require_dense
 
-    def generate_data_subset(self, y, subset, axis = 'labels'):
+
+    def generate_data_subset(self, y, subset, axis):
         """This function subsets the array of binary label vectors to include only certain labels. 
 
         Parameters
@@ -29,7 +33,7 @@ class MLClassifierBase(object):
         subset: array-like of integers
             array of integers, indices that will be subsetted from array-likes in y
 
-        axis: enum{'labels', 'rows'}
+        axis: integer 0 for 'rows', 1 for 'labels', 
             control variable for whether to return rows or labels as indexed by subset
 
         Returns
@@ -38,12 +42,13 @@ class MLClassifierBase(object):
         multi-label binary label vector : array-like of array-likes of {0,1}
             array of binary label vectors including label data only for labels from parameter labels
         """
-        if axis == 'labels':
-            return y[:,subset]
-        elif axis == 'rows':
-            return y[subset,:]
-        else:
-            return None
+        return_data = None
+        if axis == 1:
+            return_data = y.tocsc()[:, subset]
+        elif axis == 0:
+            return_data = y.tocsr()[subset, :]
+
+        return return_data
 
     def fit(self, X, y):
         """Abstract class to implement to fit classifier according to X,y.
@@ -96,3 +101,4 @@ class RepeatClassifier(MLClassifierBase):
 
     def predict(self, X):
         return np.array([np.copy(self.value_to_repeat) for x in xrange(len(X))])
+
