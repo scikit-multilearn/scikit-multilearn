@@ -50,6 +50,10 @@ class MLClassifierBase(object):
 
         return return_data
 
+    def ensure_1d(self, y):
+        return [t[0,0] for t in y.todense()]
+
+
     def fit(self, X, y):
         """Abstract class to implement to fit classifier according to X,y.
 

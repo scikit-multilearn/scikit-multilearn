@@ -23,7 +23,7 @@ class BinaryRelevance(MLClassifierBase):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, i, axis = 1)
             if not isinstance(classifier, MLClassifierBase):
-                y_subset = [t[0,0] for t in y_subset.todense()]
+                y_subset = self.ensure_1d(y_subset)
             classifier.fit(X,y_subset)
             self.classifiers.append(classifier)
 
