@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
-import sphinx_pypi_upload
+#import sphinx_pypi_upload
 
 setup(
     name='scikit-multilearn',
