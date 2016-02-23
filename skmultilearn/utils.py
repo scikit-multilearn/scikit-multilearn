@@ -1,6 +1,5 @@
 import scipy.sparse as sp
 
-
 def get_matrix_in_format(original_matrix, matrix_format):
     if original_matrix.getformat() == matrix_format:
         return original_matrix
