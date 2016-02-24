@@ -1,9 +1,10 @@
 import copy
 import numpy as np
-from .utils import get_matrix_in_format
+from .utils import get_matrix_in_format, matrix_creation_function_for_format
 from scipy.sparse import issparse, csr_matrix
+from sklearn.base import BaseEstimator
 
-class MLClassifierBase(object):
+class MLClassifierBase(BaseEstimator):
     """Base class providing API and common functions for all multi-label classifiers.
  
     Parameters
@@ -14,11 +15,22 @@ class MLClassifierBase(object):
     require_dense : boolean
         Whether the base classifier requires input as dense arrays, False by default
     """
-    def __init__(self, classifier = None, require_dense = False):
+    def __init__(self, classifier = None, require_dense = None):
         
         super(MLClassifierBase, self).__init__()
         self.classifier = classifier
-        self.require_dense = require_dense
+        if require_dense is not None:
+            if isinstance(require_dense, bool):
+                self.require_dense = [require_dense, require_dense]
+            else:
+                assert len(require_dense) == 2 and isinstance(require_dense[0], bool) and isinstance(require_dense[1], bool)
+                self.require_dense = require_dense
+
+        else:
+            if isinstance(self.classifier, MLClassifierBase):
+                self.require_dense = [False, False]
+            else:
+                self.require_dense = [True, True]
 
 
     def generate_data_subset(self, y, subset, axis):
@@ -50,8 +62,87 @@ class MLClassifierBase(object):
 
         return return_data
 
-    def ensure_1d(self, y):
-        return [t[0,0] for t in y.todense()]
+    def ensure_input_format(self, X, sparse_format='csr', enforce_sparse = False):
+        """This function ensures that input format follows the density/sparsity requirements of base classifier. 
+
+        Parameters
+        ----------
+
+        X : array-like or sparse matrix, shape = [n_samples, n_features]
+            An input feature matrix
+        
+        sparse_format: string
+            Requested format of returned scipy.sparse matrix, if sparse is returned
+
+        enforce_sparse : bool
+            Ignore require_dense and enforce sparsity, useful internally
+
+        Returns
+        -------
+
+        transformed X : array-like or sparse matrix, shape = [n_samples, n_features]
+            If require_dense was set to true for input features in the constructor, 
+            the returned value is an array-like of array-likes. If require_dense is 
+            set to false, a sparse matrix of format sparse_format is returned, if 
+            possible - without cloning.
+        """
+        is_sparse = issparse(X)
+
+        if is_sparse:
+            if self.require_dense[0] and not enforce_sparse:
+                return X.toarray()
+            else:
+                return get_matrix_in_format(X, sparse_format)
+        else:
+            if self.require_dense[0] and not enforce_sparse:
+                # TODO: perhaps a check_array?
+                return X
+            else:
+                return matrix_creation_function_for_format(sparse_format)(X)
+
+    def ensure_output_format(self, y, sparse_format='csr', enforce_sparse = False):
+        """This function ensures that output format follows the density/sparsity requirements of base classifier. 
+
+        Parameters
+        ----------
+
+        y : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+            An input feature matrix
+        
+        sparse_format: string
+            Requested format of returned scipy.sparse matrix, if sparse is returned
+
+        enforce_sparse : bool
+            Ignore require_dense and enforce sparsity, useful internally
+
+        Returns
+        -------
+
+        transformed y: array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+            If require_dense was set to True for input features in the constructor, 
+            the returned value is an array-like of array-likes. If require_dense is 
+            set to False, a sparse matrix of format sparse_format is returned, if 
+            possible - without cloning.
+        """
+        is_sparse = issparse(y)
+
+        if is_sparse:
+            if self.require_dense[0] and not enforce_sparse:
+                if y.shape[1] > 1:
+                    return y.toarray()
+                elif y.shape[1] == 1:
+                    return np.ravel(y.toarray())
+            else:
+                return get_matrix_in_format(y, sparse_format)
+        else:
+            if self.require_dense[0] and not enforce_sparse:
+                # ensuring 1d
+                if len(y[0]) == 1:
+                    return np.ravel(y)
+                else:
+                    return y
+            else:
+                return matrix_creation_function_for_format(sparse_format)(y)
 
 
     def fit(self, X, y):
@@ -131,20 +222,3 @@ class MLClassifierBase(object):
             self.setattr(parameter, value)
 
         return self
-    
-
-
-class RepeatClassifier(MLClassifierBase):
-
-    def __init__(self, value_to_repeat = None):
-        
-        super(RepeatClassifier, self).__init__()
-
-    def fit(self, X, y):
-        self.value_to_repeat = copy.copy(y.tocsr[0,:])
-        self.return_value = np.full(y)
-        return self
-
-    def predict(self, X):
-        return np.array([np.copy(self.value_to_repeat) for x in xrange(len(X))])
-
