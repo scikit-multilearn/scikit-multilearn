@@ -234,7 +234,6 @@ class MLClassifierBaseTest(unittest.TestCase):
                 y_single = sp.csr_matrix(y_single)
 
             ensured_y_single = classifier.ensure_output_format(y_single)
-            print input_sparse, y_single, ensured_y_single
 
             self.assertIsInstance(ensured_y_single, np.ndarray)
             self.assertEqual(len(ensured_y_single.shape), 1)

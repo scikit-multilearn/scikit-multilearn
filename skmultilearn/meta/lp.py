@@ -6,8 +6,8 @@ class LabelPowerset(MLClassifierBase):
     """Label Powerset multi-label classifier."""
     BRIEFNAME = "LP"
     
-    def __init__(self, classifier = None):
-        super(LabelPowerset, self).__init__(classifier)
+    def __init__(self, classifier = None, require_dense = None):
+        super(LabelPowerset, self).__init__(classifier = classifier, require_dense = require_dense)
         self.clean()
 
     def clean(self):
@@ -17,9 +17,10 @@ class LabelPowerset(MLClassifierBase):
 
     def fit(self, X, y):
         """Fit classifier according to X,y, see base method's documentation."""
+        X = self.ensure_input_format(X, sparse_format = 'csr', enforce_sparse = True)
+        y = self.ensure_output_format(y, sparse_format = 'lil', enforce_sparse = True)
         self.clean()
         self.label_count = y.shape[1]
-        y_lil = y.tolil()
         last_id = 0
         train_vector    = []
         for labels_applied in y_lil.rows:
@@ -32,7 +33,7 @@ class LabelPowerset(MLClassifierBase):
 
             train_vector.append(self.unique_combinations[label_string])
 
-        self.classifier.fit(X, train_vector)
+        self.classifier.fit(self.ensure_input_format(X), train_vector)
 
         return self
 
@@ -40,7 +41,7 @@ class LabelPowerset(MLClassifierBase):
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
         # this will be an np.array of integers representing classes
-        lp_prediction = self.classifier.predict(X)
+        lp_prediction = self.classifier.predict(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='i8')
 
         for row in xrange(len(lp_prediction)):

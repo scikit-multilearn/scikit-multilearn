@@ -127,7 +127,6 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         is_sparse = issparse(y)
 
         if is_sparse:
-            print(enforce_sparse)
             if self.require_dense[1] and not enforce_sparse:
                 if y.shape[1] != 1:
                     return y.toarray()
