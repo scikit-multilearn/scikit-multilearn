@@ -2,9 +2,9 @@ import copy
 import numpy as np
 from .utils import get_matrix_in_format, matrix_creation_function_for_format
 from scipy.sparse import issparse, csr_matrix
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, ClassifierMixin
 
-class MLClassifierBase(BaseEstimator):
+class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label classifiers.
  
     Parameters
@@ -127,15 +127,16 @@ class MLClassifierBase(BaseEstimator):
         is_sparse = issparse(y)
 
         if is_sparse:
-            if self.require_dense[0] and not enforce_sparse:
-                if y.shape[1] > 1:
+            print(enforce_sparse)
+            if self.require_dense[1] and not enforce_sparse:
+                if y.shape[1] != 1:
                     return y.toarray()
                 elif y.shape[1] == 1:
                     return np.ravel(y.toarray())
             else:
                 return get_matrix_in_format(y, sparse_format)
         else:
-            if self.require_dense[0] and not enforce_sparse:
+            if self.require_dense[1] and not enforce_sparse:
                 # ensuring 1d
                 if len(y[0]) == 1:
                     return np.ravel(y)
@@ -199,13 +200,13 @@ class MLClassifierBase(BaseEstimator):
         """
         out = dict()
 
-        out["classifier"] = self.classifier
-        out["require_dense"] = self.require_dense
-
         # deep introspection of estimator parameters
         if deep and hasattr(self.classifier, 'get_params'):
             deep_items = value.get_params().items()
             out.update((key + '__' + k, val) for k, val in deep_items)
+
+        out["classifier"] = self.classifier
+        out["require_dense"] = self.require_dense
 
         return out
 

@@ -1,3 +1,4 @@
+import itertools
 import unittest
 import numpy as np
 import scipy.sparse as sp
@@ -104,7 +105,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
 
     def test_ensure_input_format_returns_sparse_from_dense_if_enforced(self):
-        for require_dense in [True, False]:
+        for require_dense in itertools.product([True, False], repeat=2):
             classifier = MLClassifierBase(require_dense = require_dense)
 
             X = np.zeros((2,3))
@@ -114,7 +115,7 @@ class MLClassifierBaseTest(unittest.TestCase):
             self.dense_and_sparse_matrices_are_the_same(X, ensured_X)
 
     def test_ensure_input_format_returns_sparse_from_sparse_if_enforced(self):
-        for require_dense in [True, False]:
+        for require_dense in itertools.product([True, False], repeat=2):
             classifier = MLClassifierBase(require_dense = require_dense)
 
             X = sp.csr_matrix(np.zeros((2,3)))
@@ -182,7 +183,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
 
     def test_ensure_output_format_returns_sparse_from_dense_if_enforced(self):
-        for require_dense in [True, False]:
+        for require_dense in itertools.product([True, False], repeat=2):
             classifier = MLClassifierBase(require_dense = require_dense)
 
             y = np.zeros((2,3))
@@ -192,7 +193,7 @@ class MLClassifierBaseTest(unittest.TestCase):
             self.dense_and_sparse_matrices_are_the_same(y, ensured_y)
 
     def test_ensure_output_format_returns_sparse_from_sparse_if_enforced(self):
-        for require_dense in [True, False]:
+        for require_dense in itertools.product([True, False], repeat=2):
             classifier = MLClassifierBase(require_dense = require_dense)
 
             y = sp.csr_matrix(np.zeros((2,3)))
