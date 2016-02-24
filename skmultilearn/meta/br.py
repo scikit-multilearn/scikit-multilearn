@@ -20,7 +20,7 @@ class BinaryRelevance(MLClassifierBase):
         for i in xrange(self.label_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, i, axis = 1)
-            classifier.fit(self.ensure_input_format(X), self.ensure_input_format(y_subset))
+            classifier.fit(self.ensure_input_format(X), self.ensure_output_format(y_subset))
             self.classifiers.append(classifier)
 
         return self
