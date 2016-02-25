@@ -63,15 +63,10 @@ class LabelDistinctCommunitiesClassifier(LabelCooccurenceClassifier):
         """Predict labels for X, see base method's documentation."""
         input_rows = X.shape[0]
         predictions = [self.classifiers[i].predict(X) for i in xrange(self.community_count)]
-        result = np.zeros((input_rows, self.label_count))
-
-        for row in xrange(input_rows):
-            for model in xrange(self.community_count):
-                for label_position in xrange(len(self.label_sets[model])):
-                    if predictions[model][row][label_position] == 1:
-                        label_id = self.label_sets[model][label_position]
-                        result[row][label_id] = 1
-        return result
+        if isinstance(self.classifier, MLClassifierBase):
+            return hstack(predictions)
+        else:
+            return coo_matrix(predictions).T
 
 
 class HierarchicalDistinctCommunitiesClassifier(LabelCooccurenceClassifier):
