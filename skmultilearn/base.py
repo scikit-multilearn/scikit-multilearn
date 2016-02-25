@@ -1,6 +1,10 @@
+import copy
 import numpy as np
+from .utils import get_matrix_in_format, matrix_creation_function_for_format
+from scipy.sparse import issparse, csr_matrix
+from sklearn.base import BaseEstimator, ClassifierMixin
 
-class MLClassifierBase(object):
+class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label classifiers.
 
     Parameters
@@ -8,13 +12,28 @@ class MLClassifierBase(object):
 
     classifier : scikit classifier type
         The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
+    require_dense : boolean
+        Whether the base classifier requires input as dense arrays, False by default
     """
-    def __init__(self, classifier = None):
-
+    def __init__(self, classifier = None, require_dense = None):
+        
         super(MLClassifierBase, self).__init__()
         self.classifier = classifier
+        if require_dense is not None:
+            if isinstance(require_dense, bool):
+                self.require_dense = [require_dense, require_dense]
+            else:
+                assert len(require_dense) == 2 and isinstance(require_dense[0], bool) and isinstance(require_dense[1], bool)
+                self.require_dense = require_dense
 
-    def generate_data_subset(self, y, subset, axis = 'labels'):
+        else:
+            if isinstance(self.classifier, MLClassifierBase):
+                self.require_dense = [False, False]
+            else:
+                self.require_dense = [True, True]
+
+
+    def generate_data_subset(self, y, subset, axis):
         """This function subsets the array of binary label vectors to include only certain labels. 
 
         Parameters
@@ -26,7 +45,7 @@ class MLClassifierBase(object):
         subset: array-like of integers
             array of integers, indices that will be subsetted from array-likes in y
 
-        axis: enum{'labels', 'rows'}
+        axis: integer 0 for 'rows', 1 for 'labels', 
             control variable for whether to return rows or labels as indexed by subset
 
         Returns
@@ -35,12 +54,96 @@ class MLClassifierBase(object):
         multi-label binary label vector : array-like of array-likes of {0,1}
             array of binary label vectors including label data only for labels from parameter labels
         """
-        if axis == 'labels':
-            return [row[subset] for row in y]
-        elif axis == 'rows':
-            return [y[i] for i in subset]
+        return_data = None
+        if axis == 1:
+            return_data = y.tocsc()[:, subset]
+        elif axis == 0:
+            return_data = y.tocsr()[subset, :]
+
+        return return_data
+
+    def ensure_input_format(self, X, sparse_format='csr', enforce_sparse = False):
+        """This function ensures that input format follows the density/sparsity requirements of base classifier. 
+
+        Parameters
+        ----------
+
+        X : array-like or sparse matrix, shape = [n_samples, n_features]
+            An input feature matrix
+        
+        sparse_format: string
+            Requested format of returned scipy.sparse matrix, if sparse is returned
+
+        enforce_sparse : bool
+            Ignore require_dense and enforce sparsity, useful internally
+
+        Returns
+        -------
+
+        transformed X : array-like or sparse matrix, shape = [n_samples, n_features]
+            If require_dense was set to true for input features in the constructor, 
+            the returned value is an array-like of array-likes. If require_dense is 
+            set to false, a sparse matrix of format sparse_format is returned, if 
+            possible - without cloning.
+        """
+        is_sparse = issparse(X)
+
+        if is_sparse:
+            if self.require_dense[0] and not enforce_sparse:
+                return X.toarray()
+            else:
+                return get_matrix_in_format(X, sparse_format)
         else:
-            return None
+            if self.require_dense[0] and not enforce_sparse:
+                # TODO: perhaps a check_array?
+                return X
+            else:
+                return matrix_creation_function_for_format(sparse_format)(X)
+
+    def ensure_output_format(self, y, sparse_format='csr', enforce_sparse = False):
+        """This function ensures that output format follows the density/sparsity requirements of base classifier. 
+
+        Parameters
+        ----------
+
+        y : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+            An input feature matrix
+        
+        sparse_format: string
+            Requested format of returned scipy.sparse matrix, if sparse is returned
+
+        enforce_sparse : bool
+            Ignore require_dense and enforce sparsity, useful internally
+
+        Returns
+        -------
+
+        transformed y: array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+            If require_dense was set to True for input features in the constructor, 
+            the returned value is an array-like of array-likes. If require_dense is 
+            set to False, a sparse matrix of format sparse_format is returned, if 
+            possible - without cloning.
+        """
+        is_sparse = issparse(y)
+
+        if is_sparse:
+            if self.require_dense[1] and not enforce_sparse:
+                if y.shape[1] != 1:
+                    return y.toarray()
+                elif y.shape[1] == 1:
+                    return np.ravel(y.toarray())
+            else:
+                return get_matrix_in_format(y, sparse_format)
+        else:
+            if self.require_dense[1] and not enforce_sparse:
+                # ensuring 1d
+                if len(y[0]) == 1:
+                    return np.ravel(y)
+                else:
+                    return y
+            else:
+                return matrix_creation_function_for_format(sparse_format)(y)
+
 
     def fit(self, X, y):
         """Abstract class to implement to fit classifier according to X,y.
@@ -84,46 +187,35 @@ class MLClassifierBase(object):
         """
         Introspection of classifier for search models like cross validation and grid
         search.
-
         Parameters
         ----------
-
         deep : boolean
             If true all params will be introspected also and appended to the output dict.
-
         Returns
         -------
-
         out : dictionary
             Dictionary of all parameters and their values. If deep=True the dictionary
             also holds the parameters of the parameters.
-
         """
         out = dict()
-
-        out["classifier"] = self.classifier
 
         # deep introspection of estimator parameters
         if deep and hasattr(self.classifier, 'get_params'):
             deep_items = value.get_params().items()
             out.update((key + '__' + k, val) for k, val in deep_items)
 
+        out["classifier"] = self.classifier
+        out["require_dense"] = self.require_dense
+
         return out
 
     def set_params(self, **parameters):
         """
         Set parameters as returned by `get_params`.
-
-        Parameters
-        ----------
-
-        parameters : dict
-            Dictionary of parameters as returned by `get_params`. Sets each of the
-            classifiers parameters to the ones as given by the dictionary
-
+        @see https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
         """
 
-        if not params:
+        if not parameters:
             return self
 
         for parameter, value in parameters.items():

@@ -2,6 +2,7 @@ from ..base import MLClassifierBase
 import copy
 import random
 import numpy as np
+from scipy import sparse
 
 class RakelD(MLClassifierBase):
     """Distinct RAndom k-labELsets multi-label classifier."""
@@ -45,19 +46,18 @@ class RakelD(MLClassifierBase):
 
     def fit(self, X, y):
         """Fit classifier according to X,y, see base method's documentation."""
-        self.sample_models(len(y[0]))
+        self.sample_models(y.shape[1])
         return self.fit_only(X, y)
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
-        input_rows = len(X)
+        input_rows = X.shape[0]
         predictions = [self.classifiers[i].predict(X) for i in xrange(self.model_count)]
-        result = np.zeros((input_rows, self.label_count))
+        result = sparse.lil_matrix((input_rows, self.label_count), dtype=int)
 
-        for row in xrange(input_rows):
-            for model in xrange(self.model_count):
-                for label_position in xrange(len(self.label_sets[model])):
-                    if predictions[model][row][label_position] == 1:
-                        label_id = self.label_sets[model][label_position]
-                        result[row][label_id] = 1
+        for model in xrange(self.model_count):
+            predictions = self.classifiers[model].predict(X).nonzero()
+            for row, column in zip(predictions[0], predictions[1]):
+                result[row, self.label_sets[model][column]] = 1
+
         return result
