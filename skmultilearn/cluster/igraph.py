@@ -1,4 +1,8 @@
+from __future__ import absolute_import
 from .base import LabelCooccurenceClustererBase
+import numpy as np
+import igraph as ig
+
 
 class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     """Base class providing API and common functions for all label cooccurence based multi-label classifiers.
@@ -32,20 +36,23 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
         if method not in IGraphLabelCooccurenceClusterer.METHODS:
             raise ValueError("{} not a supported igraph community detection method".format(method))
 
+        if weighted not in [True, False]:
+            raise ValueError("Weighted needs to be a boolean")
 
-    def fit_predict(X, y):
+
+    def fit_predict(self, X, y):
         self.generate_coocurence_adjacency_matrix(y)
 
         if self.is_weighted:
             self.weights = dict(weight = self.edge_map.values())
         else:
-            self.weights = None
+            self.weights = dict(weight = None)
 
         self.coocurence_graph = ig.Graph(
-                edges        = [x for x in edge_map], 
+                edges        = [x for x in self.edge_map], 
                 vertex_attrs = dict(name   = range(1, self.label_count + 1)), 
                 edge_attrs   = self.weights
             )
 
-        partition = IGraphLabelCooccurenceClusterer.METHODS[self.method](self.coocurence_graph, self.weights['weights'])
+        partition = IGraphLabelCooccurenceClusterer.METHODS[self.method](self.coocurence_graph, self.weights['weight'])
         return partition

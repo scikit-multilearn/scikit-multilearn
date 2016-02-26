@@ -5,7 +5,7 @@ class LabelSpaceClustererBase(object):
     def __init__(self):
         super(LabelSpaceClustererBase, self).__init__()
 
-    def fit_predict(X, y):
+    def fit_predict(self, X, y):
         raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")      
 
 class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
