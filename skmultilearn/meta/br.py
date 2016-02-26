@@ -12,14 +12,15 @@ class BinaryRelevance(MLClassifierBase):
 
     def generate_partition(self, X, y):
         self.partition = range(y.shape[1])
+        self.model_count = y.shape[1]
 
     def fit(self, X, y):
         """Fit classifier according to `X`, `y`, see base method's documentation."""
         X = self.ensure_input_format(X, sparse_format = 'csr', enforce_sparse = True)
         y = self.ensure_output_format(y, sparse_format = 'csc', enforce_sparse = True)
+
         self.generate_partition(X, y)
         self.classifiers = []
-        self.model_count = y.shape[1]
 
         for i in xrange(self.model_count):
             classifier = copy.deepcopy(self.classifier)
