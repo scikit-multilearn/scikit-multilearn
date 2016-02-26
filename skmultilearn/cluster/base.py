@@ -1,9 +1,14 @@
-from   ..base import MLClassifierBase
-from   ..utils import get_matrix_in_format
-import numpy as np
-import igraph as ig
+from ..utils import get_matrix_in_format
 
-class LabelCooccurenceClassifier(MLClassifierBase):
+class LabelSpaceClustererBase(object):
+    """docstring for LabelSpaceClustererBase"""
+    def __init__(self):
+        super(LabelSpaceClustererBase, self).__init__()
+
+    def fit_predict(X, y):
+        raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")      
+
+class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
     """Base class providing API and common functions for all label cooccurence based multi-label classifiers.
  
     Parameters
@@ -16,17 +21,14 @@ class LabelCooccurenceClassifier(MLClassifierBase):
             Decide whether to generate a weighted or unweighted graph.
         
     """
-    def __init__(self, classifier = None, weighted = None):
-        
-        super(LabelCooccurenceClassifier, self).__init__(classifier)
-        self.is_weighted = weighted
+    def __init__(self):
+        super(LabelCooccurenceClustererBase, self).__init__()
 
-
-    def generate_coocurence_graph(self, y):
+    def generate_coocurence_adjacency_matrix(self, y):
         """This function generates a weighted or unweighted cooccurence graph based on input binary label vectors 
         and sets it to self.coocurence_graph
 
-        y : array-like of array-likes
+        y : array-like of edges
             An array-like of binary label vectors.
 
 
@@ -50,16 +52,5 @@ class LabelCooccurenceClassifier(MLClassifierBase):
                     if self.is_weighted:
                         edge_map[p] += 1.0
 
-        # 
-        if self.is_weighted:
-            self.weights = edge_map.values()
-            self.coocurence_graph = ig.Graph(
-                edges        = [x for x in edge_map], 
-                vertex_attrs = dict(name   = range(1, self.label_count + 1)), 
-                edge_attrs   = dict(weight = self.weights))
-        else:
-            self.coocurence_graph = ig.Graph(
-                edges        = [x for x in edge_map], 
-                vertex_attrs = dict(name = range(1, self.label_count + 1)))
-
-        return self
+        self.edge_map = edge_map
+        return edge_map
