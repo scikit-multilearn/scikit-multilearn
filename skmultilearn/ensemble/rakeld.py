@@ -14,8 +14,8 @@ class RakelD(LabelSpacePartitioningClassifier):
     def generate_partition(self, X, y):
         """Internal method for sampling k-labELsets"""
 
-        self.label_count = y.shape[1]
         label_sets = []
+        self.label_count = y.shape[1]
         free_labels = xrange(self.label_count)
         self.model_count = int(np.ceil(self.label_count/self.labelset_size))
 
@@ -31,4 +31,3 @@ class RakelD(LabelSpacePartitioningClassifier):
             label_sets.append(label_set)
 
         self.partition = label_sets
-

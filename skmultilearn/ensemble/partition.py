@@ -12,33 +12,30 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
     ----------
 
     classifier : scikit classifier type
-    The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
-    
-    community_detection_method: a function that returns an array-like of array-likes of integers for a given igraph.Graph 
-    and weights vector
-        An igraph.Graph object and a weight vector (if weighted == True) will be passed to this function expecting a return 
-        of a division of graph nodes into communities represented array-like of array-likes or vector containing label 
-        ids per community
+        The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
+   
+    clusterer: an skmultilearn.cluster.base object that partitions the output space
 
-
-    weighted: boolean
-            Decide whether to generate a weighted or unweighted co-occurence graph.
+    require_dense : [boolean, boolean]
+        Whether the base classifier requires input as dense arrays, False by default for 
 
     """
     def __init__(self, classifier = None, clusterer = None, require_dense = None):
-        super(LabelDistinctCommunitiesClassifier, self).__init__(classifier, require_dense)
+        super(LabelSpacePartitioningClassifier, self).__init__(classifier, require_dense)
         self.clusterer = clusterer
 
 
     def generate_partition(self, X, y):
-        self.partition = self.clusterer.fit(X, y)  
+        self.partition = self.clusterer.fit_predict(X, y)
         self.model_count = len(self.partition)
-        
+        self.label_count = y.shape[1]
+
         return self
 
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
-        result = sparse.lil_matrix((input_rows, self.model_count), dtype=int)
+        X = self.ensure_input_format(X, sparse_format = 'csr', enforce_sparse = True)
+        result = sparse.lil_matrix((X.shape[0], self.label_count), dtype=int)
 
         for model in xrange(self.model_count):
             predictions = self.ensure_output_format(self.classifiers[model].predict(X), sparse_format = None, enforce_sparse = True).nonzero()
