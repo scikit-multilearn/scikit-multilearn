@@ -23,7 +23,7 @@ class LabelPowerset(MLClassifierBase):
         self.label_count = y.shape[1]
         last_id = 0
         train_vector    = []
-        for labels_applied in y_lil.rows:
+        for labels_applied in y.rows:
             label_string = ",".join(map(str,labels_applied))
 
             if label_string not in self.unique_combinations:
