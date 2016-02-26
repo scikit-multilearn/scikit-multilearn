@@ -1,7 +1,7 @@
 import unittest
 
 from skmultilearn.ensemble.rakeld import RakelD
-from skmultilearn.meta.lp import LabelPowerset
+from skmultilearn.problem_transform.lp import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC

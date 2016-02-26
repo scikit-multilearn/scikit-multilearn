@@ -1,4 +1,4 @@
-from ..meta.br import BinaryRelevance
+from ..problem_transform.br import BinaryRelevance
 import copy
 import numpy as np
 

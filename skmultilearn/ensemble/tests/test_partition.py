@@ -2,7 +2,7 @@ import unittest
 
 from skmultilearn.ensemble.partition import LabelSpacePartitioningClassifier
 from skmultilearn.cluster.igraph import IGraphLabelCooccurenceClusterer
-from skmultilearn.meta.lp import LabelPowerset
+from skmultilearn.problem_transform.lp import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
@@ -20,7 +20,6 @@ class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
     def get_classifier(self, base_classifier):
         clusterer = IGraphLabelCooccurenceClusterer('fastgreedy', False)
         return LabelSpacePartitioningClassifier(classifier = base_classifier, clusterer = clusterer)
-
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
         classifier =  self.get_classifier(self.get_labelpowerset_with_svc())
