@@ -1,6 +1,6 @@
 import unittest
 
-from skmultilearn.meta.cc import ClassifierChain
+from skmultilearn.problem_transform.cc import ClassifierChain
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC

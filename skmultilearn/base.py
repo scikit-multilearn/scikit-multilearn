@@ -92,7 +92,10 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             if self.require_dense[0] and not enforce_sparse:
                 return X.toarray()
             else:
-                return get_matrix_in_format(X, sparse_format)
+                if sparse_format is None:
+                    return X
+                else:
+                    return get_matrix_in_format(X, sparse_format)
         else:
             if self.require_dense[0] and not enforce_sparse:
                 # TODO: perhaps a check_array?
@@ -133,7 +136,10 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                 elif y.shape[1] == 1:
                     return np.ravel(y.toarray())
             else:
-                return get_matrix_in_format(y, sparse_format)
+                if sparse_format is None:
+                    return y
+                else:
+                    return get_matrix_in_format(y, sparse_format)
         else:
             if self.require_dense[1] and not enforce_sparse:
                 # ensuring 1d
