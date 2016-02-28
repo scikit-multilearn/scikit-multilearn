@@ -6,7 +6,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label classifiers.
- 
+
     Parameters
     ----------
 
@@ -16,8 +16,11 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         Whether the base classifier requires input as dense arrays, False by default
     """
     def __init__(self, classifier = None, require_dense = None):
-        
+
         super(MLClassifierBase, self).__init__()
+
+        self.copyable_attrs = ["classifier", "require_dense"]
+
         self.classifier = classifier
         if require_dense is not None:
             if isinstance(require_dense, bool):
@@ -41,7 +44,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         y : array-like of array-likes
             An array-like of binary label vectors.
-        
+
         subset: array-like of integers
             array of integers, indices that will be subsetted from array-likes in y
 
@@ -156,7 +159,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         Parameters
         ----------
-        
+
         X : {array-like, sparse matrix}, shape = [n_samples, n_features]
             Training vectors, where n_samples is the number of samples and n_features is the number of features.
 
@@ -175,7 +178,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         Parameters
         ----------
-        
+
         X : {array-like, sparse matrix}, shape = [n_samples, n_features]
             Training vectors, where n_samples is the number of samples and n_features is the number of features.
 
@@ -183,7 +186,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         -------
 
         y : array-like, shape = [n_samples, n_labels]
-            Binary label vectors with 1 if label should be applied and 0 if not. n_labels is number of labels in the 
+            Binary label vectors with 1 if label should be applied and 0 if not. n_labels is number of labels in the
             multi-label instance that the classifier was fit to.
 
         """
@@ -205,13 +208,12 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         """
         out = dict()
 
-        # deep introspection of estimator parameters
-        if deep and hasattr(self.classifier, 'get_params'):
-            deep_items = value.get_params().items()
-            out.update((key + '__' + k, val) for k, val in deep_items)
+        for attr in self.copyable_attrs:
+            out[attr] = getattr(self, attr)
 
-        out["classifier"] = self.classifier
-        out["require_dense"] = self.require_dense
+            if hasattr(attr, 'get_params'):
+                deep_items = getattr(self, attr).get_params().items()
+                out.update((attr + '__' + k, val) for k, val in deep_items)
 
         return out
 
@@ -225,6 +227,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             return self
 
         for parameter, value in parameters.items():
-            self.setattr(parameter, value)
+            if parameter in self.copyable_attrs:
+                setattr(self, parameter, value)
 
         return self

@@ -37,7 +37,6 @@ class LabelPowerset(MLClassifierBase):
 
         return self
 
-
     def predict(self, X):
         """Predict labels for X, see base method's documentation."""
         # this will be an np.array of integers representing classes
@@ -56,15 +55,3 @@ class LabelPowerset(MLClassifierBase):
 
     def inverse_transform(self, y):
         return map(lambda x: map(int, str(x)),y)
-
-    def set_params(**params):
-        if self.classifier is not None:
-            self.classifier.set_params(params)
-
-        return self
-
-    def get_params(deep = False):
-        if deep and self.classifier is not None:
-            return self.classifier.get_params()
-
-        return dict()
