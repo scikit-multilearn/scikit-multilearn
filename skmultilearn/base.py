@@ -226,8 +226,29 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         if not parameters:
             return self
 
+        valid_params = self.get_params(deep=True)
+
         for parameter, value in parameters.items():
-	    if parameter in self.copyable_attrs:
-		setattr(self, parameter, value)
+            split = parameter.split('__', 1)
+
+            if len(split) > 1:
+                sub_obj_name, sub_param = split
+
+                if sub_obj_name not in valid_params:
+                    raise ValueError('Invalid parameter %s for estimator %s. '
+                                     'Check the list of available parameters '
+                                     'with `estimator.get_params().keys()`.' %
+                                     (name, self))
+
+                sub_object = valid_params[sub_obj_name]
+                sub_object.set_params(**{sub_param: value})
+            else:
+                if parameter in valid_params:
+                    setattr(self, parameter, value)
+                else:
+                    raise ValueError('Invalid parameter %s for estimator %s. '
+                         'Check the list of available parameters '
+                         'with `estimator.get_params().keys()`.' %
+                         (name, self))
 
         return self
