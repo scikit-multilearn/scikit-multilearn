@@ -211,7 +211,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         for attr in self.copyable_attrs:
             out[attr] = getattr(self, attr)
 
-            if hasattr(getattr(self, attr), 'get_params'):
+            if hasattr(getattr(self, attr), 'get_params') and deep:
                 deep_items = getattr(self, attr).get_params().items()
                 out.update((attr + '__' + k, val) for k, val in deep_items)
 
