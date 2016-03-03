@@ -16,8 +16,11 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         Whether the base classifier requires input as dense arrays, False by default
     """
     def __init__(self, classifier = None, require_dense = None):
-        
+
         super(MLClassifierBase, self).__init__()
+
+	self.copyable_attrs = ["classifier", "require_dense"]
+
         self.classifier = classifier
         if require_dense is not None:
             if isinstance(require_dense, bool):
@@ -205,13 +208,12 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         """
         out = dict()
 
-        # deep introspection of estimator parameters
-        if deep and hasattr(self.classifier, 'get_params'):
-            deep_items = value.get_params().items()
-            out.update((key + '__' + k, val) for k, val in deep_items)
+        for attr in self.copyable_attrs:
+            out[attr] = getattr(self, attr)
 
-        out["classifier"] = self.classifier
-        out["require_dense"] = self.require_dense
+            if hasattr(getattr(self, attr), 'get_params') and deep:
+                deep_items = getattr(self, attr).get_params().items()
+                out.update((attr + '__' + k, val) for k, val in deep_items)
 
         return out
 
@@ -224,7 +226,29 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         if not parameters:
             return self
 
+        valid_params = self.get_params(deep=True)
+
         for parameter, value in parameters.items():
-            self.setattr(parameter, value)
+            split = parameter.split('__', 1)
+
+            if len(split) > 1:
+                sub_obj_name, sub_param = split
+
+                if sub_obj_name not in valid_params:
+                    raise ValueError('Invalid parameter %s for estimator %s. '
+                                     'Check the list of available parameters '
+                                     'with `estimator.get_params().keys()`.' %
+                                     (name, self))
+
+                sub_object = valid_params[sub_obj_name]
+                sub_object.set_params(**{sub_param: value})
+            else:
+                if parameter in valid_params:
+                    setattr(self, parameter, value)
+                else:
+                    raise ValueError('Invalid parameter %s for estimator %s. '
+                         'Check the list of available parameters '
+                         'with `estimator.get_params().keys()`.' %
+                         (name, self))
 
         return self
