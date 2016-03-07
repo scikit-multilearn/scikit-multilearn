@@ -1,4 +1,4 @@
-arff
+liac-arff==2.1.0
 base64
 bz2
 copy
