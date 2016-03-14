@@ -147,7 +147,7 @@ class Meka(object):
         command_args += args
 
         meka_command = " ".join(command_args)
-        print(meka_command)
+
         pipes = subprocess.Popen(shlex.split(meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.output, self.error = pipes.communicate()
 
