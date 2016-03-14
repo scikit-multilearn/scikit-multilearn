@@ -32,14 +32,13 @@ class Meka(object):
         self.java_command = java_command
         self.classpath = meka_classpath
         self.meka_classifier = meka_classifier
-        self.threshold = 0
         self.verbosity = 5
         self.weka_classifier = weka_classifier
         self.output = None
         self.warnings = None
         self.clean()
 
-    def save_to_arff(self, X, y, endian = "big", save_sparse = True):
+    def save_to_arff(self, X, y, endian = "little", save_sparse = True):
     
         """Method for loading ARFF files as numpy array
 
@@ -81,27 +80,37 @@ class Meka(object):
         x_prefix = 0
         y_prefix = 0
 
+        x_attributes = [(u'X{}'.format(i),u'NUMERIC') for i in xrange(X.shape[1])]
+        y_attributes = [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in xrange(y.shape[1])]
+
         if endian == "big":
             y_prefix = X.shape[1]
+            relation_sign = -1
+            attributes = x_attributes + y_attributes
+
         elif endian == "little":
             x_prefix = y.shape[1]
+            relation_sign = 1
+            attributes = y_attributes + x_attributes 
+
         else:
             raise ValueError("Endian not in {big, little}")
 
-        data = [{} for r in xrange(X.shape[0])]
+        if save_sparse:
+            data = [{} for r in xrange(X.shape[0])]
+        else:
+            data = [[0 for c in xrange(X.shape[1] + y.shape[1])] for r in xrange(X.shape[0])]
+
         for keys, value in X.iteritems():
             data[keys[0]][x_prefix + keys[1]] = value
 
         for keys, value in y.iteritems():
             data[keys[0]][y_prefix + keys[1]] = value
-        
+
         dataset = {
             u'description': u'traindata',
-            u'relation': u'traindata: -C {}'.format(y.shape[1]),
-            u'attributes': 
-                [(u'X{}'.format(i),u'NUMERIC') for i in xrange(X.shape[1])]
-                +
-                [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in xrange(y.shape[1])],
+            u'relation': u'traindata: -C {}'.format(y.shape[1] * relation_sign),
+            u'attributes': attributes,                
             u'data': data
         }
 
@@ -129,10 +138,13 @@ class Meka(object):
         command_args = [
             self.java_command,
             '-cp', "{}*".format(self.classpath),
-            self.meka_classifier,
-            '-W', self.weka_classifier,
-            '-threshold', str(self.threshold),
-        ] + args
+            self.meka_classifier,    
+        ]
+
+        if self.weka_classifier is not None:
+            command_args += ['-W', self.weka_classifier]
+
+        command_args += args
 
         meka_command = " ".join(command_args)
         print(meka_command)
@@ -145,16 +157,19 @@ class Meka(object):
     def fit(self, X, y):
         self.clean()
         self.label_count = y.shape[1]
+
+        # we need this in case threshold needs to be recalibrated in meka
+        self.train_data_ = self.save_to_arff(X, y)
         train_arff = tempfile.NamedTemporaryFile(delete = False)
         classifier_dump_file = tempfile.NamedTemporaryFile(delete = False)
         
         try:
             with open(train_arff.name + '.arff', 'w') as fp:
-                fp.write(self.save_to_arff(X, y))
+                fp.write(self.train_data_)
 
             input_args = [
                 '-verbosity', "0",
-                '-split-percentage', "0",
+                '-split-percentage', "100",
                 '-t', train_arff.name + '.arff',
                 '-d', classifier_dump_file.name,
             ]
@@ -163,12 +178,12 @@ class Meka(object):
 
             self.classifier_dump = None
 
-            with open(classifier_dump_file.name, 'r') as fp:
+            with open(classifier_dump_file.name, 'rb') as fp:
                 self.classifier_dump = fp.read()
 
         finally:
             self.remove_temporary_files([train_arff, classifier_dump_file])
-
+            
         return self
 
 
@@ -176,9 +191,8 @@ class Meka(object):
         self.instance_count = X.shape[0]
 
         if self.classifier_dump is None:
-            raise Exception, 'Fuck not classified'
+            raise Exception, 'Not classified'
 
-        sparse_X = sparse.coo_matrix((X.shape[0], X.shape[1]), dtype = X.dtype)
         sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype = int)
 
         try:
@@ -186,19 +200,17 @@ class Meka(object):
             test_arff = tempfile.NamedTemporaryFile(delete = False)
             classifier_dump_file = tempfile.NamedTemporaryFile(delete = False)
 
-            with open(train_arff.name + '.arff', 'w') as fp:
-                fp.write(self.save_to_arff(sparse_X, sparse_y))
+            with open(train_arff.name + '.arff', 'wb') as fp:
+                fp.write(self.train_data_)
 
-            with open(classifier_dump_file.name, 'w') as fp:
+            with open(classifier_dump_file.name, 'wb') as fp:
                 fp.write(self.classifier_dump)
 
-            with open(test_arff.name + '.arff', 'w') as fp:
+            with open(test_arff.name + '.arff', 'wb') as fp:
                 fp.write(self.save_to_arff(X, sparse_y))
 
-
-            meka_command_string = '{java} -cp "{classpath}*" {meka} -threshold {threshold} -T {test} -verbosity 5 -W {weka} -l {classifier}'
             args = [
-                '-l', classifier_dump_file.name,
+                '-l', classifier_dump_file.name
             ]
 
             self.run(train_arff.name + '.arff', test_arff.name + '.arff', args)
@@ -206,7 +218,7 @@ class Meka(object):
 
         finally:
             self.remove_temporary_files([train_arff, test_arff, classifier_dump_file])
-
+            
         return self.results
 
     def run(self, train_file, test_file, additional_arguments = []):
