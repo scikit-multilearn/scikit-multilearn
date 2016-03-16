@@ -67,7 +67,7 @@ class Dataset(object):
 
     @classmethod
     def save_dataset_dump(cls, filename, input_space, labels):
-        """Saves a compressed data set dump
+        """Saves a compressed data set dump. May be read back into a python object using load_dataset_dump
 
         Parameters
         ----------
@@ -90,7 +90,7 @@ class Dataset(object):
 
     @classmethod
     def load_dataset_dump(cls, filename):
-        """Loads a compressed data set dump
+        """Loads a compressed data set dump, such as one previously saved by save_dataset_dump.
 
         Parameters
         ----------
