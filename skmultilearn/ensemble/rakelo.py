@@ -2,6 +2,7 @@ from .rakeld import RakelD
 import copy
 import numpy as np
 import random
+import six
 from scipy import sparse
 
 class RakelO(RakelD):
@@ -20,7 +21,7 @@ class RakelO(RakelD):
         """Internal method for sampling k-labELsets"""
         label_sets = []
         self.label_count = y.shape[1]
-        free_labels = xrange(self.label_count)
+        free_labels = six.moves.range(self.label_count)
         
         while len(label_sets) < self.model_count:
             label_set = random.sample(free_labels, self.labelset_size)
@@ -38,8 +39,8 @@ class RakelO(RakelD):
         ]
 
         votes = sparse.csc_matrix((predictions[0].shape[0], self.label_count), dtype='i8')
-        for model in xrange(self.model_count):
-            for label in xrange(len(self.partition[model])):
+        for model in six.moves.range(self.model_count):
+            for label in six.moves.range(len(self.partition[model])):
                 votes[:, self.partition[model][label]] = votes[:, self.partition[model][label]]  + predictions[model][:, label]
 
         voters = map(float, votes.sum(axis = 0).tolist()[0])

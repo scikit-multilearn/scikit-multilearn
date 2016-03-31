@@ -1,3 +1,8 @@
+from ..base import MLClassifierBase
+import random
+import six
+import copy
+import numpy as np
 
 class RandomOrderedClassifierChain(MLClassifierBase):
     """Classifier Chains multi-label classifier."""
@@ -8,7 +13,7 @@ class RandomOrderedClassifierChain(MLClassifierBase):
         self.ordering = None
 
     def draw_ordering(self):
-        self.ordering = random.sample(xrange(self.label_count), self.label_count)
+        self.ordering = random.sample(six.moves.range(self.label_count), self.label_count)
 
     def fit(self, X, y):
         # fit L = len(y[0]) BR classifiers h_i
@@ -17,10 +22,10 @@ class RandomOrderedClassifierChain(MLClassifierBase):
         self.predictions = y
         self.num_instances = len(y)
         self.label_count = len(y[0])
-        self.classifiers = [None for x in xrange(self.label_count)]
+        self.classifiers = [None for x in six.moves.range(self.label_count)]
         self.draw_ordering()
 
-        for label in xrange(self.label_count):
+        for label in six.moves.range(self.label_count):
             classifier = copy.deepcopy(self.classifier)
             y_tolearn = self.generate_data_subset(y, self.ordering[label])
             y_toinput = self.generate_data_subset(y, self.ordering[:label])
@@ -33,7 +38,7 @@ class RandomOrderedClassifierChain(MLClassifierBase):
 
     def predict(self, X):
         result = np.zeros((len(X), self.label_count), dtype='i8')
-        for instance in xrange(len(X)):
+        for instance in six.moves.range(len(X)):
             predictions = []
             for label in self.ordering:
                 prediction = self.classifiers[label].predict(np.append(X[instance], predictions))
@@ -58,10 +63,10 @@ class EnsembleClassifierChains(MLClassifierBase):
     def fit(self, X, y):
         self.models = []
         self.label_count = len(y[0])
-        for model in xrange(self.model_count):
+        for model in six.moves.range(self.model_count):
             base_classifier = copy.deepcopy(self.classifier)
             classifier = RandomOrderedClassifierChain(base_classifier)
-            sampled_rows = random.sample(xrange(len(X)), int(self.percentage*len(X)))
+            sampled_rows = random.sample(six.moves.range(len(X)), int(self.percentage*len(X)))
             classifier.fit(self.generate_data_subset(X, sampled_rows, 'rows'), self.generate_data_subset(y, sampled_rows, 'rows'))
             self.models.append(classifier)
         return self
@@ -70,16 +75,16 @@ class EnsembleClassifierChains(MLClassifierBase):
         results = np.zeros((len(X), self.label_count), dtype='i8')
         for model in self.models:
             prediction = model.predict(X)
-            for row in xrange(len(X)):
-                for label in xrange(self.label_count):
+            for row in six.moves.range(len(X)):
+                for label in six.moves.range(self.label_count):
                     results[model.ordering[label]] += prediction[row][label]
 
         sums = np.zeros(self.label_count, dtype='float')
         for row in results:
             sums += row
 
-        for row in xrange(len(X)):
-            for label in xrange(self.label_count):
+        for row in six.moves.range(len(X)):
+            for label in six.moves.range(self.label_count):
                 results[row][label] = int(results[row][label]/float(sums[label]) > self.threshold)
 
         return results

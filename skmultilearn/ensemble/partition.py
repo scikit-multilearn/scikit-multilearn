@@ -1,6 +1,7 @@
 from ..problem_transform.br import BinaryRelevance
 import copy
 import numpy as np
+import six
 
 from scipy import sparse
 from ..utils import get_matrix_in_format
@@ -37,7 +38,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
         X = self.ensure_input_format(X, sparse_format = 'csr', enforce_sparse = True)
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype=int)
 
-        for model in xrange(self.model_count):
+        for model in six.moves.range(self.model_count):
             predictions = self.ensure_output_format(self.classifiers[model].predict(X), sparse_format = None, enforce_sparse = True).nonzero()
             for row, column in zip(predictions[0], predictions[1]):
                 result[row, self.partition[model][column]] = 1
