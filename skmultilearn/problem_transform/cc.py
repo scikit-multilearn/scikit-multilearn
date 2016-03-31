@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from ..base import MLClassifierBase
 from scipy.sparse import hstack, coo_matrix, issparse
 import copy
@@ -19,13 +21,13 @@ class ClassifierChain(MLClassifierBase):
         X_extended = self.ensure_input_format(X, sparse_format = 'csc', enforce_sparse = True)
         y = self.ensure_output_format(y, sparse_format = 'csc', enforce_sparse = True)
         self.label_count = y.shape[1]
-        six.print(self.label_count)
+        print(self.label_count)
         self.classifiers = [None for x in six.moves.range(self.label_count)]
 
         for label in six.moves.range(self.label_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, label, axis = 1)
-            six.print(label, X_extended.shape)
+            print(label, X_extended.shape)
 
             self.classifiers[label] = classifier.fit(self.ensure_input_format(X_extended), self.ensure_output_format(y_subset))
             X_extended = hstack([X_extended, y_subset])
@@ -36,7 +38,7 @@ class ClassifierChain(MLClassifierBase):
         X_extended = self.ensure_input_format(X, sparse_format = 'csc', enforce_sparse = True)
         prediction = None
         for label in six.moves.range(self.label_count):
-            six.print(label, X_extended.shape)
+            print(label, X_extended.shape)
             prediction = self.classifiers[label].predict(self.ensure_input_format(X_extended))
             prediction = self.ensure_output_format(prediction, sparse_format = 'csc', enforce_sparse = True)
             X_extended = hstack([X_extended, prediction.T]).tocsc()
