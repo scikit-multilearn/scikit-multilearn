@@ -1,0 +1,1831 @@
+@relation 'MEDC: -C 45 -I 0-weka.filters.unsupervised.attribute.Remove-R1-45_MEDC: -C 45 -I 0-weka.filters.unsupervised.attribute.Remove-R46-1494-weka.filters.unsupervised.instance.RemovePercentage-P66'
+
+@attribute - {0,1}
+@attribute / {0,1}
+@attribute 0 {0,1}
+@attribute 00 {0,1}
+@attribute 04 {0,1}
+@attribute 0; {0,1}
+@attribute 0cm {0,1}
+@attribute 1 {0,1}
+@attribute 1-1/2 {0,1}
+@attribute 1-1/2-year {0,1}
+@attribute 1-month {0,1}
+@attribute 1-year {0,1}
+@attribute 1-year-1-month {0,1}
+@attribute 1-year-4-month {0,1}
+@attribute 1-year-5-month {0,1}
+@attribute 1/2 {0,1}
+@attribute 1/2/01 {0,1}
+@attribute 10 {0,1}
+@attribute 10-month {0,1}
+@attribute 10-year {0,1}
+@attribute 10-year-9-month {0,1}
+@attribute 101 {0,1}
+@attribute 102 {0,1}
+@attribute 103 {0,1}
+@attribute 104 {0,1}
+@attribute 105 {0,1}
+@attribute 11 {0,1}
+@attribute 11-1/2-year {0,1}
+@attribute 11-month {0,1}
+@attribute 11-month-16-day {0,1}
+@attribute 11-year {0,1}
+@attribute 11-year-5-month {0,1}
+@attribute 12 {0,1}
+@attribute 12-day {0,1}
+@attribute 12-month {0,1}
+@attribute 12-year {0,1}
+@attribute 12-year-7-month {0,1}
+@attribute 13 {0,1}
+@attribute 13-1/2-year {0,1}
+@attribute 13-day {0,1}
+@attribute 13-month {0,1}
+@attribute 13-year {0,1}
+@attribute 134 {0,1}
+@attribute 14 {0,1}
+@attribute 14-day {0,1}
+@attribute 14-year {0,1}
+@attribute 15-month {0,1}
+@attribute 15-year {0,1}
+@attribute 15-year-6-month {0,1}
+@attribute 16 {0,1}
+@attribute 16-month {0,1}
+@attribute 16-year {0,1}
+@attribute 17-day {0,1}
+@attribute 17-year {0,1}
+@attribute 18 {0,1}
+@attribute 18-month {0,1}
+@attribute 18-year {0,1}
+@attribute 19-month {0,1}
+@attribute 19-year {0,1}
+@attribute 2 {0,1}
+@attribute 2-1/2-year {0,1}
+@attribute 2-3 {0,1}
+@attribute 2-month {0,1}
+@attribute 2-year {0,1}
+@attribute 2-year-3-month {0,1}
+@attribute 2-year-4-month {0,1}
+@attribute 2-year-9-month {0,1}
+@attribute 20-day {0,1}
+@attribute 20-year {0,1}
+@attribute 2001 {0,1}
+@attribute 21 {0,1}
+@attribute 21-day {0,1}
+@attribute 21-month {0,1}
+@attribute 21-year {0,1}
+@attribute 22 {0,1}
+@attribute 22-day {0,1}
+@attribute 27 {0,1}
+@attribute 28 {0,1}
+@attribute 2; {0,1}
+@attribute 2nd {0,1}
+@attribute 3 {0,1}
+@attribute 3-4 {0,1}
+@attribute 3-month {0,1}
+@attribute 3-year {0,1}
+@attribute 3-year-10-month {0,1}
+@attribute 3-year-5-month {0,1}
+@attribute 38 {0,1}
+@attribute 3mm {0,1}
+@attribute 3rd {0,1}
+@attribute 4 {0,1}
+@attribute 4-1/2-year {0,1}
+@attribute 4-month {0,1}
+@attribute 4-year {0,1}
+@attribute 4-year-11-month {0,1}
+@attribute 4-year-3-month {0,1}
+@attribute 4-year-4-month {0,1}
+@attribute 4-year-8-month {0,1}
+@attribute 5 {0,1}
+@attribute 5-1/2-year {0,1}
+@attribute 5-6 {0,1}
+@attribute 5-month {0,1}
+@attribute 5-month-19-day {0,1}
+@attribute 5-year {0,1}
+@attribute 591 {0,1}
+@attribute 5th {0,1}
+@attribute 6 {0,1}
+@attribute 6-month {0,1}
+@attribute 6-month-6-day {0,1}
+@attribute 6-year {0,1}
+@attribute 6-year-11-month {0,1}
+@attribute 6-year-4-month {0,1}
+@attribute 7 {0,1}
+@attribute 7-1/2-year {0,1}
+@attribute 7-month {0,1}
+@attribute 7-year {0,1}
+@attribute 7-year-4-month {0,1}
+@attribute 8 {0,1}
+@attribute 8-month {0,1}
+@attribute 8-month-13-day {0,1}
+@attribute 8-year {0,1}
+@attribute 8-year-2-month {0,1}
+@attribute 8-year-9-month {0,1}
+@attribute 85-month {0,1}
+@attribute 9 {0,1}
+@attribute 9-day {0,1}
+@attribute 9-month {0,1}
+@attribute 9-month-24-day {0,1}
+@attribute 9-month-30-day {0,1}
+@attribute 9-year {0,1}
+@attribute 9-year-1-month {0,1}
+@attribute 90s {0,1}
+@attribute 90th {0,1}
+@attribute 9; {0,1}
+@attribute abdomen {0,1}
+@attribute abdominal {0,1}
+@attribute abnormal {0,1}
+@attribute abnormalities {0,1}
+@attribute abnormality {0,1}
+@attribute abscess {0,1}
+@attribute absent {0,1}
+@attribute accidents {0,1}
+@attribute account {0,1}
+@attribute accounts {0,1}
+@attribute acquired {0,1}
+@attribute active {0,1}
+@attribute activity {0,1}
+@attribute acute {0,1}
+@attribute addition {0,1}
+@attribute additional {0,1}
+@attribute adenoids {0,1}
+@attribute adenopathy {0,1}
+@attribute adherent {0,1}
+@attribute administration {0,1}
+@attribute admitted {0,1}
+@attribute adopted {0,1}
+@attribute adults {0,1}
+@attribute aerated {0,1}
+@attribute aeration {0,1}
+@attribute afebrile {0,1}
+@attribute afternoon {0,1}
+@attribute age {0,1}
+@attribute ago {0,1}
+@attribute air {0,1}
+@attribute airspace {0,1}
+@attribute airway {0,1}
+@attribute airways {0,1}
+@attribute aldrich {0,1}
+@attribute allergies {0,1}
+@attribute allowing {0,1}
+@attribute alternatively {0,1}
+@attribute amenable {0,1}
+@attribute amount {0,1}
+@attribute amplatzer {0,1}
+@attribute and/or {0,1}
+@attribute anechoic {0,1}
+@attribute angles {0,1}
+@attribute angulation {0,1}
+@attribute anniversary {0,1}
+@attribute annual {0,1}
+@attribute anomalies {0,1}
+@attribute anomaly {0,1}
+@attribute anterior {0,1}
+@attribute anteriorly {0,1}
+@attribute antibiotic {0,1}
+@attribute antibiotics {0,1}
+@attribute antibody {0,1}
+@attribute antrum {0,1}
+@attribute anuresis {0,1}
+@attribute aorta {0,1}
+@attribute aortic {0,1}
+@attribute ap {0,1}
+@attribute apparent {0,1}
+@attribute apparently {0,1}
+@attribute appearance {0,1}
+@attribute appeared {0,1}
+@attribute appearing {0,1}
+@attribute appears {0,1}
+@attribute appetite {0,1}
+@attribute appreciated {0,1}
+@attribute approximately {0,1}
+@attribute arch {0,1}
+@attribute area {0,1}
+@attribute areas {0,1}
+@attribute arrest {0,1}
+@attribute artifact {0,1}
+@attribute artificial {0,1}
+@attribute aryepiglottic {0,1}
+@attribute aspect {0,1}
+@attribute aspirated {0,1}
+@attribute aspirating {0,1}
+@attribute aspiration {0,1}
+@attribute assess {0,1}
+@attribute assessing {0,1}
+@attribute asthma {0,1}
+@attribute asthmatic {0,1}
+@attribute asymmetric {0,1}
+@attribute asymmetrically {0,1}
+@attribute asymmetry {0,1}
+@attribute asymptomatic {0,1}
+@attribute atelectasis {0,1}
+@attribute atrophic {0,1}
+@attribute atrophy {0,1}
+@attribute attempted {0,1}
+@attribute attenuation {0,1}
+@attribute atypical {0,1}
+@attribute augmentation {0,1}
+@attribute augmented {0,1}
+@attribute axillary {0,1}
+@attribute back {0,1}
+@attribute bacterial {0,1}
+@attribute bactrim {0,1}
+@attribute band {0,1}
+@attribute barium {0,1}
+@attribute barky {0,1}
+@attribute base {0,1}
+@attribute based {0,1}
+@attribute bases {0,1}
+@attribute basilar {0,1}
+@attribute basis {0,1}
+@attribute basketball {0,1}
+@attribute bcg {0,1}
+@attribute beckwith {0,1}
+@attribute bedwetting {0,1}
+@attribute beginning {0,1}
+@attribute behavior {0,1}
+@attribute bertin {0,1}
+@attribute bethesda {0,1}
+@attribute bibasilar {0,1}
+@attribute bifid {0,1}
+@attribute bifida {0,1}
+@attribute bilateral {0,1}
+@attribute bilaterality {0,1}
+@attribute bilaterally {0,1}
+@attribute birth {0,1}
+@attribute bladder {0,1}
+@attribute bladder; {0,1}
+@attribute bodies {0,1}
+@attribute body {0,1}
+@attribute bone {0,1}
+@attribute bony {0,1}
+@attribute borderline {0,1}
+@attribute borne {0,1}
+@attribute bowel {0,1}
+@attribute boy {0,1}
+@attribute brain {0,1}
+@attribute breath {0,1}
+@attribute breathing {0,1}
+@attribute breathlessness {0,1}
+@attribute breaths {0,1}
+@attribute bronchial {0,1}
+@attribute bronchiectasis {0,1}
+@attribute bronchiolitis {0,1}
+@attribute bronchitis {0,1}
+@attribute broncho {0,1}
+@attribute bronchopulmonary {0,1}
+@attribute bronchovascular {0,1}
+@attribute brothers {0,1}
+@attribute burning {0,1}
+@attribute calcification {0,1}
+@attribute calcifications {0,1}
+@attribute calcium {0,1}
+@attribute calculi {0,1}
+@attribute calculus {0,1}
+@attribute caliber {0,1}
+@attribute caliceal {0,1}
+@attribute caliectasis {0,1}
+@attribute calix {0,1}
+@attribute call {0,1}
+@attribute called {0,1}
+@attribute calms {0,1}
+@attribute calyceal {0,1}
+@attribute calyx {0,1}
+@attribute car {0,1}
+@attribute cardiac {0,1}
+@attribute cardiopulmonary {0,1}
+@attribute case {0,1}
+@attribute catches {0,1}
+@attribute catheter {0,1}
+@attribute catheterization {0,1}
+@attribute catheterized {0,1}
+@attribute caudal {0,1}
+@attribute caused {0,1}
+@attribute causing {0,1}
+@attribute cell {0,1}
+@attribute cells {0,1}
+@attribute central {0,1}
+@attribute cf {0,1}
+@attribute chair {0,1}
+@attribute change {0,1}
+@attribute change; {0,1}
+@attribute changed {0,1}
+@attribute characteristics {0,1}
+@attribute characterized {0,1}
+@attribute charts {0,1}
+@attribute checkup {0,1}
+@attribute chest {0,1}
+@attribute child {0,1}
+@attribute childs {0,1}
+@attribute chlorine {0,1}
+@attribute choking {0,1}
+@attribute chronic {0,1}
+@attribute chronological {0,1}
+@attribute clean {0,1}
+@attribute clear {0,1}
+@attribute cleared {0,1}
+@attribute clearing {0,1}
+@attribute clinic {0,1}
+@attribute clinical {0,1}
+@attribute clinically {0,1}
+@attribute clinician {0,1}
+@attribute clinicians {0,1}
+@attribute cloacal {0,1}
+@attribute close {0,1}
+@attribute clot {0,1}
+@attribute cm {0,1}
+@attribute coarse {0,1}
+@attribute coating {0,1}
+@attribute coffee {0,1}
+@attribute coli {0,1}
+@attribute collapse {0,1}
+@attribute collapsed {0,1}
+@attribute collecting {0,1}
+@attribute colon {0,1}
+@attribute column {0,1}
+@attribute community {0,1}
+@attribute comparative {0,1}
+@attribute compared {0,1}
+@attribute comparison {0,1}
+@attribute comparisons {0,1}
+@attribute compatible {0,1}
+@attribute compensatory {0,1}
+@attribute complaining {0,1}
+@attribute complains {0,1}
+@attribute complete {0,1}
+@attribute completely {0,1}
+@attribute complex {0,1}
+@attribute complicating {0,1}
+@attribute complication {0,1}
+@attribute complications {0,1}
+@attribute compressing {0,1}
+@attribute concentric {0,1}
+@attribute concern {0,1}
+@attribute confirmed {0,1}
+@attribute confluence {0,1}
+@attribute confluent {0,1}
+@attribute congenital {0,1}
+@attribute congestion {0,1}
+@attribute connect {0,1}
+@attribute considerably {0,1}
+@attribute considerations {0,1}
+@attribute considered {0,1}
+@attribute consistent {0,1}
+@attribute consolidation {0,1}
+@attribute consolidations {0,1}
+@attribute consolidative {0,1}
+@attribute constipation {0,1}
+@attribute consultation {0,1}
+@attribute context {0,1}
+@attribute continue {0,1}
+@attribute continued {0,1}
+@attribute contour {0,1}
+@attribute contralateral {0,1}
+@attribute contrast {0,1}
+@attribute convex {0,1}
+@attribute conveyed {0,1}
+@attribute cord {0,1}
+@attribute correlate {0,1}
+@attribute correlated {0,1}
+@attribute correlation {0,1}
+@attribute cortical {0,1}
+@attribute corticomedullary {0,1}
+@attribute costophrenic {0,1}
+@attribute cough {0,1}
+@attribute coughing {0,1}
+@attribute count {0,1}
+@attribute couple {0,1}
+@attribute crackles {0,1}
+@attribute creates {0,1}
+@attribute cries {0,1}
+@attribute croup {0,1}
+@attribute croupy {0,1}
+@attribute crowding {0,1}
+@attribute ct {0,1}
+@attribute cuffing {0,1}
+@attribute cul-de-sac {0,1}
+@attribute curing {0,1}
+@attribute current {0,1}
+@attribute curvature {0,1}
+@attribute curve {0,1}
+@attribute cyst {0,1}
+@attribute cystic {0,1}
+@attribute cystitis {0,1}
+@attribute cystogram {0,1}
+@attribute cystograms {0,1}
+@attribute cystography {0,1}
+@attribute cystourethrogram {0,1}
+@attribute cystourethrograms {0,1}
+@attribute daily {0,1}
+@attribute date {0,1}
+@attribute dated {0,1}
+@attribute dating {0,1}
+@attribute day {0,1}
+@attribute days {0,1}
+@attribute daytime {0,1}
+@attribute debris {0,1}
+@attribute decompression {0,1}
+@attribute decrease {0,1}
+@attribute decreased {0,1}
+@attribute decubitus {0,1}
+@attribute dedicated {0,1}
+@attribute deep {0,1}
+@attribute definable {0,1}
+@attribute defined {0,1}
+@attribute definite {0,1}
+@attribute definitive {0,1}
+@attribute deflux {0,1}
+@attribute deformity {0,1}
+@attribute degree {0,1}
+@attribute degrees {0,1}
+@attribute dehydrated {0,1}
+@attribute delayed {0,1}
+@attribute demonstrate {0,1}
+@attribute demonstrated {0,1}
+@attribute demonstrating {0,1}
+@attribute denise {0,1}
+@attribute densities {0,1}
+@attribute density {0,1}
+@attribute department {0,1}
+@attribute dependent {0,1}
+@attribute depending {0,1}
+@attribute descending {0,1}
+@attribute detailed {0,1}
+@attribute detected {0,1}
+@attribute determine {0,1}
+@attribute determined {0,1}
+@attribute developed {0,1}
+@attribute developing {0,1}
+@attribute development {0,1}
+@attribute deviations {0,1}
+@attribute device {0,1}
+@attribute diagnosed {0,1}
+@attribute diagnosis {0,1}
+@attribute diameter {0,1}
+@attribute diaphragm {0,1}
+@attribute diaphragms {0,1}
+@attribute diarrhea {0,1}
+@attribute dictation {0,1}
+@attribute difference {0,1}
+@attribute differences {0,1}
+@attribute differential {0,1}
+@attribute differentiation {0,1}
+@attribute difficult {0,1}
+@attribute difficulty {0,1}
+@attribute diffuse {0,1}
+@attribute dilatation {0,1}
+@attribute dilated {0,1}
+@attribute dilation {0,1}
+@attribute diminished {0,1}
+@attribute discontinued {0,1}
+@attribute discovered {0,1}
+@attribute discrepancy {0,1}
+@attribute discussed {0,1}
+@attribute discussion {0,1}
+@attribute disease {0,1}
+@attribute disease; {0,1}
+@attribute displaced {0,1}
+@attribute distal {0,1}
+@attribute distended {0,1}
+@attribute distention {0,1}
+@attribute distorted {0,1}
+@attribute diverticulum {0,1}
+@attribute documented {0,1}
+@attribute double {0,1}
+@attribute drainage {0,1}
+@attribute drained {0,1}
+@attribute dry {0,1}
+@attribute due {0,1}
+@attribute duodenal {0,1}
+@attribute duplex {0,1}
+@attribute duplicated {0,1}
+@attribute duplication {0,1}
+@attribute duration {0,1}
+@attribute dysfunction {0,1}
+@attribute dysplasia {0,1}
+@attribute dysplastic {0,1}
+@attribute dysuria {0,1}
+@attribute ear {0,1}
+@attribute early {0,1}
+@attribute echogenic {0,1}
+@attribute echogenicity {0,1}
+@attribute ectasia {0,1}
+@attribute edematous {0,1}
+@attribute effusion {0,1}
+@attribute effusions {0,1}
+@attribute elbowed {0,1}
+@attribute elevated {0,1}
+@attribute eleven {0,1}
+@attribute emergency {0,1}
+@attribute emesis {0,1}
+@attribute empty {0,1}
+@attribute emptying {0,1}
+@attribute end {0,1}
+@attribute enlarged {0,1}
+@attribute enlargement {0,1}
+@attribute enuresis {0,1}
+@attribute epiglottis {0,1}
+@attribute episode {0,1}
+@attribute episodes {0,1}
+@attribute epispadias {0,1}
+@attribute essentially {0,1}
+@attribute ethmoid {0,1}
+@attribute etiology {0,1}
+@attribute evaluate {0,1}
+@attribute evaluated {0,1}
+@attribute evaluation {0,1}
+@attribute evidence {0,1}
+@attribute evident {0,1}
+@attribute exam {0,1}
+@attribute examination {0,1}
+@attribute examinations {0,1}
+@attribute exams {0,1}
+@attribute excavatum {0,1}
+@attribute exceeds {0,1}
+@attribute exclude {0,1}
+@attribute excluded {0,1}
+@attribute existing {0,1}
+@attribute expanded {0,1}
+@attribute expected {0,1}
+@attribute explain {0,1}
+@attribute explained {0,1}
+@attribute exposure {0,1}
+@attribute exstrophy {0,1}
+@attribute extending {0,1}
+@attribute extension {0,1}
+@attribute extent {0,1}
+@attribute extrarenal {0,1}
+@attribute fahrenheit {0,1}
+@attribute failure {0,1}
+@attribute falling {0,1}
+@attribute familiar {0,1}
+@attribute family {0,1}
+@attribute fat {0,1}
+@attribute favor {0,1}
+@attribute favored {0,1}
+@attribute features {0,1}
+@attribute febrile {0,1}
+@attribute feel {0,1}
+@attribute feeling {0,1}
+@attribute fell {0,1}
+@attribute fellow- {0,1}
+@attribute female {0,1}
+@attribute fever {0,1}
+@attribute fevers {0,1}
+@attribute fibrosis {0,1}
+@attribute file {0,1}
+@attribute filed {0,1}
+@attribute filled {0,1}
+@attribute filling {0,1}
+@attribute film {0,1}
+@attribute films {0,1}
+@attribute final {0,1}
+@attribute finding {0,1}
+@attribute findings {0,1}
+@attribute fire {0,1}
+@attribute fistula {0,1}
+@attribute flank {0,1}
+@attribute flattened {0,1}
+@attribute flattening {0,1}
+@attribute fluffy {0,1}
+@attribute fluid {0,1}
+@attribute focal {0,1}
+@attribute foci {0,1}
+@attribute focus {0,1}
+@attribute folds {0,1}
+@attribute follow {0,1}
+@attribute follow-up {0,1}
+@attribute followup {0,1}
+@attribute food {0,1}
+@attribute foreign {0,1}
+@attribute foster {0,1}
+@attribute found {0,1}
+@attribute fourchette {0,1}
+@attribute fourth {0,1}
+@attribute fracture {0,1}
+@attribute free {0,1}
+@attribute frequency {0,1}
+@attribute frequent {0,1}
+@attribute frontal {0,1}
+@attribute full {0,1}
+@attribute fullness {0,1}
+@attribute fully {0,1}
+@attribute function {0,1}
+@attribute functional {0,1}
+@attribute funny {0,1}
+@attribute gagging {0,1}
+@attribute gas {0,1}
+@attribute gaseous {0,1}
+@attribute gasps {0,1}
+@attribute gastrocystoplasty {0,1}
+@attribute gastrostomy {0,1}
+@attribute generalized {0,1}
+@attribute girl {0,1}
+@attribute give {0,1}
+@attribute globally {0,1}
+@attribute glomerulonephritis {0,1}
+@attribute grade {0,1}
+@attribute grades {0,1}
+@attribute granulomatous {0,1}
+@attribute greater {0,1}
+@attribute greatly {0,1}
+@attribute gross {0,1}
+@attribute grossly {0,1}
+@attribute growing {0,1}
+@attribute grown {0,1}
+@attribute growth {0,1}
+@attribute habitus {0,1}
+@attribute half {0,1}
+@attribute hazy {0,1}
+@attribute head {0,1}
+@attribute healing {0,1}
+@attribute heart {0,1}
+@attribute height {0,1}
+@attribute held {0,1}
+@attribute helpful {0,1}
+@attribute hemangioma {0,1}
+@attribute hematuria {0,1}
+@attribute hemidiaphragm {0,1}
+@attribute hemihypertrophy {0,1}
+@attribute hemorrhagic {0,1}
+@attribute high {0,1}
+@attribute higher {0,1}
+@attribute hilar {0,1}
+@attribute hilum {0,1}
+@attribute history {0,1}
+@attribute hit {0,1}
+@attribute hodgkin {0,1}
+@attribute homogeneous {0,1}
+@attribute horseshoe {0,1}
+@attribute hospital {0,1}
+@attribute house {0,1}
+@attribute hugely {0,1}
+@attribute hydrated {0,1}
+@attribute hydrational {0,1}
+@attribute hydronephrosis {0,1}
+@attribute hydronephrosis; {0,1}
+@attribute hydronephrotic {0,1}
+@attribute hydroureter {0,1}
+@attribute hydroureteronephrosis {0,1}
+@attribute hyperdense {0,1}
+@attribute hyperechoic {0,1}
+@attribute hyperinflated {0,1}
+@attribute hyperinflation {0,1}
+@attribute hyperreactive {0,1}
+@attribute hypertrophy {0,1}
+@attribute hypoechoic {0,1}
+@attribute hypoplastic {0,1}
+@attribute hypovascularity {0,1}
+@attribute hypoventilation {0,1}
+@attribute hypoventilatory {0,1}
+@attribute identified {0,1}
+@attribute ii {0,1}
+@attribute ii-iii {0,1}
+@attribute ill {0,1}
+@attribute illness {0,1}
+@attribute image {0,1}
+@attribute images {0,1}
+@attribute imaging {0,1}
+@attribute immediately {0,1}
+@attribute improved {0,1}
+@attribute improvement {0,1}
+@attribute improving {0,1}
+@attribute inaccurate {0,1}
+@attribute incidental {0,1}
+@attribute incidentally {0,1}
+@attribute include {0,1}
+@attribute included {0,1}
+@attribute includes {0,1}
+@attribute including {0,1}
+@attribute incomplete {0,1}
+@attribute incontinence {0,1}
+@attribute increase {0,1}
+@attribute increased {0,1}
+@attribute increases {0,1}
+@attribute increasing {0,1}
+@attribute infant {0,1}
+@attribute infection {0,1}
+@attribute infection; {0,1}
+@attribute infections {0,1}
+@attribute inferior {0,1}
+@attribute infiltrate {0,1}
+@attribute infiltrates {0,1}
+@attribute inflammation {0,1}
+@attribute inflation {0,1}
+@attribute information {0,1}
+@attribute informative {0,1}
+@attribute ingested {0,1}
+@attribute initial {0,1}
+@attribute initially {0,1}
+@attribute injection {0,1}
+@attribute injury {0,1}
+@attribute inlet {0,1}
+@attribute insertions {0,1}
+@attribute inspiration {0,1}
+@attribute institution {0,1}
+@attribute insufficient {0,1}
+@attribute intact {0,1}
+@attribute intercostal {0,1}
+@attribute intermittent {0,1}
+@attribute intermittently {0,1}
+@attribute interobserver {0,1}
+@attribute interpretation {0,1}
+@attribute interstitial {0,1}
+@attribute interval {0,1}
+@attribute interventional {0,1}
+@attribute intraabdominal {0,1}
+@attribute intraluminal {0,1}
+@attribute intraoperative {0,1}
+@attribute intrarenal {0,1}
+@attribute intrathoracic {0,1}
+@attribute intrinsically {0,1}
+@attribute intussusception {0,1}
+@attribute involving {0,1}
+@attribute irregular {0,1}
+@attribute irregularity {0,1}
+@attribute issue {0,1}
+@attribute jan {0,1}
+@attribute january {0,1}
+@attribute jet {0,1}
+@attribute jets {0,1}
+@attribute junction {0,1}
+@attribute junctional {0,1}
+@attribute keeping {0,1}
+@attribute kidney {0,1}
+@attribute kidney; {0,1}
+@attribute kidneys {0,1}
+@attribute kidneys; {0,1}
+@attribute kilograms {0,1}
+@attribute l10 {0,1}
+@attribute l=10 {0,1}
+@attribute l=6 {0,1}
+@attribute l=9 {0,1}
+@attribute laboratory {0,1}
+@attribute labored {0,1}
+@attribute lack {0,1}
+@attribute large {0,1}
+@attribute larger {0,1}
+@attribute lateral {0,1}
+@attribute left {0,1}
+@attribute length {0,1}
+@attribute lengths {0,1}
+@attribute lesion {0,1}
+@attribute lethargy {0,1}
+@attribute level {0,1}
+@attribute lie {0,1}
+@attribute limited {0,1}
+@attribute limits {0,1}
+@attribute line {0,1}
+@attribute linear {0,1}
+@attribute lines {0,1}
+@attribute lingual {0,1}
+@attribute lingula {0,1}
+@attribute lingular {0,1}
+@attribute liver {0,1}
+@attribute lobar {0,1}
+@attribute lobe {0,1}
+@attribute lobes {0,1}
+@attribute localized {0,1}
+@attribute long {0,1}
+@attribute longer {0,1}
+@attribute loop {0,1}
+@attribute loops {0,1}
+@attribute loss {0,1}
+@attribute low {0,1}
+@attribute lower {0,1}
+@attribute lucent {0,1}
+@attribute lumbar {0,1}
+@attribute lumen {0,1}
+@attribute lunch {0,1}
+@attribute lung {0,1}
+@attribute lungs {0,1}
+@attribute lymph {0,1}
+@attribute lymphadenopathy {0,1}
+@attribute made {0,1}
+@attribute malaise {0,1}
+@attribute male {0,1}
+@attribute management {0,1}
+@attribute margin {0,1}
+@attribute margins {0,1}
+@attribute marked {0,1}
+@attribute markedly {0,1}
+@attribute markings {0,1}
+@attribute marrow {0,1}
+@attribute mason {0,1}
+@attribute mass {0,1}
+@attribute masses {0,1}
+@attribute maxillary {0,1}
+@attribute maximal {0,1}
+@attribute measure {0,1}
+@attribute measurement {0,1}
+@attribute measures {0,1}
+@attribute measuring {0,1}
+@attribute meatal {0,1}
+@attribute medial {0,1}
+@attribute mediastinal {0,1}
+@attribute mediastinum {0,1}
+@attribute medical {0,1}
+@attribute medication {0,1}
+@attribute megaureter {0,1}
+@attribute megaureters {0,1}
+@attribute meningomyelocele {0,1}
+@attribute mentally {0,1}
+@attribute microscopic {0,1}
+@attribute micturition {0,1}
+@attribute mid {0,1}
+@attribute middle {0,1}
+@attribute mild {0,1}
+@attribute mildly {0,1}
+@attribute minimal {0,1}
+@attribute minimally {0,1}
+@attribute minor {0,1}
+@attribute mitrofanoff {0,1}
+@attribute mm {0,1}
+@attribute moderate {0,1}
+@attribute moderately {0,1}
+@attribute moieties {0,1}
+@attribute moiety {0,1}
+@attribute mom {0,1}
+@attribute monday {0,1}
+@attribute month {0,1}
+@attribute month-old {0,1}
+@attribute months {0,1}
+@attribute mother {0,1}
+@attribute mound {0,1}
+@attribute mounds {0,1}
+@attribute mri {0,1}
+@attribute mucosal {0,1}
+@attribute multiple {0,1}
+@attribute muscular {0,1}
+@attribute mycoplasma {0,1}
+@attribute myelomeningocele {0,1}
+@attribute narrowing {0,1}
+@attribute nasal {0,1}
+@attribute nasopharyngeal {0,1}
+@attribute nature {0,1}
+@attribute neck {0,1}
+@attribute needed {0,1}
+@attribute negative {0,1}
+@attribute nephrocalcinosis {0,1}
+@attribute nephrolithiasis {0,1}
+@attribute nephrology {0,1}
+@attribute nephropathy {0,1}
+@attribute neurogenic {0,1}
+@attribute newborn {0,1}
+@attribute night {0,1}
+@attribute nights {0,1}
+@attribute nighttime {0,1}
+@attribute nipple {0,1}
+@attribute nocturnal {0,1}
+@attribute nodes {0,1}
+@attribute noisy {0,1}
+@attribute nonconventional {0,1}
+@attribute nondistended {0,1}
+@attribute nonfebrile {0,1}
+@attribute nonobstructed {0,1}
+@attribute nonobstructing {0,1}
+@attribute nonobstructive {0,1}
+@attribute nonspecific {0,1}
+@attribute normal {0,1}
+@attribute nose {0,1}
+@attribute notable {0,1}
+@attribute note {0,1}
+@attribute noted {0,1}
+@attribute nuclear {0,1}
+@attribute number {0,1}
+@attribute objected {0,1}
+@attribute obscuring {0,1}
+@attribute obstruction {0,1}
+@attribute obstructions {0,1}
+@attribute obtain {0,1}
+@attribute obtained {0,1}
+@attribute obvious {0,1}
+@attribute occurred {0,1}
+@attribute office {0,1}
+@attribute omphalocele {0,1}
+@attribute onset {0,1}
+@attribute opacification {0,1}
+@attribute opacities {0,1}
+@attribute opacity {0,1}
+@attribute opens {0,1}
+@attribute order {0,1}
+@attribute organism {0,1}
+@attribute origin {0,1}
+@attribute outer {0,1}
+@attribute outpatient {0,1}
+@attribute ovary {0,1}
+@attribute overlying {0,1}
+@attribute pain {0,1}
+@attribute palatine {0,1}
+@attribute palmer {0,1}
+@attribute parallel {0,1}
+@attribute paranasal {0,1}
+@attribute paratracheal {0,1}
+@attribute parenchyma {0,1}
+@attribute parenchymal {0,1}
+@attribute parent {0,1}
+@attribute parents {0,1}
+@attribute partial {0,1}
+@attribute partially {0,1}
+@attribute past {0,1}
+@attribute patch {0,1}
+@attribute patchiness {0,1}
+@attribute patchy {0,1}
+@attribute patent {0,1}
+@attribute patient {0,1}
+@attribute patients {0,1}
+@attribute pattern {0,1}
+@attribute pectus {0,1}
+@attribute pelves {0,1}
+@attribute pelvic {0,1}
+@attribute pelvicaliceal {0,1}
+@attribute pelvis {0,1}
+@attribute percentile {0,1}
+@attribute performed {0,1}
+@attribute peribronchial {0,1}
+@attribute perihilar {0,1}
+@attribute perineum {0,1}
+@attribute period {0,1}
+@attribute periphery {0,1}
+@attribute peristalsis {0,1}
+@attribute persist {0,1}
+@attribute persistent {0,1}
+@attribute persistently {0,1}
+@attribute persists {0,1}
+@attribute pharyngitis {0,1}
+@attribute phone {0,1}
+@attribute physical {0,1}
+@attribute physician {0,1}
+@attribute physiologic {0,1}
+@attribute picture {0,1}
+@attribute pituitary {0,1}
+@attribute place {0,1}
+@attribute placement {0,1}
+@attribute placements {0,1}
+@attribute plain {0,1}
+@attribute plate {0,1}
+@attribute pleural {0,1}
+@attribute pneumococcal {0,1}
+@attribute pneumomediastinum {0,1}
+@attribute pneumonia {0,1}
+@attribute pneumonias {0,1}
+@attribute pneumothorax {0,1}
+@attribute pole {0,1}
+@attribute poles {0,1}
+@attribute polyp {0,1}
+@attribute poor {0,1}
+@attribute portion {0,1}
+@attribute position {0,1}
+@attribute positional {0,1}
+@attribute positioning {0,1}
+@attribute positive {0,1}
+@attribute possibility {0,1}
+@attribute possibly {0,1}
+@attribute post {0,1}
+@attribute posterior {0,1}
+@attribute posteromedial {0,1}
+@attribute postnatal {0,1}
+@attribute postoperative {0,1}
+@attribute postvoid {0,1}
+@attribute potty {0,1}
+@attribute ppd {0,1}
+@attribute practice {0,1}
+@attribute prenatal {0,1}
+@attribute preoperative {0,1}
+@attribute presence {0,1}
+@attribute present {0,1}
+@attribute presented {0,1}
+@attribute presenting {0,1}
+@attribute presents {0,1}
+@attribute preservation {0,1}
+@attribute presumed {0,1}
+@attribute previous {0,1}
+@attribute previously {0,1}
+@attribute prior {0,1}
+@attribute probable {0,1}
+@attribute procedure {0,1}
+@attribute procedures {0,1}
+@attribute process {0,1}
+@attribute progressive {0,1}
+@attribute projection {0,1}
+@attribute prolonged {0,1}
+@attribute prominence {0,1}
+@attribute prominent {0,1}
+@attribute prone {0,1}
+@attribute proteinuria {0,1}
+@attribute provided {0,1}
+@attribute proximal {0,1}
+@attribute proximally {0,1}
+@attribute pulmonary {0,1}
+@attribute pulmonologist {0,1}
+@attribute punctate {0,1}
+@attribute purpose {0,1}
+@attribute pyelectasis {0,1}
+@attribute pyelocaliectasis {0,1}
+@attribute pyelonephritis {0,1}
+@attribute pyeloplasty {0,1}
+@attribute pyeloplastys {0,1}
+@attribute pyloroplasty {0,1}
+@attribute quadrant {0,1}
+@attribute query {0,1}
+@attribute question {0,1}
+@attribute questionable {0,1}
+@attribute r9 {0,1}
+@attribute r=10 {0,1}
+@attribute r=5 {0,1}
+@attribute r=9 {0,1}
+@attribute racing {0,1}
+@attribute radiograph {0,1}
+@attribute radiographic {0,1}
+@attribute radiographically {0,1}
+@attribute radiographs {0,1}
+@attribute radiopaque {0,1}
+@attribute raises {0,1}
+@attribute raising {0,1}
+@attribute rales {0,1}
+@attribute range {0,1}
+@attribute rankins {0,1}
+@attribute rate {0,1}
+@attribute re-implant {0,1}
+@attribute re-implantation {0,1}
+@attribute re-injection {0,1}
+@attribute reaction {0,1}
+@attribute reactive {0,1}
+@attribute reactor {0,1}
+@attribute real {0,1}
+@attribute reanastomosis {0,1}
+@attribute receive {0,1}
+@attribute received {0,1}
+@attribute recent {0,1}
+@attribute recently {0,1}
+@attribute recommend {0,1}
+@attribute recommendation {0,1}
+@attribute recommended {0,1}
+@attribute reconstruction {0,1}
+@attribute record {0,1}
+@attribute recurrent {0,1}
+@attribute redness {0,1}
+@attribute reevaluate {0,1}
+@attribute referred {0,1}
+@attribute referring {0,1}
+@attribute refill {0,1}
+@attribute reflect {0,1}
+@attribute reflects {0,1}
+@attribute reflux {0,1}
+@attribute reflux; {0,1}
+@attribute region {0,1}
+@attribute regions {0,1}
+@attribute regression {0,1}
+@attribute reimplantation {0,1}
+@attribute reimplants {0,1}
+@attribute related {0,1}
+@attribute relative {0,1}
+@attribute remain {0,1}
+@attribute remainder {0,1}
+@attribute remaining {0,1}
+@attribute remains {0,1}
+@attribute removal {0,1}
+@attribute removed {0,1}
+@attribute renal {0,1}
+@attribute repair {0,1}
+@attribute repaired {0,1}
+@attribute repeat {0,1}
+@attribute report {0,1}
+@attribute reported {0,1}
+@attribute reportedly {0,1}
+@attribute reports {0,1}
+@attribute represent {0,1}
+@attribute representing {0,1}
+@attribute represents {0,1}
+@attribute requested {0,1}
+@attribute resection {0,1}
+@attribute residua {0,1}
+@attribute residual {0,1}
+@attribute resolution {0,1}
+@attribute resolved {0,1}
+@attribute resolves {0,1}
+@attribute resolving {0,1}
+@attribute respiratory {0,1}
+@attribute respond {0,1}
+@attribute resultant {0,1}
+@attribute results {0,1}
+@attribute retained {0,1}
+@attribute retractions {0,1}
+@attribute retrocardiac {0,1}
+@attribute retroperitoneal {0,1}
+@attribute retropharyngeal {0,1}
+@attribute reveal {0,1}
+@attribute revealed {0,1}
+@attribute reviewing {0,1}
+@attribute rhonchi {0,1}
+@attribute rib {0,1}
+@attribute ribs {0,1}
+@attribute ring {0,1}
+@attribute rotation {0,1}
+@attribute round {0,1}
+@attribute rounded {0,1}
+@attribute routine {0,1}
+@attribute row {0,1}
+@attribute rsv {0,1}
+@attribute rule {0,1}
+@attribute ruled {0,1}
+@attribute running {0,1}
+@attribute runny {0,1}
+@attribute satisfactory {0,1}
+@attribute saturations {0,1}
+@attribute scan {0,1}
+@attribute scanning {0,1}
+@attribute scar {0,1}
+@attribute scarred {0,1}
+@attribute scarring {0,1}
+@attribute scattered {0,1}
+@attribute scheduled {0,1}
+@attribute school {0,1}
+@attribute scoliosis {0,1}
+@attribute screening {0,1}
+@attribute seat {0,1}
+@attribute secondary {0,1}
+@attribute secretions {0,1}
+@attribute segment {0,1}
+@attribute segmentation {0,1}
+@attribute seizure {0,1}
+@attribute sequela {0,1}
+@attribute setting {0,1}
+@attribute seventeen {0,1}
+@attribute severe {0,1}
+@attribute shadow {0,1}
+@attribute shadowing {0,1}
+@attribute shadows {0,1}
+@attribute sharp {0,1}
+@attribute short {0,1}
+@attribute shortness {0,1}
+@attribute shoulder {0,1}
+@attribute show {0,1}
+@attribute showed {0,1}
+@attribute showing {0,1}
+@attribute siblings {0,1}
+@attribute sick {0,1}
+@attribute sickle {0,1}
+@attribute side {0,1}
+@attribute sided {0,1}
+@attribute significance {0,1}
+@attribute significant {0,1}
+@attribute significantly {0,1}
+@attribute silhouette {0,1}
+@attribute silhouetting {0,1}
+@attribute similar {0,1}
+@attribute similarly {0,1}
+@attribute simple {0,1}
+@attribute single {0,1}
+@attribute sinus {0,1}
+@attribute sinuses {0,1}
+@attribute sinusitis {0,1}
+@attribute site {0,1}
+@attribute sixteen {0,1}
+@attribute size {0,1}
+@attribute sized {0,1}
+@attribute skin {0,1}
+@attribute sleeping {0,1}
+@attribute slight {0,1}
+@attribute slightly {0,1}
+@attribute small {0,1}
+@attribute smaller {0,1}
+@attribute smoking {0,1}
+@attribute soft {0,1}
+@attribute solitary {0,1}
+@attribute sonogram {0,1}
+@attribute sonographic {0,1}
+@attribute sonographically {0,1}
+@attribute sonography {0,1}
+@attribute sore {0,1}
+@attribute sounds {0,1}
+@attribute source {0,1}
+@attribute space {0,1}
+@attribute spasm {0,1}
+@attribute specifically {0,1}
+@attribute spina {0,1}
+@attribute spinal {0,1}
+@attribute spine {0,1}
+@attribute spleen {0,1}
+@attribute sports {0,1}
+@attribute spring {0,1}
+@attribute spurious {0,1}
+@attribute sputum {0,1}
+@attribute stable {0,1}
+@attribute standard {0,1}
+@attribute standards {0,1}
+@attribute standing {0,1}
+@attribute start {0,1}
+@attribute started {0,1}
+@attribute states {0,1}
+@attribute status {0,1}
+@attribute stenosis {0,1}
+@attribute stent {0,1}
+@attribute sternal {0,1}
+@attribute sternotomy {0,1}
+@attribute sternum {0,1}
+@attribute stomach {0,1}
+@attribute stone {0,1}
+@attribute stones {0,1}
+@attribute stool {0,1}
+@attribute streaky {0,1}
+@attribute structural {0,1}
+@attribute structure {0,1}
+@attribute structures {0,1}
+@attribute studies {0,1}
+@attribute study {0,1}
+@attribute stuffy {0,1}
+@attribute stump {0,1}
+@attribute subglottic {0,1}
+@attribute subsegmental {0,1}
+@attribute subsequent {0,1}
+@attribute subsequently {0,1}
+@attribute substance {0,1}
+@attribute subtle {0,1}
+@attribute sudden {0,1}
+@attribute suggest {0,1}
+@attribute suggested {0,1}
+@attribute suggesting {0,1}
+@attribute suggestion {0,1}
+@attribute suggestive {0,1}
+@attribute suggests {0,1}
+@attribute superimposed {0,1}
+@attribute superimposition {0,1}
+@attribute superior {0,1}
+@attribute supine {0,1}
+@attribute support {0,1}
+@attribute supporting {0,1}
+@attribute suppressive {0,1}
+@attribute suprahilar {0,1}
+@attribute suprapubic {0,1}
+@attribute surgery {0,1}
+@attribute surgical {0,1}
+@attribute surgically {0,1}
+@attribute suspect {0,1}
+@attribute suspected {0,1}
+@attribute suspicion {0,1}
+@attribute suspicious {0,1}
+@attribute swallow {0,1}
+@attribute swelling {0,1}
+@attribute symmetric {0,1}
+@attribute symptomatology {0,1}
+@attribute symptoms {0,1}
+@attribute syndrome {0,1}
+@attribute system {0,1}
+@attribute systems {0,1}
+@attribute table {0,1}
+@attribute tachypnea {0,1}
+@attribute talks {0,1}
+@attribute tb {0,1}
+@attribute tear {0,1}
+@attribute technical {0,1}
+@attribute technique {0,1}
+@attribute temperature {0,1}
+@attribute ten {0,1}
+@attribute tenting {0,1}
+@attribute term {0,1}
+@attribute test {0,1}
+@attribute tethered {0,1}
+@attribute thanksgiving {0,1}
+@attribute therapy {0,1}
+@attribute thickened {0,1}
+@attribute thickening {0,1}
+@attribute thinned {0,1}
+@attribute thinning {0,1}
+@attribute thirteen {0,1}
+@attribute thoracic {0,1}
+@attribute thorax {0,1}
+@attribute thought {0,1}
+@attribute threshold {0,1}
+@attribute throat {0,1}
+@attribute tightening {0,1}
+@attribute tightness {0,1}
+@attribute time {0,1}
+@attribute times {0,1}
+@attribute tiny {0,1}
+@attribute tissue {0,1}
+@attribute tissues {0,1}
+@attribute titer {0,1}
+@attribute today {0,1}
+@attribute todays {0,1}
+@attribute tonsils {0,1}
+@attribute tortuous {0,1}
+@attribute toxic {0,1}
+@attribute trabeculated {0,1}
+@attribute trabeculation {0,1}
+@attribute trabeculations {0,1}
+@attribute trace {0,1}
+@attribute trachea {0,1}
+@attribute tracheitis {0,1}
+@attribute tracheoesophageal {0,1}
+@attribute tracheomalacia {0,1}
+@attribute tract {0,1}
+@attribute traction {0,1}
+@attribute trained {0,1}
+@attribute transient {0,1}
+@attribute transplant {0,1}
+@attribute trapping {0,1}
+@attribute trauma {0,1}
+@attribute treated {0,1}
+@attribute treatment {0,1}
+@attribute triangular {0,1}
+@attribute tube {0,1}
+@attribute tuberculosis {0,1}
+@attribute tubes {0,1}
+@attribute tumors {0,1}
+@attribute turner {0,1}
+@attribute twenty {0,1}
+@attribute uganda {0,1}
+@attribute ultrasound {0,1}
+@attribute ultrasound; {0,1}
+@attribute uncertain {0,1}
+@attribute unchanged {0,1}
+@attribute unclear {0,1}
+@attribute uncomplicated {0,1}
+@attribute underlying {0,1}
+@attribute unilateral {0,1}
+@attribute unknown {0,1}
+@attribute unremarkable {0,1}
+@attribute unsure {0,1}
+@attribute unusual {0,1}
+@attribute upper {0,1}
+@attribute upright {0,1}
+@attribute urachus {0,1}
+@attribute ureter {0,1}
+@attribute ureteral {0,1}
+@attribute ureterectasis {0,1}
+@attribute ureteric {0,1}
+@attribute ureterocele {0,1}
+@attribute ureteroceles {0,1}
+@attribute ureteropelvic {0,1}
+@attribute ureteropyeloplasty {0,1}
+@attribute ureterostomy {0,1}
+@attribute ureteroureterostomy {0,1}
+@attribute ureterovesical {0,1}
+@attribute ureters {0,1}
+@attribute urethral {0,1}
+@attribute urgency {0,1}
+@attribute urinary {0,1}
+@attribute urine {0,1}
+@attribute uroepithelial {0,1}
+@attribute urogenital {0,1}
+@attribute urologic {0,1}
+@attribute urothelial {0,1}
+@attribute utero {0,1}
+@attribute uti {0,1}
+@attribute utis {0,1}
+@attribute vacuum {0,1}
+@attribute vagina {0,1}
+@attribute vague {0,1}
+@attribute valuable {0,1}
+@attribute valves {0,1}
+@attribute variability {0,1}
+@attribute variable {0,1}
+@attribute variant {0,1}
+@attribute varies {0,1}
+@attribute vascular {0,1}
+@attribute veins {0,1}
+@attribute versus {0,1}
+@attribute vertebral {0,1}
+@attribute vesicostomy {0,1}
+@attribute vesicoureteral {0,1}
+@attribute vesicoureteric {0,1}
+@attribute vesicular {0,1}
+@attribute vessels {0,1}
+@attribute view {0,1}
+@attribute views {0,1}
+@attribute viral {0,1}
+@attribute visible {0,1}
+@attribute visit {0,1}
+@attribute visualization {0,1}
+@attribute visualized {0,1}
+@attribute void {0,1}
+@attribute voiding {0,1}
+@attribute voids {0,1}
+@attribute volume {0,1}
+@attribute volumes {0,1}
+@attribute volumes; {0,1}
+@attribute vomiting {0,1}
+@attribute walking {0,1}
+@attribute wall {0,1}
+@attribute waning {0,1}
+@attribute wash {0,1}
+@attribute waxing {0,1}
+@attribute web {0,1}
+@attribute wedging {0,1}
+@attribute week {0,1}
+@attribute weekend {0,1}
+@attribute weeks {0,1}
+@attribute weight {0,1}
+@attribute wetting {0,1}
+@attribute wheeze {0,1}
+@attribute wheezing {0,1}
+@attribute wheezing/ {0,1}
+@attribute white {0,1}
+@attribute whooping {0,1}
+@attribute wiedemann {0,1}
+@attribute williams {0,1}
+@attribute wires {0,1}
+@attribute wiskott {0,1}
+@attribute woman {0,1}
+@attribute work {0,1}
+@attribute workup {0,1}
+@attribute worrisome {0,1}
+@attribute worse {0,1}
+@attribute worsening {0,1}
+@attribute worthwhile {0,1}
+@attribute wrestling {0,1}
+@attribute x-ray {0,1}
+@attribute x-rays {0,1}
+@attribute x1 {0,1}
+@attribute x2 {0,1}
+@attribute x5 {0,1}
+@attribute xray {0,1}
+@attribute year {0,1}
+@attribute year-old {0,1}
+@attribute yearly {0,1}
+@attribute years {0,1}
+@attribute yesterday {0,1}
+@attribute zithromax {0,1}
+@attribute zone {0,1}
+@attribute Class-0-593_70 {0,1}
+@attribute Class-1-079_99 {0,1}
+@attribute Class-2-786_09 {0,1}
+@attribute Class-3-759_89 {0,1}
+@attribute Class-4-753_0 {0,1}
+@attribute Class-5-786_2 {0,1}
+@attribute Class-6-V72_5 {0,1}
+@attribute Class-7-511_9 {0,1}
+@attribute Class-8-596_8 {0,1}
+@attribute Class-9-599_0 {0,1}
+@attribute Class-10-518_0 {0,1}
+@attribute Class-11-593_5 {0,1}
+@attribute Class-12-V13_09 {0,1}
+@attribute Class-13-791_0 {0,1}
+@attribute Class-14-789_00 {0,1}
+@attribute Class-15-593_1 {0,1}
+@attribute Class-16-462 {0,1}
+@attribute Class-17-592_0 {0,1}
+@attribute Class-18-786_59 {0,1}
+@attribute Class-19-785_6 {0,1}
+@attribute Class-20-V67_09 {0,1}
+@attribute Class-21-795_5 {0,1}
+@attribute Class-22-789_09 {0,1}
+@attribute Class-23-786_50 {0,1}
+@attribute Class-24-596_54 {0,1}
+@attribute Class-25-787_03 {0,1}
+@attribute Class-26-V42_0 {0,1}
+@attribute Class-27-786_05 {0,1}
+@attribute Class-28-753_21 {0,1}
+@attribute Class-29-783_0 {0,1}
+@attribute Class-30-277_00 {0,1}
+@attribute Class-31-780_6 {0,1}
+@attribute Class-32-486 {0,1}
+@attribute Class-33-788_41 {0,1}
+@attribute Class-34-V13_02 {0,1}
+@attribute Class-35-493_90 {0,1}
+@attribute Class-36-788_30 {0,1}
+@attribute Class-37-753_3 {0,1}
+@attribute Class-38-593_89 {0,1}
+@attribute Class-39-758_6 {0,1}
+@attribute Class-40-741_90 {0,1}
+@attribute Class-41-591 {0,1}
+@attribute Class-42-599_7 {0,1}
+@attribute Class-43-279_12 {0,1}
+@attribute Class-44-786_07 {0,1}
+
+@data
+{0 1,107 1,590 1,671 1,804 1,835 1,968 1,1420 1,1493 1}
+{0 1,125 1,323 1,392 1,799 1,850 1,873 1,1453 1}
+{116 1,392 1,532 1,570 1,590 1,968 1,1442 1,1453 1}
+{0 1,7 1,30 1,59 1,392 1,399 1,532 1,582 1,779 1,804 1,917 1,1010 1,1244 1,1309 1,1317 1,1453 1}
+{254 1,645 1,697 1,705 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1,1492 1}
+{219 1,392 1,446 1,590 1,784 1,793 1,822 1,837 1,968 1,1229 1,1453 1}
+{315 1,537 1,887 1,916 1,1130 1,1472 1}
+{392 1,406 1,431 1,483 1,582 1,627 1,968 1,1038 1,1453 1}
+{7 1,59 1,252 1,474 1,498 1,538 1,596 1,634 1,663 1,732 1,752 1,767 1,793 1,835 1,842 1,845 1,938 1,971 1,1002 1,1087 1,1340 1,1442 1,1490 1}
+{162 1,165 1,204 1,209 1,253 1,265 1,266 1,289 1,292 1,296 1,392 1,472 1,483 1,527 1,571 1,613 1,617 1,701 1,727 1,792 1,798 1,810 1,835 1,836 1,846 1,933 1,944 1,1051 1,1091 1,1095 1,1144 1,1186 1,1199 1,1262 1,1276 1,1395 1,1404 1,1429 1,1451 1}
+{162 1,237 1,483 1,703 1,709 1,784 1,793 1,822 1,952 1,968 1,1123 1,1147 1,1201 1,1252 1,1349 1,1480 1}
+{7 1,59 1,80 1,201 1,590 1,596 1,634 1,663 1,732 1,754 1,833 1,971 1,1001 1,1003 1,1102 1,1138 1,1189 1,1490 1}
+{0 1,69 1,181 1,201 1,315 1,380 1,463 1,483 1,640 1,653 1,655 1,685 1,746 1,833 1,887 1,916 1,933 1,963 1,1074 1,1119 1,1120 1,1207 1,1224 1,1283 1,1472 1}
+{213 1,250 1,315 1,767 1,1011 1,1212 1,1483 1}
+{0 1,16 1,56 1,254 1,347 1,538 1,551 1,596 1,618 1,653 1,802 1,840 1,887 1,982 1,1087 1,1219 1,1337 1,1468 1}
+{250 1,305 1,308 1,341 1,389 1,473 1,499 1,500 1,634 1,653 1,732 1,754 1,835 1,845 1,1010 1,1078 1,1273 1,1292 1,1349 1,1353 1,1468 1,1486 1}
+{406 1,653 1,767 1,784 1,793 1,837 1,930 1,968 1,1064 1,1480 1}
+{163 1,483 1,968 1,1433 1,1480 1}
+{0 1,7 1,59 1,69 1,114 1,160 1,435 1,570 1,582 1,625 1,634 1,653 1,718 1,732 1,746 1,752 1,754 1,767 1,887 1,933 1,982 1,1021 1,1044 1,1072 1,1087 1,1183 1,1219 1,1389 1,1449 1}
+{104 1,160 1,250 1,412 1,596 1,632 1,653 1,663 1,752 1,767 1,887 1,919 1,941 1,1002 1,1072 1,1077 1,1125 1,1137 1,1167 1,1189 1,1327 1,1337 1,1449 1}
+{0 1,14 1,160 1,250 1,596 1,634 1,653 1,732 1,752 1,754 1,1072 1,1084 1,1183 1,1189 1,1389 1,1449 1}
+{0 1,41 1,131 1,160 1,257 1,313 1,317 1,441 1,535 1,590 1,634 1,635 1,641 1,653 1,705 1,707 1,732 1,754 1,764 1,866 1,934 1,941 1,950 1,1000 1,1023 1,1057 1,1064 1,1070 1,1138 1,1267 1,1320 1,1366 1,1417 1,1430 1,1458 1}
+{254 1,346 1,634 1,688 1,732 1,752 1,754 1,767 1,819 1,837 1,859 1,871 1,1000 1,1021 1,1174 1,1175 1,1184 1,1212 1,1234 1,1473 1,1488 1}
+{7 1,59 1,254 1,499 1,663 1,697 1,752 1,767 1,887 1,927 1,1087 1,1271 1,1334 1,1337 1,1486 1,1489 1}
+{0 1,47 1,193 1,225 1,254 1,308 1,596 1,634 1,732 1,754 1,871 1,982 1,1219 1,1473 1}
+{524 1,634 1,732 1,887 1,1487 1}
+{705 1,887 1,1087 1,1194 1,1320 1,1366 1,1458 1}
+{0 1,371 1,410 1,570 1,573 1,582 1,596 1,710 1,785 1,793 1,837 1,1128 1,1443 1,1444 1,1479 1}
+{596 1,628 1,634 1,663 1,732 1,754 1,767 1,887 1,1188 1,1212 1,1490 1}
+{266 1,315 1,879 1,887 1,1394 1,1421 1,1493 1}
+{254 1,697 1,707 1,856 1,887 1,1087 1,1320 1,1337 1,1366 1,1484 1}
+{0 1,7 1,44 1,59 1,80 1,252 1,290 1,474 1,476 1,486 1,804 1,835 1,896 1,937 1,1011 1,1021 1,1072 1,1087 1,1246 1,1301 1,1353 1,1383 1,1485 1}
+{323 1,799 1,1420 1,1493 1}
+{254 1,663 1,697 1,887 1,991 1,1087 1,1337 1,1490 1}
+{254 1,565 1,697 1,704 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{213 1,315 1,590 1,670 1,799 1,836 1,907 1,916 1,1483 1}
+{0 1,16 1,115 1,181 1,246 1,658 1,689 1,732 1,741 1,784 1,804 1,942 1,968 1,1002 1,1147 1,1170 1,1234 1,1349 1,1480 1}
+{0 1,23 1,47 1,137 1,146 1,294 1,352 1,392 1,422 1,571 1,804 1,928 1,1453 1,1481 1}
+{165 1,392 1,483 1,532 1,571 1,590 1,835 1,968 1,1051 1,1263 1,1395 1,1453 1,1481 1}
+{7 1,24 1,59 1,164 1,438 1,473 1,483 1,537 1,571 1,590 1,701 1,726 1,968 1,1046 1,1051 1,1106 1,1111 1,1118 1,1307 1,1386 1,1395 1,1481 1,1483 1}
+{7 1,59 1,176 1,223 1,327 1,329 1,388 1,392 1,421 1,481 1,537 1,582 1,590 1,653 1,679 1,720 1,907 1,915 1,954 1,968 1,1002 1,1017 1,1030 1,1059 1,1068 1,1090 1,1192 1,1224 1,1234 1,1294 1,1304 1,1316 1,1453 1}
+{571 1,707 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{0 1,51 1,89 1,146 1,265 1,392 1,430 1,483 1,916 1,1416 1,1453 1}
+{7 1,59 1,86 1,193 1,249 1,254 1,348 1,490 1,622 1,653 1,723 1,754 1,804 1,835 1,848 1,856 1,887 1,1002 1,1174 1,1195 1,1204 1,1233 1,1247 1,1290 1,1313 1,1408 1,1488 1}
+{315 1,571 1,803 1,887 1,1198 1,1298 1,1465 1,1481 1}
+{315 1,887 1,968 1,1234 1,1480 1}
+{0 1,174 1,278 1,279 1,282 1,290 1,291 1,389 1,409 1,475 1,489 1,490 1,661 1,663 1,679 1,689 1,752 1,767 1,934 1,951 1,1070 1,1087 1,1101 1,1168 1,1170 1,1227 1,1232 1,1490 1}
+{105 1,161 1,199 1,254 1,565 1,705 1,887 1,933 1,1087 1,1197 1,1320 1,1366 1,1416 1,1484 1}
+{0 1,7 1,44 1,59 1,117 1,308 1,663 1,749 1,752 1,767 1,804 1,842 1,887 1,896 1,1128 1,1170 1,1358 1,1490 1}
+{7 1,59 1,80 1,252 1,427 1,435 1,653 1,666 1,718 1,749 1,835 1,982 1,1021 1,1072 1,1219 1,1290 1,1340 1,1353 1,1366 1,1371 1,1391 1,1460 1,1485 1}
+{0 1,34 1,315 1,570 1,887 1,979 1,989 1,1036 1,1470 1}
+{181 1,248 1,315 1,392 1,571 1,602 1,887 1,1120 1,1453 1,1481 1}
+{89 1,105 1,160 1,707 1,752 1,850 1,851 1,882 1,887 1,928 1,1087 1,1193 1,1320 1,1337 1,1366 1,1458 1}
+{0 1,45 1,392 1,532 1,804 1,968 1,1453 1}
+{7 1,16 1,59 1,89 1,111 1,282 1,302 1,347 1,653 1,663 1,686 1,737 1,767 1,802 1,835 1,841 1,891 1,933 1,940 1,1002 1,1087 1,1189 1,1226 1,1353 1,1466 1,1490 1}
+{80 1,315 1,392 1,422 1,571 1,887 1,1414 1,1453 1,1481 1}
+{97 1,290 1,346 1,474 1,538 1,596 1,663 1,688 1,752 1,835 1,842 1,848 1,938 1,1002 1,1234 1,1290 1,1371 1,1485 1,1490 1}
+{0 1,18 1,195 1,634 1,705 1,732 1,754 1,887 1,1320 1,1366 1,1458 1}
+{0 1,124 1,193 1,533 1,663 1,666 1,754 1,767 1,835 1,842 1,872 1,887 1,991 1,1021 1,1168 1,1344 1,1485 1,1490 1}
+{250 1,473 1,571 1,667 1,752 1,793 1,971 1,1138 1,1373 1,1458 1,1490 1}
+{0 1,102 1,347 1,570 1,708 1,754 1,791 1,835 1,887 1,923 1,971 1,1087 1,1095 1,1183 1,1189 1,1373 1,1382 1,1386 1,1458 1}
+{249 1,254 1,349 1,502 1,634 1,871 1,1087 1,1132 1,1204 1,1314 1,1473 1}
+{123 1,171 1,415 1,460 1,526 1,532 1,537 1,571 1,625 1,634 1,645 1,680 1,705 1,732 1,752 1,767 1,793 1,901 1,933 1,971 1,1001 1,1020 1,1072 1,1087 1,1136 1,1138 1,1189 1,1234 1,1320 1,1366 1,1389 1,1401 1,1442 1,1449 1,1458 1}
+{201 1,422 1,483 1,571 1,767 1,784 1,786 1,793 1,923 1,928 1,1189 1,1481 1}
+{0 1,16 1,63 1,125 1,347 1,500 1,532 1,570 1,634 1,653 1,732 1,754 1,767 1,891 1,933 1,1072 1,1087 1,1170 1,1389 1,1449 1,1486 1}
+{105 1,165 1,371 1,392 1,483 1,571 1,582 1,1051 1,1106 1,1395 1,1442 1,1453 1,1481 1}
+{59 1,160 1,260 1,321 1,388 1,522 1,641 1,663 1,705 1,754 1,887 1,934 1,1183 1,1196 1,1213 1,1320 1,1366 1,1417 1,1458 1}
+{315 1,571 1,887 1,911 1,1345 1,1481 1}
+{0 1,47 1,315 1,392 1,570 1,887 1,1453 1}
+{0 1,35 1,199 1,315 1,392 1,422 1,571 1,625 1,792 1,804 1,887 1,1453 1,1481 1}
+{315 1,392 1,571 1,804 1,848 1,887 1,916 1,968 1,1225 1,1282 1,1442 1,1453 1,1481 1}
+{0 1,7 1,16 1,59 1,80 1,91 1,250 1,252 1,419 1,427 1,474 1,634 1,666 1,732 1,754 1,804 1,835 1,939 1,1002 1,1021 1,1337 1,1460 1,1485 1}
+{7 1,59 1,193 1,250 1,308 1,426 1,468 1,663 1,700 1,732 1,752 1,754 1,767 1,768 1,835 1,842 1,1025 1,1158 1,1174 1,1187 1,1279 1,1301 1,1490 1}
+{0 1,30 1,156 1,315 1,323 1,546 1,571 1,610 1,679 1,799 1,887 1,920 1,1179 1,1200 1,1481 1}
+{7 1,193 1,252 1,254 1,596 1,634 1,754 1,871 1,887 1,889 1,1002 1,1195 1,1234 1,1473 1}
+{0 1,315 1,392 1,535 1,570 1,571 1,767 1,784 1,793 1,887 1,968 1,1043 1,1394 1,1443 1,1453 1,1481 1}
+{315 1,320 1,571 1,887 1,1039 1,1416 1,1481 1}
+{219 1,590 1,732 1,968 1,1102 1,1480 1}
+{0 1,83 1,260 1,341 1,388 1,412 1,532 1,621 1,705 1,1010 1,1061 1,1072 1,1087 1,1272 1,1320 1,1366 1,1389 1,1458 1}
+{136 1,164 1,229 1,250 1,259 1,293 1,315 1,392 1,483 1,571 1,590 1,671 1,683 1,709 1,798 1,823 1,887 1,943 1,944 1,968 1,1051 1,1161 1,1172 1,1244 1,1246 1,1290 1,1394 1,1395 1,1404 1,1453 1,1481 1}
+{254 1,571 1,585 1,697 1,727 1,767 1,887 1,916 1,1087 1,1337 1,1481 1}
+{0 1,7 1,15 1,315 1,887 1,916 1,1168 1,1416 1,1472 1}
+{7 1,59 1,193 1,421 1,523 1,524 1,754 1,873 1,887 1,982 1,1101 1,1189 1,1195 1,1268 1,1400 1,1487 1}
+{0 1,27 1,392 1,422 1,571 1,804 1,968 1,1480 1}
+{0 1,82 1,83 1,146 1,392 1,483 1,570 1,1414 1,1438 1,1453 1}
+{0 1,62 1,92 1,570 1,653 1,723 1,887 1,1002 1,1072 1,1087 1,1233 1,1337 1,1389 1,1449 1}
+{0 1,73 1,325 1,653 1,767 1,784 1,793 1,968 1,1480 1}
+{162 1,219 1,271 1,371 1,483 1,709 1,784 1,798 1,848 1,907 1,931 1,968 1,1201 1,1349 1,1386 1,1420 1,1448 1,1493 1}
+{7 1,59 1,134 1,135 1,196 1,244 1,384 1,398 1,527 1,539 1,688 1,728 1,749 1,752 1,767 1,805 1,835 1,887 1,896 1,916 1,924 1,928 1,933 1,961 1,1002 1,1021 1,1086 1,1109 1,1153 1,1188 1,1221 1,1240 1,1259 1,1288 1,1358 1,1485 1}
+{193 1,315 1,346 1,392 1,554 1,594 1,689 1,709 1,732 1,798 1,933 1,944 1,968 1,1002 1,1010 1,1101 1,1170 1,1480 1}
+{0 1,59 1,114 1,195 1,250 1,570 1,596 1,625 1,634 1,653 1,732 1,754 1,887 1,1072 1,1449 1}
+{7 1,59 1,250 1,341 1,475 1,628 1,767 1,987 1,1011 1,1072 1,1101 1,1189 1,1246 1,1273 1,1373 1,1401 1,1458 1}
+{136 1,164 1,229 1,259 1,293 1,392 1,483 1,546 1,590 1,670 1,683 1,709 1,799 1,823 1,835 1,848 1,887 1,943 1,944 1,968 1,1051 1,1152 1,1172 1,1244 1,1246 1,1290 1,1395 1,1453 1}
+{0 1,11 1,25 1,254 1,526 1,697 1,705 1,804 1,816 1,887 1,1087 1,1092 1,1177 1,1281 1,1320 1,1337 1,1366 1,1458 1}
+{111 1,334 1,645 1,754 1,768 1,820 1,887 1,1492 1}
+{0 1,57 1,136 1,162 1,164 1,250 1,257 1,259 1,293 1,315 1,323 1,392 1,428 1,532 1,535 1,546 1,598 1,671 1,679 1,799 1,823 1,887 1,949 1,1040 1,1128 1,1172 1,1242 1,1270 1,1325 1,1394 1,1453 1}
+{0 1,7 1,51 1,106 1,236 1,252 1,315 1,410 1,534 1,573 1,700 1,731 1,767 1,784 1,798 1,804 1,835 1,1036 1,1098 1,1212 1,1290 1,1349 1,1444 1,1479 1}
+{0 1,19 1,392 1,570 1,767 1,784 1,793 1,968 1,1480 1}
+{162 1,483 1,567 1,596 1,653 1,689 1,767 1,780 1,784 1,793 1,835 1,842 1,968 1,1002 1,1101 1,1201 1,1234 1,1480 1}
+{0 1,7 1,18 1,47 1,59 1,80 1,160 1,225 1,254 1,389 1,570 1,634 1,653 1,663 1,754 1,767 1,840 1,871 1,887 1,971 1,1003 1,1138 1,1170 1,1212 1,1349 1,1473 1}
+{0 1,7 1,59 1,62 1,452 1,474 1,537 1,653 1,749 1,752 1,767 1,804 1,808 1,837 1,896 1,933 1,940 1,1002 1,1021 1,1087 1,1168 1,1234 1,1340 1,1358 1,1372 1,1485 1}
+{0 1,392 1,532 1,784 1,793 1,804 1,968 1,1443 1,1480 1}
+{7 1,59 1,427 1,476 1,634 1,663 1,749 1,752 1,767 1,835 1,842 1,887 1,896 1,940 1,950 1,1087 1,1188 1,1358 1,1485 1,1490 1}
+{97 1,134 1,146 1,147 1,191 1,327 1,422 1,535 1,543 1,727 1,740 1,887 1,916 1,933 1,934 1,1001 1,1058 1,1087 1,1270 1,1337 1,1343 1,1446 1,1463 1}
+{134 1,886 1,887 1,916 1,1087 1,1337 1,1463 1}
+{0 1,102 1,106 1,218 1,254 1,452 1,521 1,630 1,645 1,697 1,804 1,832 1,847 1,887 1,933 1,1087 1,1337 1,1492 1}
+{392 1,784 1,834 1,968 1,1349 1,1433 1,1480 1}
+{0 1,7 1,41 1,59 1,137 1,146 1,294 1,315 1,442 1,570 1,916 1,1349 1,1408 1,1472 1}
+{0 1,19 1,172 1,323 1,459 1,570 1,596 1,640 1,799 1,961 1,982 1,986 1,997 1,1212 1,1219 1,1223 1,1426 1,1468 1}
+{80 1,199 1,201 1,219 1,372 1,392 1,584 1,784 1,793 1,804 1,907 1,982 1,1088 1,1095 1,1219 1,1318 1,1442 1,1453 1}
+{0 1,7 1,19 1,59 1,634 1,653 1,663 1,732 1,754 1,767 1,835 1,837 1,1000 1,1022 1,1074 1,1101 1,1192 1,1304 1,1340 1,1356 1,1485 1,1490 1}
+{315 1,392 1,887 1,1036 1,1416 1,1453 1}
+{0 1,58 1,219 1,370 1,446 1,507 1,563 1,578 1,596 1,709 1,777 1,784 1,979 1,989 1,1095 1,1238 1,1349 1,1470 1}
+{193 1,315 1,392 1,571 1,887 1,968 1,1037 1,1453 1,1481 1}
+{219 1,392 1,784 1,793 1,835 1,905 1,968 1,1453 1}
+{0 1,7 1,59 1,188 1,189 1,200 1,219 1,232 1,359 1,372 1,450 1,492 1,534 1,538 1,543 1,590 1,679 1,799 1,804 1,849 1,942 1,1121 1,1266 1,1294 1,1316 1,1384 1,1399 1,1420 1,1493 1}
+{0 1,41 1,254 1,570 1,645 1,697 1,887 1,1087 1,1337 1,1492 1}
+{323 1,392 1,640 1,799 1,887 1,1414 1,1453 1}
+{0 1,83 1,396 1,784 1,798 1,834 1,968 1,1128 1,1480 1}
+{634 1,732 1,752 1,767 1,891 1,940 1,971 1,982 1,1011 1,1077 1,1087 1,1138 1,1219 1,1262 1,1290 1,1340 1,1349 1,1368 1,1373 1,1458 1}
+{0 1,83 1,150 1,171 1,265 1,354 1,392 1,512 1,544 1,571 1,582 1,653 1,784 1,791 1,804 1,965 1,968 1,1159 1,1189 1,1349 1,1403 1,1420 1,1453 1,1476 1,1481 1}
+{7 1,165 1,483 1,571 1,590 1,968 1,1051 1,1395 1,1452 1,1481 1,1483 1}
+{219 1,327 1,388 1,392 1,571 1,833 1,839 1,931 1,968 1,1061 1,1155 1,1448 1,1453 1,1481 1}
+{0 1,63 1,117 1,165 1,315 1,483 1,535 1,564 1,775 1,804 1,887 1,968 1,1036 1,1037 1,1051 1,1170 1,1483 1}
+{195 1,634 1,653 1,732 1,754 1,829 1,887 1,933 1,1488 1}
+{254 1,409 1,697 1,752 1,887 1,1087 1,1337 1,1374 1,1458 1}
+{254 1,596 1,634 1,732 1,871 1,887 1,933 1,1234 1,1473 1}
+{254 1,596 1,653 1,752 1,754 1,767 1,808 1,871 1,1087 1,1138 1,1234 1,1290 1,1371 1,1473 1}
+{0 1,10 1,128 1,323 1,392 1,393 1,548 1,570 1,582 1,606 1,653 1,799 1,934 1,1029 1,1423 1,1453 1}
+{153 1,254 1,491 1,565 1,705 1,717 1,887 1,933 1,1087 1,1149 1,1197 1,1240 1,1320 1,1366 1,1458 1}
+{167 1,192 1,315 1,392 1,856 1,887 1,933 1,1064 1,1453 1}
+{392 1,400 1,864 1,887 1,1192 1,1305 1,1453 1}
+{0 1,119 1,193 1,241 1,308 1,457 1,570 1,594 1,732 1,754 1,814 1,887 1,1000 1,1067 1,1087 1,1170 1,1234 1,1244 1,1271 1,1333 1,1424 1,1450 1}
+{116 1,323 1,392 1,570 1,620 1,799 1,801 1,933 1,1442 1,1453 1,1469 1}
+{137 1,315 1,392 1,571 1,1037 1,1453 1,1481 1}
+{134 1,137 1,241 1,532 1,535 1,813 1,887 1,1087 1,1203 1,1271 1,1333 1,1337 1,1424 1,1450 1}
+{0 1,60 1,323 1,392 1,535 1,570 1,590 1,799 1,968 1,1453 1}
+{254 1,309 1,594 1,705 1,754 1,871 1,887 1,1170 1,1320 1,1366 1,1473 1}
+{80 1,315 1,372 1,392 1,422 1,571 1,590 1,887 1,1394 1,1420 1,1493 1}
+{0 1,18 1,30 1,265 1,392 1,532 1,804 1,968 1,1159 1,1414 1,1453 1,1476 1}
+{0 1,11 1,315 1,392 1,535 1,571 1,804 1,887 1,968 1,1436 1,1453 1,1481 1}
+{254 1,663 1,871 1,1102 1,1473 1}
+{32 1,392 1,590 1,653 1,804 1,968 1,1442 1,1453 1}
+{0 1,100 1,116 1,254 1,347 1,505 1,645 1,697 1,835 1,887 1,987 1,1002 1,1087 1,1101 1,1233 1,1337 1,1442 1,1492 1}
+{0 1,108 1,160 1,195 1,570 1,596 1,634 1,653 1,732 1,754 1,887 1,934 1,1072 1,1081 1,1170 1,1183 1,1234 1,1389 1,1449 1}
+{392 1,709 1,767 1,784 1,793 1,931 1,968 1,1248 1,1453 1}
+{7 1,392 1,571 1,709 1,767 1,784 1,793 1,968 1,1096 1,1453 1,1481 1}
+{7 1,59 1,589 1,604 1,705 1,837 1,866 1,938 1,957 1,1113 1,1320 1,1337 1,1366 1,1458 1}
+{308 1,596 1,634 1,663 1,732 1,754 1,1002 1,1170 1,1234 1,1490 1}
+{164 1,392 1,483 1,1051 1,1395 1,1453 1}
+{7 1,59 1,162 1,403 1,653 1,784 1,793 1,837 1,905 1,943 1,968 1,1057 1,1101 1,1103 1,1201 1,1480 1}
+{116 1,195 1,596 1,625 1,634 1,681 1,732 1,754 1,767 1,837 1,887 1,1072 1,1168 1,1184 1,1442 1,1449 1}
+{0 1,7 1,59 1,116 1,250 1,308 1,371 1,435 1,653 1,721 1,750 1,776 1,814 1,934 1,971 1,982 1,1004 1,1072 1,1074 1,1124 1,1138 1,1192 1,1219 1,1304 1,1349 1,1353 1,1386 1,1442 1,1449 1}
+{16 1,105 1,116 1,315 1,363 1,392 1,481 1,547 1,571 1,582 1,596 1,643 1,650 1,709 1,824 1,834 1,956 1,1011 1,1017 1,1097 1,1128 1,1154 1,1385 1,1406 1,1416 1,1441 1,1453 1,1474 1,1481 1}
+{0 1,45 1,158 1,184 1,196 1,254 1,630 1,645 1,653 1,705 1,746 1,767 1,804 1,835 1,842 1,887 1,933 1,982 1,1021 1,1087 1,1101 1,1177 1,1189 1,1320 1,1327 1,1337 1,1354 1,1366 1,1400 1,1414 1,1484 1,1485 1}
+{202 1,269 1,293 1,305 1,320 1,392 1,483 1,836 1,887 1,1011 1,1290 1,1382 1,1392 1,1408 1,1453 1}
+{392 1,571 1,767 1,784 1,793 1,850 1,968 1,1480 1}
+{0 1,45 1,113 1,315 1,570 1,887 1,916 1,1472 1}
+{59 1,97 1,105 1,179 1,180 1,195 1,334 1,354 1,355 1,365 1,424 1,494 1,504 1,575 1,576 1,663 1,752 1,767 1,820 1,825 1,887 1,893 1,918 1,933 1,1063 1,1178 1,1367 1,1369 1,1388 1,1490 1}
+{0 1,7 1,113 1,158 1,570 1,653 1,705 1,887 1,933 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{111 1,136 1,315 1,571 1,1037 1,1442 1,1481 1}
+{195 1,254 1,280 1,499 1,634 1,645 1,727 1,732 1,753 1,754 1,867 1,887 1,1128 1,1492 1}
+{318 1,392 1,538 1,550 1,649 1,866 1,1000 1,1453 1}
+{123 1,315 1,887 1,979 1,989 1,1036 1,1442 1,1470 1}
+{193 1,532 1,663 1,752 1,767 1,887 1,1193 1,1344 1,1454 1}
+{219 1,392 1,671 1,767 1,784 1,793 1,835 1,1238 1,1459 1}
+{0 1,37 1,136 1,148 1,198 1,258 1,259 1,293 1,315 1,323 1,429 1,451 1,512 1,534 1,546 1,579 1,724 1,799 1,823 1,887 1,890 1,916 1,952 1,965 1,970 1,1037 1,1074 1,1172 1,1222 1,1224 1,1280 1,1442 1,1472 1}
+{181 1,227 1,239 1,315 1,514 1,767 1,776 1,887 1,916 1,990 1,1036 1,1120 1,1167 1,1472 1}
+{95 1,570 1,705 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{281 1,679 1,752 1,767 1,971 1,1066 1,1087 1,1227 1,1349 1,1466 1}
+{392 1,532 1,570 1,571 1,590 1,968 1,1293 1,1414 1,1442 1,1453 1,1481 1}
+{0 1,108 1,125 1,165 1,229 1,305 1,335 1,392 1,483 1,544 1,571 1,582 1,592 1,771 1,784 1,798 1,804 1,810 1,907 1,968 1,1030 1,1051 1,1095 1,1189 1,1349 1,1395 1,1453 1}
+{87 1,213 1,315 1,323 1,392 1,482 1,707 1,770 1,794 1,983 1,1030 1,1064 1,1119 1,1483 1}
+{254 1,524 1,697 1,887 1,1087 1,1337 1,1487 1}
+{0 1,100 1,136 1,164 1,229 1,259 1,293 1,392 1,483 1,582 1,590 1,670 1,683 1,709 1,799 1,823 1,835 1,836 1,887 1,943 1,944 1,968 1,1051 1,1172 1,1244 1,1290 1,1395 1,1416 1,1453 1}
+{315 1,323 1,392 1,535 1,571 1,807 1,922 1,965 1,968 1,1017 1,1157 1,1161 1,1394 1,1453 1,1481 1}
+{61 1,315 1,392 1,572 1,590 1,727 1,851 1,887 1,968 1,1036 1,1416 1,1453 1,1481 1}
+{0 1,63 1,158 1,570 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{0 1,83 1,250 1,252 1,341 1,487 1,488 1,634 1,667 1,689 1,732 1,737 1,754 1,767 1,828 1,835 1,842 1,843 1,1079 1,1187 1,1272 1,1340 1,1363 1,1490 1}
+{16 1,150 1,154 1,162 1,370 1,388 1,444 1,481 1,483 1,582 1,651 1,767 1,784 1,793 1,886 1,902 1,979 1,989 1,1045 1,1201 1,1211 1,1262 1,1331 1,1434 1,1470 1}
+{0 1,45 1,137 1,315 1,392 1,653 1,1037 1,1453 1}
+{70 1,162 1,392 1,483 1,501 1,571 1,590 1,679 1,804 1,848 1,1201 1,1414 1,1453 1,1481 1}
+{164 1,392 1,483 1,671 1,835 1,1051 1,1453 1,1483 1}
+{0 1,28 1,158 1,570 1,887 1,1087 1,1301 1,1337 1,1373 1,1458 1}
+{249 1,254 1,443 1,596 1,634 1,663 1,732 1,754 1,871 1,887 1,1125 1,1204 1,1473 1}
+{7 1,16 1,49 1,59 1,97 1,111 1,195 1,282 1,346 1,538 1,570 1,653 1,663 1,752 1,767 1,833 1,841 1,848 1,887 1,975 1,1087 1,1170 1,1234 1,1442 1,1466 1}
+{392 1,767 1,784 1,793 1,968 1,1480 1}
+{0 1,173 1,219 1,392 1,709 1,784 1,804 1,834 1,1443 1,1453 1}
+{0 1,100 1,114 1,254 1,570 1,697 1,705 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{165 1,371 1,392 1,483 1,571 1,590 1,968 1,1051 1,1395 1,1453 1,1481 1}
+{150 1,392 1,652 1,709 1,767 1,784 1,793 1,935 1,1010 1,1147 1,1252 1,1416 1,1453 1}
+{7 1,16 1,59 1,80 1,123 1,346 1,707 1,725 1,752 1,767 1,887 1,1007 1,1064 1,1077 1,1087 1,1138 1,1153 1,1221 1,1320 1,1353 1,1366 1,1442 1,1458 1}
+{7 1,80 1,532 1,538 1,625 1,887 1,1072 1,1087 1,1337 1,1449 1}
+{0 1,7 1,59 1,80 1,91 1,119 1,193 1,195 1,331 1,551 1,590 1,596 1,634 1,653 1,663 1,732 1,741 1,752 1,767 1,793 1,804 1,833 1,835 1,887 1,946 1,971 1,1000 1,1084 1,1138 1,1168 1,1170 1,1212 1,1442 1,1490 1}
+{7 1,59 1,334 1,427 1,437 1,480 1,488 1,596 1,628 1,634 1,663 1,732 1,754 1,767 1,835 1,940 1,950 1,1002 1,1021 1,1183 1,1234 1,1290 1,1371 1,1485 1,1490 1}
+{0 1,91 1,254 1,570 1,697 1,887 1,1087 1,1271 1,1337 1,1425 1,1450 1}
+{887 1,1072 1,1087 1,1164 1,1337 1,1373 1,1458 1}
+{0 1,7 1,59 1,128 1,392 1,512 1,571 1,784 1,804 1,834 1,837 1,965 1,968 1,1095 1,1189 1,1290 1,1480 1}
+{161 1,571 1,653 1,848 1,887 1,1072 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{0 1,63 1,125 1,570 1,653 1,705 1,835 1,887 1,1072 1,1087 1,1290 1,1320 1,1337 1,1366 1,1371 1,1389 1,1458 1,1461 1}
+{219 1,315 1,422 1,446 1,563 1,571 1,701 1,784 1,837 1,1095 1,1346 1,1349 1,1481 1}
+{0 1,315 1,392 1,535 1,887 1,968 1,1436 1,1443 1,1453 1}
+{0 1,98 1,165 1,320 1,392 1,483 1,582 1,590 1,804 1,835 1,848 1,943 1,968 1,1051 1,1095 1,1290 1,1395 1,1453 1}
+{315 1,392 1,887 1,968 1,1436 1,1442 1,1453 1}
+{0 1,117 1,315 1,392 1,570 1,677 1,835 1,887 1,1451 1,1453 1}
+{164 1,224 1,392 1,483 1,571 1,590 1,705 1,837 1,943 1,968 1,1051 1,1290 1,1386 1,1395 1,1453 1,1481 1}
+{7 1,473 1,653 1,767 1,835 1,851 1,887 1,923 1,934 1,942 1,971 1,1030 1,1072 1,1087 1,1138 1,1292 1,1337 1,1349 1,1389 1,1430 1,1449 1}
+{0 1,18 1,80 1,128 1,254 1,570 1,697 1,707 1,887 1,1002 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{0 1,7 1,16 1,59 1,160 1,346 1,509 1,537 1,590 1,625 1,634 1,653 1,732 1,754 1,767 1,835 1,887 1,994 1,1044 1,1072 1,1081 1,1087 1,1138 1,1168 1,1183 1,1234 1,1389 1,1449 1}
+{0 1,114 1,315 1,392 1,483 1,535 1,570 1,887 1,968 1,1395 1,1436 1,1453 1}
+{0 1,35 1,535 1,570 1,968 1,1420 1,1493 1}
+{0 1,62 1,75 1,146 1,164 1,392 1,483 1,570 1,571 1,679 1,683 1,798 1,968 1,1051 1,1128 1,1248 1,1395 1,1453 1,1481 1}
+{80 1,254 1,515 1,571 1,705 1,752 1,754 1,767 1,835 1,848 1,887 1,933 1,1023 1,1072 1,1290 1,1371 1,1481 1}
+{315 1,392 1,848 1,887 1,1453 1}
+{219 1,392 1,571 1,590 1,784 1,834 1,907 1,968 1,1095 1,1453 1,1481 1}
+{0 1,11 1,100 1,315 1,320 1,392 1,653 1,887 1,1453 1}
+{146 1,392 1,483 1,968 1,1017 1,1128 1,1453 1}
+{315 1,571 1,887 1,1270 1,1481 1}
+{0 1,19 1,308 1,435 1,447 1,517 1,621 1,630 1,645 1,653 1,663 1,732 1,835 1,842 1,933 1,995 1,1005 1,1490 1}
+{265 1,371 1,427 1,571 1,582 1,784 1,793 1,968 1,1128 1,1199 1,1480 1}
+{0 1,92 1,117 1,254 1,570 1,697 1,705 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{105 1,323 1,392 1,571 1,799 1,850 1,1442 1,1453 1,1481 1}
+{0 1,7 1,59 1,102 1,193 1,254 1,424 1,448 1,535 1,570 1,625 1,653 1,663 1,707 1,754 1,887 1,1064 1,1072 1,1168 1,1195 1,1320 1,1366 1,1389 1,1449 1,1458 1}
+{7 1,134 1,162 1,171 1,260 1,262 1,342 1,392 1,421 1,422 1,487 1,571 1,615 1,835 1,883 1,886 1,916 1,935 1,1189 1,1228 1,1453 1,1481 1}
+{165 1,373 1,392 1,483 1,571 1,590 1,943 1,1051 1,1095 1,1290 1,1395 1,1408 1,1453 1,1481 1}
+{0 1,7 1,59 1,136 1,255 1,439 1,488 1,645 1,653 1,679 1,754 1,836 1,851 1,933 1,1013 1,1014 1,1195 1,1366 1,1462 1,1492 1}
+{4 1,230 1,238 1,250 1,417 1,557 1,625 1,633 1,634 1,653 1,663 1,666 1,680 1,705 1,707 1,739 1,752 1,754 1,887 1,933 1,1064 1,1070 1,1072 1,1138 1,1209 1,1288 1,1320 1,1366 1,1389 1,1449 1,1458 1}
+{7 1,59 1,250 1,285 1,474 1,581 1,626 1,650 1,663 1,705 1,767 1,837 1,886 1,940 1,991 1,1000 1,1010 1,1072 1,1087 1,1290 1,1371 1,1490 1}
+{137 1,571 1,590 1,792 1,798 1,1404 1,1481 1}
+{0 1,35 1,213 1,315 1,621 1,887 1,1036 1,1483 1}
+{373 1,392 1,422 1,590 1,679 1,1165 1,1453 1}
+{315 1,337 1,654 1,767 1,887 1,916 1,1167 1,1274 1,1472 1}
+{154 1,392 1,887 1,933 1,979 1,989 1,1185 1,1234 1,1285 1,1336 1,1453 1,1470 1}
+{0 1,92 1,254 1,570 1,596 1,653 1,859 1,871 1,887 1,1087 1,1337 1,1473 1,1488 1}
+{392 1,422 1,571 1,887 1,1453 1,1481 1}
+{254 1,697 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{392 1,512 1,571 1,784 1,793 1,965 1,968 1,1480 1}
+{219 1,323 1,392 1,784 1,799 1,834 1,1238 1,1459 1}
+{0 1,83 1,262 1,392 1,518 1,571 1,615 1,653 1,804 1,885 1,935 1,997 1,1026 1,1453 1,1474 1,1481 1}
+{219 1,372 1,392 1,590 1,906 1,1453 1}
+{7 1,59 1,111 1,315 1,392 1,570 1,848 1,887 1,1416 1,1436 1,1442 1,1453 1}
+{0 1,315 1,767 1,793 1,887 1,916 1,968 1,1128 1,1472 1}
+{7 1,160 1,193 1,241 1,250 1,532 1,535 1,754 1,764 1,813 1,887 1,1271 1,1424 1,1450 1}
+{0 1,7 1,59 1,193 1,285 1,653 1,663 1,666 1,689 1,732 1,752 1,767 1,793 1,808 1,835 1,887 1,971 1,1072 1,1101 1,1102 1,1168 1,1310 1,1389 1,1449 1,1485 1}
+{7 1,59 1,165 1,213 1,219 1,237 1,305 1,371 1,483 1,653 1,767 1,810 1,837 1,934 1,1010 1,1051 1,1187 1,1459 1,1483 1}
+{268 1,315 1,430 1,535 1,548 1,916 1,934 1,968 1,970 1,1472 1}
+{254 1,697 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{0 1,7 1,10 1,16 1,59 1,128 1,195 1,250 1,435 1,535 1,570 1,634 1,653 1,663 1,666 1,732 1,754 1,853 1,887 1,928 1,982 1,1004 1,1072 1,1219 1,1389 1,1449 1}
+{0 1,59 1,106 1,250 1,500 1,570 1,583 1,625 1,634 1,653 1,732 1,887 1,926 1,1072 1,1087 1,1247 1,1337 1,1389 1,1449 1}
+{97 1,254 1,570 1,645 1,697 1,887 1,1087 1,1337 1,1442 1,1492 1}
+{195 1,250 1,634 1,653 1,732 1,754 1,887 1,1072 1,1389 1,1449 1}
+{142 1,191 1,275 1,392 1,401 1,465 1,497 1,590 1,608 1,619 1,653 1,722 1,763 1,810 1,848 1,891 1,933 1,934 1,968 1,1088 1,1330 1,1406 1,1412 1,1453 1}
+{0 1,92 1,254 1,570 1,697 1,705 1,887 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{213 1,315 1,392 1,571 1,653 1,887 1,1036 1,1481 1,1483 1}
+{0 1,16 1,122 1,195 1,347 1,538 1,570 1,634 1,653 1,699 1,732 1,754 1,802 1,887 1,1337 1,1487 1}
+{323 1,640 1,799 1,887 1,910 1,968 1,1480 1}
+{116 1,254 1,645 1,653 1,697 1,804 1,831 1,835 1,887 1,1021 1,1087 1,1337 1,1442 1,1492 1}
+{0 1,250 1,653 1,663 1,666 1,752 1,767 1,843 1,1072 1,1153 1,1168 1,1212 1,1389 1,1449 1,1460 1,1490 1}
+{392 1,700 1,709 1,810 1,1453 1}
+{7 1,59 1,181 1,234 1,256 1,258 1,320 1,392 1,421 1,516 1,590 1,653 1,745 1,767 1,798 1,811 1,835 1,968 1,1294 1,1324 1,1387 1,1413 1,1442 1,1453 1}
+{0 1,102 1,187 1,570 1,887 1,1087 1,1337 1,1487 1}
+{193 1,261 1,315 1,442 1,571 1,607 1,671 1,766 1,887 1,1037 1,1187 1,1200 1,1245 1,1393 1,1481 1}
+{0 1,116 1,308 1,341 1,362 1,500 1,596 1,634 1,717 1,732 1,754 1,767 1,795 1,854 1,1000 1,1087 1,1125 1,1197 1,1206 1,1272 1,1342 1,1442 1,1486 1}
+{7 1,80 1,211 1,371 1,392 1,571 1,582 1,596 1,653 1,784 1,793 1,804 1,848 1,968 1,1061 1,1102 1,1123 1,1436 1,1442 1,1453 1,1481 1}
+{0 1,7 1,59 1,121 1,570 1,589 1,604 1,645 1,837 1,887 1,940 1,957 1,1087 1,1337 1,1492 1}
+{0 1,11 1,82 1,133 1,134 1,535 1,538 1,594 1,647 1,754 1,813 1,887 1,1087 1,1337 1,1450 1}
+{5 1,59 1,435 1,587 1,754 1,758 1,767 1,852 1,887 1,1032 1,1072 1,1449 1}
+{0 1,41 1,82 1,315 1,392 1,804 1,887 1,1394 1,1453 1}
+{146 1,162 1,247 1,259 1,303 1,315 1,371 1,483 1,653 1,690 1,792 1,798 1,916 1,950 1,1166 1,1201 1,1404 1,1472 1}
+{524 1,699 1,887 1,1087 1,1337 1,1366 1,1487 1}
+{315 1,732 1,887 1,968 1,1036 1,1102 1,1480 1}
+{7 1,323 1,532 1,799 1,979 1,989 1,1277 1,1470 1}
+{315 1,887 1,1064 1,1420 1,1493 1}
+{0 1,92 1,315 1,392 1,804 1,887 1,1453 1}
+{7 1,16 1,59 1,250 1,426 1,596 1,634 1,663 1,732 1,754 1,1490 1}
+{164 1,219 1,234 1,392 1,483 1,671 1,798 1,1051 1,1096 1,1395 1,1459 1}
+{0 1,7 1,59 1,71 1,91 1,195 1,498 1,634 1,663 1,666 1,732 1,752 1,767 1,804 1,842 1,845 1,887 1,923 1,971 1,1000 1,1167 1,1234 1,1292 1,1340 1,1349 1,1460 1,1490 1}
+{315 1,571 1,775 1,887 1,1198 1,1298 1,1465 1,1481 1}
+{146 1,392 1,538 1,887 1,953 1,1453 1,1465 1}
+{0 1,7 1,45 1,59 1,136 1,146 1,315 1,392 1,570 1,775 1,887 1,1036 1,1453 1}
+{0 1,7 1,52 1,59 1,80 1,123 1,193 1,538 1,570 1,594 1,634 1,653 1,663 1,732 1,749 1,767 1,850 1,887 1,896 1,933 1,1138 1,1168 1,1212 1,1358 1,1360 1,1490 1}
+{315 1,887 1,1455 1}
+{0 1,1 1,7 1,45 1,59 1,80 1,89 1,148 1,174 1,201 1,225 1,254 1,298 1,322 1,334 1,389 1,406 1,409 1,410 1,448 1,462 1,483 1,508 1,522 1,535 1,542 1,591 1,596 1,634 1,648 1,663 1,679 1,727 1,732 1,754 1,767 1,796 1,859 1,868 1,871 1,914 1,933 1,971 1,982 1,1085 1,1087 1,1102 1,1125 1,1134 1,1155 1,1176 1,1219 1,1227 1,1246 1,1297 1,1337 1,1349 1,1473 1,1488 1}
+{320 1,392 1,535 1,798 1,810 1,835 1,968 1,1010 1,1453 1}
+{371 1,392 1,582 1,1319 1,1420 1,1453 1,1493 1}
+{323 1,392 1,422 1,464 1,571 1,586 1,640 1,799 1,887 1,1453 1,1481 1}
+{7 1,59 1,250 1,281 1,282 1,634 1,653 1,663 1,700 1,732 1,767 1,793 1,833 1,835 1,950 1,971 1,1021 1,1087 1,1183 1,1349 1,1485 1,1490 1}
+{134 1,315 1,887 1,916 1,968 1,1128 1,1463 1}
+{32 1,97 1,392 1,767 1,784 1,793 1,848 1,968 1,1349 1,1442 1,1480 1}
+{0 1,113 1,219 1,260 1,327 1,388 1,392 1,562 1,571 1,643 1,671 1,713 1,767 1,784 1,793 1,804 1,968 1,1255 1,1386 1,1420 1,1459 1,1480 1,1493 1}
+{571 1,709 1,1481 1}
+{0 1,119 1,195 1,252 1,254 1,596 1,632 1,653 1,754 1,871 1,887 1,933 1,1125 1,1212 1,1473 1}
+{7 1,250 1,537 1,628 1,663 1,689 1,749 1,752 1,767 1,896 1,933 1,950 1,960 1,1002 1,1089 1,1221 1,1242 1,1302 1,1353 1,1358 1,1402 1,1432 1,1477 1,1490 1}
+{0 1,45 1,69 1,308 1,315 1,392 1,570 1,887 1,1170 1,1436 1,1453 1}
+{0 1,53 1,392 1,590 1,653 1,804 1,968 1,1000 1,1087 1,1324 1,1453 1,1475 1}
+{165 1,371 1,392 1,483 1,582 1,590 1,968 1,1051 1,1395 1,1414 1,1453 1}
+{0 1,7 1,59 1,106 1,297 1,341 1,389 1,424 1,427 1,474 1,496 1,500 1,663 1,669 1,705 1,767 1,793 1,835 1,837 1,842 1,950 1,961 1,971 1,981 1,982 1,998 1,1002 1,1024 1,1080 1,1138 1,1181 1,1212 1,1219 1,1248 1,1272 1,1349 1,1490 1}
+{7 1,135 1,308 1,483 1,537 1,634 1,663 1,732 1,752 1,825 1,1002 1,1072 1,1087 1,1449 1,1490 1}
+{134 1,315 1,323 1,640 1,887 1,916 1,1463 1}
+{136 1,571 1,590 1,792 1,798 1,1404 1,1481 1}
+{0 1,83 1,315 1,392 1,570 1,887 1,1036 1,1453 1}
+{254 1,524 1,697 1,887 1,1087 1,1337 1,1487 1}
+{0 1,83 1,250 1,392 1,571 1,767 1,784 1,943 1,968 1,1290 1,1349 1,1480 1}
+{26 1,123 1,421 1,534 1,565 1,570 1,707 1,754 1,848 1,887 1,1195 1,1320 1,1366 1,1458 1}
+{315 1,323 1,410 1,573 1,792 1,798 1,1405 1,1479 1}
+{0 1,7 1,16 1,59 1,112 1,252 1,254 1,282 1,347 1,406 1,442 1,508 1,551 1,592 1,594 1,634 1,653 1,699 1,732 1,752 1,754 1,793 1,802 1,833 1,887 1,903 1,971 1,1001 1,1095 1,1189 1,1234 1,1487 1}
+{137 1,146 1,315 1,979 1,989 1,1470 1}
+{7 1,195 1,634 1,732 1,754 1,887 1,1072 1,1449 1}
+{0 1,53 1,315 1,392 1,570 1,746 1,887 1,1036 1,1453 1}
+{89 1,195 1,538 1,570 1,596 1,625 1,634 1,680 1,732 1,754 1,767 1,887 1,1072 1,1125 1,1168 1,1337 1,1389 1,1442 1,1449 1}
+{254 1,697 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{23 1,165 1,372 1,392 1,438 1,483 1,556 1,571 1,590 1,705 1,835 1,943 1,968 1,1006 1,1051 1,1145 1,1244 1,1281 1,1290 1,1307 1,1395 1,1453 1,1481 1}
+{0 1,30 1,392 1,804 1,968 1,1453 1}
+{164 1,392 1,483 1,590 1,701 1,810 1,837 1,944 1,968 1,1051 1,1453 1}
+{195 1,634 1,732 1,754 1,887 1,1072 1,1449 1}
+{7 1,59 1,217 1,334 1,458 1,535 1,628 1,645 1,679 1,754 1,814 1,887 1,900 1,933 1,934 1,995 1,1087 1,1183 1,1214 1,1227 1,1492 1}
+{0 1,44 1,645 1,804 1,887 1,1087 1,1337 1,1492 1}
+{7 1,32 1,37 1,59 1,467 1,549 1,582 1,594 1,634 1,732 1,754 1,767 1,841 1,971 1,1001 1,1021 1,1072 1,1087 1,1212 1,1349 1,1389 1,1449 1}
+{80 1,254 1,487 1,565 1,570 1,660 1,686 1,705 1,716 1,842 1,887 1,987 1,1087 1,1101 1,1320 1,1337 1,1366 1,1442 1,1456 1,1458 1}
+{7 1,59 1,254 1,508 1,529 1,663 1,666 1,752 1,767 1,871 1,887 1,922 1,1000 1,1183 1,1189 1,1212 1,1291 1,1349 1,1473 1}
+{0 1,7 1,19 1,59 1,62 1,219 1,234 1,305 1,335 1,371 1,383 1,392 1,407 1,421 1,507 1,532 1,571 1,701 1,767 1,798 1,804 1,810 1,833 1,835 1,836 1,838 1,968 1,983 1,1206 1,1294 1,1414 1,1453 1,1481 1}
+{0 1,40 1,315 1,323 1,366 1,392 1,422 1,571 1,1453 1,1481 1}
+{7 1,634 1,732 1,887 1,1087 1,1337 1,1373 1,1458 1}
+{195 1,308 1,594 1,754 1,887 1,933 1,1072 1,1374 1,1484 1}
+{0 1,83 1,106 1,146 1,392 1,570 1,582 1,1453 1}
+{0 1,12 1,570 1,571 1,590 1,968 1,1481 1}
+{89 1,254 1,565 1,645 1,697 1,705 1,706 1,831 1,850 1,887 1,933 1,1087 1,1320 1,1337 1,1366 1,1458 1}
+{315 1,392 1,422 1,501 1,571 1,887 1,1436 1,1453 1,1481 1}
+{160 1,161 1,199 1,254 1,697 1,705 1,887 1,933 1,1000 1,1057 1,1087 1,1320 1,1337 1,1366 1,1416 1,1445 1,1484 1}
+{0 1,161 1,287 1,288 1,327 1,371 1,466 1,569 1,653 1,671 1,799 1,804 1,835 1,934 1,967 1,968 1,982 1,1018 1,1064 1,1128 1,1189 1,1219 1,1301 1,1416 1,1420 1,1443 1,1493 1}
+{0 1,266 1,315 1,392 1,440 1,472 1,570 1,642 1,685 1,830 1,865 1,887 1,898 1,933 1,960 1,1036 1,1443 1,1453 1}
+{137 1,164 1,253 1,1420 1,1493 1}
+{0 1,36 1,524 1,804 1,887 1,1087 1,1337 1,1487 1}

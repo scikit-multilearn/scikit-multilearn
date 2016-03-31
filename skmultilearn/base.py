@@ -148,6 +148,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                 else:
                     return y
             else:
+                if sparse_format is None:
+                    sparse_format='csr'
                 return matrix_creation_function_for_format(sparse_format)(y)
 
 
