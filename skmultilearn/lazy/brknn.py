@@ -1,6 +1,7 @@
 from ..base import MLClassifierBase
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
+import six
 
 class BinaryRelevanceKNN(MLClassifierBase):
     """Binary Relevance multi-label classifier based on k Nearest Neighbours method."""
@@ -29,7 +30,7 @@ class BinaryRelevanceKNN(MLClassifierBase):
 
     def predict(self, X):
         result = np.zeros((len(X), self.num_labels), dtype='i8')
-        for instance in xrange(len(X)):
+        for instance in six.moves.range(len(X)):
             neighbors = self.knn.kneighbors(X[instance], self.k, return_distance=False)
             classifier = self.classifier(self.k, self.num_labels)
             classifier.fit(neighbors, self.predictions)
@@ -45,7 +46,7 @@ class BaseBRkNNClassifier(object):
 
     def compute_confidences(self, neighbors, y):
         self.confidences = [0] * self.num_labels
-        for label in xrange(self.num_labels):
+        for label in six.moves.range(self.num_labels):
             confidence = sum(y[neighbor][label] == 1 for neighbor in neighbors[0])
             self.confidences[label] = float(confidence) / self.k
 

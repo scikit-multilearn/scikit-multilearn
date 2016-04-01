@@ -19,7 +19,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         super(MLClassifierBase, self).__init__()
 
-	self.copyable_attrs = ["classifier", "require_dense"]
+        self.copyable_attrs = ["classifier", "require_dense"]
 
         self.classifier = classifier
         if require_dense is not None:

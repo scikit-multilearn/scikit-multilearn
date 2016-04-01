@@ -1,6 +1,7 @@
 from .partition import LabelSpacePartitioningClassifier
 import copy
 import random
+import six
 import numpy as np
 from scipy import sparse
 
@@ -16,7 +17,7 @@ class RakelD(LabelSpacePartitioningClassifier):
 
         label_sets = []
         self.label_count = y.shape[1]
-        free_labels = xrange(self.label_count)
+        free_labels = six.moves.range(self.label_count)
         self.model_count = int(np.ceil(self.label_count/self.labelset_size))
 
         while len(label_sets) <= self.model_count:

@@ -1,5 +1,6 @@
 from ..base import MLClassifierBase
 import numpy as np
+import six
 from scipy import sparse
 
 class LabelPowerset(MLClassifierBase):
@@ -44,7 +45,7 @@ class LabelPowerset(MLClassifierBase):
         lp_prediction = self.classifier.predict(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='i8')
 
-        for row in xrange(len(lp_prediction)):
+        for row in six.moves.range(len(lp_prediction)):
             assignment = lp_prediction[row]
             result[row, self.reverse_combinations[assignment]] = 1
 

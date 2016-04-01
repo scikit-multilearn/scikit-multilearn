@@ -1,6 +1,7 @@
 import subprocess
 import numpy as np
 import tempfile
+import six
 import shlex
 import scipy.sparse as sparse
 import arff
@@ -80,8 +81,8 @@ class Meka(object):
         x_prefix = 0
         y_prefix = 0
 
-        x_attributes = [(u'X{}'.format(i),u'NUMERIC') for i in xrange(X.shape[1])]
-        y_attributes = [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in xrange(y.shape[1])]
+        x_attributes = [(u'X{}'.format(i),u'NUMERIC') for i in six.moves.range(X.shape[1])]
+        y_attributes = [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in six.moves.range(y.shape[1])]
 
         if endian == "big":
             y_prefix = X.shape[1]
@@ -97,9 +98,9 @@ class Meka(object):
             raise ValueError("Endian not in {big, little}")
 
         if save_sparse:
-            data = [{} for r in xrange(X.shape[0])]
+            data = [{} for r in six.moves.range(X.shape[0])]
         else:
-            data = [[0 for c in xrange(X.shape[1] + y.shape[1])] for r in xrange(X.shape[0])]
+            data = [[0 for c in six.moves.range(X.shape[1] + y.shape[1])] for r in six.moves.range(X.shape[0])]
 
         for keys, value in X.iteritems():
             data[keys[0]][x_prefix + keys[1]] = value
@@ -152,7 +153,7 @@ class Meka(object):
         self.output, self.error = pipes.communicate()
 
         if pipes.returncode != 0:
-            raise Exception, self.output
+            raise Exception(self.output)
 
     def fit(self, X, y):
         self.clean()
@@ -191,7 +192,7 @@ class Meka(object):
         self.instance_count = X.shape[0]
 
         if self.classifier_dump is None:
-            raise Exception, 'Not classified'
+            raise Exception('Not classified')
 
         sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype = int)
 
@@ -278,7 +279,7 @@ class Meka(object):
             self.results = sparse.csr_matrix(self.predictions)
         elif self.verbosity == 5:
             self.results = sparse.lil_matrix((self.instance_count, self.label_count), dtype='int')
-            for row in xrange(self.instance_count):
+            for row in six.moves.range(self.instance_count):
                 for label in self.predictions[row]:
                     self.results[row, label] = 1
 

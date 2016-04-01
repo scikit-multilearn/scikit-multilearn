@@ -1,6 +1,7 @@
 from ..base import MLClassifierBase
 from scipy.sparse import hstack, coo_matrix
 from sklearn.utils import check_array
+import six
 import copy
 
 class BinaryRelevance(MLClassifierBase):
@@ -11,7 +12,7 @@ class BinaryRelevance(MLClassifierBase):
         super(BinaryRelevance, self).__init__(classifier, require_dense)
 
     def generate_partition(self, X, y):
-        self.partition = range(y.shape[1])
+        self.partition = six.moves.range(y.shape[1])
         self.model_count = y.shape[1]
 
     def fit(self, X, y):
@@ -22,7 +23,7 @@ class BinaryRelevance(MLClassifierBase):
         self.generate_partition(X, y)
         self.classifiers = []
 
-        for i in xrange(self.model_count):
+        for i in six.moves.range(self.model_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, self.partition[i], axis = 1)
             classifier.fit(self.ensure_input_format(X), self.ensure_output_format(y_subset))
@@ -32,7 +33,7 @@ class BinaryRelevance(MLClassifierBase):
 
     def predict(self, X):
         """Predict labels for `X`, see base method's documentation."""
-        predictions = [self.classifiers[label].predict(self.ensure_input_format(X)) for label in xrange(self.model_count)]
+        predictions = [self.classifiers[label].predict(self.ensure_input_format(X)) for label in six.moves.range(self.model_count)]
         if isinstance(self.classifier, MLClassifierBase):
             return hstack(predictions)
         else:

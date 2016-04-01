@@ -2,6 +2,7 @@ import itertools
 import unittest
 import numpy as np
 import scipy.sparse as sp
+import six
 
 from .test_utils import SPARSE_MATRIX_FORMATS
 from ..base import MLClassifierBase
@@ -12,16 +13,16 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def dense_and_dense_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), len(ensured_X))
-        for row in xrange(len(X)):
+        for row in six.moves.range(len(X)):
             self.assertEqual(len(X[row]), len(ensured_X[row]))
-            for col in xrange(len(X[row])):
+            for col in six.moves.range(len(X[row])):
                 self.assertEqual(X[row][col], ensured_X[row][col])
 
     def dense_and_sparse_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), ensured_X.shape[0])
-        for row in xrange(len(X)):
+        for row in six.moves.range(len(X)):
             self.assertEqual(len(X[row]), ensured_X.shape[1])
-            for col in xrange(len(X[row])):
+            for col in six.moves.range(len(X[row])):
                 self.assertEqual(X[row][col], ensured_X[row, col])
 
     def sparse_and_sparse_matrices_are_the_same(self, X, ensured_X):
