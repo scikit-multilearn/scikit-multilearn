@@ -1,3 +1,7 @@
+from ..base import MLClassifierBase
+import numpy as np
+import copy, random
+from scipy import sparse
 
 class RandomOrderedClassifierChain(MLClassifierBase):
     """Classifier Chains multi-label classifier."""
@@ -15,15 +19,15 @@ class RandomOrderedClassifierChain(MLClassifierBase):
         # on X + y[:i] as input space and y[i+1] as output
         # 
         self.predictions = y
-        self.num_instances = len(y)
-        self.label_count = len(y[0])
+        self.num_instances = y.shape[0]
+        self.label_count = y.shape[1]
         self.classifiers = [None for x in xrange(self.label_count)]
         self.draw_ordering()
 
         for label in xrange(self.label_count):
             classifier = copy.deepcopy(self.classifier)
-            y_tolearn = self.generate_data_subset(y, self.ordering[label])
-            y_toinput = self.generate_data_subset(y, self.ordering[:label])
+            y_tolearn = self.generate_data_subset(y, self.ordering[label], axis = 1)
+            y_toinput = self.generate_data_subset(y, self.ordering[:label], axis = 1)
 
             X_extended = np.append(X, y_toinput, axis = 1)
             classifier.fit(X_extended, y_tolearn)
@@ -32,8 +36,8 @@ class RandomOrderedClassifierChain(MLClassifierBase):
         return self
 
     def predict(self, X):
-        result = np.zeros((len(X), self.label_count), dtype='i8')
-        for instance in xrange(len(X)):
+        result = np.zeros((X.shape[0], self.label_count), dtype='i8')
+        for instance in xrange(X.shape[0]):
             predictions = []
             for label in self.ordering:
                 prediction = self.classifiers[label].predict(np.append(X[instance], predictions))
@@ -55,22 +59,30 @@ class EnsembleClassifierChains(MLClassifierBase):
         self.models      = None
 
 
+    def generate_partition(self, X, y):
+        self.partition = range(y.shape[1])
+        self.model_count = y.shape[1]
+
     def fit(self, X, y):
+        X = self.ensure_input_format(X, sparse_format = 'csr', enforce_sparse = True)
+        y = self.ensure_output_format(y, sparse_format = 'csc', enforce_sparse = True)
+
+        self.generate_partition(X, y)
         self.models = []
-        self.label_count = len(y[0])
+        self.label_count = y.shape[1]
         for model in xrange(self.model_count):
-            base_classifier = copy.deepcopy(self.classifier)
-            classifier = RandomOrderedClassifierChain(base_classifier)
-            sampled_rows = random.sample(xrange(len(X)), int(self.percentage*len(X)))
-            classifier.fit(self.generate_data_subset(X, sampled_rows, 'rows'), self.generate_data_subset(y, sampled_rows, 'rows'))
+            classifier = copy.deepcopy(self.classifier)
+            sampled_rows = self.generate_data_subset(X, self.partition[model], axis = 0)
+            sampled_y = self.generate_data_subset(y, self.partition[model], axis = 0)
+            classifier.fit(self.ensure_input_format(sampled_rows), self.ensure_output_format(sampled_y))
             self.models.append(classifier)
         return self
 
     def predict(self, X):
-        results = np.zeros((len(X), self.label_count), dtype='i8')
+        results = np.zeros((X.shape[0], self.label_count), dtype='i8')
         for model in self.models:
             prediction = model.predict(X)
-            for row in xrange(len(X)):
+            for row in xrange(X.shape[0]):
                 for label in xrange(self.label_count):
                     results[model.ordering[label]] += prediction[row][label]
 
