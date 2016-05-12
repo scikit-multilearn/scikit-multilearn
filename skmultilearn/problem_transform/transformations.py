@@ -7,7 +7,7 @@ class RandomOrderedClassifierChain(MLClassifierBase):
         super(RandomOrderedClassifierChain, self).__init__(classifier)
         self.ordering = None
 
-    def draw_ordering(self):
+    def generate_label_ordering(self):
         self.ordering = random.sample(xrange(self.label_count), self.label_count)
 
     def fit(self, X, y):
@@ -67,20 +67,22 @@ class EnsembleClassifierChains(MLClassifierBase):
         return self
 
     def predict(self, X):
-        results = np.zeros((len(X), self.label_count), dtype='i8')
-        for model in self.models:
-            prediction = model.predict(X)
-            for row in xrange(len(X)):
-                for label in xrange(self.label_count):
-                    results[model.ordering[label]] += prediction[row][label]
+        """Predict labels for X, see base method's documentation."""
+        predictions = [
+            self.ensure_input_format(self.ensure_input_format(c.predict(X)), sparse_format = 'csc', enforce_sparse = True)
+            for c in self.classifiers
+        ]
 
-        sums = np.zeros(self.label_count, dtype='float')
-        for row in results:
-            sums += row
+        votes = sparse.csc_matrix((predictions[0].shape[0], self.label_count), dtype='i8')
+        for model in xrange(self.model_count):
+            for label in xrange(len(self.partition[model])):
+                votes[:, self.partition[model][label]] = votes[:, self.partition[model][label]]  + predictions[model][:, label]
 
-        for row in xrange(len(X)):
-            for label in xrange(self.label_count):
-                results[row][label] = int(results[row][label]/float(sums[label]) > self.threshold)
+        voters = map(float, votes.sum(axis = 0).tolist()[0])
 
-        return results
-        
+        nonzeros = votes.nonzero()
+        for row, column in zip(nonzeros[0], nonzeros[1]):
+            if votes[row, column] >= self.threshold * voters[column]:
+                votes[row, column] = 1
+
+        return votes

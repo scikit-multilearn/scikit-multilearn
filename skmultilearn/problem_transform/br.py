@@ -1,9 +1,9 @@
-from ..base import MLClassifierBase
+from ..base.problem_transformation import ProblemTransformationBase
 from scipy.sparse import hstack, coo_matrix
 from sklearn.utils import check_array
 import copy
 
-class BinaryRelevance(MLClassifierBase):
+class BinaryRelevance(ProblemTransformationBase):
     """Binary Relevance multi-label classifier."""
     BRIEFNAME = "BR"
     
@@ -33,7 +33,7 @@ class BinaryRelevance(MLClassifierBase):
     def predict(self, X):
         """Predict labels for `X`, see base method's documentation."""
         predictions = [self.classifiers[label].predict(self.ensure_input_format(X)) for label in xrange(self.model_count)]
-        if isinstance(self.classifier, MLClassifierBase):
+        if isinstance(self.classifier, ProblemTransformationBase):
             return hstack(predictions)
         else:
             return coo_matrix(predictions).T

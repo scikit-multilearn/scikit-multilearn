@@ -4,11 +4,11 @@ import numpy as np
 import scipy.sparse as sp
 
 from .test_utils import SPARSE_MATRIX_FORMATS
-from ..base import MLClassifierBase
+from ..base import ProblemTransformationBase
 from sklearn.base import BaseEstimator
 
 
-class MLClassifierBaseTest(unittest.TestCase):
+class ProblemTransformationBaseTest(unittest.TestCase):
 
     def dense_and_dense_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), len(ensured_X))
@@ -35,19 +35,19 @@ class MLClassifierBaseTest(unittest.TestCase):
         expected_values = [[True, True], [False, False], [True, False], [True, True], [False, False], [False, True]]
         
         for value, expected_value in zip(values, expected_values):
-            classifier = MLClassifierBase(classifier = None, require_dense = value)
+            classifier = ProblemTransformationBase(classifier = None, require_dense = value)
             self.assertEqual(classifier.require_dense, expected_value)
 
     def test_if_require_dense_is_correctly_inferred_when_none_passed(self):
-        values = [None, MLClassifierBase()]
+        values = [None, ProblemTransformationBase()]
         expected_values = [[True, True], [False, False]]
         
         for value, expected_value in zip(values, expected_values):
-            classifier = MLClassifierBase(classifier = value, require_dense = None)
+            classifier = ProblemTransformationBase(classifier = value, require_dense = None)
             self.assertEqual(classifier.require_dense, expected_value)
 
     def test_make_sure_abstract_methods_are_not_implemented_in_base(self):
-        classifier = MLClassifierBase()
+        classifier = ProblemTransformationBase()
 
         with self.assertRaises(NotImplementedError):
             classifier.fit([], [])
@@ -56,7 +56,7 @@ class MLClassifierBaseTest(unittest.TestCase):
             classifier.predict([])
 
     def test_make_sure_params_include_all_params(self):
-        classifier = MLClassifierBase()
+        classifier = ProblemTransformationBase()
         classifier_params = classifier.get_params(deep = False)
         expected_params = ['classifier', 'require_dense']
 
@@ -64,11 +64,11 @@ class MLClassifierBaseTest(unittest.TestCase):
             self.assertIn(param, classifier_params)
 
     def test_make_sure_ml_base_classifier_follows_base_estimator(self):
-        classifier = MLClassifierBase()
+        classifier = ProblemTransformationBase()
         self.assertIsInstance(classifier, BaseEstimator) 
 
     def test_ensure_input_format_returns_dense_from_dense_if_required(self):
-        classifier = MLClassifierBase(require_dense = True)
+        classifier = ProblemTransformationBase(require_dense = True)
 
         X = np.zeros((2,3))
         ensured_X = classifier.ensure_input_format(X)
@@ -77,7 +77,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_dense_matrices_are_the_same(X, ensured_X)
 
     def test_ensure_input_format_returns_dense_from_sparse_if_required(self):
-        classifier = MLClassifierBase(require_dense = True)
+        classifier = ProblemTransformationBase(require_dense = True)
 
         X = sp.csr_matrix(np.zeros((2,3)))
         ensured_X = classifier.ensure_input_format(X)
@@ -86,7 +86,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_sparse_matrices_are_the_same(ensured_X, X)
 
     def test_ensure_input_format_returns_sparse_from_dense_if_required(self):
-        classifier = MLClassifierBase(require_dense = False)
+        classifier = ProblemTransformationBase(require_dense = False)
 
         X = np.zeros((2,3))
         ensured_X = classifier.ensure_input_format(X)
@@ -95,7 +95,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_sparse_matrices_are_the_same(X, ensured_X)
 
     def test_ensure_input_format_returns_sparse_from_sparse_if_required(self):
-        classifier = MLClassifierBase(require_dense = False)
+        classifier = ProblemTransformationBase(require_dense = False)
 
         X = sp.csr_matrix(np.zeros((2,3)))
         ensured_X = classifier.ensure_input_format(X)
@@ -106,7 +106,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_input_format_returns_sparse_from_dense_if_enforced(self):
         for require_dense in itertools.product([True, False], repeat=2):
-            classifier = MLClassifierBase(require_dense = require_dense)
+            classifier = ProblemTransformationBase(require_dense = require_dense)
 
             X = np.zeros((2,3))
             ensured_X = classifier.ensure_input_format(X, enforce_sparse = True)
@@ -116,7 +116,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_input_format_returns_sparse_from_sparse_if_enforced(self):
         for require_dense in itertools.product([True, False], repeat=2):
-            classifier = MLClassifierBase(require_dense = require_dense)
+            classifier = ProblemTransformationBase(require_dense = require_dense)
 
             X = sp.csr_matrix(np.zeros((2,3)))
             ensured_X = classifier.ensure_input_format(X, enforce_sparse = True)
@@ -127,7 +127,7 @@ class MLClassifierBaseTest(unittest.TestCase):
     def test_ensure_input_format_returns_sparse_in_format_from_dense_if_enforced(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
             for require_dense in [True, False]:
-                classifier = MLClassifierBase(require_dense = require_dense)
+                classifier = ProblemTransformationBase(require_dense = require_dense)
 
                 X = np.zeros((2,3))
                 ensured_X = classifier.ensure_input_format(X, sparse_format = sparse_format, enforce_sparse = True)
@@ -137,7 +137,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_input_format_returns_sparse_in_format_from_dense_if_required(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
-            classifier = MLClassifierBase(require_dense = False)
+            classifier = ProblemTransformationBase(require_dense = False)
 
             X = np.zeros((2,3))
             ensured_X = classifier.ensure_input_format(X, sparse_format = sparse_format)
@@ -146,7 +146,7 @@ class MLClassifierBaseTest(unittest.TestCase):
             self.assertEqual(ensured_X.format, sparse_format)
 
     def test_ensure_output_format_returns_dense_from_dense_if_required(self):
-        classifier = MLClassifierBase(require_dense = True)
+        classifier = ProblemTransformationBase(require_dense = True)
 
         y = np.zeros((2,3))
         ensured_y = classifier.ensure_output_format(y)
@@ -155,7 +155,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_dense_matrices_are_the_same(y, ensured_y)
 
     def test_ensure_output_format_returns_dense_from_sparse_if_required(self):
-        classifier = MLClassifierBase(require_dense = True)
+        classifier = ProblemTransformationBase(require_dense = True)
 
         y = sp.csr_matrix(np.zeros((2,3)))
         ensured_y = classifier.ensure_output_format(y)
@@ -164,7 +164,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_sparse_matrices_are_the_same(ensured_y, y)
 
     def test_ensure_output_format_returns_sparse_from_dense_if_required(self):
-        classifier = MLClassifierBase(require_dense = False)
+        classifier = ProblemTransformationBase(require_dense = False)
 
         y = np.zeros((2,3))
         ensured_y = classifier.ensure_output_format(y)
@@ -173,7 +173,7 @@ class MLClassifierBaseTest(unittest.TestCase):
         self.dense_and_sparse_matrices_are_the_same(y, ensured_y)
 
     def test_ensure_output_format_returns_sparse_from_sparse_if_required(self):
-        classifier = MLClassifierBase(require_dense = False)
+        classifier = ProblemTransformationBase(require_dense = False)
 
         y = sp.csr_matrix(np.zeros((2,3)))
         ensured_y = classifier.ensure_output_format(y)
@@ -184,7 +184,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_output_format_returns_sparse_from_dense_if_enforced(self):
         for require_dense in itertools.product([True, False], repeat=2):
-            classifier = MLClassifierBase(require_dense = require_dense)
+            classifier = ProblemTransformationBase(require_dense = require_dense)
 
             y = np.zeros((2,3))
             ensured_y = classifier.ensure_output_format(y, enforce_sparse = True)
@@ -194,7 +194,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_output_format_returns_sparse_from_sparse_if_enforced(self):
         for require_dense in itertools.product([True, False], repeat=2):
-            classifier = MLClassifierBase(require_dense = require_dense)
+            classifier = ProblemTransformationBase(require_dense = require_dense)
 
             y = sp.csr_matrix(np.zeros((2,3)))
             ensured_y = classifier.ensure_output_format(y, enforce_sparse = True)
@@ -205,7 +205,7 @@ class MLClassifierBaseTest(unittest.TestCase):
     def test_ensure_output_format_returns_sparse_in_format_from_dense_if_enforced(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
             for require_dense in [True, False]:
-                classifier = MLClassifierBase(require_dense = require_dense)
+                classifier = ProblemTransformationBase(require_dense = require_dense)
 
                 y = np.zeros((2,3))
                 ensured_y = classifier.ensure_output_format(y, sparse_format = sparse_format, enforce_sparse = True)
@@ -215,7 +215,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_output_format_returns_sparse_in_format_from_dense_if_required(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
-            classifier = MLClassifierBase(require_dense = False)
+            classifier = ProblemTransformationBase(require_dense = False)
 
             y = np.zeros((2,3))
             ensured_y = classifier.ensure_output_format(y, sparse_format = sparse_format)
@@ -226,7 +226,7 @@ class MLClassifierBaseTest(unittest.TestCase):
 
     def test_ensure_output_is_1d_for_single_label_y_when_dense(self):
         for input_sparse in [True, False]:
-            classifier = MLClassifierBase(require_dense = True)
+            classifier = ProblemTransformationBase(require_dense = True)
             y_single = np.ones((2,1), dtype=int)
 
             shape = y_single.shape

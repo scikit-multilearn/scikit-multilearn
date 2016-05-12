@@ -1,10 +1,10 @@
-from ..base import MLClassifierBase
+from ..base.problem_transformation import ProblemTransformationBase
 from scipy.sparse import hstack, coo_matrix, issparse
 import copy
 import numpy as np
 import random
 
-class ClassifierChain(MLClassifierBase):
+class ClassifierChain(ProblemTransformationBase):
     """Classifier Chains multi-label classifier."""
     BRIEFNAME = "CC"
     

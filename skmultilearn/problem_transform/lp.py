@@ -1,8 +1,8 @@
-from ..base import MLClassifierBase
+from ..base.problem_transformation import ProblemTransformationBase
 import numpy as np
 from scipy import sparse
 
-class LabelPowerset(MLClassifierBase):
+class LabelPowerset(ProblemTransformationBase):
     """Label Powerset multi-label classifier."""
     BRIEFNAME = "LP"
     
