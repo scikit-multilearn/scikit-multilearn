@@ -6,8 +6,9 @@ import scipy.sparse as sparse
 import arff
 import os
 
+from ..base import MLClassifierBase
 
-class Meka(object):
+class Meka(MLClassifierBase):
     """ Runs the MEKA classifier
 
         Parameters
