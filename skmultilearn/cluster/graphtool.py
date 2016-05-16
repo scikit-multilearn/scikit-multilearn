@@ -23,8 +23,7 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
 
     def __init__(self, weighted = None, allow_overlap = False):            
-        super(IGraphLabelCooccurenceClusterer, self).__init__()
-        self.method = method
+        super(LabelCooccurenceClustererBase, self).__init__()
         self.is_weighted = weighted
         self.allow_overlap = allow_overlap
 
@@ -40,7 +39,7 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         
         self.weights = g.new_edge_property('double')
 
-        for edge, weight in edge_map.iteritems():
+        for edge, weight in self.edge_map.iteritems():
             e = g.add_edge(edge[0], edge[1])
             if self.is_weighted:
                 self.weights[e] = weight
@@ -54,7 +53,7 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         self.generate_coocurence_adjacency_matrix(y)
         self.generate_coocurence_graph()
 
-        d = gt.minimize_blockmodel_dl(g, overlap = self.allow_overlap, ec = self.weights)
+        d = gt.minimize_blockmodel_dl(self.coocurence_graph, overlap = self.allow_overlap, ec = self.weights)
         A = d.get_blocks().a
 
         self.label_sets = [[] for i in xrange(d.B)]
