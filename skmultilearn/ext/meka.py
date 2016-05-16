@@ -7,6 +7,7 @@ import arff
 import os
 
 from ..base import MLClassifierBase
+from ..dataset import Dataset
 
 class Meka(MLClassifierBase):
     """ Runs the MEKA classifier
@@ -39,83 +40,7 @@ class Meka(MLClassifierBase):
         self.warnings = None
         self.clean()
 
-    def save_to_arff(self, X, y, endian = "little", save_sparse = True):
     
-        """Method for loading ARFF files as numpy array
-
-        Parameters
-        ----------
-
-        filename : string
-            Path to ARFF file
-        
-        labelcount: integer
-            Number of labels in the ARFF file
-
-        endian: string{"big", "little"}
-            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
-            or at the end ("little" endianness, MULAN format)
-
-        input_feature_type: numpy.type as string
-            The desire type of the contents of the return 'X' array-likes, default 'i8', 
-            should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
-
-        encode_nominal: boolean
-            Whether convert categorical data into numeric factors - required for some scikit classifiers that can't handle non-numeric input featuers.
-
-        save_sparse: boolean
-            Whether to read arff file as a sparse file format, liac-arff breaks if sparse reading is enabled for non-sparse ARFFs.
-
-        Returns
-        -------
-        
-        data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
-            The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
-            and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-            then the input vector has label no. 5)
-
-        """
-        X = X.todok()
-        y = y.todok()
-        
-        x_prefix = 0
-        y_prefix = 0
-
-        x_attributes = [(u'X{}'.format(i),u'NUMERIC') for i in xrange(X.shape[1])]
-        y_attributes = [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in xrange(y.shape[1])]
-
-        if endian == "big":
-            y_prefix = X.shape[1]
-            relation_sign = -1
-            attributes = x_attributes + y_attributes
-
-        elif endian == "little":
-            x_prefix = y.shape[1]
-            relation_sign = 1
-            attributes = y_attributes + x_attributes 
-
-        else:
-            raise ValueError("Endian not in {big, little}")
-
-        if save_sparse:
-            data = [{} for r in xrange(X.shape[0])]
-        else:
-            data = [[0 for c in xrange(X.shape[1] + y.shape[1])] for r in xrange(X.shape[0])]
-
-        for keys, value in X.iteritems():
-            data[keys[0]][x_prefix + keys[1]] = value
-
-        for keys, value in y.iteritems():
-            data[keys[0]][y_prefix + keys[1]] = value
-
-        dataset = {
-            u'description': u'traindata',
-            u'relation': u'traindata: -C {}'.format(y.shape[1] * relation_sign),
-            u'attributes': attributes,                
-            u'data': data
-        }
-
-        return arff.dumps(dataset)
 
     def clean(self):
         self.results = None
@@ -160,7 +85,7 @@ class Meka(MLClassifierBase):
         self.label_count = y.shape[1]
 
         # we need this in case threshold needs to be recalibrated in meka
-        self.train_data_ = self.save_to_arff(X, y)
+        self.train_data_ = Dataset.save_to_arff(X, y)
         train_arff = tempfile.NamedTemporaryFile(delete = False)
         classifier_dump_file = tempfile.NamedTemporaryFile(delete = False)
         
@@ -208,7 +133,7 @@ class Meka(MLClassifierBase):
                 fp.write(self.classifier_dump)
 
             with open(test_arff.name + '.arff', 'wb') as fp:
-                fp.write(self.save_to_arff(X, sparse_y))
+                fp.write(Dataset.save_to_arff(X, sparse_y))
 
             args = [
                 '-l', classifier_dump_file.name
