@@ -28,11 +28,25 @@ class Meka(MLClassifierBase):
             Path to the MEKA class path folder, usually the folder lib in the directory MEKA was extracted to
 
     """
-    def __init__(self, meka_classifier = None, weka_classifier = None, java_command = '/usr/bin/java', meka_classpath = "/home/niedakh/icml/meka-1.7/lib/"):
+    def __init__(self, meka_classifier = None, weka_classifier = None, java_command = None, meka_classpath = None):
         super(Meka, self).__init__()
 
         self.java_command = java_command
+        if self.java_command is None:
+            # TODO: this will not be needed once we're python 3 ready - we will use it only in python 2.7 cases
+            from whichcraft import which
+            self.java_command = which("java")
+
+            if self.java_command is None:
+                raise ValueError("Java not found")
+        
         self.classpath = meka_classpath
+        if self.classpath is None:
+            self.classpath = os.environ.get('MEKA_CLASSPATH')
+
+            if self.classpath is None:
+                raise ValueError("No meka classpath defined")
+
         self.meka_classifier = meka_classifier
         self.verbosity = 5
         self.weka_classifier = weka_classifier
