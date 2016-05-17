@@ -23,6 +23,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
     def __init__(self, classifier = None, clusterer = None, require_dense = None):
         super(LabelSpacePartitioningClassifier, self).__init__(classifier, require_dense)
         self.clusterer = clusterer
+        self.copyable_attrs = ['clusterer', 'classifier', 'require_dense']
 
 
     def generate_partition(self, X, y):

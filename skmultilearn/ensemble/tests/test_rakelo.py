@@ -18,27 +18,27 @@ class RakelOTest(ClassifierBaseTest):
 
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
-        classifier = RakelO(classifier = self.get_labelpowerset_with_svc(), models = 20, labelset_size = 5)
+        classifier = RakelO(classifier = self.get_labelpowerset_with_svc(), model_count = 20, labelset_size = 5)
 
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_non_dense_base_classifier(self):
-        classifier = RakelO(classifier = self.get_labelpowerset_with_svc(), models = 20, labelset_size = 5)
+        classifier = RakelO(classifier = self.get_labelpowerset_with_svc(), model_count = 20, labelset_size = 5)
 
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
 
     def test_if_sparse_classification_works_on_dense_base_classifier(self):
-        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), models = 20, labelset_size = 5)
+        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), model_count = 20, labelset_size = 5)
 
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_dense_base_classifier(self):
-        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), models = 20, labelset_size = 5)
+        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), model_count = 20, labelset_size = 5)
 
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
     
     def test_if_works_with_cross_validation(self):
-        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), models = 20, labelset_size = 5)
+        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), model_count = 20, labelset_size = 5)
         
         self.assertClassifierWorksWithCV(classifier)
 

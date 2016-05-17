@@ -10,6 +10,8 @@ class RakelD(LabelSpacePartitioningClassifier):
     def __init__(self, classifier = None, labelset_size = None, require_dense = None):
         super(RakelD, self).__init__(classifier = classifier, require_dense = require_dense)
         self.labelset_size = labelset_size
+        self.copyable_attrs = ['labelset_size', 'classifier', 'require_dense']
+
 
     def generate_partition(self, X, y):
         """Internal method for sampling k-labELsets"""

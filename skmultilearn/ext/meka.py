@@ -40,11 +40,11 @@ class Meka(MLClassifierBase):
             if self.java_command is None:
                 raise ValueError("Java not found")
         
-        self.classpath = meka_classpath
-        if self.classpath is None:
-            self.classpath = os.environ.get('MEKA_CLASSPATH')
+        self.meka_classpath = meka_classpath
+        if self.meka_classpath is None:
+            self.meka_classpath = os.environ.get('MEKA_CLASSPATH')
 
-            if self.classpath is None:
+            if self.meka_classpath is None:
                 raise ValueError("No meka classpath defined")
 
         self.meka_classifier = meka_classifier
@@ -53,7 +53,9 @@ class Meka(MLClassifierBase):
         self.output = None
         self.warnings = None
         self.require_dense = [False, False]
+        self.copyable_attrs = ['meka_classifier', 'weka_classifier', 'java_command', 'meka_classpath']
         self.clean()
+
 
     
 
@@ -78,7 +80,7 @@ class Meka(MLClassifierBase):
     def run_meka_command(self, args):
         command_args = [
             self.java_command,
-            '-cp', "{}*".format(self.classpath),
+            '-cp', "{}*".format(self.meka_classpath),
             self.meka_classifier,    
         ]
 

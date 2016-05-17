@@ -11,10 +11,11 @@ class RakelO(RakelD):
 
     """
 
-    def __init__(self, classifier = None, models = None, labelset_size = None, require_dense = None):
+    def __init__(self, classifier = None, model_count = None, labelset_size = None, require_dense = None):
         super(RakelO, self).__init__(classifier = classifier, require_dense = require_dense)
-        self.model_count = int(models)
+        self.model_count = int(model_count)
         self.labelset_size = labelset_size
+        self.copyable_attrs = ['model_count', 'labelset_size', 'require_dense', 'classifier']
 
     def generate_partition(self, X, y):
         """Internal method for sampling k-labELsets"""
