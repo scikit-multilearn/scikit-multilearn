@@ -52,6 +52,7 @@ class Meka(MLClassifierBase):
         self.weka_classifier = weka_classifier
         self.output = None
         self.warnings = None
+        self.require_dense = [False, False]
         self.clean()
 
     
@@ -96,6 +97,8 @@ class Meka(MLClassifierBase):
 
     def fit(self, X, y):
         self.clean()
+        X = self.ensure_input_format(X, sparse_format = 'dok', enforce_sparse = True)
+        y = self.ensure_output_format(y, sparse_format = 'dok', enforce_sparse = True)
         self.label_count = y.shape[1]
 
         # we need this in case threshold needs to be recalibrated in meka
@@ -128,7 +131,9 @@ class Meka(MLClassifierBase):
 
 
     def predict(self, X):
+        X = self.ensure_input_format(X, sparse_format = 'dok', enforce_sparse = True)
         self.instance_count = X.shape[0]
+
 
         if self.classifier_dump is None:
             raise Exception, 'Not classified'
@@ -202,6 +207,8 @@ class Meka(MLClassifierBase):
             self.results = None
             self.statistics = None
             return None
+
+        print self.output
 
         predictions_split_head = '==== PREDICTIONS'
         predictions_split_foot = '|==========='
