@@ -36,6 +36,11 @@ class RakelOTest(ClassifierBaseTest):
         classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), models = 20, labelset_size = 5)
 
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
+    
+    def test_if_works_with_cross_validation(self):
+        classifier = RakelO(classifier = self.get_labelpowerset_with_nb(), models = 20, labelset_size = 5)
+        
+        self.assertClassifierWorksWithCV(classifier)
 
 if __name__ == '__main__':
     unittest.main()

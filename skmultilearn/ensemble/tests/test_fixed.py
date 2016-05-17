@@ -40,5 +40,10 @@ class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
 
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
 
+    def test_if_works_with_cross_validation(self):
+        classifier =  self.get_classifier(self.get_labelpowerset_with_nb())
+        
+        self.assertClassifierWorksWithCV(classifier)
+
 if __name__ == '__main__':
     unittest.main()

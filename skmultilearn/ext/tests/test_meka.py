@@ -20,6 +20,8 @@ class MekaTest(ClassifierBaseTest):
     def test_if_meka_classification_works_on_dense_input(self):
         self.assertClassifierWorksWithSparsity(self.classifier(), 'dense')
 
+    def test_if_works_with_cross_validation(self):
+        self.assertClassifierWorksWithCV(self.classifier())
 
 if __name__ == '__main__':
     unittest.main()
