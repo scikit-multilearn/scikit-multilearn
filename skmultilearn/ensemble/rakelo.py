@@ -38,7 +38,7 @@ class RakelO(RakelD):
             for c in self.classifiers
         ]
 
-        votes = sparse.csc_matrix((predictions[0].shape[0], self.label_count), dtype='i8')
+        votes = sparse.csc_matrix((predictions[0].shape[0], self.label_count), dtype='int')
         for model in xrange(self.model_count):
             for label in xrange(len(self.partition[model])):
                 votes[:, self.partition[model][label]] = votes[:, self.partition[model][label]]  + predictions[model][:, label]
@@ -47,6 +47,7 @@ class RakelO(RakelD):
 
         nonzeros = votes.nonzero()
         for row, column in zip(nonzeros[0], nonzeros[1]):
-            votes[row, column] = votes[row, column] / voters[column]
+            votes[row, column] = np.round(votes[row, column] / float(voters[column]))
 
-        return votes
+        return self.ensure_input_format(votes, enforce_sparse = False)
+

@@ -5,13 +5,13 @@ import igraph as ig
 
 
 class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
-    """Base class providing API and common functions for all label cooccurence based multi-label classifiers.
+    """Clusters the label space using igraph community detection methods
  
     Parameters
     ----------
 
-    classifier : scikit classifier type
-        The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
+    method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
+        the igraph community detection method that will be used
 
     weighted: boolean
             Decide whether to generate a weighted or unweighted graph.
@@ -41,6 +41,21 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
 
 
     def fit_predict(self, X, y):
+    """Performs clustering on y and returns list of label lists
+
+    Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
+
+    Parameters
+    ----------
+    X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
+    y : sparse matrix (n_samples, n_labels), label space
+
+    Returns
+    -------
+    partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
+
+
+    """
         self.generate_coocurence_adjacency_matrix(y)
 
         if self.is_weighted:

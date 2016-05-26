@@ -16,10 +16,11 @@ class ClassifierBaseTest(unittest.TestCase):
 
     def assertClassifierWorksWithCV(self, classifier):
         # all the nice stuff is tested here - whether the classifier is clonable, etc.
-        X, y = make_multilabel_classification()
+        X, y = make_multilabel_classification(sparse = False, return_indicator = 'dense')
         n_iterations = 3
-        cv = cross_validation.ShuffleSplit(X.shape[0], n_iter=n_iterations, test_size=0.3, random_state=0)
-        scores = cross_validation.cross_val_score(classifier, X, y, cv=cv, scoring='f1_macro')
+        cv = cross_validation.ShuffleSplit(X.shape[0], n_iter = n_iterations, test_size = 0.5, random_state = 0)
+        
+        scores = cross_validation.cross_val_score(classifier, X, y = y, cv = cv, scoring='accuracy')
 
         self.assertEqual(len(scores), n_iterations)
 

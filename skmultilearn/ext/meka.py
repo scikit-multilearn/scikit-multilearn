@@ -1,5 +1,4 @@
 import subprocess
-import numpy as np
 import tempfile
 import shlex
 import scipy.sparse as sparse
