@@ -1,5 +1,6 @@
-Classifying input using scikit-multilearn
------------------------------------------
+.. _classify:
+Classify your dataset
+=====================
 
 To classify data with a multi-label classifier, you need to have:
 
@@ -9,29 +10,106 @@ To classify data with a multi-label classifier, you need to have:
 
 - selected the multi-label classification method, ex. Binary Relevance
 
-- an array of input feature vectors you want to have labeled
+- an array or (dense/sparse) matrix with feature vectors to classify
 
-An example use case of the data sets for classification:
+
+Loading the data set
+--------------------
+`scikit-multilearn` lets you load two formats of data, one of them is the traditional ARFF format, using liac-arff package. The other uses scikit-multilearn format that is a BZ2-pped pickle of a dict containing two sparse matrices.
+
+Loading from arff
+^^^^^^^^^^^^^^^^^
+
+This approach uses https://pythonhosted.org/liac-arff/ library to load ARFF files into scikit-multilearn. Many benchmark ARFF data sets can be found in _`MULAN's collection <http://mulan.sourceforge.net/datasets-mlc.html>`. This can be done using the :class:`Dataset's` static method :func:`Dataset::load_arff_to_numpy`.
 
 .. code-block:: python
 
-	from skmultilearn.dataset import Dataset
-	from skmultilearn.meta.br import BinaryRelevance
-	from sklearn.naive_bayes import GaussianNB
-	import sklearn.metrics
+    from skmultilearn.dataset import Dataset
+    
+    ## some information about the data set 
+    # number of labels
+    labelcount = 16 
+    
+    # where the labels are located, 
+    # big = at the beginning of the file
+    endianness = 'big' 
+    
+    # dtype used in the feature space
+    feature_type = 'float' 
+    
+    # whether the nominal attributes should be encoded as integers
+    encode_nominal = True
 
-	# load data
-	train_set = Dataset.load_dataset_dump("data/scene-train.dump.bz2")
-	test_set = Dataset.load_dataset_dump("data/scene-test.dump.bz2")
+    # if True - use the sparse loading mechanism from liac-arff
+    # if False - load dense representation and convert to sparse
+    load_sparse = True
 
-	# initialize Binary Relevance multi-label classifier with gaussian naive bayes base classifier
-	classifier = BinaryRelevance(GaussianNB())
-	
-	# train
-	classifier.fit(train_set['X'],train_set['y'])
-	
-	# predict
-	predictions = classifier.predict(test_set['X'])
+    # load data
+    X_train, y_train = Dataset.load_arff_to_numpy("path_to_data/dataset-train.dump.bz2", 
+        labelcount = labelcount, 
+        endian = "big", 
+        input_feature_type = feature_type,
+        encode_nominal = encode_nominal,
+        load_sparse = load_sparse)
 
-	# measure
-	print(sklearn.metrics.hamming_loss(test_set['y'], predictions))
+    X_test, y_test = Dataset.load_arff_to_numpy("path_to_data/dataset-train.dump.bz2",
+        labelcount = labelcount, 
+        endian = "big", 
+        input_feature_type = feature_type,
+        encode_nominal = encode_nominal,
+        load_sparse = load_sparse)
+
+
+Classifying input using scikit-multilearn
+-----------------------------------------
+
+The easiest way to perform multi-label classification is to transform it to a single-label classification task and then use scikit classifiers for that new job. There is a variety of such classifiers available in the ::module::`skmultilearn.problem_transformation` module. ::class::`Binary Relevance` is an example of such approach. 
+
+Binary Relevance requires a base classifier to use in the single-label problem. It clones a new one for each label and performs per label classification, summing the results together in the end. It can be done using scikit-multilearn as follows.
+
+.. code-block:: python
+
+    from skmultilearn.problem_transform import BinaryRelevance
+    from sklearn.naive_bayes import GaussianNB
+    import sklearn.metrics
+
+    # assume data is loaded using 
+    # and is available in X_train/X_test, y_train/y_test
+
+    # initialize Binary Relevance multi-label classifier 
+    # with gaussian naive bayes base classifier
+    classifier = BinaryRelevance(GaussianNB(), require_dense)
+    
+    # train
+    classifier.fit(X_train, y_train)
+    
+    # predict
+    predictions = classifier.predict(X_test)
+
+    # measure
+    print(sklearn.metrics.hamming_loss(y_test, predictions))
+
+
+As described in ::class::`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While scikit-multilearn uses sparse matrices everywhere, scikit-learn is still in transition - to enable this (and a large speed up) use the following example:
+
+.. code-block:: python
+    from skmultilearn.problem_transform import BinaryRelevance
+    from sklearn.svm import SVC
+    import sklearn.metrics
+
+    # assume data is loaded using 
+    # and is available in X_train/X_test, y_train/y_test
+
+    # initialize Binary Relevance multi-label classifier 
+    # with an SVM classifier
+    # SVM in scikit only supports the X matrix in sparse representation 
+    classifier = BinaryRelevance(classifier = SVC(), require_dense = [False, True])
+
+    # train
+    classifier.fit(X_train, y_train)
+    
+    # predict
+    predictions = classifier.predict(X_test)
+
+    # measure
+    print(sklearn.metrics.hamming_loss(y_test, predictions))

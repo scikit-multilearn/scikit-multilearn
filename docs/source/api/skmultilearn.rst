@@ -6,27 +6,23 @@ Subpackages
 
 .. toctree::
 
-    skmultilearn.meta
+    skmultilearn.adapt
+    skmultilearn.base
+    skmultilearn.cluster
+    skmultilearn.download
+    skmultilearn.ensemble
+    skmultilearn.ext
+    skmultilearn.problem_transform
+    skmultilearn.tests
 
 Submodules
 ----------
 
-skmultilearn.base module
-------------------------
+.. toctree::
 
-.. automodule:: skmultilearn.base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.dataset module
----------------------------
-
-.. automodule:: skmultilearn.dataset
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   skmultilearn.dataset
+   skmultilearn.repeat_classifier
+   skmultilearn.utils
 
 Module contents
 ---------------
