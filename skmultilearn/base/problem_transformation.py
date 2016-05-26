@@ -6,7 +6,15 @@ from scipy.sparse import issparse, csr_matrix
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 class ProblemTransformationBase(MLClassifierBase):
-    """Base class providing API and common functions for all multi-label classifiers.
+    """Base class providing common functions for multi-label classifiers that follow the problem transformation approach.
+
+    Problem transformation is the approach in which the original multi-label classification problem     is transformed into one or more single-label problems, which are then solved by single-class or multi-class classifiers.
+
+    Scikit-multilearn provides a number of such methods:
+
+    - Binary Relevance - which performs a single-label single-class classification for each label and sums the results :class:`BinaryRelevance`
+    - Classifier Chains - which performs a single-label single-class classification for each label and sums the results :class:`ClassifierChain`
+    - Label Powerset - which performs a single-label single-class classification for each label and sums the results :class:`LabelPowerset`
  
     Parameters
     ----------
@@ -31,7 +39,7 @@ class ProblemTransformationBase(MLClassifierBase):
                 self.require_dense = require_dense
 
         else:
-            if isinstance(self.classifier, ProblemTransformationBase):
+            if isinstance(self.classifier, MLClassifierBase):
                 self.require_dense = [False, False]
             else:
                 self.require_dense = [True, True]
