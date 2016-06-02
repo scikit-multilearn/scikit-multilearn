@@ -101,18 +101,23 @@ The biggest problem with joining single-label scikit classifiers with multi-labe
 If the ``required_dense`` argument is not passed, it is set to ``[false, false]`` if a classifier inherits ::class::``MLClassifierBase`` and to ``[true, true]`` as a fallback otherwise. In short it assumes dense representation is required for base classifier if the base classifier is not a scikit-multilearn classifier. 
 
 
+
 Ensemble classification
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Ensemble classification is an approach of transforming a multi-label classification problem into a family (an ensemble) of multi-label subproblems. 
 
-In the case when your classifier concentrates on clustering the label space you should look into existing clustering schemes in the skmultilearn.ensemble module as base classes. In most cases you can take an existing general scheme, such as: LabelSpacePartitioningClassifier - which partitions a label space using a clusterer class that implements the LabelSpaceClustererBase interface. 
+In the case when your classifier concentrates on clustering the label space you should look into existing clustering schemes in the skmultilearn.ensemble module as base classes. In most cases you can take an existing general scheme, such as: :class:`LabelSpacePartitioningClassifier` - which partitions a label space using a clusterer class that implements the :class:`LabelSpaceClustererBase` interface. 
 
 
 Unit testing
 ------------
 
-Scikit-multilearn provides a base unit test class for testing classifiers. 
+Scikit-multilearn provides a base unit test class for testing classifiers. Please check ``skmultilearn.tests.classifier_basetest`` for a general framework for testing the multi-label classifier.
+
+Currently tests test three capabilities of the classifier:
+- whether the classifier works with dense/sparse input data :func:`ClassifierBaseTest.assertClassifierWorksWithSparsity`
+- whether it is clonable and works with scikit-learn's cross-validation classes :func:`ClassifierBaseTest.assertClassifierWorksWithCV`
 
 
 Implement your classifier checklist

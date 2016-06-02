@@ -35,6 +35,7 @@ ex. a two-object set with each row being a small 1px x 1px image with rgb channe
 The ``scikit-multilearn`` provided data sets are produced using :meth:`skmultilearn.dataset.Dataset` class and contain a dictionary with two keys: ``X``, ``y``, containing a data set in the format described above. The data sets are ``pickle`` dumps compressed using the ``bz2`` module. They can be loaded using the ``Dataset`` class.
 
 Example use case of loading data sets:
+
 .. code-block:: python
 
 	from skmultilearn.dataset import Dataset
