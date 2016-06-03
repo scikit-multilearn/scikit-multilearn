@@ -13,9 +13,6 @@ is built on top of the well-known `scikit-learn <http://scikit-learn.org>`_ ecos
 How do I start?
 ---------------
 
-If you are new to multi-label classification alltogether, start with the 
-:ref:`Concepts <concepts>` chapter which goes through the concepts and shows where different methods fit.
-
 If you've already performed multi-label classification, you're probably interested in some 
 :ref:`examples of how to use scikit-multilearn <classify>` and find out how to: load a data set, learn a classifier and test the results using scikit measures.
 
@@ -37,8 +34,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-   
-   concepts
+
    datasets
    classify
    meka
