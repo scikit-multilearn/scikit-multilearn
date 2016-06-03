@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from distutils.core import setup
+from setuptools import setup, find_packages
 #import sphinx_pypi_upload
 
 setup(
     name='scikit-multilearn',
     version='0.0.2',
-    packages=find_packages(exclude=['docs', 'tests']),
+    packages=find_packages(exclude=['docs', 'tests', '*.tests']),
     author=u'Piotr Szymański',
     author_email='niedakh@gmail.com',
     license='BSD',
