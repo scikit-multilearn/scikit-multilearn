@@ -5,7 +5,7 @@ from distutils.core import setup
 setup(
     name='scikit-multilearn',
     version='0.0.2',
-    packages=['skmultilearn'],
+    py_modules=['skmultilearn'],
     author=u'Piotr Szymański',
     author_email='niedakh@gmail.com',
     license='BSD',
