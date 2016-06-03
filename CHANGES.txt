@@ -1,4 +1,20 @@
-scikit-multilearn -1.0.1 (released 2014-12-01)
+scikit-multilearn - 0.0.2 (released 2016-06-04)
+
+- add Classifier Chains support based on Wojciech Stachowiak's code
+- [LargeSpeedup] converted all classes to use sparse matrices inside scikit-multilearn
+- converted all methods to be fully compatible with scikit BaseEstimator 
+  & Classifier Mixin based on work Christian Schulze's work
+- refactor meka to perform as a scikit-compatible classifier
+- add support for meka 1.9
+- add framework for label space division based classification and
+  label space clustering version of the ClustererMixin from scikit
+- add igraph and graphtool-based label space clusterers using community
+  detection methods on a label co-occurence graph
+- full test coverage
+- fixed a number of bugs
+
+
+scikit-multilearn - 0.0.1 (released 2014-12-01)
 
 - initial release
 - support for initial set of multi-label classification methods:
