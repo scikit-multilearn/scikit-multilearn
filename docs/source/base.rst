@@ -58,20 +58,20 @@ An example of this would be:
 The fit method
 ^^^^^^^^^^^^^^
 
-The ``fit(self, X, y)`` expects classifier training data. 
+The ``fit(self, X, y)`` expects classifier training data:
 
-``X`` should be a sparse matrix of shape: ``(n_samples, n_features)``, although for compatibility reasons array of arrays and a dense matrix are supported. 
+- ``X`` should be a sparse matrix of shape: ``(n_samples, n_features)``, although for compatibility reasons array of arrays and a dense matrix are supported. 
 
-``y`` should be a sparse, binary indicator, matrix of shape: ``(n_samples, n_labels)`` with 1 in a position ``i,j`` when ``i``-th sample  is labeled with label no. ``j``
+- ``y`` should be a sparse, binary indicator, matrix of shape: ``(n_samples, n_labels)`` with 1 in a position ``i,j`` when ``i``-th sample  is labeled with label no. ``j``
 
 It should return ``self`` after the classifier has been fitted to training data. It is customary that ``fit`` should remember ``n_labels`` in a way. In practice we store ``n_labels`` as ``self.label_count`` in scikit-multilearn classifiers.
 
 The predict method
 ^^^^^^^^^^^^^^^^^^
 
-The ``predict(self, X)`` returns a prediction of labels for the samples from ``X``.
+The ``predict(self, X)`` returns a prediction of labels for the samples from ``X``:
 
-``X`` should be a sparse matrix of shape: ``(n_samples, n_features)``, although for compatibility reasons array of arrays and a dense matrix are supported. 
+- ``X`` should be a sparse matrix of shape: ``(n_samples, n_features)``, although for compatibility reasons array of arrays and a dense matrix are supported. 
 
 The returned value is similar to ``y`` in ``fit``. It should be a sparse binary indicator matrix of the shape ``(n_samples, n_labels)``.
 

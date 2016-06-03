@@ -9,7 +9,6 @@ Subpackages
     skmultilearn.adapt
     skmultilearn.base
     skmultilearn.cluster
-    skmultilearn.download
     skmultilearn.ensemble
     skmultilearn.ext
     skmultilearn.problem_transform
@@ -18,11 +17,30 @@ Subpackages
 Submodules
 ----------
 
-.. toctree::
+skmultilearn.dataset module
+---------------------------
 
-   skmultilearn.dataset
-   skmultilearn.repeat_classifier
-   skmultilearn.utils
+.. automodule:: skmultilearn.dataset
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skmultilearn.repeat_classifier module
+-------------------------------------
+
+.. automodule:: skmultilearn.repeat_classifier
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skmultilearn.utils module
+-------------------------
+
+.. automodule:: skmultilearn.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

@@ -1,7 +1,6 @@
-.. _meka-wrapper:
+.. _mekawrapper:
 Using the meka wrapper
 ======================
-
 
 Setting up MEKA
 ---------------

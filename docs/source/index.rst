@@ -19,31 +19,32 @@ If you are new to multi-label classification alltogether, start with the
 If you've already performed multi-label classification, you're probably interested in some 
 :ref:`examples of how to use scikit-multilearn <classify>` and find out how to: load a data set, learn a classifier and test the results using scikit measures.
 
-If you came here to use the wrapper around the well known ``meka``, there's an example of how to do it in: :ref:`Using the meka wrapper <meka-wrapper>`.
+If you came here to use the wrapper around the well known `meka library <http://meka.sf.net>`_, there's an example of how to do it in: :ref:`Using the meka wrapper <mekawrapper>`.
 
 If you are a developer and want to join scikit-multilearn, here you can find out how to:
 
 - :ref:`implement a classifier <implementing-classifier>`
-- :ref:`implement a new clusterer for ensemble methods based on label space division <implement-clusterer>`
+- :ref:`implement a new clusterer for ensemble methods based on label space division <implementclusterer>`
+
 .. - :ref:`find some Junior Jobs and help the team <junior-jobs>`
 
 
 .. todo: write useful scenarios such as CV, train/test split etc.
 
-If you used previous versions of the library, this document goes through the changes: versions.
-
-For the very hugry - we also have some fresh apidocs.
+If you used previous versions of the library, you might want to :ref:`document goes through the changes <changes>`.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
-
-..   concepts
+   
+   concepts
    datasets
    classify
-   base
    meka
+   base
+   clusterer
+   api/modules
 
    changes
 

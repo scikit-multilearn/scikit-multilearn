@@ -4,23 +4,21 @@ Classify your dataset
 
 To classify data with a multi-label classifier, you need to have:
 
-- a training data set: ``X`` - array of input feature vectors and ``y`` arary of binary label indicator vectors associated with each row
-
 - selected a base classifier, ex. a naive bayes one
-
 - selected the multi-label classification method, ex. Binary Relevance
-
 - an array or (dense/sparse) matrix with feature vectors to classify
-
+- a training data set: 
+    - ``X``: array of input feature vectors
+    - ``y`` arary of binary label indicator vectors associated with each row
 
 Loading the data set
 --------------------
-`scikit-multilearn` lets you load two formats of data, one of them is the traditional ARFF format, using liac-arff package. The other uses scikit-multilearn format that is a BZ2-pped pickle of a dict containing two sparse matrices.
+``scikit-multilearn`` lets you load two formats of data, one of them is the traditional ARFF format, using `liac-arff <https://pythonhosted.org/liac-arff/>`_ package. The other uses scikit-multilearn format that is a BZ2-pped pickle of a dict containing two sparse matrices.
 
 Loading from arff
 ^^^^^^^^^^^^^^^^^
 
-This approach uses https://pythonhosted.org/liac-arff/ library to load ARFF files into scikit-multilearn. Many benchmark ARFF data sets can be found in _`MULAN's collection <http://mulan.sourceforge.net/datasets-mlc.html>`. This can be done using the :class:`Dataset's` static method :func:`Dataset::load_arff_to_numpy`.
+This approach uses the ``liac-arff`` library to load ARFF files into ``scikit-multilearn``. Many benchmark ARFF data sets can be found in `MULAN's collection <http://mulan.sourceforge.net/datasets-mlc.html>`_. This can be done using the :class:`Dataset` static method :func:`Dataset::load_arff_to_numpy`.
 
 .. code-block:: python
 
@@ -63,7 +61,7 @@ This approach uses https://pythonhosted.org/liac-arff/ library to load ARFF file
 Classifying input using scikit-multilearn
 -----------------------------------------
 
-The easiest way to perform multi-label classification is to transform it to a single-label classification task and then use scikit classifiers for that new job. There is a variety of such classifiers available in the ::module::`skmultilearn.problem_transformation` module. ::class::`Binary Relevance` is an example of such approach. 
+The easiest way to perform multi-label classification is to transform it to a single-label classification task and then use scikit classifiers for that new job. There is a variety of such classifiers available in the :module:`skmultilearn.problem_transformation` module. :class:`Binary Relevance` is an example of such approach. 
 
 Binary Relevance requires a base classifier to use in the single-label problem. It clones a new one for each label and performs per label classification, summing the results together in the end. It can be done using scikit-multilearn as follows.
 
@@ -90,9 +88,10 @@ Binary Relevance requires a base classifier to use in the single-label problem. 
     print(sklearn.metrics.hamming_loss(y_test, predictions))
 
 
-As described in ::class::`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While scikit-multilearn uses sparse matrices everywhere, scikit-learn is still in transition - to enable this (and a large speed up) use the following example:
+As described in :class:`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While ``scikit-multilearn`` uses sparse matrices everywhere, ``scikit-learn`` is still in transition - to enable this (and a large speed up) use the following example:
 
 .. code-block:: python
+
     from skmultilearn.problem_transform import BinaryRelevance
     from sklearn.svm import SVC
     import sklearn.metrics
