@@ -10,16 +10,9 @@ To implement a multi-label classifier you need to subclass :meth:`skmultilearn.b
 Sparse representation
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The ``fit(self, X, y)`` expects classifier training data represented as an array-like of input feature vectors (rows) ``X`` and an array-like of binary label vectors as described in :ref:`datasets`. It should return ``self`` after the classifier has been fitted to training data.
+In ``0.0.2`` the entire ``scikit-multilearn`` package has been converted to use sparse representation of input and output spaces internally. Helper functions were introduced for this purpose in the :module:`utils` module and problem transformation base class. Multi-label output spaces are usually very sparse. This change provides a large speed up in problem transformation and ensemble approaches. In problem transformation classifiers a new parameter - ``requires_dense`` of type ``[bool, bool]`` which denotes whether the base classifier requires dense input for ``X`` - first ``bool`` - or ``y`` - second ``bool``. If no values passed, the base class infers ``[False, False]`` for :class:`skmultilearn.base.MLClassifierBase` derived classes and ``[True, True]``.
 
 Meka is scikit-compatible
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``predict(self ,X)`` expects an array-like of input feature vectors (rows) ``X`` that are to be classified. It should return an array-like of binary label vectors as described in :ref:`datasets`.
-
-
-Problem transformations changed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``predict(self ,X)`` expects an array-like of input feature vectors (rows) ``X`` that are to be classified. It should return an array-like of binary label vectors as described in :ref:`datasets`.
-
+The meka classifier has been updated to support version ``1.9`` and is now a fully ``scikit-learn`` compatible classifier supporting ``fit`` and ``predict`` among others. 
