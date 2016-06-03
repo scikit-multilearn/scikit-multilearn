@@ -4,9 +4,10 @@ from ..utils import get_matrix_in_format, matrix_creation_function_for_format
 from scipy.sparse import issparse, csr_matrix
 from sklearn.base import BaseEstimator, ClassifierMixin
 
+
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label classifiers.
- 
+
     Parameters
     ----------
 
@@ -15,11 +16,11 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     require_dense : boolean
         Whether the base classifier requires input as dense arrays, False by default
     """
+
     def __init__(self):
         super(MLClassifierBase, self).__init__()
 
-    	self.copyable_attrs = []
-
+        self.copyable_attrs = []
 
     def generate_data_subset(self, y, subset, axis):
         """This function subsets the array of binary label vectors to include only certain labels. 
@@ -29,7 +30,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         y : array-like of array-likes
             An array-like of binary label vectors.
-        
+
         subset: array-like of integers
             array of integers, indices that will be subsetted from array-likes in y
 
@@ -50,7 +51,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         return return_data
 
-    def ensure_input_format(self, X, sparse_format='csr', enforce_sparse = False):
+    def ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
         """This function ensures that input format follows the density/sparsity requirements of base classifier. 
 
         Parameters
@@ -58,7 +59,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         X : array-like or sparse matrix, shape = [n_samples, n_features]
             An input feature matrix
-        
+
         sparse_format: string
             Requested format of returned scipy.sparse matrix, if sparse is returned
 
@@ -91,7 +92,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             else:
                 return matrix_creation_function_for_format(sparse_format)(X)
 
-    def ensure_output_format(self, y, sparse_format='csr', enforce_sparse = False):
+    def ensure_output_format(self, y, sparse_format='csr', enforce_sparse=False):
         """This function ensures that output format follows the density/sparsity requirements of base classifier. 
 
         Parameters
@@ -99,7 +100,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         y : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
             An input feature matrix
-        
+
         sparse_format: string
             Requested format of returned scipy.sparse matrix, if sparse is returned
 
@@ -138,13 +139,12 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             else:
                 return matrix_creation_function_for_format(sparse_format)(y)
 
-
     def fit(self, X, y):
         """Abstract class to implement to fit classifier according to X,y.
 
         Parameters
         ----------
-        
+
         X : {array-like, sparse matrix}, shape = [n_samples, n_features]
             Training vectors, where n_samples is the number of samples and n_features is the number of features.
 
@@ -163,7 +163,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         Parameters
         ----------
-        
+
         X : {array-like, sparse matrix}, shape = [n_samples, n_features]
             Training vectors, where n_samples is the number of samples and n_features is the number of features.
 
@@ -191,7 +191,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             Dictionary of all parameters and their values. If deep=True the dictionary
             also holds the parameters of the parameters.
         """
-        
+
         out = dict()
 
         for attr in self.copyable_attrs:
@@ -233,8 +233,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                     setattr(self, parameter, value)
                 else:
                     raise ValueError('Invalid parameter %s for estimator %s. '
-                         'Check the list of available parameters '
-                         'with `estimator.get_params().keys()`.' %
-                         (name, self))
+                                     'Check the list of available parameters '
+                                     'with `estimator.get_params().keys()`.' %
+                                     (name, self))
 
         return self

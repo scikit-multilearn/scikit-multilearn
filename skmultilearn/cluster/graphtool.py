@@ -6,7 +6,7 @@ import graph_tool.all as gt
 
 class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
     """ Clusters the label space using graph tool's stochastic block modelling community detection method
- 
+
         Parameters
         ----------
 
@@ -15,9 +15,10 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
         allow_overlap: boolean
                 Allow overlapping of clusters or not.
-        
+
     """
-    def __init__(self, weighted = None, allow_overlap = False):            
+
+    def __init__(self, weighted=None, allow_overlap=False):
         super(LabelCooccurenceClustererBase, self).__init__()
         self.is_weighted = weighted
         self.allow_overlap = allow_overlap
@@ -39,12 +40,12 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
             Returns
             -------
-        
+
             g : graphtool.Graph object representing a label co-occurence graph
         """
-        g = gt.Graph(directed = False)
+        g = gt.Graph(directed=False)
         g.add_vertex(self.label_count)
-        
+
         self.weights = g.new_edge_property('double')
 
         for edge, weight in self.edge_map.iteritems():
@@ -75,13 +76,14 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         self.generate_coocurence_adjacency_matrix(y)
         self.generate_coocurence_graph()
 
-        d = gt.minimize_blockmodel_dl(self.coocurence_graph, overlap = self.allow_overlap, ec = self.weights)
+        d = gt.minimize_blockmodel_dl(
+            self.coocurence_graph, overlap=self.allow_overlap, ec=self.weights)
         A = d.get_blocks().a
 
         self.label_sets = [[] for i in xrange(d.B)]
         for k in xrange(len(A)):
             self.label_sets[A[k]].append(k)
-    
+
         self.model_count = len(self.label_sets)
 
         return np.array(self.label_sets)

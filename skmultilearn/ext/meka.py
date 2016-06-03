@@ -8,18 +8,20 @@ import os
 from ..base import MLClassifierBase
 from ..dataset import Dataset
 
+
 class Meka(MLClassifierBase):
-    """ Runs the MEKA classifier
+    """.. autoclass:: skmultilearn.ext.Meka
+        Runs the MEKA classifier
 
         Parameters
         ----------
 
         meka_classifier : string
             The MEKA classifier string and parameters from the MEKA API, such as: "meka.classifiers.multilabel.MULAN -S RAkEL2"
-        
+
         weka_classifier : string
             The WEKA classifier string and parameters from the WEKA API, such as: "weka.classifiers.trees.J48"
-        
+
         java_command : string
             Path to test the java command
 
@@ -27,18 +29,20 @@ class Meka(MLClassifierBase):
             Path to the MEKA class path folder, usually the folder lib in the directory MEKA was extracted to
 
     """
-    def __init__(self, meka_classifier = None, weka_classifier = None, java_command = None, meka_classpath = None):
+
+    def __init__(self, meka_classifier=None, weka_classifier=None, java_command=None, meka_classpath=None):
         super(Meka, self).__init__()
 
         self.java_command = java_command
         if self.java_command is None:
-            # TODO: this will not be needed once we're python 3 ready - we will use it only in python 2.7 cases
+            # TODO: this will not be needed once we're python 3 ready - we will
+            # use it only in python 2.7 cases
             from whichcraft import which
             self.java_command = which("java")
 
             if self.java_command is None:
                 raise ValueError("Java not found")
-        
+
         self.meka_classpath = meka_classpath
         if self.meka_classpath is None:
             self.meka_classpath = os.environ.get('MEKA_CLASSPATH')
@@ -52,11 +56,9 @@ class Meka(MLClassifierBase):
         self.output = None
         self.warnings = None
         self.require_dense = [False, False]
-        self.copyable_attrs = ['meka_classifier', 'weka_classifier', 'java_command', 'meka_classpath']
+        self.copyable_attrs = ['meka_classifier',
+                               'weka_classifier', 'java_command', 'meka_classpath']
         self.clean()
-
-
-    
 
     def clean(self):
         self.results = None
@@ -66,7 +68,6 @@ class Meka(MLClassifierBase):
         self.label_count = None
         self.instance_count = None
 
-
     def remove_temporary_files(self, temporary_files):
         for file_name in temporary_files:
             os.remove(file_name.name)
@@ -75,12 +76,11 @@ class Meka(MLClassifierBase):
             if os.path.exists(arff_file_name):
                 os.remove(arff_file_name)
 
-
     def run_meka_command(self, args):
         command_args = [
             self.java_command,
             '-cp', "{}*".format(self.meka_classpath),
-            self.meka_classifier,    
+            self.meka_classifier,
         ]
 
         if self.weka_classifier is not None:
@@ -90,7 +90,8 @@ class Meka(MLClassifierBase):
 
         meka_command = " ".join(command_args)
 
-        pipes = subprocess.Popen(shlex.split(meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipes = subprocess.Popen(shlex.split(
+            meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.output, self.error = pipes.communicate()
 
         if pipes.returncode != 0:
@@ -98,15 +99,17 @@ class Meka(MLClassifierBase):
 
     def fit(self, X, y):
         self.clean()
-        X = self.ensure_input_format(X, sparse_format = 'dok', enforce_sparse = True)
-        y = self.ensure_output_format(y, sparse_format = 'dok', enforce_sparse = True)
+        X = self.ensure_input_format(
+            X, sparse_format='dok', enforce_sparse=True)
+        y = self.ensure_output_format(
+            y, sparse_format='dok', enforce_sparse=True)
         self.label_count = y.shape[1]
 
         # we need this in case threshold needs to be recalibrated in meka
         self.train_data_ = Dataset.save_to_arff(X, y)
-        train_arff = tempfile.NamedTemporaryFile(delete = False)
-        classifier_dump_file = tempfile.NamedTemporaryFile(delete = False)
-        
+        train_arff = tempfile.NamedTemporaryFile(delete=False)
+        classifier_dump_file = tempfile.NamedTemporaryFile(delete=False)
+
         try:
             with open(train_arff.name + '.arff', 'w') as fp:
                 fp.write(self.train_data_)
@@ -127,24 +130,23 @@ class Meka(MLClassifierBase):
 
         finally:
             self.remove_temporary_files([train_arff, classifier_dump_file])
-            
+
         return self
 
-
     def predict(self, X):
-        X = self.ensure_input_format(X, sparse_format = 'dok', enforce_sparse = True)
+        X = self.ensure_input_format(
+            X, sparse_format='dok', enforce_sparse=True)
         self.instance_count = X.shape[0]
-
 
         if self.classifier_dump is None:
             raise Exception, 'Not classified'
 
-        sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype = int)
+        sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype=int)
 
         try:
-            train_arff = tempfile.NamedTemporaryFile(delete = False)
-            test_arff = tempfile.NamedTemporaryFile(delete = False)
-            classifier_dump_file = tempfile.NamedTemporaryFile(delete = False)
+            train_arff = tempfile.NamedTemporaryFile(delete=False)
+            test_arff = tempfile.NamedTemporaryFile(delete=False)
+            classifier_dump_file = tempfile.NamedTemporaryFile(delete=False)
 
             with open(train_arff.name + '.arff', 'wb') as fp:
                 fp.write(self.train_data_)
@@ -163,11 +165,12 @@ class Meka(MLClassifierBase):
             self.parse_output()
 
         finally:
-            self.remove_temporary_files([train_arff, test_arff, classifier_dump_file])
-            
+            self.remove_temporary_files(
+                [train_arff, test_arff, classifier_dump_file])
+
         return self.results
 
-    def run(self, train_file, test_file, additional_arguments = []):
+    def run(self, train_file, test_file, additional_arguments=[]):
         """ Runs the meka classifiers
 
         Parameters
@@ -175,7 +178,7 @@ class Meka(MLClassifierBase):
 
         train_file : string
             Path to train .arff file in meka format (big endian, labels first in attributes list).
-        
+
         test_file : string
             Path to test .arff file in meka format (big endian, labels first in attributes list).
 
@@ -189,7 +192,7 @@ class Meka(MLClassifierBase):
         self.output = None
         self.warnings = None
 
-        # meka_command_string = 'java -cp "/home/niedakh/pwr/old/meka-1.5/lib/*" meka.classifiers.multilabel.MULAN -S RAkEL2  
+        # meka_command_string = 'java -cp "/home/niedakh/pwr/old/meka-1.5/lib/*" meka.classifiers.multilabel.MULAN -S RAkEL2
         # -threshold 0 -t {train} -T {test} -verbosity {verbosity} -W weka.classifiers.bayes.NaiveBayes'
         # meka.classifiers.multilabel.LC, weka.classifiers.bayes.NaiveBayes
 
@@ -215,26 +218,33 @@ class Meka(MLClassifierBase):
         predictions_split_foot = '|==========='
 
         if self.label_count is None:
-            self.label_count = map(lambda y: int(y.split(')')[1].strip()), filter(lambda x: 'Number of labels' in x, self.output.split('\n')))[0]
-        
+            self.label_count = map(lambda y: int(y.split(')')[1].strip()), filter(
+                lambda x: 'Number of labels' in x, self.output.split('\n')))[0]
+
         if self.instance_count is None:
-            self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split('\n'))[0].split('(')[1].split('=')[1].split(')')[0]))
-        self.predictions = self.output.split(predictions_split_head)[1].split(predictions_split_foot)[0].split('\n')[1:-1]
-        self.predictions = map(lambda z: map(lambda f: int(f.strip()),  z.split(',')), map(lambda y: y.split(']')[0], map(lambda x: x.split('] [')[1], self.predictions)))
+            self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split(
+                '\n'))[0].split('(')[1].split('=')[1].split(')')[0]))
+        self.predictions = self.output.split(predictions_split_head)[1].split(
+            predictions_split_foot)[0].split('\n')[1:-1]
+        self.predictions = map(lambda z: map(lambda f: int(f.strip()),  z.split(',')), map(
+            lambda y: y.split(']')[0], map(lambda x: x.split('] [')[1], self.predictions)))
 
         if self.verbosity == 6:
             self.results = sparse.csr_matrix(self.predictions)
         elif self.verbosity == 5:
-            self.results = sparse.lil_matrix((self.instance_count, self.label_count), dtype='int')
+            self.results = sparse.lil_matrix(
+                (self.instance_count, self.label_count), dtype='int')
             for row in xrange(self.instance_count):
                 for label in self.predictions[row]:
                     self.results[row, label] = 1
 
-        statistics = filter(lambda x: len(x)> 0 and '==' not in x, self.output.split('== Evaluation Info')[1].split('\n'))
-        statistics = filter(lambda y: '  ' in y, map(lambda z: z.strip(), statistics))
+        statistics = filter(lambda x: len(x) > 0 and '==' not in x, self.output.split(
+            '== Evaluation Info')[1].split('\n'))
+        statistics = filter(lambda y: '  ' in y, map(
+            lambda z: z.strip(), statistics))
         array_data = filter(lambda z: '[' in z, statistics)
         non_array_data = filter(lambda z: '[' not in z, statistics)
-        
+
         self.statistics = {}
         for row in non_array_data:
             r = row.strip().split('  ')
@@ -246,17 +256,16 @@ class Meka(MLClassifierBase):
                 test_value = float(r[1])
             except ValueError:
                 test_value = r[1]
-            
+
             r[1] = test_value
             self.statistics[r[0]] = r[1]
 
         for row in array_data:
             r = row.strip().split('[')
             r = map(lambda z: z.strip(), r)
-            r[1] = r[1].replace(', ',' ').replace(',','.').replace(']', '').split(' ')
+            r[1] = r[1].replace(', ', ' ').replace(
+                ',', '.').replace(']', '').split(' ')
             r[1] = filter(lambda x: len(x) > 0, r[1])
             self.statistics[r[0]] = r[1]
 
         return self.results, self.statistics
-
-

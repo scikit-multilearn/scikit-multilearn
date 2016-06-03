@@ -5,9 +5,11 @@ import numpy as np
 
 from scipy import sparse
 
+
 class Dataset(object):
+
     @classmethod
-    def load_arff_to_numpy(cls, filename, labelcount, endian = "big", input_feature_type = 'float', encode_nominal = True, load_sparse = False):
+    def load_arff_to_numpy(cls, filename, labelcount, endian="big", input_feature_type='float', encode_nominal=True, load_sparse=False):
         """Method for loading ARFF files as numpy array
 
         Parameters
@@ -15,7 +17,7 @@ class Dataset(object):
 
         filename : string
             Path to ARFF file
-        
+
         labelcount: integer
             Number of labels in the ARFF file
 
@@ -35,7 +37,7 @@ class Dataset(object):
 
         Returns
         -------
-        
+
         data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
             The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
             and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
@@ -44,21 +46,27 @@ class Dataset(object):
         """
         matrix = None
         if not load_sparse:
-            arff_frame = arff.load(open(filename,'rb'), encode_nominal = encode_nominal, return_type=arff.DENSE)
-            matrix = sparse.csr_matrix(arff_frame['data'], dtype=input_feature_type)
+            arff_frame = arff.load(
+                open(filename, 'rb'), encode_nominal=encode_nominal, return_type=arff.DENSE)
+            matrix = sparse.csr_matrix(
+                arff_frame['data'], dtype=input_feature_type)
         else:
-            arff_frame = arff.load(open(filename ,'rb'), encode_nominal = encode_nominal, return_type=arff.COO)
+            arff_frame = arff.load(
+                open(filename, 'rb'), encode_nominal=encode_nominal, return_type=arff.COO)
             data = arff_frame['data'][0]
-            row  = arff_frame['data'][1]
-            col  = arff_frame['data'][2]
-            matrix = sparse.coo_matrix((data, (row, col)), shape=(max(row)+1, max(col)+1))
+            row = arff_frame['data'][1]
+            col = arff_frame['data'][2]
+            matrix = sparse.coo_matrix(
+                (data, (row, col)), shape=(max(row) + 1, max(col) + 1))
 
         X, y = None, None
-        
+
         if endian == "big":
-            X, y = matrix.tocsc()[:,labelcount:].tolil(), matrix.tocsc()[:,:labelcount].astype(int).tolil()
+            X, y = matrix.tocsc()[:, labelcount:].tolil(), matrix.tocsc()[
+                :, :labelcount].astype(int).tolil()
         elif endian == "little":
-            X, y = matrix.tocsc()[:,:-labelcount].tolil(), matrix.tocsc()[:,-labelcount:].astype(int).tolil()
+            X, y = matrix.tocsc()[
+                :, :-labelcount].tolil(), matrix.tocsc()[:, -labelcount:].astype(int).tolil()
         else:
             # unknown endian
             return None
@@ -66,8 +74,7 @@ class Dataset(object):
         return X, y
 
     @classmethod
-    def save_to_arff(cls, X, y, endian = "little", save_sparse = True):
-    
+    def save_to_arff(cls, X, y, endian="little", save_sparse=True):
         """Method for loading ARFF files as numpy array
 
         Parameters
@@ -75,7 +82,7 @@ class Dataset(object):
 
         filename : string
             Path to ARFF file
-        
+
         labelcount: integer
             Number of labels in the ARFF file
 
@@ -95,7 +102,7 @@ class Dataset(object):
 
         Returns
         -------
-        
+
         data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
             The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
             and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
@@ -104,12 +111,14 @@ class Dataset(object):
         """
         X = X.todok()
         y = y.todok()
-        
+
         x_prefix = 0
         y_prefix = 0
 
-        x_attributes = [(u'X{}'.format(i),u'NUMERIC') for i in xrange(X.shape[1])]
-        y_attributes = [(u'y{}'.format(i), [unicode(0),unicode(1)]) for i in xrange(y.shape[1])]
+        x_attributes = [(u'X{}'.format(i), u'NUMERIC')
+                        for i in xrange(X.shape[1])]
+        y_attributes = [(u'y{}'.format(i), [unicode(0), unicode(1)])
+                        for i in xrange(y.shape[1])]
 
         if endian == "big":
             y_prefix = X.shape[1]
@@ -119,7 +128,7 @@ class Dataset(object):
         elif endian == "little":
             x_prefix = y.shape[1]
             relation_sign = 1
-            attributes = y_attributes + x_attributes 
+            attributes = y_attributes + x_attributes
 
         else:
             raise ValueError("Endian not in {big, little}")
@@ -127,7 +136,8 @@ class Dataset(object):
         if save_sparse:
             data = [{} for r in xrange(X.shape[0])]
         else:
-            data = [[0 for c in xrange(X.shape[1] + y.shape[1])] for r in xrange(X.shape[0])]
+            data = [[0 for c in xrange(X.shape[1] + y.shape[1])]
+                    for r in xrange(X.shape[0])]
 
         for keys, value in X.iteritems():
             data[keys[0]][x_prefix + keys[1]] = value
@@ -138,7 +148,7 @@ class Dataset(object):
         dataset = {
             u'description': u'traindata',
             u'relation': u'traindata: -C {}'.format(y.shape[1] * relation_sign),
-            u'attributes': attributes,                
+            u'attributes': attributes,
             u'data': data
         }
 
@@ -193,5 +203,5 @@ class Dataset(object):
 
         with bz2.BZ2File(filename, "r") as file_handle:
             data = pickle.load(file_handle)
-        
+
         return data
