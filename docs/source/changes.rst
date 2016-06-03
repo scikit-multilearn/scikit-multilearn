@@ -4,8 +4,9 @@ Changes from previous releases
 
 To implement a multi-label classifier you need to subclass :meth:`skmultilearn.base.MLClassifierBase`. The constructor takes the underlying base classifier and sets it to ``self.classifier`` for future deep copying and access. In order to implement a new classifier you should implement the :meth:`skmultilearn.base.MLClassifierBase.fit` and :meth:`skmultilearn.base.MLClassifierBase.predict` methods.
 
-0.0.1 -> 0.0.2
+0.0.1 -> 0.0.3
 --------------
+The ``0.0.2`` release has been removed due to error in upload to PyPi and the idiotic decision of the PyPi admins to disallow updating files.
 
 Sparse representation
 ^^^^^^^^^^^^^^^^^^^^^^

@@ -1,4 +1,4 @@
-scikit-multilearn - 0.0.2 (released 2016-06-04)
+scikit-multilearn - 0.0.3 (released 2016-06-04)
 
 - add Classifier Chains support based on Wojciech Stachowiak's code
 - [LargeSpeedup] converted all classes to use sparse matrices inside scikit-multilearn
@@ -13,6 +13,8 @@ scikit-multilearn - 0.0.2 (released 2016-06-04)
 - full test coverage
 - fixed a number of bugs
 
+scikit-multilearn - 0.0.2 (released 2016-06-04)
+Broken release due to PYPI absurds.
 
 scikit-multilearn - 0.0.1 (released 2014-12-01)
 
