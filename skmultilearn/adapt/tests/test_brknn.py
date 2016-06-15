@@ -1,6 +1,6 @@
 import unittest
 
-from skmultilearn.lazy.brknn import BRkNNaClassifier, BRkNNbClassifier
+from skmultilearn.adapt import BRkNNaClassifier, BRkNNbClassifier
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 
