@@ -1,80 +1,60 @@
 from ..base import MLClassifierBase
+from ..utils import get_matrix_in_format
 from sklearn.neighbors import NearestNeighbors
+import scipy.sparse as sparse
 import numpy as np
 
 class BinaryRelevanceKNN(MLClassifierBase):
-    """Binary Relevance multi-label classifier based on k Nearest Neighbours method."""
-    BRIEFNAME = "BRkNN"
+    """Binary Relevance multi-label classifier based on k Nearest Neighbors method."""
 
-    EXTENSION_A = 'BRkNN-a'
-    EXTENSION_B = 'BRkNN-b'
-
-    def __init__(self, k = 10, extension = None):
-        super(BinaryRelevanceKNN, self).__init__(self.classifiers(extension))
-        self.BRIEFNAME = extension
+    def __init__(self, k = 10):
+        super(BinaryRelevanceKNN, self).__init__()
         self.k = k # Number of neighbours
-
-    def classifiers(self, extension):
-        return {
-            BinaryRelevanceKNN.EXTENSION_A: BRkNNaClassifier,
-            BinaryRelevanceKNN.EXTENSION_B: BRkNNbClassifier
-        }.get(extension, BRkNNaClassifier)
+        self.copyable_attrs = ['k']
 
     def fit(self, X, y):
-        self.predictions = y;
-        self.num_instances = len(y)
-        self.num_labels = len(y[0])
+        self.train_labelspace = get_matrix_in_format(y, 'csc')
+        self.num_instances = self.train_labelspace.shape[0]
+        self.num_labels = self.train_labelspace.shape[1]
         self.knn = NearestNeighbors(self.k).fit(X)
         return self
 
+    def compute_confidences(self):
+        # % of neighbours that have a given label assigned
+        # sum over each label columns after subsetting for neighbours
+        # and normalize
+        self.confidences = np.vstack([self.train_labelspace[n,:].tocsc().sum(axis=0) / float(self.num_labels) for n in self.neighbors])
+        return self.confidences
+
     def predict(self, X):
-        result = np.zeros((len(X), self.num_labels), dtype='i8')
-        for instance in xrange(len(X)):
-            neighbors = self.knn.kneighbors(X[instance], self.k, return_distance=False)
-            classifier = self.classifier(self.k, self.num_labels)
-            classifier.fit(neighbors, self.predictions)
-            result[instance] = classifier.predict()
-        return result
+        self.neighbors = self.knn.kneighbors(X, self.k, return_distance=False)
+        self.compute_confidences()
+        return self.predict_variant(X)
 
+class BRkNNaClassifier(BinaryRelevanceKNN):
+    """Binary Relevance multi-label classifier based on k Nearest Neighbours method.
 
-class BaseBRkNNClassifier(object):
+    This version of the classifier assigns the labels that are assigned to at least half of the neighbors.
+    """
 
-    def __init__(self, k, num_labels):
-        self.k = k
-        self.num_labels = num_labels
+    def predict_variant(self, X):
+        # TODO: find out if moving the sparsity to compute confidences boots speed
+        return sparse.csr_matrix(np.rint(self.confidences), dtype='i8')
 
-    def compute_confidences(self, neighbors, y):
-        self.confidences = [0] * self.num_labels
-        for label in xrange(self.num_labels):
-            confidence = sum(y[neighbor][label] == 1 for neighbor in neighbors[0])
-            self.confidences[label] = float(confidence) / self.k
+class BRkNNbClassifier(BinaryRelevanceKNN):
+    """Binary Relevance multi-label classifier based on k Nearest Neighbours method.
 
-    def fit(self, neighbors, y):
-        raise NotImplementedError("BaseBRkNNClassifier::fit()")
+    This version of the classifier assigns the most popular m labels of the neighbors, where m is the average number of labels assigned to the object's neighbors.
+    """
 
-    def predict(self):
-        raise NotImplementedError("BaseBRkNNClassifier::predict()")
-
-class BRkNNaClassifier(BaseBRkNNClassifier):
-
-    def fit(self, neighbors, y):
-        self.compute_confidences(neighbors, y)
-
-    def predict(self):
-        prediction = [1 if confidence >= 0.5 else 0 for confidence in self.confidences]
-        return np.array(prediction)
-
-
-class BRkNNbClassifier(BaseBRkNNClassifier):
-
-    def fit(self, neighbors, y):
-        self.compute_confidences(neighbors, y)
-        labels_counts = [sum(y[neighbor]) for neighbor in neighbors[0]]
-        self.avg_labels = int(round(float(sum(labels_counts)) / len(labels_counts)))
-
-    def predict(self):
-        prediction = np.zeros(len(self.confidences), dtype='i8')
-        labels_sorted = sorted(range(len(self.confidences)), key=lambda k: self.confidences[k], reverse=True)
-        for label in labels_sorted[:self.avg_labels:]:
-            prediction[label] = 1
+    def predict_variant(self, X):
+        self.avg_labels = [int(np.average(self.train_labelspace[n,:].sum(axis=1)).round()) for n in self.neighbors]
+        
+        prediction = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='i8')
+        top_labels = np.argpartition(self.confidences, kth=self.avg_labels, axis=1).tolist()
+        
+        for i in xrange(X.shape[0]):
+            for j in top_labels[i][-self.avg_labels[i]:]:
+                prediction[i,j] += 1
+        
         return prediction
