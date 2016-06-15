@@ -1,6 +1,6 @@
 import unittest
 
-from skmultilearn.lazy.mlknn import MLkNN
+from skmultilearn.adapt import MLkNN
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 
