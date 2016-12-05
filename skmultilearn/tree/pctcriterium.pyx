@@ -335,137 +335,141 @@ cdef class ClassificationCriterion(PCTCiterionBase):
 
 cdef class GiniBuilder:
     cpdef void add_criterion(self,PCTCriterion pct_criterion):
-        pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,
-                                    <crit_children_impurity>gini_children_impurity)
+        pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,
+                                    <crit_children_impurity>GiniBuilder.children_impurity)
 
-cdef double gini_node_impurity(ClassificationCriterion crit) nogil:
-    cdef SIZE_t* n_classes = crit.n_classes
-    cdef double* sum_total = crit.sum_total
-    cdef double gini = 0.0
-    cdef double sq_count
-    cdef double count_k
-    cdef SIZE_t k
-    cdef SIZE_t c
+    @staticmethod
+    cdef double node_impurity(ClassificationCriterion crit) nogil:
+        cdef SIZE_t* n_classes = crit.n_classes
+        cdef double* sum_total = crit.sum_total
+        cdef double gini = 0.0
+        cdef double sq_count
+        cdef double count_k
+        cdef SIZE_t k
+        cdef SIZE_t c
 
-    for k in range(crit.n_outputs):
-        sq_count = 0.0
+        for k in range(crit.n_outputs):
+            sq_count = 0.0
 
-        for c in range(n_classes[k]):
-            count_k = sum_total[c]
-            sq_count += count_k * count_k
+            for c in range(n_classes[k]):
+                count_k = sum_total[c]
+                sq_count += count_k * count_k
 
-        gini += 1.0 - sq_count / (crit.weighted_n_node_samples *
-                                  crit.weighted_n_node_samples)
+            gini += 1.0 - sq_count / (crit.weighted_n_node_samples *
+                                      crit.weighted_n_node_samples)
 
-        sum_total += crit.sum_stride
+            sum_total += crit.sum_stride
 
-    return gini / crit.n_outputs
+        return gini / crit.n_outputs
 
-cdef void gini_children_impurity(ClassificationCriterion crit, double* impurity_left,
-                                double* impurity_right) nogil:
+    @staticmethod
+    cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,
+                                    double* impurity_right) nogil:
 
-    cdef SIZE_t* n_classes = crit.n_classes
-    cdef double* sum_left = crit.sum_left
-    cdef double* sum_right = crit.sum_right
-    cdef double gini_left = 0.0
-    cdef double gini_right = 0.0
-    cdef double sq_count_left
-    cdef double sq_count_right
-    cdef double count_k
-    cdef SIZE_t k
-    cdef SIZE_t c
+        cdef SIZE_t* n_classes = crit.n_classes
+        cdef double* sum_left = crit.sum_left
+        cdef double* sum_right = crit.sum_right
+        cdef double gini_left = 0.0
+        cdef double gini_right = 0.0
+        cdef double sq_count_left
+        cdef double sq_count_right
+        cdef double count_k
+        cdef SIZE_t k
+        cdef SIZE_t c
 
-    for k in range(crit.n_outputs):
-        sq_count_left = 0.0
-        sq_count_right = 0.0
+        for k in range(crit.n_outputs):
+            sq_count_left = 0.0
+            sq_count_right = 0.0
 
-        for c in range(n_classes[k]):
-            count_k = sum_left[c]
-            sq_count_left += count_k * count_k
+            for c in range(n_classes[k]):
+                count_k = sum_left[c]
+                sq_count_left += count_k * count_k
 
-            count_k = sum_right[c]
-            sq_count_right += count_k * count_k
+                count_k = sum_right[c]
+                sq_count_right += count_k * count_k
 
-        gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *
-                                            crit.weighted_n_left)
+            gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *
+                                                crit.weighted_n_left)
 
-        gini_right += 1.0 - sq_count_right / (crit.weighted_n_right *
-                                              crit.weighted_n_right)
+            gini_right += 1.0 - sq_count_right / (crit.weighted_n_right *
+                                                  crit.weighted_n_right)
 
-        sum_left += crit.sum_stride
-        sum_right += crit.sum_stride
+            sum_left += crit.sum_stride
+            sum_right += crit.sum_stride
 
-    impurity_left[0] = gini_left / crit.n_outputs
-    impurity_right[0] = gini_right / crit.n_outputs
+        impurity_left[0] = gini_left / crit.n_outputs
+        impurity_right[0] = gini_right / crit.n_outputs
 
 cdef class EntropyBuilder:
     cpdef void add_criterion(self,PCTCriterion pct_criterion):
-        pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,
-                                    <crit_children_impurity>entropy_children_impurity)
+        pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,
+                                    <crit_children_impurity> EntropyBuilder.children_impurity)
 
-cdef double entropy_node_impurity(ClassificationCriterion crit) nogil:
-    """Evaluate the impurity of the current node, i.e. the impurity of
-    samples[start:end], using the cross-entropy criterion."""
+    @staticmethod
+    cdef double node_impurity(ClassificationCriterion crit) nogil:
+        """Evaluate the impurity of the current node, i.e. the impurity of
+        samples[start:end], using the cross-entropy criterion."""
 
-    cdef SIZE_t* n_classes = crit.n_classes
-    cdef double* sum_total = crit.sum_total
-    cdef double entropy = 0.0
-    cdef double count_k
-    cdef SIZE_t k
-    cdef SIZE_t c
+        cdef SIZE_t* n_classes = crit.n_classes
+        cdef double* sum_total = crit.sum_total
+        cdef double entropy = 0.0
+        cdef double count_k
+        cdef SIZE_t k
+        cdef SIZE_t c
 
-    for k in range(crit.n_outputs):
-        for c in range(n_classes[k]):
-            count_k = sum_total[c]
-            if count_k > 0.0:
-                count_k /= crit.weighted_n_node_samples
-                entropy -= count_k * log(count_k)
+        for k in range(crit.n_outputs):
+            for c in range(n_classes[k]):
+                count_k = sum_total[c]
+                if count_k > 0.0:
+                    count_k /= crit.weighted_n_node_samples
+                    entropy -= count_k * log(count_k)
 
-        sum_total += crit.sum_stride
+            sum_total += crit.sum_stride
 
-    return entropy / crit.n_outputs
+        return entropy / crit.n_outputs
 
-cdef void entropy_children_impurity(ClassificationCriterion crit, double* impurity_left,
-                            double* impurity_right) nogil:
-    """Evaluate the impurity in children nodes
+    @staticmethod
+    cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,
+                                double* impurity_right) nogil:
+        """Evaluate the impurity in children nodes
 
-    i.e. the impurity of the left child (samples[start:pos]) and the
-    impurity the right child (samples[pos:end]).
+        i.e. the impurity of the left child (samples[start:pos]) and the
+        impurity the right child (samples[pos:end]).
 
-    Parameters
-    ----------
-    impurity_left: double pointer
-        The memory address to save the impurity of the left node
-    impurity_right: double pointer
-        The memory address to save the impurity of the right node
-    """
+        Parameters
+        ----------
+        impurity_left: double pointer
+            The memory address to save the impurity of the left node
+        impurity_right: double pointer
+            The memory address to save the impurity of the right node
+        """
 
-    cdef SIZE_t* n_classes = crit.n_classes
-    cdef double* sum_left = crit.sum_left
-    cdef double* sum_right = crit.sum_right
-    cdef double entropy_left = 0.0
-    cdef double entropy_right = 0.0
-    cdef double count_k
-    cdef SIZE_t k
-    cdef SIZE_t c
+        cdef SIZE_t* n_classes = crit.n_classes
+        cdef double* sum_left = crit.sum_left
+        cdef double* sum_right = crit.sum_right
+        cdef double entropy_left = 0.0
+        cdef double entropy_right = 0.0
+        cdef double count_k
+        cdef SIZE_t k
+        cdef SIZE_t c
 
-    for k in range(crit.n_outputs):
-        for c in range(n_classes[k]):
-            count_k = sum_left[c]
-            if count_k > 0.0:
-                count_k /= crit.weighted_n_left
-                entropy_left -= count_k * log(count_k)
+        for k in range(crit.n_outputs):
+            for c in range(n_classes[k]):
+                count_k = sum_left[c]
+                if count_k > 0.0:
+                    count_k /= crit.weighted_n_left
+                    entropy_left -= count_k * log(count_k)
 
-            count_k = sum_right[c]
-            if count_k > 0.0:
-                count_k /= crit.weighted_n_right
-                entropy_right -= count_k * log(count_k)
+                count_k = sum_right[c]
+                if count_k > 0.0:
+                    count_k /= crit.weighted_n_right
+                    entropy_right -= count_k * log(count_k)
 
-        sum_left += crit.sum_stride
-        sum_right += crit.sum_stride
+            sum_left += crit.sum_stride
+            sum_right += crit.sum_stride
 
-    impurity_left[0] = entropy_left / crit.n_outputs
-    impurity_right[0] = entropy_right / crit.n_outputs
+        impurity_left[0] = entropy_left / crit.n_outputs
+        impurity_right[0] = entropy_right / crit.n_outputs
 
 
 cdef class PCTCriterion(ClassificationCriterion):

@@ -923,7 +923,7 @@ typedef npy_int32 __pyx_t_12skmultilearn_4tree_5utils_INT32_t;
  */
 typedef npy_uint32 __pyx_t_12skmultilearn_4tree_5utils_UINT32_t;
 
-/* "skmultilearn/tree/pctcriterium.pxd":8
+/* "skmultilearn/tree/pctcriterium.pxd":11
  * np.import_array()
  * 
  * ctypedef np.npy_float32 DTYPE_t          # Type of X             # <<<<<<<<<<<<<<
@@ -932,7 +932,7 @@ typedef npy_uint32 __pyx_t_12skmultilearn_4tree_5utils_UINT32_t;
  */
 typedef npy_float32 __pyx_t_12skmultilearn_4tree_12pctcriterium_DTYPE_t;
 
-/* "skmultilearn/tree/pctcriterium.pxd":9
+/* "skmultilearn/tree/pctcriterium.pxd":12
  * 
  * ctypedef np.npy_float32 DTYPE_t          # Type of X
  * ctypedef np.npy_float64 DOUBLE_t         # Type of y, sample_weight             # <<<<<<<<<<<<<<
@@ -941,7 +941,7 @@ typedef npy_float32 __pyx_t_12skmultilearn_4tree_12pctcriterium_DTYPE_t;
  */
 typedef npy_float64 __pyx_t_12skmultilearn_4tree_12pctcriterium_DOUBLE_t;
 
-/* "skmultilearn/tree/pctcriterium.pxd":10
+/* "skmultilearn/tree/pctcriterium.pxd":13
  * ctypedef np.npy_float32 DTYPE_t          # Type of X
  * ctypedef np.npy_float64 DOUBLE_t         # Type of y, sample_weight
  * ctypedef np.npy_intp SIZE_t              # Type for indices and counters             # <<<<<<<<<<<<<<
@@ -950,7 +950,7 @@ typedef npy_float64 __pyx_t_12skmultilearn_4tree_12pctcriterium_DOUBLE_t;
  */
 typedef npy_intp __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t;
 
-/* "skmultilearn/tree/pctcriterium.pxd":11
+/* "skmultilearn/tree/pctcriterium.pxd":14
  * ctypedef np.npy_float64 DOUBLE_t         # Type of y, sample_weight
  * ctypedef np.npy_intp SIZE_t              # Type for indices and counters
  * ctypedef np.npy_int32 INT32_t            # Signed 32 bit integer             # <<<<<<<<<<<<<<
@@ -959,7 +959,7 @@ typedef npy_intp __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t;
  */
 typedef npy_int32 __pyx_t_12skmultilearn_4tree_12pctcriterium_INT32_t;
 
-/* "skmultilearn/tree/pctcriterium.pxd":12
+/* "skmultilearn/tree/pctcriterium.pxd":15
  * ctypedef np.npy_intp SIZE_t              # Type for indices and counters
  * ctypedef np.npy_int32 INT32_t            # Signed 32 bit integer
  * ctypedef np.npy_uint32 UINT32_t          # Unsigned 32 bit integer             # <<<<<<<<<<<<<<
@@ -1229,7 +1229,7 @@ struct __pyx_obj_7sklearn_4tree_9_splitter_Splitter {
 };
 
 
-/* "skmultilearn/tree/pctcriterium.pxd":14
+/* "skmultilearn/tree/pctcriterium.pxd":17
  * ctypedef np.npy_uint32 UINT32_t          # Unsigned 32 bit integer
  * 
  * cdef class PCTCiterionBase(Criterion):             # <<<<<<<<<<<<<<
@@ -1261,7 +1261,7 @@ struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion {
  * 
  * cdef class GiniBuilder:             # <<<<<<<<<<<<<<
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,
+ *         pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,
  */
 struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder {
   PyObject_HEAD
@@ -1269,12 +1269,12 @@ struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder {
 };
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":401
- *     impurity_right[0] = gini_right / crit.n_outputs
+/* "skmultilearn/tree/pctcriterium.pyx":403
+ *         impurity_right[0] = gini_right / crit.n_outputs
  * 
  * cdef class EntropyBuilder:             # <<<<<<<<<<<<<<
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,
+ *         pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,
  */
 struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder {
   PyObject_HEAD
@@ -1282,7 +1282,7 @@ struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder {
 };
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":471
+/* "skmultilearn/tree/pctcriterium.pyx":475
  * 
  * 
  * cdef class PCTCriterion(ClassificationCriterion):             # <<<<<<<<<<<<<<
@@ -1300,7 +1300,7 @@ struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion {
 };
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":622
+/* "skmultilearn/tree/pctcriterium.pyx":626
  *             all_improvments[c]=actual_proxy_improvement
  * 
  * cdef class PCTAllSklearnCriterions(PCTCriterion):             # <<<<<<<<<<<<<<
@@ -1420,30 +1420,34 @@ static struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_Classificatio
  * 
  * cdef class GiniBuilder:             # <<<<<<<<<<<<<<
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,
+ *         pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,
  */
 
 struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_GiniBuilder {
   void (*add_criterion)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder *, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, int __pyx_skip_dispatch);
+  double (*node_impurity)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *);
+  void (*children_impurity)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *);
 };
 static struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_GiniBuilder *__pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_GiniBuilder;
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":401
- *     impurity_right[0] = gini_right / crit.n_outputs
+/* "skmultilearn/tree/pctcriterium.pyx":403
+ *         impurity_right[0] = gini_right / crit.n_outputs
  * 
  * cdef class EntropyBuilder:             # <<<<<<<<<<<<<<
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,
+ *         pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,
  */
 
 struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_EntropyBuilder {
   void (*add_criterion)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, int __pyx_skip_dispatch);
+  double (*node_impurity)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *);
+  void (*children_impurity)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *);
 };
 static struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *__pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_EntropyBuilder;
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":471
+/* "skmultilearn/tree/pctcriterium.pyx":475
  * 
  * 
  * cdef class PCTCriterion(ClassificationCriterion):             # <<<<<<<<<<<<<<
@@ -1459,7 +1463,7 @@ struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion {
 static struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTCriterion;
 
 
-/* "skmultilearn/tree/pctcriterium.pyx":622
+/* "skmultilearn/tree/pctcriterium.pyx":626
  *             all_improvments[c]=actual_proxy_improvement
  * 
  * cdef class PCTAllSklearnCriterions(PCTCriterion):             # <<<<<<<<<<<<<<
@@ -1887,7 +1891,11 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_23ClassificationCriter
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_23ClassificationCriterion_children_impurity(CYTHON_UNUSED struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_self, CYTHON_UNUSED double *__pyx_v_impurity_left, CYTHON_UNUSED double *__pyx_v_impurity_right); /* proto*/
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_23ClassificationCriterion_node_value(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_self, double *__pyx_v_dest); /* proto*/
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_add_criterion(CYTHON_UNUSED struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder *__pyx_v_self, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_pct_criterion, int __pyx_skip_dispatch); /* proto*/
+static double __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit); /* proto*/
+static void __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right); /* proto*/
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_criterion(CYTHON_UNUSED struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *__pyx_v_self, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_pct_criterion, int __pyx_skip_dispatch); /* proto*/
+static double __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit); /* proto*/
+static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right); /* proto*/
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_criterion(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_self, __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_v_criteria_count, int __pyx_skip_dispatch); /* proto*/
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_criterion(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_self, __pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity __pyx_v_criterion_node_impurity, __pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity __pyx_v_criterion_children_impurity); /* proto*/
 static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_self); /* proto*/
@@ -1963,10 +1971,6 @@ static PyTypeObject *__pyx_ptype_12skmultilearn_4tree_12pctcriterium_EntropyBuil
 static PyTypeObject *__pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTCriterion = 0;
 static PyTypeObject *__pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions = 0;
 static double __pyx_v_12skmultilearn_4tree_12pctcriterium_INFINITY;
-static double __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *); /*proto*/
-static void __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *); /*proto*/
-static double __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *); /*proto*/
-static void __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t = { "SIZE_t", NULL, sizeof(__pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t), 0 };
 #define __Pyx_MODULE_NAME "skmultilearn.tree.pctcriterium"
 int __pyx_module_is_main_skmultilearn__tree__pctcriterium = 0;
@@ -3894,8 +3898,8 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_23ClassificationCriterio
  * 
  * cdef class GiniBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):             # <<<<<<<<<<<<<<
- *         pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,
- *                                     <crit_children_impurity>gini_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,
+ *                                     <crit_children_impurity>GiniBuilder.children_impurity)
  */
 
 static PyObject *__pyx_pw_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_1add_criterion(PyObject *__pyx_v_self, PyObject *__pyx_v_pct_criterion); /*proto*/
@@ -3950,18 +3954,18 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_add_criter
   /* "skmultilearn/tree/pctcriterium.pyx":338
  * cdef class GiniBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,             # <<<<<<<<<<<<<<
- *                                     <crit_children_impurity>gini_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,             # <<<<<<<<<<<<<<
+ *                                     <crit_children_impurity>GiniBuilder.children_impurity)
  * 
  */
-  ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_pct_criterion->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->add_criterion(__pyx_v_pct_criterion, ((__pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_gini_node_impurity), ((__pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_gini_children_impurity));
+  ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_pct_criterion->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->add_criterion(__pyx_v_pct_criterion, ((__pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_node_impurity), ((__pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_children_impurity));
 
   /* "skmultilearn/tree/pctcriterium.pyx":337
  * 
  * cdef class GiniBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):             # <<<<<<<<<<<<<<
- *         pct_criterion.add_criterion(<crit_node_impurity>gini_node_impurity,
- *                                     <crit_children_impurity>gini_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity>GiniBuilder.node_impurity,
+ *                                     <crit_children_impurity>GiniBuilder.children_impurity)
  */
 
   /* function exit code */
@@ -4018,15 +4022,15 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_add_
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":341
- *                                     <crit_children_impurity>gini_children_impurity)
+/* "skmultilearn/tree/pctcriterium.pyx":342
  * 
- * cdef double gini_node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total
+ *     @staticmethod
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total
  */
 
-static double __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit) {
+static double __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit) {
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t *__pyx_v_n_classes;
   double *__pyx_v_sum_total;
   double __pyx_v_gini;
@@ -4042,120 +4046,120 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_node_impurity(str
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_5;
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_6;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":342
- * 
- * cdef double gini_node_impurity(ClassificationCriterion crit) nogil:
- *     cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
- *     cdef double* sum_total = crit.sum_total
- *     cdef double gini = 0.0
+  /* "skmultilearn/tree/pctcriterium.pyx":343
+ *     @staticmethod
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:
+ *         cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
+ *         cdef double* sum_total = crit.sum_total
+ *         cdef double gini = 0.0
  */
   __pyx_t_1 = __pyx_v_crit->n_classes;
   __pyx_v_n_classes = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":343
- * cdef double gini_node_impurity(ClassificationCriterion crit) nogil:
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total             # <<<<<<<<<<<<<<
- *     cdef double gini = 0.0
- *     cdef double sq_count
+  /* "skmultilearn/tree/pctcriterium.pyx":344
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total             # <<<<<<<<<<<<<<
+ *         cdef double gini = 0.0
+ *         cdef double sq_count
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_total;
   __pyx_v_sum_total = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":344
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total
- *     cdef double gini = 0.0             # <<<<<<<<<<<<<<
- *     cdef double sq_count
- *     cdef double count_k
+  /* "skmultilearn/tree/pctcriterium.pyx":345
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total
+ *         cdef double gini = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double sq_count
+ *         cdef double count_k
  */
   __pyx_v_gini = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":350
- *     cdef SIZE_t c
+  /* "skmultilearn/tree/pctcriterium.pyx":351
+ *         cdef SIZE_t c
  * 
- *     for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
- *         sq_count = 0.0
+ *         for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
+ *             sq_count = 0.0
  * 
  */
   __pyx_t_3 = __pyx_v_crit->__pyx_base.__pyx_base.n_outputs;
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_k = __pyx_t_4;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":351
+    /* "skmultilearn/tree/pctcriterium.pyx":352
  * 
- *     for k in range(crit.n_outputs):
- *         sq_count = 0.0             # <<<<<<<<<<<<<<
+ *         for k in range(crit.n_outputs):
+ *             sq_count = 0.0             # <<<<<<<<<<<<<<
  * 
- *         for c in range(n_classes[k]):
+ *             for c in range(n_classes[k]):
  */
     __pyx_v_sq_count = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":353
- *         sq_count = 0.0
+    /* "skmultilearn/tree/pctcriterium.pyx":354
+ *             sq_count = 0.0
  * 
- *         for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
- *             count_k = sum_total[c]
- *             sq_count += count_k * count_k
+ *             for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
+ *                 count_k = sum_total[c]
+ *                 sq_count += count_k * count_k
  */
     __pyx_t_5 = (__pyx_v_n_classes[__pyx_v_k]);
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_c = __pyx_t_6;
 
-      /* "skmultilearn/tree/pctcriterium.pyx":354
+      /* "skmultilearn/tree/pctcriterium.pyx":355
  * 
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]             # <<<<<<<<<<<<<<
- *             sq_count += count_k * count_k
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]             # <<<<<<<<<<<<<<
+ *                 sq_count += count_k * count_k
  * 
  */
       __pyx_v_count_k = (__pyx_v_sum_total[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":355
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]
- *             sq_count += count_k * count_k             # <<<<<<<<<<<<<<
+      /* "skmultilearn/tree/pctcriterium.pyx":356
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]
+ *                 sq_count += count_k * count_k             # <<<<<<<<<<<<<<
  * 
- *         gini += 1.0 - sq_count / (crit.weighted_n_node_samples *
+ *             gini += 1.0 - sq_count / (crit.weighted_n_node_samples *
  */
       __pyx_v_sq_count = (__pyx_v_sq_count + (__pyx_v_count_k * __pyx_v_count_k));
     }
 
-    /* "skmultilearn/tree/pctcriterium.pyx":357
- *             sq_count += count_k * count_k
+    /* "skmultilearn/tree/pctcriterium.pyx":358
+ *                 sq_count += count_k * count_k
  * 
- *         gini += 1.0 - sq_count / (crit.weighted_n_node_samples *             # <<<<<<<<<<<<<<
- *                                   crit.weighted_n_node_samples)
+ *             gini += 1.0 - sq_count / (crit.weighted_n_node_samples *             # <<<<<<<<<<<<<<
+ *                                       crit.weighted_n_node_samples)
  * 
  */
     __pyx_v_gini = (__pyx_v_gini + (1.0 - (__pyx_v_sq_count / (__pyx_v_crit->__pyx_base.__pyx_base.weighted_n_node_samples * __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_node_samples))));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":360
- *                                   crit.weighted_n_node_samples)
+    /* "skmultilearn/tree/pctcriterium.pyx":361
+ *                                       crit.weighted_n_node_samples)
  * 
- *         sum_total += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_total += crit.sum_stride             # <<<<<<<<<<<<<<
  * 
- *     return gini / crit.n_outputs
+ *         return gini / crit.n_outputs
  */
     __pyx_v_sum_total = (__pyx_v_sum_total + __pyx_v_crit->sum_stride);
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":362
- *         sum_total += crit.sum_stride
+  /* "skmultilearn/tree/pctcriterium.pyx":363
+ *             sum_total += crit.sum_stride
  * 
- *     return gini / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         return gini / crit.n_outputs             # <<<<<<<<<<<<<<
  * 
- * cdef void gini_children_impurity(ClassificationCriterion crit, double* impurity_left,
+ *     @staticmethod
  */
   __pyx_r = (__pyx_v_gini / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
   goto __pyx_L0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":341
- *                                     <crit_children_impurity>gini_children_impurity)
+  /* "skmultilearn/tree/pctcriterium.pyx":342
  * 
- * cdef double gini_node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total
+ *     @staticmethod
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total
  */
 
   /* function exit code */
@@ -4163,15 +4167,15 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_node_impurity(str
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":364
- *     return gini / crit.n_outputs
+/* "skmultilearn/tree/pctcriterium.pyx":366
  * 
- * cdef void gini_children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
- *                                 double* impurity_right) nogil:
+ *     @staticmethod
+ *     cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
+ *                                     double* impurity_right) nogil:
  * 
  */
 
-static void __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right) {
+static void __pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right) {
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t *__pyx_v_n_classes;
   double *__pyx_v_sum_left;
   double *__pyx_v_sum_right;
@@ -4189,203 +4193,203 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_gini_children_impurity(s
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_5;
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_6;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":367
- *                                 double* impurity_right) nogil:
+  /* "skmultilearn/tree/pctcriterium.pyx":369
+ *                                     double* impurity_right) nogil:
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right
+ *         cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right
  */
   __pyx_t_1 = __pyx_v_crit->n_classes;
   __pyx_v_n_classes = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":368
+  /* "skmultilearn/tree/pctcriterium.pyx":370
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_left = crit.sum_left             # <<<<<<<<<<<<<<
- *     cdef double* sum_right = crit.sum_right
- *     cdef double gini_left = 0.0
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_left = crit.sum_left             # <<<<<<<<<<<<<<
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double gini_left = 0.0
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_left;
   __pyx_v_sum_left = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":369
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right             # <<<<<<<<<<<<<<
- *     cdef double gini_left = 0.0
- *     cdef double gini_right = 0.0
+  /* "skmultilearn/tree/pctcriterium.pyx":371
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right             # <<<<<<<<<<<<<<
+ *         cdef double gini_left = 0.0
+ *         cdef double gini_right = 0.0
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_right;
   __pyx_v_sum_right = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":370
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right
- *     cdef double gini_left = 0.0             # <<<<<<<<<<<<<<
- *     cdef double gini_right = 0.0
- *     cdef double sq_count_left
+  /* "skmultilearn/tree/pctcriterium.pyx":372
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double gini_left = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double gini_right = 0.0
+ *         cdef double sq_count_left
  */
   __pyx_v_gini_left = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":371
- *     cdef double* sum_right = crit.sum_right
- *     cdef double gini_left = 0.0
- *     cdef double gini_right = 0.0             # <<<<<<<<<<<<<<
- *     cdef double sq_count_left
- *     cdef double sq_count_right
+  /* "skmultilearn/tree/pctcriterium.pyx":373
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double gini_left = 0.0
+ *         cdef double gini_right = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double sq_count_left
+ *         cdef double sq_count_right
  */
   __pyx_v_gini_right = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":378
- *     cdef SIZE_t c
+  /* "skmultilearn/tree/pctcriterium.pyx":380
+ *         cdef SIZE_t c
  * 
- *     for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
- *         sq_count_left = 0.0
- *         sq_count_right = 0.0
+ *         for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
+ *             sq_count_left = 0.0
+ *             sq_count_right = 0.0
  */
   __pyx_t_3 = __pyx_v_crit->__pyx_base.__pyx_base.n_outputs;
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_k = __pyx_t_4;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":379
+    /* "skmultilearn/tree/pctcriterium.pyx":381
  * 
- *     for k in range(crit.n_outputs):
- *         sq_count_left = 0.0             # <<<<<<<<<<<<<<
- *         sq_count_right = 0.0
+ *         for k in range(crit.n_outputs):
+ *             sq_count_left = 0.0             # <<<<<<<<<<<<<<
+ *             sq_count_right = 0.0
  * 
  */
     __pyx_v_sq_count_left = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":380
- *     for k in range(crit.n_outputs):
- *         sq_count_left = 0.0
- *         sq_count_right = 0.0             # <<<<<<<<<<<<<<
+    /* "skmultilearn/tree/pctcriterium.pyx":382
+ *         for k in range(crit.n_outputs):
+ *             sq_count_left = 0.0
+ *             sq_count_right = 0.0             # <<<<<<<<<<<<<<
  * 
- *         for c in range(n_classes[k]):
+ *             for c in range(n_classes[k]):
  */
     __pyx_v_sq_count_right = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":382
- *         sq_count_right = 0.0
+    /* "skmultilearn/tree/pctcriterium.pyx":384
+ *             sq_count_right = 0.0
  * 
- *         for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
- *             count_k = sum_left[c]
- *             sq_count_left += count_k * count_k
+ *             for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
+ *                 count_k = sum_left[c]
+ *                 sq_count_left += count_k * count_k
  */
     __pyx_t_5 = (__pyx_v_n_classes[__pyx_v_k]);
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_c = __pyx_t_6;
 
-      /* "skmultilearn/tree/pctcriterium.pyx":383
+      /* "skmultilearn/tree/pctcriterium.pyx":385
  * 
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]             # <<<<<<<<<<<<<<
- *             sq_count_left += count_k * count_k
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]             # <<<<<<<<<<<<<<
+ *                 sq_count_left += count_k * count_k
  * 
  */
       __pyx_v_count_k = (__pyx_v_sum_left[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":384
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]
- *             sq_count_left += count_k * count_k             # <<<<<<<<<<<<<<
+      /* "skmultilearn/tree/pctcriterium.pyx":386
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]
+ *                 sq_count_left += count_k * count_k             # <<<<<<<<<<<<<<
  * 
- *             count_k = sum_right[c]
+ *                 count_k = sum_right[c]
  */
       __pyx_v_sq_count_left = (__pyx_v_sq_count_left + (__pyx_v_count_k * __pyx_v_count_k));
 
-      /* "skmultilearn/tree/pctcriterium.pyx":386
- *             sq_count_left += count_k * count_k
+      /* "skmultilearn/tree/pctcriterium.pyx":388
+ *                 sq_count_left += count_k * count_k
  * 
- *             count_k = sum_right[c]             # <<<<<<<<<<<<<<
- *             sq_count_right += count_k * count_k
+ *                 count_k = sum_right[c]             # <<<<<<<<<<<<<<
+ *                 sq_count_right += count_k * count_k
  * 
  */
       __pyx_v_count_k = (__pyx_v_sum_right[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":387
+      /* "skmultilearn/tree/pctcriterium.pyx":389
  * 
- *             count_k = sum_right[c]
- *             sq_count_right += count_k * count_k             # <<<<<<<<<<<<<<
+ *                 count_k = sum_right[c]
+ *                 sq_count_right += count_k * count_k             # <<<<<<<<<<<<<<
  * 
- *         gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *
+ *             gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *
  */
       __pyx_v_sq_count_right = (__pyx_v_sq_count_right + (__pyx_v_count_k * __pyx_v_count_k));
     }
 
-    /* "skmultilearn/tree/pctcriterium.pyx":389
- *             sq_count_right += count_k * count_k
+    /* "skmultilearn/tree/pctcriterium.pyx":391
+ *                 sq_count_right += count_k * count_k
  * 
- *         gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *             # <<<<<<<<<<<<<<
- *                                             crit.weighted_n_left)
+ *             gini_left += 1.0 - sq_count_left / (crit.weighted_n_left *             # <<<<<<<<<<<<<<
+ *                                                 crit.weighted_n_left)
  * 
  */
     __pyx_v_gini_left = (__pyx_v_gini_left + (1.0 - (__pyx_v_sq_count_left / (__pyx_v_crit->__pyx_base.__pyx_base.weighted_n_left * __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_left))));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":392
- *                                             crit.weighted_n_left)
+    /* "skmultilearn/tree/pctcriterium.pyx":394
+ *                                                 crit.weighted_n_left)
  * 
- *         gini_right += 1.0 - sq_count_right / (crit.weighted_n_right *             # <<<<<<<<<<<<<<
- *                                               crit.weighted_n_right)
+ *             gini_right += 1.0 - sq_count_right / (crit.weighted_n_right *             # <<<<<<<<<<<<<<
+ *                                                   crit.weighted_n_right)
  * 
  */
     __pyx_v_gini_right = (__pyx_v_gini_right + (1.0 - (__pyx_v_sq_count_right / (__pyx_v_crit->__pyx_base.__pyx_base.weighted_n_right * __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_right))));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":395
- *                                               crit.weighted_n_right)
+    /* "skmultilearn/tree/pctcriterium.pyx":397
+ *                                                   crit.weighted_n_right)
  * 
- *         sum_left += crit.sum_stride             # <<<<<<<<<<<<<<
- *         sum_right += crit.sum_stride
+ *             sum_left += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_right += crit.sum_stride
  * 
  */
     __pyx_v_sum_left = (__pyx_v_sum_left + __pyx_v_crit->sum_stride);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":396
+    /* "skmultilearn/tree/pctcriterium.pyx":398
  * 
- *         sum_left += crit.sum_stride
- *         sum_right += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_left += crit.sum_stride
+ *             sum_right += crit.sum_stride             # <<<<<<<<<<<<<<
  * 
- *     impurity_left[0] = gini_left / crit.n_outputs
+ *         impurity_left[0] = gini_left / crit.n_outputs
  */
     __pyx_v_sum_right = (__pyx_v_sum_right + __pyx_v_crit->sum_stride);
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":398
- *         sum_right += crit.sum_stride
+  /* "skmultilearn/tree/pctcriterium.pyx":400
+ *             sum_right += crit.sum_stride
  * 
- *     impurity_left[0] = gini_left / crit.n_outputs             # <<<<<<<<<<<<<<
- *     impurity_right[0] = gini_right / crit.n_outputs
+ *         impurity_left[0] = gini_left / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         impurity_right[0] = gini_right / crit.n_outputs
  * 
  */
   (__pyx_v_impurity_left[0]) = (__pyx_v_gini_left / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":399
+  /* "skmultilearn/tree/pctcriterium.pyx":401
  * 
- *     impurity_left[0] = gini_left / crit.n_outputs
- *     impurity_right[0] = gini_right / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         impurity_left[0] = gini_left / crit.n_outputs
+ *         impurity_right[0] = gini_right / crit.n_outputs             # <<<<<<<<<<<<<<
  * 
  * cdef class EntropyBuilder:
  */
   (__pyx_v_impurity_right[0]) = (__pyx_v_gini_right / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":364
- *     return gini / crit.n_outputs
+  /* "skmultilearn/tree/pctcriterium.pyx":366
  * 
- * cdef void gini_children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
- *                                 double* impurity_right) nogil:
+ *     @staticmethod
+ *     cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
+ *                                     double* impurity_right) nogil:
  * 
  */
 
   /* function exit code */
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":402
+/* "skmultilearn/tree/pctcriterium.pyx":404
  * 
  * cdef class EntropyBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):             # <<<<<<<<<<<<<<
- *         pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,
- *                                     <crit_children_impurity>entropy_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,
+ *                                     <crit_children_impurity> EntropyBuilder.children_impurity)
  */
 
 static PyObject *__pyx_pw_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_1add_criterion(PyObject *__pyx_v_self, PyObject *__pyx_v_pct_criterion); /*proto*/
@@ -4401,7 +4405,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_cri
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add_criterion); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 402, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add_criterion); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_1add_criterion)) {
       __Pyx_INCREF(__pyx_t_1);
@@ -4416,16 +4420,16 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_cri
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_pct_criterion)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_pct_criterion)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 404, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 404, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_pct_criterion));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_pct_criterion));
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_pct_criterion));
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 404, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
@@ -4437,21 +4441,21 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_cri
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":403
+  /* "skmultilearn/tree/pctcriterium.pyx":405
  * cdef class EntropyBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):
- *         pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,             # <<<<<<<<<<<<<<
- *                                     <crit_children_impurity>entropy_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,             # <<<<<<<<<<<<<<
+ *                                     <crit_children_impurity> EntropyBuilder.children_impurity)
  * 
  */
-  ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_pct_criterion->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->add_criterion(__pyx_v_pct_criterion, ((__pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_node_impurity), ((__pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_children_impurity));
+  ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_pct_criterion->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->add_criterion(__pyx_v_pct_criterion, ((__pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_node_impurity), ((__pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity)__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_children_impurity));
 
-  /* "skmultilearn/tree/pctcriterium.pyx":402
+  /* "skmultilearn/tree/pctcriterium.pyx":404
  * 
  * cdef class EntropyBuilder:
  *     cpdef void add_criterion(self,PCTCriterion pct_criterion):             # <<<<<<<<<<<<<<
- *         pct_criterion.add_criterion(<crit_node_impurity>entropy_node_impurity,
- *                                     <crit_children_impurity>entropy_children_impurity)
+ *         pct_criterion.add_criterion(<crit_node_impurity> EntropyBuilder.node_impurity,
+ *                                     <crit_children_impurity> EntropyBuilder.children_impurity)
  */
 
   /* function exit code */
@@ -4473,7 +4477,7 @@ static PyObject *__pyx_pw_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_1
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_criterion (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pct_criterion), __pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTCriterion, 1, "pct_criterion", 0))) __PYX_ERR(0, 402, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pct_criterion), __pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTCriterion, 1, "pct_criterion", 0))) __PYX_ERR(0, 404, __pyx_L1_error)
   __pyx_r = __pyx_pf_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_criterion(((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *)__pyx_v_self), ((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_pct_criterion));
 
   /* function exit code */
@@ -4491,7 +4495,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_a
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("add_criterion", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_criterion(__pyx_v_self, __pyx_v_pct_criterion, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 402, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_criterion(__pyx_v_self, __pyx_v_pct_criterion, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4508,15 +4512,15 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_a
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":406
- *                                     <crit_children_impurity>entropy_children_impurity)
+/* "skmultilearn/tree/pctcriterium.pyx":409
  * 
- * cdef double entropy_node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
- *     """Evaluate the impurity of the current node, i.e. the impurity of
- *     samples[start:end], using the cross-entropy criterion."""
+ *     @staticmethod
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
+ *         """Evaluate the impurity of the current node, i.e. the impurity of
+ *         samples[start:end], using the cross-entropy criterion."""
  */
 
-static double __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit) {
+static double __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_node_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit) {
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t *__pyx_v_n_classes;
   double *__pyx_v_sum_total;
   double __pyx_v_entropy;
@@ -4532,130 +4536,130 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_node_impurity(
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_6;
   int __pyx_t_7;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":410
- *     samples[start:end], using the cross-entropy criterion."""
+  /* "skmultilearn/tree/pctcriterium.pyx":413
+ *         samples[start:end], using the cross-entropy criterion."""
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
- *     cdef double* sum_total = crit.sum_total
- *     cdef double entropy = 0.0
+ *         cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
+ *         cdef double* sum_total = crit.sum_total
+ *         cdef double entropy = 0.0
  */
   __pyx_t_1 = __pyx_v_crit->n_classes;
   __pyx_v_n_classes = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":411
+  /* "skmultilearn/tree/pctcriterium.pyx":414
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total             # <<<<<<<<<<<<<<
- *     cdef double entropy = 0.0
- *     cdef double count_k
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total             # <<<<<<<<<<<<<<
+ *         cdef double entropy = 0.0
+ *         cdef double count_k
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_total;
   __pyx_v_sum_total = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":412
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_total = crit.sum_total
- *     cdef double entropy = 0.0             # <<<<<<<<<<<<<<
- *     cdef double count_k
- *     cdef SIZE_t k
+  /* "skmultilearn/tree/pctcriterium.pyx":415
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_total = crit.sum_total
+ *         cdef double entropy = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double count_k
+ *         cdef SIZE_t k
  */
   __pyx_v_entropy = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":417
- *     cdef SIZE_t c
+  /* "skmultilearn/tree/pctcriterium.pyx":420
+ *         cdef SIZE_t c
  * 
- *     for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]
+ *         for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]
  */
   __pyx_t_3 = __pyx_v_crit->__pyx_base.__pyx_base.n_outputs;
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_k = __pyx_t_4;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":418
+    /* "skmultilearn/tree/pctcriterium.pyx":421
  * 
- *     for k in range(crit.n_outputs):
- *         for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
- *             count_k = sum_total[c]
- *             if count_k > 0.0:
+ *         for k in range(crit.n_outputs):
+ *             for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
+ *                 count_k = sum_total[c]
+ *                 if count_k > 0.0:
  */
     __pyx_t_5 = (__pyx_v_n_classes[__pyx_v_k]);
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_c = __pyx_t_6;
 
-      /* "skmultilearn/tree/pctcriterium.pyx":419
- *     for k in range(crit.n_outputs):
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]             # <<<<<<<<<<<<<<
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_node_samples
+      /* "skmultilearn/tree/pctcriterium.pyx":422
+ *         for k in range(crit.n_outputs):
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]             # <<<<<<<<<<<<<<
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_node_samples
  */
       __pyx_v_count_k = (__pyx_v_sum_total[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":420
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_node_samples
- *                 entropy -= count_k * log(count_k)
+      /* "skmultilearn/tree/pctcriterium.pyx":423
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_node_samples
+ *                     entropy -= count_k * log(count_k)
  */
       __pyx_t_7 = ((__pyx_v_count_k > 0.0) != 0);
       if (__pyx_t_7) {
 
-        /* "skmultilearn/tree/pctcriterium.pyx":421
- *             count_k = sum_total[c]
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_node_samples             # <<<<<<<<<<<<<<
- *                 entropy -= count_k * log(count_k)
+        /* "skmultilearn/tree/pctcriterium.pyx":424
+ *                 count_k = sum_total[c]
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_node_samples             # <<<<<<<<<<<<<<
+ *                     entropy -= count_k * log(count_k)
  * 
  */
         __pyx_v_count_k = (__pyx_v_count_k / __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_node_samples);
 
-        /* "skmultilearn/tree/pctcriterium.pyx":422
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_node_samples
- *                 entropy -= count_k * log(count_k)             # <<<<<<<<<<<<<<
+        /* "skmultilearn/tree/pctcriterium.pyx":425
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_node_samples
+ *                     entropy -= count_k * log(count_k)             # <<<<<<<<<<<<<<
  * 
- *         sum_total += crit.sum_stride
+ *             sum_total += crit.sum_stride
  */
         __pyx_v_entropy = (__pyx_v_entropy - (__pyx_v_count_k * __pyx_f_7sklearn_4tree_6_utils_log(__pyx_v_count_k)));
 
-        /* "skmultilearn/tree/pctcriterium.pyx":420
- *         for c in range(n_classes[k]):
- *             count_k = sum_total[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_node_samples
- *                 entropy -= count_k * log(count_k)
+        /* "skmultilearn/tree/pctcriterium.pyx":423
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_total[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_node_samples
+ *                     entropy -= count_k * log(count_k)
  */
       }
     }
 
-    /* "skmultilearn/tree/pctcriterium.pyx":424
- *                 entropy -= count_k * log(count_k)
+    /* "skmultilearn/tree/pctcriterium.pyx":427
+ *                     entropy -= count_k * log(count_k)
  * 
- *         sum_total += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_total += crit.sum_stride             # <<<<<<<<<<<<<<
  * 
- *     return entropy / crit.n_outputs
+ *         return entropy / crit.n_outputs
  */
     __pyx_v_sum_total = (__pyx_v_sum_total + __pyx_v_crit->sum_stride);
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":426
- *         sum_total += crit.sum_stride
+  /* "skmultilearn/tree/pctcriterium.pyx":429
+ *             sum_total += crit.sum_stride
  * 
- *     return entropy / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         return entropy / crit.n_outputs             # <<<<<<<<<<<<<<
  * 
- * cdef void entropy_children_impurity(ClassificationCriterion crit, double* impurity_left,
+ *     @staticmethod
  */
   __pyx_r = (__pyx_v_entropy / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
   goto __pyx_L0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":406
- *                                     <crit_children_impurity>entropy_children_impurity)
+  /* "skmultilearn/tree/pctcriterium.pyx":409
  * 
- * cdef double entropy_node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
- *     """Evaluate the impurity of the current node, i.e. the impurity of
- *     samples[start:end], using the cross-entropy criterion."""
+ *     @staticmethod
+ *     cdef double node_impurity(ClassificationCriterion crit) nogil:             # <<<<<<<<<<<<<<
+ *         """Evaluate the impurity of the current node, i.e. the impurity of
+ *         samples[start:end], using the cross-entropy criterion."""
  */
 
   /* function exit code */
@@ -4663,15 +4667,15 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_node_impurity(
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":428
- *     return entropy / crit.n_outputs
+/* "skmultilearn/tree/pctcriterium.pyx":432
  * 
- * cdef void entropy_children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
- *                             double* impurity_right) nogil:
- *     """Evaluate the impurity in children nodes
+ *     @staticmethod
+ *     cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
+ *                                 double* impurity_right) nogil:
+ *         """Evaluate the impurity in children nodes
  */
 
-static void __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right) {
+static void __pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_children_impurity(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *__pyx_v_crit, double *__pyx_v_impurity_left, double *__pyx_v_impurity_right) {
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t *__pyx_v_n_classes;
   double *__pyx_v_sum_left;
   double *__pyx_v_sum_right;
@@ -4688,218 +4692,218 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_entropy_children_impurit
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_6;
   int __pyx_t_7;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":443
- *     """
+  /* "skmultilearn/tree/pctcriterium.pyx":447
+ *         """
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right
+ *         cdef SIZE_t* n_classes = crit.n_classes             # <<<<<<<<<<<<<<
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right
  */
   __pyx_t_1 = __pyx_v_crit->n_classes;
   __pyx_v_n_classes = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":444
+  /* "skmultilearn/tree/pctcriterium.pyx":448
  * 
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_left = crit.sum_left             # <<<<<<<<<<<<<<
- *     cdef double* sum_right = crit.sum_right
- *     cdef double entropy_left = 0.0
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_left = crit.sum_left             # <<<<<<<<<<<<<<
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double entropy_left = 0.0
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_left;
   __pyx_v_sum_left = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":445
- *     cdef SIZE_t* n_classes = crit.n_classes
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right             # <<<<<<<<<<<<<<
- *     cdef double entropy_left = 0.0
- *     cdef double entropy_right = 0.0
+  /* "skmultilearn/tree/pctcriterium.pyx":449
+ *         cdef SIZE_t* n_classes = crit.n_classes
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right             # <<<<<<<<<<<<<<
+ *         cdef double entropy_left = 0.0
+ *         cdef double entropy_right = 0.0
  */
   __pyx_t_2 = __pyx_v_crit->__pyx_base.__pyx_base.sum_right;
   __pyx_v_sum_right = __pyx_t_2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":446
- *     cdef double* sum_left = crit.sum_left
- *     cdef double* sum_right = crit.sum_right
- *     cdef double entropy_left = 0.0             # <<<<<<<<<<<<<<
- *     cdef double entropy_right = 0.0
- *     cdef double count_k
+  /* "skmultilearn/tree/pctcriterium.pyx":450
+ *         cdef double* sum_left = crit.sum_left
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double entropy_left = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double entropy_right = 0.0
+ *         cdef double count_k
  */
   __pyx_v_entropy_left = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":447
- *     cdef double* sum_right = crit.sum_right
- *     cdef double entropy_left = 0.0
- *     cdef double entropy_right = 0.0             # <<<<<<<<<<<<<<
- *     cdef double count_k
- *     cdef SIZE_t k
+  /* "skmultilearn/tree/pctcriterium.pyx":451
+ *         cdef double* sum_right = crit.sum_right
+ *         cdef double entropy_left = 0.0
+ *         cdef double entropy_right = 0.0             # <<<<<<<<<<<<<<
+ *         cdef double count_k
+ *         cdef SIZE_t k
  */
   __pyx_v_entropy_right = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":452
- *     cdef SIZE_t c
+  /* "skmultilearn/tree/pctcriterium.pyx":456
+ *         cdef SIZE_t c
  * 
- *     for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]
+ *         for k in range(crit.n_outputs):             # <<<<<<<<<<<<<<
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]
  */
   __pyx_t_3 = __pyx_v_crit->__pyx_base.__pyx_base.n_outputs;
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_k = __pyx_t_4;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":453
+    /* "skmultilearn/tree/pctcriterium.pyx":457
  * 
- *     for k in range(crit.n_outputs):
- *         for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
- *             count_k = sum_left[c]
- *             if count_k > 0.0:
+ *         for k in range(crit.n_outputs):
+ *             for c in range(n_classes[k]):             # <<<<<<<<<<<<<<
+ *                 count_k = sum_left[c]
+ *                 if count_k > 0.0:
  */
     __pyx_t_5 = (__pyx_v_n_classes[__pyx_v_k]);
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_c = __pyx_t_6;
 
-      /* "skmultilearn/tree/pctcriterium.pyx":454
- *     for k in range(crit.n_outputs):
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]             # <<<<<<<<<<<<<<
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_left
+      /* "skmultilearn/tree/pctcriterium.pyx":458
+ *         for k in range(crit.n_outputs):
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]             # <<<<<<<<<<<<<<
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_left
  */
       __pyx_v_count_k = (__pyx_v_sum_left[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":455
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_left
- *                 entropy_left -= count_k * log(count_k)
+      /* "skmultilearn/tree/pctcriterium.pyx":459
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_left
+ *                     entropy_left -= count_k * log(count_k)
  */
       __pyx_t_7 = ((__pyx_v_count_k > 0.0) != 0);
       if (__pyx_t_7) {
 
-        /* "skmultilearn/tree/pctcriterium.pyx":456
- *             count_k = sum_left[c]
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_left             # <<<<<<<<<<<<<<
- *                 entropy_left -= count_k * log(count_k)
+        /* "skmultilearn/tree/pctcriterium.pyx":460
+ *                 count_k = sum_left[c]
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_left             # <<<<<<<<<<<<<<
+ *                     entropy_left -= count_k * log(count_k)
  * 
  */
         __pyx_v_count_k = (__pyx_v_count_k / __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_left);
 
-        /* "skmultilearn/tree/pctcriterium.pyx":457
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_left
- *                 entropy_left -= count_k * log(count_k)             # <<<<<<<<<<<<<<
+        /* "skmultilearn/tree/pctcriterium.pyx":461
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_left
+ *                     entropy_left -= count_k * log(count_k)             # <<<<<<<<<<<<<<
  * 
- *             count_k = sum_right[c]
+ *                 count_k = sum_right[c]
  */
         __pyx_v_entropy_left = (__pyx_v_entropy_left - (__pyx_v_count_k * __pyx_f_7sklearn_4tree_6_utils_log(__pyx_v_count_k)));
 
-        /* "skmultilearn/tree/pctcriterium.pyx":455
- *         for c in range(n_classes[k]):
- *             count_k = sum_left[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_left
- *                 entropy_left -= count_k * log(count_k)
+        /* "skmultilearn/tree/pctcriterium.pyx":459
+ *             for c in range(n_classes[k]):
+ *                 count_k = sum_left[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_left
+ *                     entropy_left -= count_k * log(count_k)
  */
       }
 
-      /* "skmultilearn/tree/pctcriterium.pyx":459
- *                 entropy_left -= count_k * log(count_k)
+      /* "skmultilearn/tree/pctcriterium.pyx":463
+ *                     entropy_left -= count_k * log(count_k)
  * 
- *             count_k = sum_right[c]             # <<<<<<<<<<<<<<
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_right
+ *                 count_k = sum_right[c]             # <<<<<<<<<<<<<<
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_right
  */
       __pyx_v_count_k = (__pyx_v_sum_right[__pyx_v_c]);
 
-      /* "skmultilearn/tree/pctcriterium.pyx":460
+      /* "skmultilearn/tree/pctcriterium.pyx":464
  * 
- *             count_k = sum_right[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_right
- *                 entropy_right -= count_k * log(count_k)
+ *                 count_k = sum_right[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_right
+ *                     entropy_right -= count_k * log(count_k)
  */
       __pyx_t_7 = ((__pyx_v_count_k > 0.0) != 0);
       if (__pyx_t_7) {
 
-        /* "skmultilearn/tree/pctcriterium.pyx":461
- *             count_k = sum_right[c]
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_right             # <<<<<<<<<<<<<<
- *                 entropy_right -= count_k * log(count_k)
+        /* "skmultilearn/tree/pctcriterium.pyx":465
+ *                 count_k = sum_right[c]
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_right             # <<<<<<<<<<<<<<
+ *                     entropy_right -= count_k * log(count_k)
  * 
  */
         __pyx_v_count_k = (__pyx_v_count_k / __pyx_v_crit->__pyx_base.__pyx_base.weighted_n_right);
 
-        /* "skmultilearn/tree/pctcriterium.pyx":462
- *             if count_k > 0.0:
- *                 count_k /= crit.weighted_n_right
- *                 entropy_right -= count_k * log(count_k)             # <<<<<<<<<<<<<<
+        /* "skmultilearn/tree/pctcriterium.pyx":466
+ *                 if count_k > 0.0:
+ *                     count_k /= crit.weighted_n_right
+ *                     entropy_right -= count_k * log(count_k)             # <<<<<<<<<<<<<<
  * 
- *         sum_left += crit.sum_stride
+ *             sum_left += crit.sum_stride
  */
         __pyx_v_entropy_right = (__pyx_v_entropy_right - (__pyx_v_count_k * __pyx_f_7sklearn_4tree_6_utils_log(__pyx_v_count_k)));
 
-        /* "skmultilearn/tree/pctcriterium.pyx":460
+        /* "skmultilearn/tree/pctcriterium.pyx":464
  * 
- *             count_k = sum_right[c]
- *             if count_k > 0.0:             # <<<<<<<<<<<<<<
- *                 count_k /= crit.weighted_n_right
- *                 entropy_right -= count_k * log(count_k)
+ *                 count_k = sum_right[c]
+ *                 if count_k > 0.0:             # <<<<<<<<<<<<<<
+ *                     count_k /= crit.weighted_n_right
+ *                     entropy_right -= count_k * log(count_k)
  */
       }
     }
 
-    /* "skmultilearn/tree/pctcriterium.pyx":464
- *                 entropy_right -= count_k * log(count_k)
+    /* "skmultilearn/tree/pctcriterium.pyx":468
+ *                     entropy_right -= count_k * log(count_k)
  * 
- *         sum_left += crit.sum_stride             # <<<<<<<<<<<<<<
- *         sum_right += crit.sum_stride
+ *             sum_left += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_right += crit.sum_stride
  * 
  */
     __pyx_v_sum_left = (__pyx_v_sum_left + __pyx_v_crit->sum_stride);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":465
+    /* "skmultilearn/tree/pctcriterium.pyx":469
  * 
- *         sum_left += crit.sum_stride
- *         sum_right += crit.sum_stride             # <<<<<<<<<<<<<<
+ *             sum_left += crit.sum_stride
+ *             sum_right += crit.sum_stride             # <<<<<<<<<<<<<<
  * 
- *     impurity_left[0] = entropy_left / crit.n_outputs
+ *         impurity_left[0] = entropy_left / crit.n_outputs
  */
     __pyx_v_sum_right = (__pyx_v_sum_right + __pyx_v_crit->sum_stride);
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":467
- *         sum_right += crit.sum_stride
+  /* "skmultilearn/tree/pctcriterium.pyx":471
+ *             sum_right += crit.sum_stride
  * 
- *     impurity_left[0] = entropy_left / crit.n_outputs             # <<<<<<<<<<<<<<
- *     impurity_right[0] = entropy_right / crit.n_outputs
+ *         impurity_left[0] = entropy_left / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         impurity_right[0] = entropy_right / crit.n_outputs
  * 
  */
   (__pyx_v_impurity_left[0]) = (__pyx_v_entropy_left / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":468
+  /* "skmultilearn/tree/pctcriterium.pyx":472
  * 
- *     impurity_left[0] = entropy_left / crit.n_outputs
- *     impurity_right[0] = entropy_right / crit.n_outputs             # <<<<<<<<<<<<<<
+ *         impurity_left[0] = entropy_left / crit.n_outputs
+ *         impurity_right[0] = entropy_right / crit.n_outputs             # <<<<<<<<<<<<<<
  * 
  * 
  */
   (__pyx_v_impurity_right[0]) = (__pyx_v_entropy_right / __pyx_v_crit->__pyx_base.__pyx_base.n_outputs);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":428
- *     return entropy / crit.n_outputs
+  /* "skmultilearn/tree/pctcriterium.pyx":432
  * 
- * cdef void entropy_children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
- *                             double* impurity_right) nogil:
- *     """Evaluate the impurity in children nodes
+ *     @staticmethod
+ *     cdef void children_impurity(ClassificationCriterion crit, double* impurity_left,             # <<<<<<<<<<<<<<
+ *                                 double* impurity_right) nogil:
+ *         """Evaluate the impurity in children nodes
  */
 
   /* function exit code */
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":479
+/* "skmultilearn/tree/pctcriterium.pyx":483
  *     cdef double* avg_right
  * 
  *     def __cinit__(self, SIZE_t n_outputs,             # <<<<<<<<<<<<<<
@@ -4935,11 +4939,11 @@ static int __pyx_pw_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_1__cinit_
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_classes)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 479, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 483, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 479, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 483, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -4947,18 +4951,18 @@ static int __pyx_pw_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_1__cinit_
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_n_outputs = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_n_outputs == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 479, __pyx_L3_error)
+    __pyx_v_n_outputs = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_n_outputs == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 483, __pyx_L3_error)
     __pyx_v_n_classes = ((PyArrayObject *)values[1]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 479, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 483, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("skmultilearn.tree.pctcriterium.PCTCriterion.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_n_classes), __pyx_ptype_5numpy_ndarray, 1, "n_classes", 0))) __PYX_ERR(0, 480, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_n_classes), __pyx_ptype_5numpy_ndarray, 1, "n_classes", 0))) __PYX_ERR(0, 484, __pyx_L1_error)
   __pyx_r = __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__(((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_self), __pyx_v_n_outputs, __pyx_v_n_classes);
 
   /* function exit code */
@@ -4982,11 +4986,11 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
   __pyx_pybuffernd_n_classes.rcbuffer = &__pyx_pybuffer_n_classes;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_n_classes.rcbuffer->pybuffer, (PyObject*)__pyx_v_n_classes, &__Pyx_TypeInfo_nn___pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 479, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_n_classes.rcbuffer->pybuffer, (PyObject*)__pyx_v_n_classes, &__Pyx_TypeInfo_nn___pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 483, __pyx_L1_error)
   }
   __pyx_pybuffernd_n_classes.diminfo[0].strides = __pyx_pybuffernd_n_classes.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_n_classes.diminfo[0].shape = __pyx_pybuffernd_n_classes.rcbuffer->pybuffer.shape[0];
 
-  /* "skmultilearn/tree/pctcriterium.pyx":481
+  /* "skmultilearn/tree/pctcriterium.pyx":485
  *     def __cinit__(self, SIZE_t n_outputs,
  *                   np.ndarray[SIZE_t, ndim=1] n_classes):
  *         self.criteria_count = 0             # <<<<<<<<<<<<<<
@@ -4995,7 +4999,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->__pyx_base.__pyx_base.criteria_count = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":482
+  /* "skmultilearn/tree/pctcriterium.pyx":486
  *                   np.ndarray[SIZE_t, ndim=1] n_classes):
  *         self.criteria_count = 0
  *         self.max_criteria_count = 5             # <<<<<<<<<<<<<<
@@ -5004,7 +5008,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->max_criteria_count = 5;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":483
+  /* "skmultilearn/tree/pctcriterium.pyx":487
  *         self.criteria_count = 0
  *         self.max_criteria_count = 5
  *         self.criteria_node_impurity = NULL             # <<<<<<<<<<<<<<
@@ -5013,7 +5017,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->criteria_node_impurity = NULL;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":484
+  /* "skmultilearn/tree/pctcriterium.pyx":488
  *         self.max_criteria_count = 5
  *         self.criteria_node_impurity = NULL
  *         self.criteria_children_impurity = NULL             # <<<<<<<<<<<<<<
@@ -5022,7 +5026,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->criteria_children_impurity = NULL;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":485
+  /* "skmultilearn/tree/pctcriterium.pyx":489
  *         self.criteria_node_impurity = NULL
  *         self.criteria_children_impurity = NULL
  *         self.avg_all = NULL             # <<<<<<<<<<<<<<
@@ -5031,7 +5035,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->avg_all = NULL;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":486
+  /* "skmultilearn/tree/pctcriterium.pyx":490
  *         self.criteria_children_impurity = NULL
  *         self.avg_all = NULL
  *         self.avg_left = NULL             # <<<<<<<<<<<<<<
@@ -5040,7 +5044,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->avg_left = NULL;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":487
+  /* "skmultilearn/tree/pctcriterium.pyx":491
  *         self.avg_all = NULL
  *         self.avg_left = NULL
  *         self.avg_right = NULL             # <<<<<<<<<<<<<<
@@ -5049,52 +5053,52 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
  */
   __pyx_v_self->avg_right = NULL;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":488
+  /* "skmultilearn/tree/pctcriterium.pyx":492
  *         self.avg_left = NULL
  *         self.avg_right = NULL
  *         safe_realloc(&self.criteria_node_impurity, self.max_criteria_count)             # <<<<<<<<<<<<<<
  *         safe_realloc(&self.criteria_children_impurity, self.max_criteria_count)
  *         safe_realloc(&self.avg_all, self.n_outputs )
  */
-  __pyx_fuse_4__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_node_impurity), __pyx_v_self->max_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 488, __pyx_L1_error)
+  __pyx_fuse_4__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_node_impurity), __pyx_v_self->max_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 492, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":489
+  /* "skmultilearn/tree/pctcriterium.pyx":493
  *         self.avg_right = NULL
  *         safe_realloc(&self.criteria_node_impurity, self.max_criteria_count)
  *         safe_realloc(&self.criteria_children_impurity, self.max_criteria_count)             # <<<<<<<<<<<<<<
  *         safe_realloc(&self.avg_all, self.n_outputs )
  *         safe_realloc(&self.avg_left,self.n_outputs )
  */
-  __pyx_fuse_5__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_children_impurity), __pyx_v_self->max_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 489, __pyx_L1_error)
+  __pyx_fuse_5__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_children_impurity), __pyx_v_self->max_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 493, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":490
+  /* "skmultilearn/tree/pctcriterium.pyx":494
  *         safe_realloc(&self.criteria_node_impurity, self.max_criteria_count)
  *         safe_realloc(&self.criteria_children_impurity, self.max_criteria_count)
  *         safe_realloc(&self.avg_all, self.n_outputs )             # <<<<<<<<<<<<<<
  *         safe_realloc(&self.avg_left,self.n_outputs )
  *         safe_realloc(&self.avg_right,self.n_outputs )
  */
-  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_all), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_all), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 494, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":491
+  /* "skmultilearn/tree/pctcriterium.pyx":495
  *         safe_realloc(&self.criteria_children_impurity, self.max_criteria_count)
  *         safe_realloc(&self.avg_all, self.n_outputs )
  *         safe_realloc(&self.avg_left,self.n_outputs )             # <<<<<<<<<<<<<<
  *         safe_realloc(&self.avg_right,self.n_outputs )
  * 
  */
-  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_left), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 491, __pyx_L1_error)
+  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_left), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 495, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":492
+  /* "skmultilearn/tree/pctcriterium.pyx":496
  *         safe_realloc(&self.avg_all, self.n_outputs )
  *         safe_realloc(&self.avg_left,self.n_outputs )
  *         safe_realloc(&self.avg_right,self.n_outputs )             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_right), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 492, __pyx_L1_error)
+  __pyx_fuse_3__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->avg_right), __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 496, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":479
+  /* "skmultilearn/tree/pctcriterium.pyx":483
  *     cdef double* avg_right
  * 
  *     def __cinit__(self, SIZE_t n_outputs,             # <<<<<<<<<<<<<<
@@ -5122,7 +5126,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion___cinit__
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":494
+/* "skmultilearn/tree/pctcriterium.pyx":498
  *         safe_realloc(&self.avg_right,self.n_outputs )
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -5145,7 +5149,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":496
+  /* "skmultilearn/tree/pctcriterium.pyx":500
  *     def __dealloc__(self):
  *         """Destructor."""
  *         free(self.criteria_node_impurity)             # <<<<<<<<<<<<<<
@@ -5154,7 +5158,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
  */
   free(__pyx_v_self->criteria_node_impurity);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":497
+  /* "skmultilearn/tree/pctcriterium.pyx":501
  *         """Destructor."""
  *         free(self.criteria_node_impurity)
  *         free(self.criteria_children_impurity)             # <<<<<<<<<<<<<<
@@ -5163,7 +5167,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
  */
   free(__pyx_v_self->criteria_children_impurity);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":498
+  /* "skmultilearn/tree/pctcriterium.pyx":502
  *         free(self.criteria_node_impurity)
  *         free(self.criteria_children_impurity)
  *         free(self.avg_all)             # <<<<<<<<<<<<<<
@@ -5172,7 +5176,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
  */
   free(__pyx_v_self->avg_all);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":499
+  /* "skmultilearn/tree/pctcriterium.pyx":503
  *         free(self.criteria_children_impurity)
  *         free(self.avg_all)
  *         free(self.avg_left)             # <<<<<<<<<<<<<<
@@ -5181,7 +5185,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
  */
   free(__pyx_v_self->avg_left);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":500
+  /* "skmultilearn/tree/pctcriterium.pyx":504
  *         free(self.avg_all)
  *         free(self.avg_left)
  *         free(self.avg_right)             # <<<<<<<<<<<<<<
@@ -5190,7 +5194,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
  */
   free(__pyx_v_self->avg_right);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":494
+  /* "skmultilearn/tree/pctcriterium.pyx":498
  *         safe_realloc(&self.avg_right,self.n_outputs )
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -5202,7 +5206,7 @@ static void __pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_2__deall
   __Pyx_RefNannyFinishContext();
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":503
+/* "skmultilearn/tree/pctcriterium.pyx":507
  * 
  * 
  *     cpdef void resize_criterion(self, SIZE_t criteria_count):             # <<<<<<<<<<<<<<
@@ -5227,10 +5231,10 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_cr
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_resize_criterion); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 503, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_resize_criterion); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_5resize_criterion)) {
-      __pyx_t_3 = __Pyx_PyInt_From_Py_intptr_t(__pyx_v_criteria_count); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 503, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_Py_intptr_t(__pyx_v_criteria_count); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_1);
       __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -5244,17 +5248,17 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_cr
         }
       }
       if (!__pyx_t_5) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 503, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 507, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 503, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 507, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 503, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 507, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -5266,25 +5270,25 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_cr
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":504
+  /* "skmultilearn/tree/pctcriterium.pyx":508
  * 
  *     cpdef void resize_criterion(self, SIZE_t criteria_count):
  *         safe_realloc(&self.criteria_node_impurity, criteria_count)             # <<<<<<<<<<<<<<
  *         safe_realloc(&self.criteria_children_impurity, criteria_count)
  *         self.max_criteria_count = criteria_count
  */
-  __pyx_fuse_4__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_node_impurity), __pyx_v_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 504, __pyx_L1_error)
+  __pyx_fuse_4__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_node_impurity), __pyx_v_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 508, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":505
+  /* "skmultilearn/tree/pctcriterium.pyx":509
  *     cpdef void resize_criterion(self, SIZE_t criteria_count):
  *         safe_realloc(&self.criteria_node_impurity, criteria_count)
  *         safe_realloc(&self.criteria_children_impurity, criteria_count)             # <<<<<<<<<<<<<<
  *         self.max_criteria_count = criteria_count
  *         self.criteria_count = min(self.criteria_count, criteria_count)
  */
-  __pyx_fuse_5__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_children_impurity), __pyx_v_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 505, __pyx_L1_error)
+  __pyx_fuse_5__pyx_f_12skmultilearn_4tree_5utils_safe_realloc((&__pyx_v_self->criteria_children_impurity), __pyx_v_criteria_count); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 509, __pyx_L1_error)
 
-  /* "skmultilearn/tree/pctcriterium.pyx":506
+  /* "skmultilearn/tree/pctcriterium.pyx":510
  *         safe_realloc(&self.criteria_node_impurity, criteria_count)
  *         safe_realloc(&self.criteria_children_impurity, criteria_count)
  *         self.max_criteria_count = criteria_count             # <<<<<<<<<<<<<<
@@ -5293,7 +5297,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_cr
  */
   __pyx_v_self->max_criteria_count = __pyx_v_criteria_count;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":507
+  /* "skmultilearn/tree/pctcriterium.pyx":511
  *         safe_realloc(&self.criteria_children_impurity, criteria_count)
  *         self.max_criteria_count = criteria_count
  *         self.criteria_count = min(self.criteria_count, criteria_count)             # <<<<<<<<<<<<<<
@@ -5309,7 +5313,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_cr
   }
   __pyx_v_self->__pyx_base.__pyx_base.criteria_count = __pyx_t_9;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":503
+  /* "skmultilearn/tree/pctcriterium.pyx":507
  * 
  * 
  *     cpdef void resize_criterion(self, SIZE_t criteria_count):             # <<<<<<<<<<<<<<
@@ -5339,7 +5343,7 @@ static PyObject *__pyx_pw_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_5re
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("resize_criterion (wrapper)", 0);
   assert(__pyx_arg_criteria_count); {
-    __pyx_v_criteria_count = __Pyx_PyInt_As_Py_intptr_t(__pyx_arg_criteria_count); if (unlikely((__pyx_v_criteria_count == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 503, __pyx_L3_error)
+    __pyx_v_criteria_count = __Pyx_PyInt_As_Py_intptr_t(__pyx_arg_criteria_count); if (unlikely((__pyx_v_criteria_count == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 507, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5360,7 +5364,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_4re
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("resize_criterion", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_criterion(__pyx_v_self, __pyx_v_criteria_count, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 503, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_criterion(__pyx_v_self, __pyx_v_criteria_count, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5377,7 +5381,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_4re
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":511
+/* "skmultilearn/tree/pctcriterium.pyx":515
  * 
  *     #TODO: add resize
  *     cdef void add_criterion(self, crit_node_impurity criterion_node_impurity, crit_children_impurity criterion_children_impurity) nogil:             # <<<<<<<<<<<<<<
@@ -5388,7 +5392,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_4re
 static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_criterion(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *__pyx_v_self, __pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity __pyx_v_criterion_node_impurity, __pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity __pyx_v_criterion_children_impurity) {
   int __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":512
+  /* "skmultilearn/tree/pctcriterium.pyx":516
  *     #TODO: add resize
  *     cdef void add_criterion(self, crit_node_impurity criterion_node_impurity, crit_children_impurity criterion_children_impurity) nogil:
  *         if self.criteria_count >= self.max_criteria_count:             # <<<<<<<<<<<<<<
@@ -5398,7 +5402,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
   __pyx_t_1 = ((__pyx_v_self->__pyx_base.__pyx_base.criteria_count >= __pyx_v_self->max_criteria_count) != 0);
   if (__pyx_t_1) {
 
-    /* "skmultilearn/tree/pctcriterium.pyx":513
+    /* "skmultilearn/tree/pctcriterium.pyx":517
  *     cdef void add_criterion(self, crit_node_impurity criterion_node_impurity, crit_children_impurity criterion_children_impurity) nogil:
  *         if self.criteria_count >= self.max_criteria_count:
  *             return #Excetion in use, not visible (nogil restriction)             # <<<<<<<<<<<<<<
@@ -5407,7 +5411,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
  */
     goto __pyx_L0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":512
+    /* "skmultilearn/tree/pctcriterium.pyx":516
  *     #TODO: add resize
  *     cdef void add_criterion(self, crit_node_impurity criterion_node_impurity, crit_children_impurity criterion_children_impurity) nogil:
  *         if self.criteria_count >= self.max_criteria_count:             # <<<<<<<<<<<<<<
@@ -5416,7 +5420,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
  */
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":515
+  /* "skmultilearn/tree/pctcriterium.pyx":519
  *             return #Excetion in use, not visible (nogil restriction)
  * 
  *         self.criteria_node_impurity[self.criteria_count] = criterion_node_impurity             # <<<<<<<<<<<<<<
@@ -5425,7 +5429,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
  */
   (__pyx_v_self->criteria_node_impurity[__pyx_v_self->__pyx_base.__pyx_base.criteria_count]) = __pyx_v_criterion_node_impurity;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":516
+  /* "skmultilearn/tree/pctcriterium.pyx":520
  * 
  *         self.criteria_node_impurity[self.criteria_count] = criterion_node_impurity
  *         self.criteria_children_impurity[self.criteria_count] = criterion_children_impurity             # <<<<<<<<<<<<<<
@@ -5434,7 +5438,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
  */
   (__pyx_v_self->criteria_children_impurity[__pyx_v_self->__pyx_base.__pyx_base.criteria_count]) = __pyx_v_criterion_children_impurity;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":517
+  /* "skmultilearn/tree/pctcriterium.pyx":521
  *         self.criteria_node_impurity[self.criteria_count] = criterion_node_impurity
  *         self.criteria_children_impurity[self.criteria_count] = criterion_children_impurity
  *         self.criteria_count += 1             # <<<<<<<<<<<<<<
@@ -5443,7 +5447,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
  */
   __pyx_v_self->__pyx_base.__pyx_base.criteria_count = (__pyx_v_self->__pyx_base.__pyx_base.criteria_count + 1);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":511
+  /* "skmultilearn/tree/pctcriterium.pyx":515
  * 
  *     #TODO: add resize
  *     cdef void add_criterion(self, crit_node_impurity criterion_node_impurity, crit_children_impurity criterion_children_impurity) nogil:             # <<<<<<<<<<<<<<
@@ -5455,7 +5459,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_crite
   __pyx_L0:;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":520
+/* "skmultilearn/tree/pctcriterium.pyx":524
  * 
  * 
  *     cdef double node_impurity(self) nogil:             # <<<<<<<<<<<<<<
@@ -5472,7 +5476,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_2;
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_3;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":521
+  /* "skmultilearn/tree/pctcriterium.pyx":525
  * 
  *     cdef double node_impurity(self) nogil:
  *         cdef double all_node_impurity = 0             # <<<<<<<<<<<<<<
@@ -5481,7 +5485,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
  */
   __pyx_v_all_node_impurity = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":522
+  /* "skmultilearn/tree/pctcriterium.pyx":526
  *     cdef double node_impurity(self) nogil:
  *         cdef double all_node_impurity = 0
  *         cdef double actual_node_impurity = -INFINITY             # <<<<<<<<<<<<<<
@@ -5490,7 +5494,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
  */
   __pyx_v_actual_node_impurity = (-__pyx_v_12skmultilearn_4tree_12pctcriterium_INFINITY);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":523
+  /* "skmultilearn/tree/pctcriterium.pyx":527
  *         cdef double all_node_impurity = 0
  *         cdef double actual_node_impurity = -INFINITY
  *         cdef SIZE_t c = 0             # <<<<<<<<<<<<<<
@@ -5499,7 +5503,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
  */
   __pyx_v_c = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":525
+  /* "skmultilearn/tree/pctcriterium.pyx":529
  *         cdef SIZE_t c = 0
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -5509,7 +5513,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
   __pyx_t_1 = ((__pyx_v_self->__pyx_base.__pyx_base.criteria_count < 1) != 0);
   if (__pyx_t_1) {
 
-    /* "skmultilearn/tree/pctcriterium.pyx":526
+    /* "skmultilearn/tree/pctcriterium.pyx":530
  * 
  *         if self.criteria_count < 1:
  *             return - INFINITY #Excetion in use, not visible (nogil restriction)             # <<<<<<<<<<<<<<
@@ -5519,7 +5523,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
     __pyx_r = (-__pyx_v_12skmultilearn_4tree_12pctcriterium_INFINITY);
     goto __pyx_L0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":525
+    /* "skmultilearn/tree/pctcriterium.pyx":529
  *         cdef SIZE_t c = 0
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -5528,7 +5532,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
  */
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":527
+  /* "skmultilearn/tree/pctcriterium.pyx":531
  *         if self.criteria_count < 1:
  *             return - INFINITY #Excetion in use, not visible (nogil restriction)
  *         for c in range(self.criteria_count):             # <<<<<<<<<<<<<<
@@ -5539,7 +5543,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_c = __pyx_t_3;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":528
+    /* "skmultilearn/tree/pctcriterium.pyx":532
  *             return - INFINITY #Excetion in use, not visible (nogil restriction)
  *         for c in range(self.criteria_count):
  *             actual_node_impurity = self.criteria_node_impurity[c](self)             # <<<<<<<<<<<<<<
@@ -5548,7 +5552,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
  */
     __pyx_v_actual_node_impurity = (__pyx_v_self->criteria_node_impurity[__pyx_v_c])(((PyObject *)__pyx_v_self));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":529
+    /* "skmultilearn/tree/pctcriterium.pyx":533
  *         for c in range(self.criteria_count):
  *             actual_node_impurity = self.criteria_node_impurity[c](self)
  *             all_node_impurity += actual_node_impurity / <double>self.criteria_count             # <<<<<<<<<<<<<<
@@ -5558,7 +5562,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
     __pyx_v_all_node_impurity = (__pyx_v_all_node_impurity + (__pyx_v_actual_node_impurity / ((double)__pyx_v_self->__pyx_base.__pyx_base.criteria_count)));
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":531
+  /* "skmultilearn/tree/pctcriterium.pyx":535
  *             all_node_impurity += actual_node_impurity / <double>self.criteria_count
  * 
  *         return all_node_impurity             # <<<<<<<<<<<<<<
@@ -5568,7 +5572,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
   __pyx_r = __pyx_v_all_node_impurity;
   goto __pyx_L0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":520
+  /* "skmultilearn/tree/pctcriterium.pyx":524
  * 
  * 
  *     cdef double node_impurity(self) nogil:             # <<<<<<<<<<<<<<
@@ -5581,7 +5585,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_node_im
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":534
+/* "skmultilearn/tree/pctcriterium.pyx":538
  * 
  * 
  *     cdef void children_impurity(self, double* impurity_left,             # <<<<<<<<<<<<<<
@@ -5597,7 +5601,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_2;
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_3;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":537
+  /* "skmultilearn/tree/pctcriterium.pyx":541
  *                             double* impurity_right) nogil:
  *         """It's backward compatibility implementation of children impurity. All criteria are averaged."""
  *         cdef SIZE_t c = 0             # <<<<<<<<<<<<<<
@@ -5606,7 +5610,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   __pyx_v_c = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":538
+  /* "skmultilearn/tree/pctcriterium.pyx":542
  *         """It's backward compatibility implementation of children impurity. All criteria are averaged."""
  *         cdef SIZE_t c = 0
  *         cdef double all_impurity_left = 0             # <<<<<<<<<<<<<<
@@ -5615,7 +5619,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   __pyx_v_all_impurity_left = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":539
+  /* "skmultilearn/tree/pctcriterium.pyx":543
  *         cdef SIZE_t c = 0
  *         cdef double all_impurity_left = 0
  *         cdef double all_impurity_right = 0             # <<<<<<<<<<<<<<
@@ -5624,7 +5628,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   __pyx_v_all_impurity_right = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":541
+  /* "skmultilearn/tree/pctcriterium.pyx":545
  *         cdef double all_impurity_right = 0
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -5634,7 +5638,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
   __pyx_t_1 = ((__pyx_v_self->__pyx_base.__pyx_base.criteria_count < 1) != 0);
   if (__pyx_t_1) {
 
-    /* "skmultilearn/tree/pctcriterium.pyx":542
+    /* "skmultilearn/tree/pctcriterium.pyx":546
  * 
  *         if self.criteria_count < 1:
  *             return  #Excetion in use, not visible (nogil restriction)             # <<<<<<<<<<<<<<
@@ -5643,7 +5647,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
     goto __pyx_L0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":541
+    /* "skmultilearn/tree/pctcriterium.pyx":545
  *         cdef double all_impurity_right = 0
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -5652,7 +5656,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":543
+  /* "skmultilearn/tree/pctcriterium.pyx":547
  *         if self.criteria_count < 1:
  *             return  #Excetion in use, not visible (nogil restriction)
  *         for c in range(self.criteria_count):             # <<<<<<<<<<<<<<
@@ -5663,7 +5667,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_c = __pyx_t_3;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":544
+    /* "skmultilearn/tree/pctcriterium.pyx":548
  *             return  #Excetion in use, not visible (nogil restriction)
  *         for c in range(self.criteria_count):
  *             self.criteria_children_impurity[c](self, impurity_left, impurity_right)             # <<<<<<<<<<<<<<
@@ -5672,7 +5676,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
     (__pyx_v_self->criteria_children_impurity[__pyx_v_c])(((PyObject *)__pyx_v_self), __pyx_v_impurity_left, __pyx_v_impurity_right);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":545
+    /* "skmultilearn/tree/pctcriterium.pyx":549
  *         for c in range(self.criteria_count):
  *             self.criteria_children_impurity[c](self, impurity_left, impurity_right)
  *             all_impurity_left += impurity_left[0] / <double>self.criteria_count             # <<<<<<<<<<<<<<
@@ -5681,7 +5685,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
     __pyx_v_all_impurity_left = (__pyx_v_all_impurity_left + ((__pyx_v_impurity_left[0]) / ((double)__pyx_v_self->__pyx_base.__pyx_base.criteria_count)));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":546
+    /* "skmultilearn/tree/pctcriterium.pyx":550
  *             self.criteria_children_impurity[c](self, impurity_left, impurity_right)
  *             all_impurity_left += impurity_left[0] / <double>self.criteria_count
  *             all_impurity_right += impurity_right[0] / <double>self.criteria_count             # <<<<<<<<<<<<<<
@@ -5691,7 +5695,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
     __pyx_v_all_impurity_right = (__pyx_v_all_impurity_right + ((__pyx_v_impurity_right[0]) / ((double)__pyx_v_self->__pyx_base.__pyx_base.criteria_count)));
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":547
+  /* "skmultilearn/tree/pctcriterium.pyx":551
  *             all_impurity_left += impurity_left[0] / <double>self.criteria_count
  *             all_impurity_right += impurity_right[0] / <double>self.criteria_count
  *         impurity_left[0] = all_impurity_left             # <<<<<<<<<<<<<<
@@ -5700,7 +5704,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   (__pyx_v_impurity_left[0]) = __pyx_v_all_impurity_left;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":548
+  /* "skmultilearn/tree/pctcriterium.pyx":552
  *             all_impurity_right += impurity_right[0] / <double>self.criteria_count
  *         impurity_left[0] = all_impurity_left
  *         impurity_right[0] = all_impurity_right             # <<<<<<<<<<<<<<
@@ -5709,7 +5713,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
  */
   (__pyx_v_impurity_right[0]) = __pyx_v_all_impurity_right;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":534
+  /* "skmultilearn/tree/pctcriterium.pyx":538
  * 
  * 
  *     cdef void children_impurity(self, double* impurity_left,             # <<<<<<<<<<<<<<
@@ -5721,7 +5725,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_children_
   __pyx_L0:;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":551
+/* "skmultilearn/tree/pctcriterium.pyx":555
  * 
  * 
  *     cdef double pct_hypothesis(self) nogil:             # <<<<<<<<<<<<<<
@@ -5756,7 +5760,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_5;
   int __pyx_t_6;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":556
+  /* "skmultilearn/tree/pctcriterium.pyx":560
  *         cdef double var_e_normalized_left
  *         cdef double var_e_normalized_right
  *         cdef double E_cout = (self.end-self.start)             # <<<<<<<<<<<<<<
@@ -5765,7 +5769,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_E_cout = (__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.end - __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.start);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":558
+  /* "skmultilearn/tree/pctcriterium.pyx":562
  *         cdef double E_cout = (self.end-self.start)
  * 
  *         cdef double d_partial_all   =0.0             # <<<<<<<<<<<<<<
@@ -5774,7 +5778,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_partial_all = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":559
+  /* "skmultilearn/tree/pctcriterium.pyx":563
  * 
  *         cdef double d_partial_all   =0.0
  *         cdef double d_partial_left  =0.0             # <<<<<<<<<<<<<<
@@ -5783,7 +5787,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_partial_left = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":560
+  /* "skmultilearn/tree/pctcriterium.pyx":564
  *         cdef double d_partial_all   =0.0
  *         cdef double d_partial_left  =0.0
  *         cdef double d_partial_right =0.0             # <<<<<<<<<<<<<<
@@ -5792,7 +5796,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_partial_right = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":561
+  /* "skmultilearn/tree/pctcriterium.pyx":565
  *         cdef double d_partial_left  =0.0
  *         cdef double d_partial_right =0.0
  *         cdef double d_all   =0.0             # <<<<<<<<<<<<<<
@@ -5801,7 +5805,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_all = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":562
+  /* "skmultilearn/tree/pctcriterium.pyx":566
  *         cdef double d_partial_right =0.0
  *         cdef double d_all   =0.0
  *         cdef double d_left  =0.0             # <<<<<<<<<<<<<<
@@ -5810,7 +5814,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_left = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":563
+  /* "skmultilearn/tree/pctcriterium.pyx":567
  *         cdef double d_all   =0.0
  *         cdef double d_left  =0.0
  *         cdef double d_right =0.0             # <<<<<<<<<<<<<<
@@ -5819,7 +5823,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_d_right = 0.0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":567
+  /* "skmultilearn/tree/pctcriterium.pyx":571
  *         cdef SIZE_t y_l_label
  * 
  *         cdef double* sum_total = self.sum_total             # <<<<<<<<<<<<<<
@@ -5829,7 +5833,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   __pyx_t_1 = __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.sum_total;
   __pyx_v_sum_total = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":568
+  /* "skmultilearn/tree/pctcriterium.pyx":572
  * 
  *         cdef double* sum_total = self.sum_total
  *         cdef double* sum_left = self.sum_left             # <<<<<<<<<<<<<<
@@ -5839,7 +5843,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   __pyx_t_1 = __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.sum_left;
   __pyx_v_sum_left = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":569
+  /* "skmultilearn/tree/pctcriterium.pyx":573
  *         cdef double* sum_total = self.sum_total
  *         cdef double* sum_left = self.sum_left
  *         cdef double* sum_right = self.sum_right             # <<<<<<<<<<<<<<
@@ -5849,7 +5853,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   __pyx_t_1 = __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.sum_right;
   __pyx_v_sum_right = __pyx_t_1;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":575
+  /* "skmultilearn/tree/pctcriterium.pyx":579
  *         cdef SIZE_t p
  * 
  *         for l in range(self.n_outputs):             # <<<<<<<<<<<<<<
@@ -5860,7 +5864,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_l = __pyx_t_3;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":576
+    /* "skmultilearn/tree/pctcriterium.pyx":580
  * 
  *         for l in range(self.n_outputs):
  *             self.avg_all[l] = sum_total[1]/(sum_total[0]+sum_total[1])             # <<<<<<<<<<<<<<
@@ -5869,7 +5873,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     (__pyx_v_self->avg_all[__pyx_v_l]) = ((__pyx_v_sum_total[1]) / ((__pyx_v_sum_total[0]) + (__pyx_v_sum_total[1])));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":577
+    /* "skmultilearn/tree/pctcriterium.pyx":581
  *         for l in range(self.n_outputs):
  *             self.avg_all[l] = sum_total[1]/(sum_total[0]+sum_total[1])
  *             self.avg_left[l] =  sum_left[1]/(sum_left[0]+sum_left[1])             # <<<<<<<<<<<<<<
@@ -5878,7 +5882,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     (__pyx_v_self->avg_left[__pyx_v_l]) = ((__pyx_v_sum_left[1]) / ((__pyx_v_sum_left[0]) + (__pyx_v_sum_left[1])));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":578
+    /* "skmultilearn/tree/pctcriterium.pyx":582
  *             self.avg_all[l] = sum_total[1]/(sum_total[0]+sum_total[1])
  *             self.avg_left[l] =  sum_left[1]/(sum_left[0]+sum_left[1])
  *             self.avg_right[l] = sum_right[1]/(sum_right[0]+sum_right[1])             # <<<<<<<<<<<<<<
@@ -5887,7 +5891,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     (__pyx_v_self->avg_right[__pyx_v_l]) = ((__pyx_v_sum_right[1]) / ((__pyx_v_sum_right[0]) + (__pyx_v_sum_right[1])));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":580
+    /* "skmultilearn/tree/pctcriterium.pyx":584
  *             self.avg_right[l] = sum_right[1]/(sum_right[0]+sum_right[1])
  * 
  *             sum_total += self.sum_stride             # <<<<<<<<<<<<<<
@@ -5896,7 +5900,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_sum_total = (__pyx_v_sum_total + __pyx_v_self->__pyx_base.sum_stride);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":581
+    /* "skmultilearn/tree/pctcriterium.pyx":585
  * 
  *             sum_total += self.sum_stride
  *             sum_left += self.sum_stride             # <<<<<<<<<<<<<<
@@ -5905,7 +5909,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_sum_left = (__pyx_v_sum_left + __pyx_v_self->__pyx_base.sum_stride);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":582
+    /* "skmultilearn/tree/pctcriterium.pyx":586
  *             sum_total += self.sum_stride
  *             sum_left += self.sum_stride
  *             sum_right += self.sum_stride             # <<<<<<<<<<<<<<
@@ -5915,7 +5919,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
     __pyx_v_sum_right = (__pyx_v_sum_right + __pyx_v_self->__pyx_base.sum_stride);
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":585
+  /* "skmultilearn/tree/pctcriterium.pyx":589
  * 
  *         #TODO: Check situation when pos = end
  *         for p in range(self.start, self.end):             # <<<<<<<<<<<<<<
@@ -5926,7 +5930,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   for (__pyx_t_3 = __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.start; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_p = __pyx_t_3;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":586
+    /* "skmultilearn/tree/pctcriterium.pyx":590
  *         #TODO: Check situation when pos = end
  *         for p in range(self.start, self.end):
  *             i = self.samples[p]             # <<<<<<<<<<<<<<
@@ -5935,7 +5939,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_i = (__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.samples[__pyx_v_p]);
 
-    /* "skmultilearn/tree/pctcriterium.pyx":587
+    /* "skmultilearn/tree/pctcriterium.pyx":591
  *         for p in range(self.start, self.end):
  *             i = self.samples[p]
  *             d_partial_all   =0.0             # <<<<<<<<<<<<<<
@@ -5944,7 +5948,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_d_partial_all = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":588
+    /* "skmultilearn/tree/pctcriterium.pyx":592
  *             i = self.samples[p]
  *             d_partial_all   =0.0
  *             d_partial_left  =0.0             # <<<<<<<<<<<<<<
@@ -5953,7 +5957,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_d_partial_left = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":589
+    /* "skmultilearn/tree/pctcriterium.pyx":593
  *             d_partial_all   =0.0
  *             d_partial_left  =0.0
  *             d_partial_right =0.0             # <<<<<<<<<<<<<<
@@ -5962,7 +5966,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_d_partial_right = 0.0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":591
+    /* "skmultilearn/tree/pctcriterium.pyx":595
  *             d_partial_right =0.0
  * 
  *             for l in range(self.n_outputs):             # <<<<<<<<<<<<<<
@@ -5973,7 +5977,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_l = __pyx_t_5;
 
-      /* "skmultilearn/tree/pctcriterium.pyx":592
+      /* "skmultilearn/tree/pctcriterium.pyx":596
  * 
  *             for l in range(self.n_outputs):
  *                 y_l_label = <SIZE_t> self.y[i * self.y_stride + l] #zero or one - it's mutilabel             # <<<<<<<<<<<<<<
@@ -5982,7 +5986,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
       __pyx_v_y_l_label = ((__pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t)(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.y[((__pyx_v_i * __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.y_stride) + __pyx_v_l)]));
 
-      /* "skmultilearn/tree/pctcriterium.pyx":593
+      /* "skmultilearn/tree/pctcriterium.pyx":597
  *             for l in range(self.n_outputs):
  *                 y_l_label = <SIZE_t> self.y[i * self.y_stride + l] #zero or one - it's mutilabel
  *                 d_partial_all += (y_l_label-self.avg_all[l])**2             # <<<<<<<<<<<<<<
@@ -5991,7 +5995,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
       __pyx_v_d_partial_all = (__pyx_v_d_partial_all + pow((__pyx_v_y_l_label - (__pyx_v_self->avg_all[__pyx_v_l])), 2.0));
 
-      /* "skmultilearn/tree/pctcriterium.pyx":594
+      /* "skmultilearn/tree/pctcriterium.pyx":598
  *                 y_l_label = <SIZE_t> self.y[i * self.y_stride + l] #zero or one - it's mutilabel
  *                 d_partial_all += (y_l_label-self.avg_all[l])**2
  *                 if p < self.pos:             # <<<<<<<<<<<<<<
@@ -6001,7 +6005,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
       __pyx_t_6 = ((__pyx_v_p < __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.pos) != 0);
       if (__pyx_t_6) {
 
-        /* "skmultilearn/tree/pctcriterium.pyx":595
+        /* "skmultilearn/tree/pctcriterium.pyx":599
  *                 d_partial_all += (y_l_label-self.avg_all[l])**2
  *                 if p < self.pos:
  *                     d_partial_left += (y_l_label-self.avg_left[l])**2             # <<<<<<<<<<<<<<
@@ -6010,7 +6014,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
         __pyx_v_d_partial_left = (__pyx_v_d_partial_left + pow((__pyx_v_y_l_label - (__pyx_v_self->avg_left[__pyx_v_l])), 2.0));
 
-        /* "skmultilearn/tree/pctcriterium.pyx":594
+        /* "skmultilearn/tree/pctcriterium.pyx":598
  *                 y_l_label = <SIZE_t> self.y[i * self.y_stride + l] #zero or one - it's mutilabel
  *                 d_partial_all += (y_l_label-self.avg_all[l])**2
  *                 if p < self.pos:             # <<<<<<<<<<<<<<
@@ -6020,7 +6024,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
         goto __pyx_L9;
       }
 
-      /* "skmultilearn/tree/pctcriterium.pyx":597
+      /* "skmultilearn/tree/pctcriterium.pyx":601
  *                     d_partial_left += (y_l_label-self.avg_left[l])**2
  *                 else:
  *                     d_partial_right += (y_l_label-self.avg_right[l])**2             # <<<<<<<<<<<<<<
@@ -6033,7 +6037,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
       __pyx_L9:;
     }
 
-    /* "skmultilearn/tree/pctcriterium.pyx":598
+    /* "skmultilearn/tree/pctcriterium.pyx":602
  *                 else:
  *                     d_partial_right += (y_l_label-self.avg_right[l])**2
  *             d_all   += sqrt(d_partial_all) #TODO: Maybe (1/E) should be shift to up?             # <<<<<<<<<<<<<<
@@ -6042,7 +6046,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_d_all = (__pyx_v_d_all + sqrt(__pyx_v_d_partial_all));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":599
+    /* "skmultilearn/tree/pctcriterium.pyx":603
  *                     d_partial_right += (y_l_label-self.avg_right[l])**2
  *             d_all   += sqrt(d_partial_all) #TODO: Maybe (1/E) should be shift to up?
  *             d_left  += sqrt(d_partial_left)             # <<<<<<<<<<<<<<
@@ -6051,7 +6055,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
     __pyx_v_d_left = (__pyx_v_d_left + sqrt(__pyx_v_d_partial_left));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":600
+    /* "skmultilearn/tree/pctcriterium.pyx":604
  *             d_all   += sqrt(d_partial_all) #TODO: Maybe (1/E) should be shift to up?
  *             d_left  += sqrt(d_partial_left)
  *             d_right += sqrt(d_partial_right)             # <<<<<<<<<<<<<<
@@ -6061,7 +6065,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
     __pyx_v_d_right = (__pyx_v_d_right + sqrt(__pyx_v_d_partial_right));
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":602
+  /* "skmultilearn/tree/pctcriterium.pyx":606
  *             d_right += sqrt(d_partial_right)
  * 
  *         var_e = (1.0/E_cout) * d_all             # <<<<<<<<<<<<<<
@@ -6070,7 +6074,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_var_e = ((1.0 / __pyx_v_E_cout) * __pyx_v_d_all);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":603
+  /* "skmultilearn/tree/pctcriterium.pyx":607
  * 
  *         var_e = (1.0/E_cout) * d_all
  *         var_e_normalized_left = (1.0/E_cout)* d_left             # <<<<<<<<<<<<<<
@@ -6079,7 +6083,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_var_e_normalized_left = ((1.0 / __pyx_v_E_cout) * __pyx_v_d_left);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":604
+  /* "skmultilearn/tree/pctcriterium.pyx":608
  *         var_e = (1.0/E_cout) * d_all
  *         var_e_normalized_left = (1.0/E_cout)* d_left
  *         var_e_normalized_right = (1.0/E_cout)* d_right             # <<<<<<<<<<<<<<
@@ -6088,7 +6092,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_var_e_normalized_right = ((1.0 / __pyx_v_E_cout) * __pyx_v_d_right);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":605
+  /* "skmultilearn/tree/pctcriterium.pyx":609
  *         var_e_normalized_left = (1.0/E_cout)* d_left
  *         var_e_normalized_right = (1.0/E_cout)* d_right
  *         h = var_e - (var_e_normalized_left + var_e_normalized_right)             # <<<<<<<<<<<<<<
@@ -6097,7 +6101,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
  */
   __pyx_v_h = (__pyx_v_var_e - (__pyx_v_var_e_normalized_left + __pyx_v_var_e_normalized_right));
 
-  /* "skmultilearn/tree/pctcriterium.pyx":606
+  /* "skmultilearn/tree/pctcriterium.pyx":610
  *         var_e_normalized_right = (1.0/E_cout)* d_right
  *         h = var_e - (var_e_normalized_left + var_e_normalized_right)
  *         return h             # <<<<<<<<<<<<<<
@@ -6107,7 +6111,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   __pyx_r = __pyx_v_h;
   goto __pyx_L0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":551
+  /* "skmultilearn/tree/pctcriterium.pyx":555
  * 
  * 
  *     cdef double pct_hypothesis(self) nogil:             # <<<<<<<<<<<<<<
@@ -6120,7 +6124,7 @@ static double __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_pct_hyp
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":608
+/* "skmultilearn/tree/pctcriterium.pyx":612
  *         return h
  * 
  *     cdef void proxy_impurity_improvement_all(self, double* all_improvments) nogil:             # <<<<<<<<<<<<<<
@@ -6137,7 +6141,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_2;
   __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t __pyx_t_3;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":611
+  /* "skmultilearn/tree/pctcriterium.pyx":615
  *         cdef double impurity_left
  *         cdef double impurity_right
  *         cdef SIZE_t c = 0             # <<<<<<<<<<<<<<
@@ -6146,7 +6150,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
   __pyx_v_c = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":612
+  /* "skmultilearn/tree/pctcriterium.pyx":616
  *         cdef double impurity_right
  *         cdef SIZE_t c = 0
  *         cdef double actual_proxy_improvement = - INFINITY             # <<<<<<<<<<<<<<
@@ -6155,7 +6159,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
   __pyx_v_actual_proxy_improvement = (-__pyx_v_12skmultilearn_4tree_12pctcriterium_INFINITY);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":614
+  /* "skmultilearn/tree/pctcriterium.pyx":618
  *         cdef double actual_proxy_improvement = - INFINITY
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -6165,7 +6169,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
   __pyx_t_1 = ((__pyx_v_self->__pyx_base.__pyx_base.criteria_count < 1) != 0);
   if (__pyx_t_1) {
 
-    /* "skmultilearn/tree/pctcriterium.pyx":615
+    /* "skmultilearn/tree/pctcriterium.pyx":619
  * 
  *         if self.criteria_count < 1:
  *             return #TODO: Give exception             # <<<<<<<<<<<<<<
@@ -6174,7 +6178,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
     goto __pyx_L0;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":614
+    /* "skmultilearn/tree/pctcriterium.pyx":618
  *         cdef double actual_proxy_improvement = - INFINITY
  * 
  *         if self.criteria_count < 1:             # <<<<<<<<<<<<<<
@@ -6183,7 +6187,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":616
+  /* "skmultilearn/tree/pctcriterium.pyx":620
  *         if self.criteria_count < 1:
  *             return #TODO: Give exception
  *         for c in range(self.criteria_count):             # <<<<<<<<<<<<<<
@@ -6194,7 +6198,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_c = __pyx_t_3;
 
-    /* "skmultilearn/tree/pctcriterium.pyx":617
+    /* "skmultilearn/tree/pctcriterium.pyx":621
  *             return #TODO: Give exception
  *         for c in range(self.criteria_count):
  *             self.criteria_children_impurity[c](self, &impurity_left, &impurity_right)             # <<<<<<<<<<<<<<
@@ -6203,7 +6207,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
     (__pyx_v_self->criteria_children_impurity[__pyx_v_c])(((PyObject *)__pyx_v_self), (&__pyx_v_impurity_left), (&__pyx_v_impurity_right));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":619
+    /* "skmultilearn/tree/pctcriterium.pyx":623
  *             self.criteria_children_impurity[c](self, &impurity_left, &impurity_right)
  *             actual_proxy_improvement = (- self.weighted_n_right * impurity_right
  *                 - self.weighted_n_left * impurity_left)             # <<<<<<<<<<<<<<
@@ -6212,7 +6216,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
  */
     __pyx_v_actual_proxy_improvement = (((-__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.weighted_n_right) * __pyx_v_impurity_right) - (__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.weighted_n_left * __pyx_v_impurity_left));
 
-    /* "skmultilearn/tree/pctcriterium.pyx":620
+    /* "skmultilearn/tree/pctcriterium.pyx":624
  *             actual_proxy_improvement = (- self.weighted_n_right * impurity_right
  *                 - self.weighted_n_left * impurity_left)
  *             all_improvments[c]=actual_proxy_improvement             # <<<<<<<<<<<<<<
@@ -6222,7 +6226,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
     (__pyx_v_all_improvments[__pyx_v_c]) = __pyx_v_actual_proxy_improvement;
   }
 
-  /* "skmultilearn/tree/pctcriterium.pyx":608
+  /* "skmultilearn/tree/pctcriterium.pyx":612
  *         return h
  * 
  *     cdef void proxy_impurity_improvement_all(self, double* all_improvments) nogil:             # <<<<<<<<<<<<<<
@@ -6234,7 +6238,7 @@ static void __pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_proxy_imp
   __pyx_L0:;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":623
+/* "skmultilearn/tree/pctcriterium.pyx":627
  * 
  * cdef class PCTAllSklearnCriterions(PCTCriterion):
  *     def __cinit__(self, SIZE_t n_outputs, np.ndarray[SIZE_t, ndim=1] n_classes):             # <<<<<<<<<<<<<<
@@ -6270,11 +6274,11 @@ static int __pyx_pw_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_classes)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 623, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 627, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 623, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 627, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -6282,18 +6286,18 @@ static int __pyx_pw_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_n_outputs = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_n_outputs == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 623, __pyx_L3_error)
+    __pyx_v_n_outputs = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_n_outputs == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(0, 627, __pyx_L3_error)
     __pyx_v_n_classes = ((PyArrayObject *)values[1]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 623, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 627, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("skmultilearn.tree.pctcriterium.PCTAllSklearnCriterions.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_n_classes), __pyx_ptype_5numpy_ndarray, 1, "n_classes", 0))) __PYX_ERR(0, 623, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_n_classes), __pyx_ptype_5numpy_ndarray, 1, "n_classes", 0))) __PYX_ERR(0, 627, __pyx_L1_error)
   __pyx_r = __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterions___cinit__(((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions *)__pyx_v_self), __pyx_v_n_outputs, __pyx_v_n_classes);
 
   /* function exit code */
@@ -6320,23 +6324,23 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
   __pyx_pybuffernd_n_classes.rcbuffer = &__pyx_pybuffer_n_classes;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_n_classes.rcbuffer->pybuffer, (PyObject*)__pyx_v_n_classes, &__Pyx_TypeInfo_nn___pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 623, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_n_classes.rcbuffer->pybuffer, (PyObject*)__pyx_v_n_classes, &__Pyx_TypeInfo_nn___pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 627, __pyx_L1_error)
   }
   __pyx_pybuffernd_n_classes.diminfo[0].strides = __pyx_pybuffernd_n_classes.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_n_classes.diminfo[0].shape = __pyx_pybuffernd_n_classes.rcbuffer->pybuffer.shape[0];
 
-  /* "skmultilearn/tree/pctcriterium.pyx":624
+  /* "skmultilearn/tree/pctcriterium.pyx":628
  * cdef class PCTAllSklearnCriterions(PCTCriterion):
  *     def __cinit__(self, SIZE_t n_outputs, np.ndarray[SIZE_t, ndim=1] n_classes):
  *         gini = GiniBuilder()             # <<<<<<<<<<<<<<
  *         gini.add_criterion(self)
  *         entropy = EntropyBuilder()
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_GiniBuilder), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 624, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_GiniBuilder), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 628, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_gini = ((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":625
+  /* "skmultilearn/tree/pctcriterium.pyx":629
  *     def __cinit__(self, SIZE_t n_outputs, np.ndarray[SIZE_t, ndim=1] n_classes):
  *         gini = GiniBuilder()
  *         gini.add_criterion(self)             # <<<<<<<<<<<<<<
@@ -6345,19 +6349,19 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
  */
   ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_GiniBuilder *)__pyx_v_gini->__pyx_vtab)->add_criterion(__pyx_v_gini, ((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_self), 0);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":626
+  /* "skmultilearn/tree/pctcriterium.pyx":630
  *         gini = GiniBuilder()
  *         gini.add_criterion(self)
  *         entropy = EntropyBuilder()             # <<<<<<<<<<<<<<
  *         entropy.add_criterion(self)
  *         self.criteria_count = 2
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_EntropyBuilder), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 626, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_EntropyBuilder), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 630, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_entropy = ((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":627
+  /* "skmultilearn/tree/pctcriterium.pyx":631
  *         gini.add_criterion(self)
  *         entropy = EntropyBuilder()
  *         entropy.add_criterion(self)             # <<<<<<<<<<<<<<
@@ -6366,7 +6370,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
  */
   ((struct __pyx_vtabstruct_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *)__pyx_v_entropy->__pyx_vtab)->add_criterion(__pyx_v_entropy, ((struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *)__pyx_v_self), 0);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":628
+  /* "skmultilearn/tree/pctcriterium.pyx":632
  *         entropy = EntropyBuilder()
  *         entropy.add_criterion(self)
  *         self.criteria_count = 2             # <<<<<<<<<<<<<<
@@ -6375,7 +6379,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
  */
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.criteria_count = 2;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":623
+  /* "skmultilearn/tree/pctcriterium.pyx":627
  * 
  * cdef class PCTAllSklearnCriterions(PCTCriterion):
  *     def __cinit__(self, SIZE_t n_outputs, np.ndarray[SIZE_t, ndim=1] n_classes):             # <<<<<<<<<<<<<<
@@ -6406,7 +6410,7 @@ static int __pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCriterion
   return __pyx_r;
 }
 
-/* "skmultilearn/tree/pctcriterium.pyx":630
+/* "skmultilearn/tree/pctcriterium.pyx":634
  *         self.criteria_count = 2
  * 
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
@@ -6436,7 +6440,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCri
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("__reduce__", 0);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":631
+  /* "skmultilearn/tree/pctcriterium.pyx":635
  * 
  *     def __reduce__(self):
  *         return (PCTAllSklearnCriterions,             # <<<<<<<<<<<<<<
@@ -6445,33 +6449,33 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCri
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":632
+  /* "skmultilearn/tree/pctcriterium.pyx":636
  *     def __reduce__(self):
  *         return (PCTAllSklearnCriterions,
  *                 (self.n_outputs,             # <<<<<<<<<<<<<<
  *                  sizet_ptr_to_ndarray(self.n_classes, self.n_outputs)),
  *                 self.__getstate__())
  */
-  __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.n_outputs); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 636, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":633
+  /* "skmultilearn/tree/pctcriterium.pyx":637
  *         return (PCTAllSklearnCriterions,
  *                 (self.n_outputs,
  *                  sizet_ptr_to_ndarray(self.n_classes, self.n_outputs)),             # <<<<<<<<<<<<<<
  *                 self.__getstate__())
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_7sklearn_4tree_6_utils_sizet_ptr_to_ndarray(__pyx_v_self->__pyx_base.__pyx_base.n_classes, __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.n_outputs)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 633, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)__pyx_f_7sklearn_4tree_6_utils_sizet_ptr_to_ndarray(__pyx_v_self->__pyx_base.__pyx_base.n_classes, __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.n_outputs)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 637, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "skmultilearn/tree/pctcriterium.pyx":632
+  /* "skmultilearn/tree/pctcriterium.pyx":636
  *     def __reduce__(self):
  *         return (PCTAllSklearnCriterions,
  *                 (self.n_outputs,             # <<<<<<<<<<<<<<
  *                  sizet_ptr_to_ndarray(self.n_classes, self.n_outputs)),
  *                 self.__getstate__())
  */
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 636, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -6480,12 +6484,12 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCri
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":634
+  /* "skmultilearn/tree/pctcriterium.pyx":638
  *                 (self.n_outputs,
  *                  sizet_ptr_to_ndarray(self.n_classes, self.n_outputs)),
  *                 self.__getstate__())             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getstate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 634, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getstate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 638, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_4 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_1))) {
@@ -6498,22 +6502,22 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCri
     }
   }
   if (__pyx_t_4) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 634, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 638, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 634, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 638, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":631
+  /* "skmultilearn/tree/pctcriterium.pyx":635
  * 
  *     def __reduce__(self):
  *         return (PCTAllSklearnCriterions,             # <<<<<<<<<<<<<<
  *                 (self.n_outputs,
  *                  sizet_ptr_to_ndarray(self.n_classes, self.n_outputs)),
  */
-  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 631, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 635, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions));
   __Pyx_GIVEREF(((PyObject *)__pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions));
@@ -6528,7 +6532,7 @@ static PyObject *__pyx_pf_12skmultilearn_4tree_12pctcriterium_23PCTAllSklearnCri
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "skmultilearn/tree/pctcriterium.pyx":630
+  /* "skmultilearn/tree/pctcriterium.pyx":634
  *         self.criteria_count = 2
  * 
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
@@ -9442,6 +9446,8 @@ PyMODINIT_FUNC PyInit_pctcriterium(void)
   __pyx_ptype_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion = &__pyx_type_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion;
   __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_GiniBuilder = &__pyx_vtable_12skmultilearn_4tree_12pctcriterium_GiniBuilder;
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_GiniBuilder.add_criterion = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_GiniBuilder *, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, int __pyx_skip_dispatch))__pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_add_criterion;
+  __pyx_vtable_12skmultilearn_4tree_12pctcriterium_GiniBuilder.node_impurity = (double (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *))__pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_node_impurity;
+  __pyx_vtable_12skmultilearn_4tree_12pctcriterium_GiniBuilder.children_impurity = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *))__pyx_f_12skmultilearn_4tree_12pctcriterium_11GiniBuilder_children_impurity;
   if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_GiniBuilder) < 0) __PYX_ERR(0, 336, __pyx_L1_error)
   __pyx_type_12skmultilearn_4tree_12pctcriterium_GiniBuilder.tp_print = 0;
   if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_GiniBuilder.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_GiniBuilder) < 0) __PYX_ERR(0, 336, __pyx_L1_error)
@@ -9449,10 +9455,12 @@ PyMODINIT_FUNC PyInit_pctcriterium(void)
   __pyx_ptype_12skmultilearn_4tree_12pctcriterium_GiniBuilder = &__pyx_type_12skmultilearn_4tree_12pctcriterium_GiniBuilder;
   __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_EntropyBuilder = &__pyx_vtable_12skmultilearn_4tree_12pctcriterium_EntropyBuilder;
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.add_criterion = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_EntropyBuilder *, struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, int __pyx_skip_dispatch))__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_add_criterion;
-  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 401, __pyx_L1_error)
+  __pyx_vtable_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.node_impurity = (double (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *))__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_node_impurity;
+  __pyx_vtable_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.children_impurity = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion *, double *, double *))__pyx_f_12skmultilearn_4tree_12pctcriterium_14EntropyBuilder_children_impurity;
+  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 403, __pyx_L1_error)
   __pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 401, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "EntropyBuilder", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 401, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 403, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "EntropyBuilder", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder) < 0) __PYX_ERR(0, 403, __pyx_L1_error)
   __pyx_ptype_12skmultilearn_4tree_12pctcriterium_EntropyBuilder = &__pyx_type_12skmultilearn_4tree_12pctcriterium_EntropyBuilder;
   __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTCriterion = &__pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTCriterion;
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTCriterion.__pyx_base = *__pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion;
@@ -9463,18 +9471,18 @@ PyMODINIT_FUNC PyInit_pctcriterium(void)
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTCriterion.resize_criterion = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, __pyx_t_12skmultilearn_4tree_12pctcriterium_SIZE_t, int __pyx_skip_dispatch))__pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_resize_criterion;
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTCriterion.add_criterion = (void (*)(struct __pyx_obj_12skmultilearn_4tree_12pctcriterium_PCTCriterion *, __pyx_t_12skmultilearn_4tree_5utils_crit_node_impurity, __pyx_t_12skmultilearn_4tree_5utils_crit_children_impurity))__pyx_f_12skmultilearn_4tree_12pctcriterium_12PCTCriterion_add_criterion;
   __pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion.tp_base = __pyx_ptype_12skmultilearn_4tree_12pctcriterium_ClassificationCriterion;
-  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 471, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 475, __pyx_L1_error)
   __pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 471, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "PCTCriterion", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 471, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 475, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PCTCriterion", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion) < 0) __PYX_ERR(0, 475, __pyx_L1_error)
   __pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTCriterion = &__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTCriterion;
   __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions = &__pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions;
   __pyx_vtable_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions.__pyx_base = *__pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTCriterion;
   __pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions.tp_base = __pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTCriterion;
-  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 622, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
   __pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 622, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "PCTAllSklearnCriterions", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 622, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions.tp_dict, __pyx_vtabptr_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PCTAllSklearnCriterions", (PyObject *)&__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
   __pyx_ptype_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions = &__pyx_type_12skmultilearn_4tree_12pctcriterium_PCTAllSklearnCriterions;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 
