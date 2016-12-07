@@ -1,23 +1,25 @@
 # Authors: Grzegorz Kulakowski <grzegorz7w@gmail.com>
 # License: BSD 3 clause
-
 from ..base import MLClassifierBase
 
 import numpy as np
+from scipy import sparse
+from scipy.linalg import inv, norm
 
-##TODO: Check bias
+
 class MLTSVM(MLClassifierBase):
-    def __init__(self, c_k, sor_omega =1.0, threshold = 1e-6, lambda_param=1.0):
+    def __init__(self, c_k, sor_omega =1.0, threshold = 1e-6, lambda_param=1.0, max_sor_iteration=500):
         super(MLClassifierBase, self).__init__()
+        self.max_sor_iteration = max_sor_iteration
         self.threshold = threshold
         self.copyable_attrs = []
-        self.lambda_param = lambda_param # TODO: possibility to set-up different lambda to different class
+        self.lambda_param = lambda_param  # TODO: possibility to set-up different lambda to different class
         self.c_k = c_k
         self.sor_omega = sor_omega
-        # TODO: Add attributes after recognising with one is need
+        self.copyable_attrs = ['c_k','sor_omega','lambda_param', 'threshold'] # TODO: check completness
 
     def get_x_class_instanes(self, X, Y, label_class):
-        y_labels = Y[:,label_class] != 0
+        y_labels = Y[:, label_class] != 0
         return X[y_labels, :]  # TODO: hide warning, or replace by slower X[np.where(Y[label, :]) != 0, :]
 
     def get_x_noclass_instanes(self, X, Y, label_class):
@@ -30,17 +32,24 @@ class MLTSVM(MLClassifierBase):
         X_bias = np.concatenate((X, np.ones((X.shape[0], 1), dtype=X.dtype)), axis=1)
         self.iteration_count = []
         for label in range(0, self.k):
-            # Calculate the parametr Q for overrelaxation
+            # Calculate the parameter Q for overrelaxation
             H_k = self.get_x_class_instanes(X_bias, Y, label)
             G_k = self.get_x_noclass_instanes(X_bias, Y, label)
-            Q_knoPrefixGk = np.dot(np.linalg.inv(np.dot(H_k.T, H_k) + self.lambda_param * np.identity(m + 1)), G_k.T)
-            Q_k = np.dot(G_k,Q_knoPrefixGk)
-            Q_k = (Q_k + Q_k.T)/2   #It's step for succes requirments from quadratic problem
+            Q_knoPrefixGk = inv((H_k.T).dot(H_k) + self.lambda_param * np.identity(m + 1)).dot(G_k.T)
+            Q_k = G_k.dot(Q_knoPrefixGk)
+            # It's step for success requirements from quadratic problem - symetric matrix
+            Q_k = (Q_k + Q_k.T)/2.0
 
             # Calculate other
             alpha_k = self.__successive_overrelaxation(self.sor_omega, Q_k)
-            self.wk_bk[label] = (-np.dot(Q_knoPrefixGk,alpha_k)).T #TODO: check it
-        self.wk_norms = np.linalg.norm(self.wk_bk, axis=1)
+            self.wk_bk[label] = (-np.dot(Q_knoPrefixGk,alpha_k)).T
+
+            # Garbage Collect
+            H_k = None
+            G_k = None
+            Q_knoPrefixGk = None
+            Q_k = None
+        self.wk_norms = norm(self.wk_bk, axis=1)
         self.treshold = 1.0 / np.max(self.wk_norms)
 
     def __successive_overrelaxation(self, omegaW, Q):
@@ -55,19 +64,17 @@ class MLTSVM(MLClassifierBase):
         last_alfa_norm_change = -1
 
         nr_iter = 0
-        max_nr_iter = 500
         while is_not_enough:  # do while
             oldAlpha = oldnew_alpha
             for j in range(small_l - 1, -1, -1):  # It's from last alpha to first
-                oldnew_alpha[j] = oldAlpha[j] - omegaW * D_inv[j] * (np.dot(Q[j, :].T, oldnew_alpha) - 1)
+                oldnew_alpha[j] = oldAlpha[j] - omegaW * D_inv[j] * (Q[j, :].T.dot(oldnew_alpha) - 1)
             oldnew_alpha = oldnew_alpha.clip(0.0, self.c_k)
-            alfa_norm_change = np.linalg.norm(oldnew_alpha - oldAlpha)
-            #print alfa_norm_change
+            alfa_norm_change = norm(oldnew_alpha - oldAlpha)
 
             if not was_going_down and last_alfa_norm_change > alfa_norm_change:
                 was_going_down = True
             is_not_enough = alfa_norm_change > self.threshold and\
-                            nr_iter < max_nr_iter\
+                            nr_iter < self.max_sor_iteration \
                             and ((not was_going_down) or last_alfa_norm_change > alfa_norm_change) # TODO: and any(oldnew_alpha != oldAlpha)
 
             last_alfa_norm_change = alfa_norm_change
@@ -78,8 +85,8 @@ class MLTSVM(MLClassifierBase):
     def predict(self, X):
         e = np.ones((X.shape[0], 1), dtype=X.dtype)
         X_with_bias = np.concatenate((X, e), axis=1)  # horizontaly
-        wk_norms_multiplicated = self.wk_norms[np.newaxis, :]  # chage to form [[wk1, wk2, ..., wkk]]
-        all_distances = (-np.dot(X_with_bias,self.wk_bk.T)) / wk_norms_multiplicated
+        wk_norms_multiplicated = self.wk_norms[np.newaxis, :]  # change to form [[wk1, wk2, ..., wkk]]
+        all_distances = (-X_with_bias.dot(self.wk_bk.T)) / wk_norms_multiplicated
         predicted_y = np.where(all_distances < self.treshold, 1, 0)
         # TODO: add label if no labels is in row
         return predicted_y
