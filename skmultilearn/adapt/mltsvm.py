@@ -8,9 +8,9 @@ from scipy.linalg import inv, norm
 
 
 class MLTSVM(MLClassifierBase):
-    def __init__(self, c_k, sor_omega =1.0, threshold = 1e-6, lambda_param=1.0, max_sor_iteration=500):
+    def __init__(self, c_k, sor_omega =1.0, threshold = 1e-6, lambda_param=1.0, max_iteration=500):
         super(MLClassifierBase, self).__init__()
-        self.max_sor_iteration = max_sor_iteration
+        self.max_sor_iteration = max_iteration
         self.threshold = threshold
         self.copyable_attrs = []
         self.lambda_param = lambda_param  # TODO: possibility to set-up different lambda to different class

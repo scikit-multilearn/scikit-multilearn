@@ -36,6 +36,8 @@ from libc.stdlib cimport qsort
 from libc.string cimport memcpy
 from libc.string cimport memset
 
+from scipy.sparse import csc_matrix
+
 import numpy as np
 cimport numpy as np
 np.import_array()
@@ -63,7 +65,7 @@ cdef inline void _init_split(SplitRecord* self, SIZE_t start_pos) nogil:
     self.threshold = 0.
     self.improvement = -INFINITY
 
-cdef class BaseForPCTSplitter(Splitter):
+cdef class PCTSplitterBase(Splitter):
     cdef PCTCiterionBase pct_criterium
     cdef double* pct_improvements ##TODO:Add stict safe mode for it, because It can be change
     cdef double* pct_best_improvements ##TODO:Add stict safe mode for it
@@ -85,7 +87,7 @@ cdef class BaseForPCTSplitter(Splitter):
         free(self.pct_improvements)
         free(self.pct_best_improvements)
 
-cdef class BaseDenseSplitter(BaseForPCTSplitter):
+cdef class BaseDenseSplitter(PCTSplitterBase):
     cdef DTYPE_t* X
     cdef SIZE_t X_sample_stride
     cdef SIZE_t X_feature_stride
@@ -729,7 +731,7 @@ cdef class RandomSplitter(BaseDenseSplitter):
         split[0] = best
         n_constant_features[0] = n_total_constants
 ################
-cdef class BaseSparseSplitter(Splitter):
+cdef class BaseSparseSplitter(PCTSplitterBase):
     # The sparse splitter works only with csc sparse matrix format
     cdef DTYPE_t* X_data
     cdef INT32_t* X_indices
