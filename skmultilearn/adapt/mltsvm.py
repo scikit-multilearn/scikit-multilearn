@@ -13,10 +13,10 @@ class MLTSVM(MLClassifierBase):
         self.max_sor_iteration = max_iteration
         self.threshold = threshold
         self.copyable_attrs = []
-        self.lambda_param = lambda_param  # TODO: possibility to set-up different lambda to different class
+        self.lambda_param = lambda_param  # TODO: possibility to add different lambda to different labels
         self.c_k = c_k
         self.sor_omega = sor_omega
-        self.copyable_attrs = ['c_k','sor_omega','lambda_param', 'threshold'] # TODO: check completness
+        self.copyable_attrs = ['c_k','sor_omega','lambda_param', 'threshold', 'max_iteration']
 
     def get_x_class_instanes(self, X, Y, label_class):
         y_labels = Y[:, label_class] != 0
@@ -55,7 +55,7 @@ class MLTSVM(MLClassifierBase):
     def __successive_overrelaxation(self, omegaW, Q):
         # Initialization
         D = np.diag(Q)  # Only one dimension vector - is enough
-        D_inv = 1.0 / D  # D-1 simplify form, TODO: check if is correct
+        D_inv = 1.0 / D  # D-1 simplify form
         small_l = Q.shape[1]
         oldnew_alpha = np.zeros([small_l, 1])  # it's buffer
 
@@ -66,7 +66,7 @@ class MLTSVM(MLClassifierBase):
         nr_iter = 0
         while is_not_enough:  # do while
             oldAlpha = oldnew_alpha
-            for j in range(small_l - 1, -1, -1):  # It's from last alpha to first
+            for j in range(0,small_l):  # It's from last alpha to first
                 oldnew_alpha[j] = oldAlpha[j] - omegaW * D_inv[j] * (Q[j, :].T.dot(oldnew_alpha) - 1)
             oldnew_alpha = oldnew_alpha.clip(0.0, self.c_k)
             alfa_norm_change = norm(oldnew_alpha - oldAlpha)
@@ -75,7 +75,8 @@ class MLTSVM(MLClassifierBase):
                 was_going_down = True
             is_not_enough = alfa_norm_change > self.threshold and\
                             nr_iter < self.max_sor_iteration \
-                            and ((not was_going_down) or last_alfa_norm_change > alfa_norm_change) # TODO: and any(oldnew_alpha != oldAlpha)
+                            and ((not was_going_down) or last_alfa_norm_change > alfa_norm_change)
+                            # TODO: maybe add any(oldnew_alpha != oldAlpha)
 
             last_alfa_norm_change = alfa_norm_change
             nr_iter+=1
@@ -88,5 +89,5 @@ class MLTSVM(MLClassifierBase):
         wk_norms_multiplicated = self.wk_norms[np.newaxis, :]  # change to form [[wk1, wk2, ..., wkk]]
         all_distances = (-X_with_bias.dot(self.wk_bk.T)) / wk_norms_multiplicated
         predicted_y = np.where(all_distances < self.treshold, 1, 0)
-        # TODO: add label if no labels is in row
+        # TODO: It's possible to add condition to: add label if no labels is in row.
         return predicted_y
