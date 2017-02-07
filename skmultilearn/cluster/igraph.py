@@ -40,21 +40,21 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
             raise ValueError("Weighted needs to be a boolean")
 
     def fit_predict(self, X, y):
-    """Performs clustering on y and returns list of label lists
+        """Performs clustering on y and returns list of label lists
 
-    Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
+        Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
 
-    Parameters
-    ----------
-    X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
-    y : sparse matrix (n_samples, n_labels), label space
+        Parameters
+        ----------
+        X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
+        y : sparse matrix (n_samples, n_labels), label space
 
-    Returns
-    -------
-    partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
+        Returns
+        -------
+        partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
 
 
-    """
+        """
         self.generate_coocurence_adjacency_matrix(y)
 
         if self.is_weighted:
