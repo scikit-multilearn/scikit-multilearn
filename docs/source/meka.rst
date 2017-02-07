@@ -23,7 +23,7 @@ To use the interface class start with importing skmultilearn's module, then crea
 .. code-block:: python
 
     from sklearn.datasets import make_multilabel_classification
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
     from sklearn.metrics import hamming_loss
     from skmultilearn.ext import Meka
 
