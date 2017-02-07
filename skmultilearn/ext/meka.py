@@ -10,8 +10,7 @@ from ..dataset import Dataset
 
 
 class Meka(MLClassifierBase):
-    """.. autoclass:: skmultilearn.ext.Meka
-        Runs the MEKA classifier
+    """ Runs the MEKA classifier
 
         Parameters
         ----------
