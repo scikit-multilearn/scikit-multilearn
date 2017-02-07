@@ -21,13 +21,11 @@ class ClassifierChain(ProblemTransformationBase):
         y = self.ensure_output_format(
             y, sparse_format='csc', enforce_sparse=True)
         self.label_count = y.shape[1]
-        print self.label_count
         self.classifiers = [None for x in xrange(self.label_count)]
 
         for label in xrange(self.label_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, label, axis=1)
-            print label, X_extended.shape
 
             self.classifiers[label] = classifier.fit(self.ensure_input_format(
                 X_extended), self.ensure_output_format(y_subset))
@@ -40,7 +38,6 @@ class ClassifierChain(ProblemTransformationBase):
             X, sparse_format='csc', enforce_sparse=True)
         prediction = None
         for label in xrange(self.label_count):
-            print label, X_extended.shape
             prediction = self.classifiers[label].predict(
                 self.ensure_input_format(X_extended))
             prediction = self.ensure_output_format(
@@ -48,3 +45,26 @@ class ClassifierChain(ProblemTransformationBase):
             X_extended = hstack([X_extended, prediction.T]).tocsc()
 
         return X_extended[:, -self.label_count:]
+
+    def predict_proba(self, X):
+        """Predict probabilities for labels for `X`, see base method's documentation."""
+        X_extended = self.ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
+        prediction = None
+        results = []
+        for label in xrange(self.label_count):
+            prediction = self.classifiers[label].predict(
+                self.ensure_input_format(X_extended))
+
+            prediction = self.ensure_output_format(
+                prediction, sparse_format='csc', enforce_sparse=True)
+
+            prediction_proba = self.classifiers[label].predict_proba(
+                self.ensure_input_format(X_extended))
+
+            prediction_proba = self.ensure_output_format(
+                prediction_proba, sparse_format='csc', enforce_sparse=True)[:, 1]
+
+            X_extended = hstack([X_extended, prediction.T]).tocsc()
+            results.append(prediction_proba)
+
+        return hstack(results)
