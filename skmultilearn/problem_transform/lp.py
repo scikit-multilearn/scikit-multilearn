@@ -53,6 +53,19 @@ class LabelPowerset(ProblemTransformationBase):
 
         return result
 
+    def predict_proba(self, X):
+        """Predict probabilities for labels for `X`, see base method's documentation."""
+        lp_prediction = self.classifier.predict_proba(self.ensure_input_format(X))
+        result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='float')
+        for row in xrange(len(lp_prediction)):
+            assignment = lp_prediction[row]
+            for combination_id in xrange(len(assignment)):
+                for label in self.reverse_combinations[combination_id]:
+                    result[row, label] += assignment[combination_id]
+
+        return result
+
+
     def transform(self, y):
         """ Transform the label set to a multi-class problem """
         return map(lambda x: int("".join(map(str, x))), y)

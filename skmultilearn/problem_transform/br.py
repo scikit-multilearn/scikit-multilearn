@@ -42,3 +42,13 @@ class BinaryRelevance(ProblemTransformationBase):
             return hstack(predictions)
         else:
             return coo_matrix(predictions).T
+
+    def predict_proba(self, X):
+        """Predict probabilities for labels for `X`, see base method's documentation."""
+        predictions = [self.classifiers[label].predict_proba(
+            self.ensure_input_format(X))[:, 1] for label in xrange(self.model_count)]
+
+        if isinstance(self.classifier, ProblemTransformationBase):
+            return hstack(predictions)
+        else:
+            return coo_matrix(predictions).T

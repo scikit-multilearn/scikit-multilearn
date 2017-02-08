@@ -29,8 +29,9 @@ class MLARAM(MLClassifierBase):
     require_dense : boolean
         Whether the base classifier requires input as dense arrays, False by default"""
     BRIEFNAME = "ML-ARAM"
-    def __init__(self, vigilance=0.9,threshold=0.02, tneurons=None, tdebug=0, require_dense = True):
-        super(MLARAM, self).__init__(None, require_dense)
+
+    def __init__(self, vigilance=0.9,threshold=0.02, tneurons=None):
+        super(MLARAM, self).__init__()
         
         if tneurons!=None:
             self.neurons=tneurons
@@ -41,14 +42,14 @@ class MLARAM(MLClassifierBase):
         self.threshold=threshold
 	
         self.allneu=""
-        self.debug=tdebug
         self.online=1
         self.alpha=0.0000000000001
-        self.copyable_attrs = ["classifier", "require_dense", "vigilance","threshold","online"]
+        self.copyable_attrs += ["neurons", "labels", "vigilance","threshold", "allneu", "online", "alpha"]
         
     def reset(self):
         self.labels=[]
         self.neurons=[]
+
     #@profile
     def fit(self,X,y):
         
@@ -63,21 +64,15 @@ class MLARAM(MLClassifierBase):
             X=numpy.multiply(X-xmi,1/(xma-xmi))
             
         if len(self.neurons) == 0:
-            ones = scipy.ones(X[0].shape);
+            ones = scipy.ones(X[0].shape)
             self.neurons.append(Neuron(numpy.concatenate((X[0], ones - X[0]), ismatrix),y[0]))
             startc = 1
             labdict[y[0].nonzero()[0].tostring()] = [0]
         else:
             startc = 0
         newlabel = 0
-        import time
-        time1=time.time()
-        ones = scipy.ones(X[0].shape);
+        ones = scipy.ones(X[0].shape)
         for i1,f1 in enumerate(X[startc: ], startc):
-
-            if i1%1000==0:
-                print i1,X.shape[0],len(self.neurons), newlabel, "time ",time.time()-time1
-                time1=time.time()
             found=0
             if scipy.sparse.issparse(f1):
                 f1=f1.todense()
@@ -165,15 +160,7 @@ class MLARAM(MLClassifierBase):
         allneusum=allneu.sum(1)+self.alpha
 
 
-        import time
-        time1=time.time()
         for i1,f1 in enumerate(X):
-            if self.debug==1:
-                print i1,
-            if (i1%10)+1==10:
-                print i1,time.time()-time1
-                time1=time.time()
-
             if scipy.sparse.issparse(f1):
 
                 f1 = f1.todense()
@@ -191,7 +178,7 @@ class MLARAM(MLClassifierBase):
 
             
 
-            largest_activ = 1;
+            largest_activ = 1
 
             par_t=self.threshold
             for i in range(1, len(self.neurons)):
@@ -199,9 +186,7 @@ class MLARAM(MLClassifierBase):
                 if activ_change >par_t*diff_act:
                     break
 
-                largest_activ +=  1;
-
-
+                largest_activ +=  1
 
             rbsum = sum([activity[k] for k in sortedact[0:largest_activ]])
 

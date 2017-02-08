@@ -12,11 +12,6 @@ class ClustererBaseTests(unittest.TestCase):
         self.assertRaises(
             ValueError, IGraphLabelCooccurenceClusterer, 'foobar', False)
 
-    def test_weight_is_not_bool_exception(self):
-        method = IGraphLabelCooccurenceClusterer.METHODS.keys()[0]
-        self.assertRaises(
-            ValueError, IGraphLabelCooccurenceClusterer, method, 'not bool')
-
     def test_actually_works_on_proper_params(self):
         X, y = make_multilabel_classification(
             sparse=True, return_indicator='sparse')
@@ -24,11 +19,13 @@ class ClustererBaseTests(unittest.TestCase):
 
         for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
             for weighted in [True, False]:
-                clusterer = IGraphLabelCooccurenceClusterer(method, weighted)
-                self.assertEqual(clusterer.method, method)
-                self.assertEqual(clusterer.is_weighted, weighted)
-                partition = clusterer.fit_predict(X, y)
-                self.assertIsInstance(partition, np.ndarray)
+                for include_self_edges in [True, False]:
+                    clusterer = IGraphLabelCooccurenceClusterer(method, weighted=weighted,
+                                                                include_self_edges=include_self_edges)
+                    self.assertEqual(clusterer.method, method)
+                    self.assertEqual(clusterer.is_weighted, weighted)
+                    partition = clusterer.fit_predict(X, y)
+                    self.assertIsInstance(partition, np.ndarray)
 
 
 if __name__ == '__main__':

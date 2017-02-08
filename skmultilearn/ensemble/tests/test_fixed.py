@@ -1,13 +1,10 @@
 import unittest
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
 
 from skmultilearn.ensemble.fixed import FixedLabelPartitionClassifier
 from skmultilearn.problem_transform.lp import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
-from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import SVC
-from sklearn.datasets import make_multilabel_classification
-from sklearn.cross_validation import train_test_split
-from sklearn.utils.estimator_checks import check_estimator
 
 
 class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):

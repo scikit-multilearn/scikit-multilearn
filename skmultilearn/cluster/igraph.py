@@ -16,6 +16,9 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     weighted: boolean
             Decide whether to generate a weighted or unweighted graph.
 
+    include_self_edges : boolean
+            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
+
     """
 
     METHODS = {
@@ -27,34 +30,31 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
         'walktrap': lambda graph, w = None: np.array(graph.community_walktrap(weights=w).as_clustering()),
     }
 
-    def __init__(self, method=None, weighted=None):
-        super(IGraphLabelCooccurenceClusterer, self).__init__()
+    def __init__(self, method=None, weighted=None, include_self_edges = None):
+        super(IGraphLabelCooccurenceClusterer, self).__init__(weighted=weighted, include_self_edges=include_self_edges)
         self.method = method
-        self.is_weighted = weighted
 
         if method not in IGraphLabelCooccurenceClusterer.METHODS:
             raise ValueError(
                 "{} not a supported igraph community detection method".format(method))
 
-        if weighted not in [True, False]:
-            raise ValueError("Weighted needs to be a boolean")
 
     def fit_predict(self, X, y):
-    """Performs clustering on y and returns list of label lists
+        """Performs clustering on y and returns list of label lists
 
-    Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
+        Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
 
-    Parameters
-    ----------
-    X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
-    y : sparse matrix (n_samples, n_labels), label space
+        Parameters
+        ----------
+        X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
+        y : sparse matrix (n_samples, n_labels), label space
 
-    Returns
-    -------
-    partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
+        Returns
+        -------
+        partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
 
 
-    """
+        """
         self.generate_coocurence_adjacency_matrix(y)
 
         if self.is_weighted:

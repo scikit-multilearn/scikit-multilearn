@@ -7,10 +7,6 @@ from skmultilearn.cluster.graphtool import GraphToolCooccurenceClusterer
 
 class GraphtoolClustererBaseTests(unittest.TestCase):
 
-    def test_weight_is_not_bool_exception(self):
-        self.assertRaises(
-            ValueError, GraphToolCooccurenceClusterer, 'not bool', True)
-
     def test_allow_overlap_is_not_bool_exception(self):
         self.assertRaises(
             ValueError, GraphToolCooccurenceClusterer, True, 'not bool')
@@ -22,12 +18,14 @@ class GraphtoolClustererBaseTests(unittest.TestCase):
 
         for allow_overlap in [True, False]:
             for weighted in [True, False]:
-                clusterer = GraphToolCooccurenceClusterer(
-                    weighted=weighted, allow_overlap=allow_overlap)
-                self.assertEqual(clusterer.allow_overlap, allow_overlap)
-                self.assertEqual(clusterer.is_weighted, weighted)
-                partition = clusterer.fit_predict(X, y)
-                self.assertIsInstance(partition, np.ndarray)
+                for include_self_edges in [True, False]:
+                    clusterer = GraphToolCooccurenceClusterer(
+                        weighted=weighted, allow_overlap=allow_overlap, include_self_edges=include_self_edges)
+                    self.assertEqual(clusterer.allow_overlap, allow_overlap)
+                    self.assertEqual(clusterer.is_weighted, weighted)
+                    self.assertEqual(clusterer.include_self_edges, include_self_edges)
+                    partition = clusterer.fit_predict(X, y)
+                    self.assertIsInstance(partition, np.ndarray)
 
 if __name__ == '__main__':
     unittest.main()
