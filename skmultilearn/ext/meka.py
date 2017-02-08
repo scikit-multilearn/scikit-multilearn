@@ -225,17 +225,18 @@ class Meka(MLClassifierBase):
                 '\n'))[0].split('(')[1].split('=')[1].split(')')[0]))
         self.predictions = self.output.split(predictions_split_head)[1].split(
             predictions_split_foot)[0].split('\n')[1:-1]
-        self.predictions = map(lambda z: map(lambda f: int(f.strip()),  z.split(',')), map(
-            lambda y: y.split(']')[0], map(lambda x: x.split('] [')[1], self.predictions)))
 
-        if self.verbosity == 6:
-            self.results = sparse.csr_matrix(self.predictions)
-        elif self.verbosity == 5:
-            self.results = sparse.lil_matrix(
-                (self.instance_count, self.label_count), dtype='int')
-            for row in xrange(self.instance_count):
-                for label in self.predictions[row]:
-                    self.results[row, label] = 1
+        self.predictions = map(lambda y: y.split(']')[0], map(lambda x: x.split('] [')[1], self.predictions))
+        self.predictions = map(lambda z: filter(lambda a: len(a) > 0, map(lambda f: f.strip(), z.split(','))), self.predictions)
+        self.predictions = map(lambda z: map(lambda a: int(a), z), self.predictions)
+
+        assert self.verbosity == 5
+
+        self.results = sparse.lil_matrix(
+            (self.instance_count, self.label_count), dtype='int')
+        for row in xrange(self.instance_count):
+            for label in self.predictions[row]:
+                self.results[row, label] = 1
 
         statistics = filter(lambda x: len(x) > 0 and '==' not in x, self.output.split(
             '== Evaluation Info')[1].split('\n'))
