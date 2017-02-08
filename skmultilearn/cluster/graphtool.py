@@ -18,16 +18,13 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
     """
 
-    def __init__(self, weighted=None, allow_overlap=False):
-        super(LabelCooccurenceClustererBase, self).__init__()
-        self.is_weighted = weighted
+    def __init__(self, weighted=None, include_self_edges = None, allow_overlap=None):
+        super(GraphToolCooccurenceClusterer, self).__init__(weighted=weighted, include_self_edges=include_self_edges)
+
         self.allow_overlap = allow_overlap
 
-        if weighted not in [True, False]:
-            raise ValueError("Weighted needs to be a boolean")
-
         if allow_overlap not in [True, False]:
-            raise ValueError("Weighted needs to be a boolean")
+            raise ValueError("allow_overlap needs to be a boolean")
 
     def generate_coocurence_graph(self):
         """ Constructs a graph tool Graph object representing the label coocurence_graph
@@ -77,7 +74,7 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         self.generate_coocurence_graph()
 
         d = gt.minimize_blockmodel_dl(
-            self.coocurence_graph, overlap=self.allow_overlap, ec=self.weights)
+            self.coocurence_graph, overlap=self.allow_overlap) #, ec=self.weights), broken in graphtool for now
         A = d.get_blocks().a
 
         self.label_sets = [[] for i in xrange(d.B)]

@@ -17,16 +17,26 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
     Parameters
     ----------
 
-    classifier : scikit classifier type
-        The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
-
     weighted: boolean
             Decide whether to generate a weighted or unweighted graph.
 
+    include_self_edges : boolean
+            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
+
     """
 
-    def __init__(self):
+    def __init__(self, weighted=None, include_self_edges = None):
         super(LabelCooccurenceClustererBase, self).__init__()
+
+        self.is_weighted = weighted
+        self.include_self_edges = include_self_edges
+
+        if weighted not in [True, False]:
+            raise ValueError("Weighted needs to be a boolean")
+
+        if include_self_edges not in [True, False]:
+            raise ValueError("Decision about whether to include self edges needs to be a boolean")
+
 
     def generate_coocurence_adjacency_matrix(self, y):
         """This function generates a weighted or unweighted cooccurence graph based on input binary label vectors 
@@ -44,11 +54,15 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
         """
         label_data = get_matrix_in_format(y, 'lil')
         self.label_count = label_data.shape[1]
-
         edge_map = {}
 
         for row in label_data.rows:
-            pairs = [(a, b) for b in row for a in row if a < b]
+            pairs = None
+            if self.include_self_edges:
+                pairs = [(a, b) for b in row for a in row if a <= b]
+            else:
+                pairs = [(a, b) for b in row for a in row if a < b]
+
             for p in pairs:
                 if p not in edge_map:
                     edge_map[p] = 1.0
