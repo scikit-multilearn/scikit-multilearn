@@ -91,3 +91,11 @@ Remember that if you use MEKA, apart from citing scikit-multilearn, you should a
         address = {New York, NY, USA},
     } 
 
+
+Handling errors
+---------------
+MEKA is handled through a subprocess and while MEKA is a wonderful library, its error reporting system is more targeted at
+reading output in the terminal. In case of error we wull issue an exception with the output MEKA provided. You can always
+check the output / errors of MEKA as they are stored in the classes's ``output`` and ``error`` properties. For example in
+the above example where the MEKA classifier instance is named ``meka`` - you can access the properties under ``meka.output``
+or ``meka.error``.

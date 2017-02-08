@@ -94,7 +94,7 @@ class Meka(MLClassifierBase):
         self.output, self.error = pipes.communicate()
 
         if pipes.returncode != 0:
-            raise Exception, self.output
+            raise Exception, self.output + self.error
 
     def fit(self, X, y):
         self.clean()
