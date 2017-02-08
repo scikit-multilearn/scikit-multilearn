@@ -7,7 +7,22 @@ import scipy.sparse as sparse
 
 
 class MLkNN(MLClassifierBase):
-    """k Nearest Neighbours multi-label classifier."""
+    """kNN classification method adapted for multi-label classification
+
+    Parameters
+    ----------
+
+    k : integer
+        number of neighbours of each input instance to take into account
+
+    s: boolean
+            the smoothing parameter
+
+    ignore_first_neighbours : integer
+            ability to ignore first N neighbours, useful for comparing with other classification software, if you
+            don't know what it does, the default is safe, see https://github.com/scikit-multilearn/scikit-multilearn/issues/22
+
+    """
     BRIEFNAME = "MLkNN"
 
     def __init__(self, k=10, s=1.0, ignore_first_neighbours=0):
