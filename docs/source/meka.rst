@@ -8,14 +8,16 @@ In order to use the python interface to `MEKA <http://meka.sourceforge.net/>`_  
 
 An example path to java might be: ``/usr/bin/java``, an example classpath to meka can be: ``/opt/meka-1.9/lib/``.
 
-**The current version supports meka 1.9**
+**The current version supports meka 1.9.1+**
+
+The currently officially released MEKA version is 1.9.0 from 2015 and has a `bug <https://github.com/Waikato/meka/issues/1>`_ that prevents the wrapper from working. Please `download a compiled 1.9.1+ snapshot <https://adams.cms.waikato.ac.nz/snapshots/meka/>'_ instead of using the 1.9.0 version.
 
 Note that you will need to have ``liac-arff`` installed if you want to use the MEKA wrapper, you can get them using: ``pip install liac-arff``.
 
 
 Using the wrapper
 --------------------
-Starting from scikit-multilearn ``0.0.2`` the meka wrapper is available from ``skmultilearn.ext`` (ext as in external) and is a fully scikit-compatible multi-label classifier.
+Starting from scikit-multilearn ``0.0.2`` the meka wrapper is available from ``skmultilearn.ext`` (ext as in external) and is a fully scikit-compatible multi-label classifier. Please note that rel
 
 To use the interface class start with importing skmultilearn's module, then create an object of the ``Meka`` class using the constructor and run the interface such as in the example:
 
@@ -94,8 +96,4 @@ Remember that if you use MEKA, apart from citing scikit-multilearn, you should a
 
 Handling errors
 ---------------
-MEKA is handled through a subprocess and while MEKA is a wonderful library, its error reporting system is more targeted at
-reading output in the terminal. In case of error we wull issue an exception with the output MEKA provided. You can always
-check the output / errors of MEKA as they are stored in the classes's ``output`` and ``error`` properties. For example in
-the above example where the MEKA classifier instance is named ``meka`` - you can access the properties under ``meka.output``
-or ``meka.error``.
+MEKA is handled through a subprocess and while MEKA is a wonderful library, its error reporting system is more targeted at reading output in the terminal. In case of error we wull issue an exception with the output MEKA provided. You can always check the output / errors of MEKA as they are stored in the classes's ``output`` and ``error`` properties. For example in the above example where the MEKA classifier instance is named ``meka`` - you can access the properties under ``meka.output``or ``meka.error``.
