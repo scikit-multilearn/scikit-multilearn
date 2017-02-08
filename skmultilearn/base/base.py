@@ -215,6 +215,9 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         valid_params = self.get_params(deep=True)
 
         for parameter, value in parameters.items():
+            # this is because params stored in embedded estimators are separated by __
+            # http://stackoverflow.com/questions/12632992/gridsearch-for-an-estimator-inside-a-onevsrestclassifier/12637528#12637528
+
             split = parameter.split('__', 1)
 
             if len(split) > 1:
