@@ -214,30 +214,38 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         valid_params = self.get_params(deep=True)
 
-        for parameter, value in parameters.items():
-            # this is because params stored in embedded estimators are separated by __
-            # http://stackoverflow.com/questions/12632992/gridsearch-for-an-estimator-inside-a-onevsrestclassifier/12637528#12637528
 
-            split = parameter.split('__', 1)
+        parameters_current_level = filter(lambda x: '__' not in x, parameters)
+        for parameter, value in parameters_current_level:
+            value = parameters[parameter]
 
-            if len(split) > 1:
-                sub_obj_name, sub_param = split
-
-                if sub_obj_name not in valid_params:
-                    raise ValueError('Invalid parameter %s for estimator %s. '
-                                     'Check the list of available parameters '
-                                     'with `estimator.get_params().keys()`.' %
-                                     (sub_obj_name, self))
-
-                sub_object = valid_params[sub_obj_name]
-                sub_object.set_params(**{sub_param: value})
+            if parameter in valid_params:
+                setattr(self, parameter, value)
             else:
-                if parameter in valid_params:
-                    setattr(self, parameter, value)
-                else:
-                    raise ValueError('Invalid parameter %s for estimator %s. '
-                                     'Check the list of available parameters '
-                                     'with `estimator.get_params().keys()`.' %
-                                     (parameter, self))
+                raise ValueError('Invalid parameter %s for estimator %s. '
+                                 'Check the list of available parameters '
+                                 'with `estimator.get_params().keys()`.' %
+                                 (parameter, self))
+
+
+        parameters_below_current_level = filter(lambda x: '__' in x, parameters)
+        parameters_grouped_by_current_level = {object : {} for object in valid_params}
+
+        for parameter in parameters_below_current_level:
+            object_name, sub_param = parameter.split('__', 1)
+
+            if object_name not in parameters_grouped_by_current_level:
+                raise ValueError('Invalid parameter %s for estimator %s. '
+                                 'Check the list of available parameters '
+                                 'with `estimator.get_params().keys()`.' %
+                                 (object_name, self))
+
+            value = parameters[parameter]
+            parameters_grouped_by_current_level[object_name][sub_param] = value
+
+        # parameters_grouped_by_current_level groups valid parameters for subojects
+        for object_name, sub_params in parameters_grouped_by_current_level.iteritems():
+            sub_object = valid_params[sub_obj_name]
+            sub_object.set_params(sub_params)
 
         return self
