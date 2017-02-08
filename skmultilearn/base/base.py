@@ -224,7 +224,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                     raise ValueError('Invalid parameter %s for estimator %s. '
                                      'Check the list of available parameters '
                                      'with `estimator.get_params().keys()`.' %
-                                     (name, self))
+                                     (sub_obj_name, self))
 
                 sub_object = valid_params[sub_obj_name]
                 sub_object.set_params(**{sub_param: value})
@@ -235,6 +235,6 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                     raise ValueError('Invalid parameter %s for estimator %s. '
                                      'Check the list of available parameters '
                                      'with `estimator.get_params().keys()`.' %
-                                     (name, self))
+                                     (parameter, self))
 
         return self
