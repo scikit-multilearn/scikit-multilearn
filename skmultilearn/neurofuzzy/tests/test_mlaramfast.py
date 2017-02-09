@@ -1,6 +1,6 @@
 import unittest
 
-from skmultilearn.neurofuzzy.MLARAMfast import MLARAM
+from skmultilearn.neurofuzzy import MLARAM
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 

@@ -1,12 +1,11 @@
 import unittest
 from sklearn.datasets import make_multilabel_classification
-from sklearn.model_selection import train_test_split
-
-from skmultilearn.dataset import Dataset
-from skmultilearn.ensemble.rakeld import RakelD
-from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
+
+from skmultilearn.ensemble.rakeld import RakelD
+from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset
+
 
 class MLClassifierBaseTests(unittest.TestCase):
 

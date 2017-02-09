@@ -2,7 +2,7 @@ import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
-from skmultilearn.problem_transform.br import BinaryRelevance
+from skmultilearn.problem_transform import BinaryRelevance
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 

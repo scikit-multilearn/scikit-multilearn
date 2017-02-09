@@ -1,6 +1,6 @@
 import unittest
 import scipy.sparse as sp
-from skmultilearn.cluster.base import LabelSpaceClustererBase, LabelCooccurenceClustererBase
+from skmultilearn.cluster import LabelSpaceClustererBase, LabelCooccurenceClustererBase
 
 
 class ClustererBaseTests(unittest.TestCase):

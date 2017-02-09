@@ -2,7 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 import unittest
 from sklearn.datasets import make_multilabel_classification
-from skmultilearn.cluster.graphtool import GraphToolCooccurenceClusterer
+from skmultilearn.cluster import GraphToolCooccurenceClusterer
 
 
 class GraphtoolClustererBaseTests(unittest.TestCase):

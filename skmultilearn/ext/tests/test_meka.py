@@ -1,6 +1,6 @@
 import unittest
 
-from skmultilearn.ext.meka import Meka
+from skmultilearn.ext import Meka
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 

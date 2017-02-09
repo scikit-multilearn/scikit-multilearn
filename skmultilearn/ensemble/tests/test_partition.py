@@ -2,9 +2,9 @@ import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
-from skmultilearn.cluster.igraph import IGraphLabelCooccurenceClusterer
-from skmultilearn.ensemble.partition import LabelSpacePartitioningClassifier
-from skmultilearn.problem_transform.lp import LabelPowerset
+from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
+from skmultilearn.ensemble import LabelSpacePartitioningClassifier
+from skmultilearn.problem_transform import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 

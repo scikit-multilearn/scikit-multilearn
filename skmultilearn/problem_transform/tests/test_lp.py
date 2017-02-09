@@ -2,7 +2,7 @@ import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
-from skmultilearn.problem_transform.lp import LabelPowerset
+from skmultilearn.problem_transform import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 
