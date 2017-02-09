@@ -4,15 +4,19 @@ Using the meka wrapper
 
 Setting up MEKA
 ---------------
-In order to use the python interface to `MEKA <http://meka.sourceforge.net/>`_  you need to have JAVA and MEKA installed. Paths to both are passed to the class's constructor. To set up MEKA download the ``meka-<version>-realease.zip`` from `MEKA's sourceforge page <https://sourceforge.net/projects/meka/>`_, unzip it to ``<MEKA_DIR>`` and use ``<MEKA_DIR>/lib`` as the MEKA classpath for the constructor.
-
-An example path to java might be: ``/usr/bin/java``, an example classpath to meka can be: ``/opt/meka-1.9/lib/``.
+In order to use the python interface to `MEKA <http://meka.sourceforge.net/>`_  you need to have JAVA and MEKA installed. Paths to both are passed to the class's constructor.
 
 **The current version supports meka 1.9.1+**
 
-The currently officially released MEKA version is 1.9.0 from 2015 and has a `bug <https://github.com/Waikato/meka/issues/1>`_ that prevents the wrapper from working. Please `download a compiled 1.9.1+ snapshot <https://adams.cms.waikato.ac.nz/snapshots/meka/>'_ instead of using the 1.9.0 version.
+The currently officially released MEKA version is 1.9.0 from 2015 and has a `bug <https://github.com/Waikato/meka/issues/1>`_
+that prevents the wrapper from working. Please `download a compiled 1.9.1+ snapshot <https://adams.cms.waikato.ac.nz/snapshots/meka/>`_
+instead of using the 1.9.0 version, unzip it to ``<MEKA_DIR>`` and use ``<MEKA_DIR>/lib/`` as the MEKA classpath for the constructor.
 
 Note that you will need to have ``liac-arff`` installed if you want to use the MEKA wrapper, you can get them using: ``pip install liac-arff``.
+
+An example path to java might be: ``/usr/bin/java``, an example classpath to meka can be: ``/opt/meka-1.9.1-SNAPSHOT/lib/``.
+In Python 2.7 the pip package ``whichcraft`` is used to detect the location of java executables if no path is provided to the constructor.
+You can install it via ``pip install whichcraft``. In Python 3 ``whichcraft`` is not used.
 
 
 Using the wrapper
