@@ -44,6 +44,7 @@ Contents:
    meka
    base
    clusterer
+   model_estimation
    api/modules
 
    changes

@@ -216,7 +216,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
 
         parameters_current_level = filter(lambda x: '__' not in x, parameters)
-        for parameter, value in parameters_current_level:
+        for parameter in parameters_current_level:
             value = parameters[parameter]
 
             if parameter in valid_params:
@@ -243,9 +243,12 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             value = parameters[parameter]
             parameters_grouped_by_current_level[object_name][sub_param] = value
 
+        valid_params = self.get_params(deep=True)
+
         # parameters_grouped_by_current_level groups valid parameters for subojects
         for object_name, sub_params in parameters_grouped_by_current_level.iteritems():
-            sub_object = valid_params[sub_obj_name]
-            sub_object.set_params(sub_params)
+            if len(sub_params) > 0:
+                sub_object = valid_params[object_name]
+                sub_object.set_params(**sub_params)
 
         return self
