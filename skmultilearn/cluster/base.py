@@ -1,3 +1,4 @@
+from builtins import object
 from ..utils import get_matrix_in_format
 
 

@@ -1,3 +1,6 @@
+from builtins import str
+from builtins import range
+from builtins import object
 import arff
 import bz2
 import pickle
@@ -116,9 +119,9 @@ class Dataset(object):
         y_prefix = 0
 
         x_attributes = [(u'X{}'.format(i), u'NUMERIC')
-                        for i in xrange(X.shape[1])]
-        y_attributes = [(u'y{}'.format(i), [unicode(0), unicode(1)])
-                        for i in xrange(y.shape[1])]
+                        for i in range(X.shape[1])]
+        y_attributes = [(u'y{}'.format(i), [str(0), str(1)])
+                        for i in range(y.shape[1])]
 
         if endian == "big":
             y_prefix = X.shape[1]
@@ -134,15 +137,15 @@ class Dataset(object):
             raise ValueError("Endian not in {big, little}")
 
         if save_sparse:
-            data = [{} for r in xrange(X.shape[0])]
+            data = [{} for r in range(X.shape[0])]
         else:
-            data = [[0 for c in xrange(X.shape[1] + y.shape[1])]
-                    for r in xrange(X.shape[0])]
+            data = [[0 for c in range(X.shape[1] + y.shape[1])]
+                    for r in range(X.shape[0])]
 
-        for keys, value in X.iteritems():
+        for keys, value in X.items():
             data[keys[0]][x_prefix + keys[1]] = value
 
-        for keys, value in y.iteritems():
+        for keys, value in y.items():
             data[keys[0]][y_prefix + keys[1]] = value
 
         dataset = {

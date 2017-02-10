@@ -1,3 +1,4 @@
+from builtins import range
 from .base import MLClassifierBase
 import copy
 import numpy as np
@@ -15,4 +16,4 @@ class RepeatClassifier(MLClassifierBase):
         return self
 
     def predict(self, X):
-        return np.array([np.copy(self.value_to_repeat) for x in xrange(len(X))])
+        return np.array([np.copy(self.value_to_repeat) for x in range(len(X))])

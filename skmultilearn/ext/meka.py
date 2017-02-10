@@ -1,4 +1,8 @@
 from __future__ import print_function
+from builtins import map
+from builtins import str
+from builtins import filter
+from builtins import range
 import subprocess
 import tempfile
 import shlex
@@ -216,8 +220,7 @@ class Meka(MLClassifierBase):
         predictions_split_foot = '|==========='
 
         if self.label_count is None:
-            self.label_count = map(lambda y: int(y.split(')')[1].strip()), filter(
-                lambda x: 'Number of labels' in x, self.output.split('\n')))[0]
+            self.label_count = map(lambda y: int(y.split(')')[1].strip()), [x for x in self.output.split('\n') if 'Number of labels' in x])[0]
 
         if self.instance_count is None:
             self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split(
@@ -225,30 +228,29 @@ class Meka(MLClassifierBase):
         self.predictions = self.output.split(predictions_split_head)[1].split(
             predictions_split_foot)[0].split('\n')[1:-1]
 
-        self.predictions = map(lambda y: y.split(']')[0], map(lambda x: x.split('] [')[1], self.predictions))
-        self.predictions = map(lambda z: filter(lambda a: len(a) > 0, map(lambda f: f.strip(), z.split(','))), self.predictions)
-        self.predictions = map(lambda z: map(lambda a: int(a), z), self.predictions)
+        self.predictions = [y.split(']')[0] for y in [x.split('] [')[1] for x in self.predictions]]
+        self.predictions = [[a for a in [f.strip() for f in z.split(',')] if len(a) > 0] for z in self.predictions]
+        self.predictions = [[int(a) for a in z] for z in self.predictions]
 
         assert self.verbosity == 5
 
         self.results = sparse.lil_matrix(
             (self.instance_count, self.label_count), dtype='int')
-        for row in xrange(self.instance_count):
+        for row in range(self.instance_count):
             for label in self.predictions[row]:
                 self.results[row, label] = 1
 
-        statistics = filter(lambda x: len(x) > 0 and '==' not in x, self.output.split(
-            '== Evaluation Info')[1].split('\n'))
-        statistics = filter(lambda y: '  ' in y, map(
-            lambda z: z.strip(), statistics))
-        array_data = filter(lambda z: '[' in z, statistics)
-        non_array_data = filter(lambda z: '[' not in z, statistics)
+        statistics = [x for x in self.output.split(
+            '== Evaluation Info')[1].split('\n') if len(x) > 0 and '==' not in x]
+        statistics = [y for y in [z.strip() for z in statistics] if '  ' in y]
+        array_data = [z for z in statistics if '[' in z]
+        non_array_data = [z for z in statistics if '[' not in z]
 
         self.statistics = {}
         for row in non_array_data:
             r = row.strip().split('  ')
-            r = filter(lambda z: len(z) > 0, r)
-            r = map(lambda z: z.strip(), r)
+            r = [z for z in r if len(z) > 0]
+            r = [z.strip() for z in r]
             if len(r) < 2:
                 continue
             try:
@@ -261,10 +263,10 @@ class Meka(MLClassifierBase):
 
         for row in array_data:
             r = row.strip().split('[')
-            r = map(lambda z: z.strip(), r)
+            r = [z.strip() for z in r]
             r[1] = r[1].replace(', ', ' ').replace(
                 ',', '.').replace(']', '').split(' ')
-            r[1] = filter(lambda x: len(x) > 0, r[1])
+            r[1] = [x for x in r[1] if len(x) > 0]
             self.statistics[r[0]] = r[1]
 
         return self.results, self.statistics

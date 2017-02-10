@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import range
 from .base import LabelCooccurenceClustererBase
 import numpy as np
 import igraph as ig
@@ -58,13 +59,13 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
         self.generate_coocurence_adjacency_matrix(y)
 
         if self.is_weighted:
-            self.weights = dict(weight=self.edge_map.values())
+            self.weights = dict(weight=list(self.edge_map.values()))
         else:
             self.weights = dict(weight=None)
 
         self.coocurence_graph = ig.Graph(
             edges=[x for x in self.edge_map],
-            vertex_attrs=dict(name=range(1, self.label_count + 1)),
+            vertex_attrs=dict(name=list(range(1, self.label_count + 1))),
             edge_attrs=self.weights
         )
 

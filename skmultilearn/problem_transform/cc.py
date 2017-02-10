@@ -1,3 +1,4 @@
+from builtins import range
 from ..base.problem_transformation import ProblemTransformationBase
 from scipy.sparse import hstack, coo_matrix, issparse
 import copy
@@ -21,9 +22,9 @@ class ClassifierChain(ProblemTransformationBase):
         y = self.ensure_output_format(
             y, sparse_format='csc', enforce_sparse=True)
         self.label_count = y.shape[1]
-        self.classifiers = [None for x in xrange(self.label_count)]
+        self.classifiers = [None for x in range(self.label_count)]
 
-        for label in xrange(self.label_count):
+        for label in range(self.label_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, label, axis=1)
 
@@ -37,7 +38,7 @@ class ClassifierChain(ProblemTransformationBase):
         X_extended = self.ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
         prediction = None
-        for label in xrange(self.label_count):
+        for label in range(self.label_count):
             prediction = self.classifiers[label].predict(
                 self.ensure_input_format(X_extended))
             prediction = self.ensure_output_format(
@@ -51,7 +52,7 @@ class ClassifierChain(ProblemTransformationBase):
         X_extended = self.ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
         prediction = None
         results = []
-        for label in xrange(self.label_count):
+        for label in range(self.label_count):
             prediction = self.classifiers[label].predict(
                 self.ensure_input_format(X_extended))
 

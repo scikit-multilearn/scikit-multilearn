@@ -198,7 +198,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             out[attr] = getattr(self, attr)
 
             if hasattr(getattr(self, attr), 'get_params') and deep:
-                deep_items = getattr(self, attr).get_params().items()
+                deep_items = list(getattr(self, attr).get_params().items())
                 out.update((attr + '__' + k, val) for k, val in deep_items)
 
         return out
@@ -215,7 +215,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         valid_params = self.get_params(deep=True)
 
 
-        parameters_current_level = filter(lambda x: '__' not in x, parameters)
+        parameters_current_level = [x for x in parameters if '__' not in x]
         for parameter in parameters_current_level:
             value = parameters[parameter]
 
@@ -228,7 +228,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                                  (parameter, self))
 
 
-        parameters_below_current_level = filter(lambda x: '__' in x, parameters)
+        parameters_below_current_level = [x for x in parameters if '__' in x]
         parameters_grouped_by_current_level = {object : {} for object in valid_params}
 
         for parameter in parameters_below_current_level:
@@ -246,7 +246,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         valid_params = self.get_params(deep=True)
 
         # parameters_grouped_by_current_level groups valid parameters for subojects
-        for object_name, sub_params in parameters_grouped_by_current_level.iteritems():
+        for object_name, sub_params in parameters_grouped_by_current_level.items():
             if len(sub_params) > 0:
                 sub_object = valid_params[object_name]
                 sub_object.set_params(**sub_params)

@@ -1,3 +1,4 @@
+from builtins import range
 from ..base import MLClassifierBase
 from ..utils import get_matrix_in_format
 from sklearn.neighbors import NearestNeighbors
@@ -53,7 +54,7 @@ class BRkNNbClassifier(BinaryRelevanceKNN):
         prediction = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='i8')
         top_labels = np.argpartition(self.confidences, kth=self.avg_labels, axis=1).tolist()
         
-        for i in xrange(X.shape[0]):
+        for i in range(X.shape[0]):
             for j in top_labels[i][-self.avg_labels[i]:]:
                 prediction[i,j] += 1
         

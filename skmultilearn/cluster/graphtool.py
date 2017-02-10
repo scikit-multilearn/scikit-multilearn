@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import range
 from .base import LabelCooccurenceClustererBase
 import numpy as np
 import graph_tool.all as gt
@@ -45,7 +46,7 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
         self.weights = g.new_edge_property('double')
 
-        for edge, weight in self.edge_map.iteritems():
+        for edge, weight in self.edge_map.items():
             e = g.add_edge(edge[0], edge[1])
             if self.is_weighted:
                 self.weights[e] = weight
@@ -77,8 +78,8 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
             self.coocurence_graph, overlap=self.allow_overlap) #, ec=self.weights), broken in graphtool for now
         A = d.get_blocks().a
 
-        self.label_sets = [[] for i in xrange(d.B)]
-        for k in xrange(len(A)):
+        self.label_sets = [[] for i in range(d.B)]
+        for k in range(len(A)):
             self.label_sets[A[k]].append(k)
 
         self.model_count = len(self.label_sets)

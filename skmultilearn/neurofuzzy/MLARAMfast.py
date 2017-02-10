@@ -1,3 +1,5 @@
+from builtins import range
+from builtins import object
 #copyright @Fernando Benites
 
 from ..base import MLClassifierBase
@@ -6,7 +8,7 @@ import numpy.core.umath as umath
 import scipy.sparse
 import numpy
 
-class Neuron:
+class Neuron(object):
     def __init__(self,startpoint,label):
         #vector must be in complement form
         self.vc =  startpoint 

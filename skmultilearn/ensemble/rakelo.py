@@ -1,3 +1,6 @@
+from builtins import zip
+from builtins import map
+from builtins import range
 from .rakeld import RakelD
 import copy
 import numpy as np
@@ -24,7 +27,7 @@ class RakelO(RakelD):
         """Internal method for sampling k-labELsets"""
         label_sets = []
         self.label_count = y.shape[1]
-        free_labels = xrange(self.label_count)
+        free_labels = range(self.label_count)
 
         while len(label_sets) < self.model_count:
             label_set = random.sample(free_labels, self.labelset_size)
@@ -44,12 +47,12 @@ class RakelO(RakelD):
 
         votes = sparse.csc_matrix(
             (predictions[0].shape[0], self.label_count), dtype='int')
-        for model in xrange(self.model_count):
-            for label in xrange(len(self.partition[model])):
+        for model in range(self.model_count):
+            for label in range(len(self.partition[model])):
                 votes[:, self.partition[model][label]] = votes[
                     :, self.partition[model][label]] + predictions[model][:, label]
 
-        voters = map(float, votes.sum(axis=0).tolist()[0])
+        voters = list(map(float, votes.sum(axis=0).tolist()[0]))
 
         nonzeros = votes.nonzero()
         for row, column in zip(nonzeros[0], nonzeros[1]):

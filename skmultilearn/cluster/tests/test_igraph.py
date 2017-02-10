@@ -17,7 +17,7 @@ class ClustererBaseTests(unittest.TestCase):
             sparse=True, return_indicator='sparse')
         assert sp.issparse(y)
 
-        for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
+        for method in list(IGraphLabelCooccurenceClusterer.METHODS.keys()):
             for weighted in [True, False]:
                 for include_self_edges in [True, False]:
                     clusterer = IGraphLabelCooccurenceClusterer(method, weighted=weighted,

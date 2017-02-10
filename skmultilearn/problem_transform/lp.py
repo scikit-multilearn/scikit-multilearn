@@ -1,3 +1,6 @@
+from builtins import map
+from builtins import str
+from builtins import range
 from ..base.problem_transformation import ProblemTransformationBase
 import numpy as np
 from scipy import sparse
@@ -47,7 +50,7 @@ class LabelPowerset(ProblemTransformationBase):
         lp_prediction = self.classifier.predict(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='i8')
 
-        for row in xrange(len(lp_prediction)):
+        for row in range(len(lp_prediction)):
             assignment = lp_prediction[row]
             result[row, self.reverse_combinations[assignment]] = 1
 
@@ -57,9 +60,9 @@ class LabelPowerset(ProblemTransformationBase):
         """Predict probabilities for labels for `X`, see base method's documentation."""
         lp_prediction = self.classifier.predict_proba(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='float')
-        for row in xrange(len(lp_prediction)):
+        for row in range(len(lp_prediction)):
             assignment = lp_prediction[row]
-            for combination_id in xrange(len(assignment)):
+            for combination_id in range(len(assignment)):
                 for label in self.reverse_combinations[combination_id]:
                     result[row, label] += assignment[combination_id]
 
@@ -68,7 +71,7 @@ class LabelPowerset(ProblemTransformationBase):
 
     def transform(self, y):
         """ Transform the label set to a multi-class problem """
-        return map(lambda x: int("".join(map(str, x))), y)
+        return [int("".join(map(str, x))) for x in y]
 
     def inverse_transform(self, y):
-        return map(lambda x: map(int, str(x)), y)
+        return [list(map(int, str(x))) for x in y]

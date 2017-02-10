@@ -1,3 +1,4 @@
+from builtins import range
 from ..base import MLClassifierBase
 from ..utils import get_matrix_in_format
 
@@ -48,9 +49,9 @@ class MLkNN(MLClassifierBase):
         neighbors = [a[self.ignore_first_neighbours:] for a in
                      self.knn.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)]
 
-        for instance in xrange(self.num_instances):
+        for instance in range(self.num_instances):
             deltas = label_info[neighbors[instance], :].sum(axis=0)
-            for label in xrange(self.num_labels):
+            for label in range(self.num_labels):
                 if label_info[instance, label] == 1:
                     c[label, deltas[0, label]] += 1
                 else:
@@ -61,8 +62,8 @@ class MLkNN(MLClassifierBase):
 
         cond_prob_true = sparse.lil_matrix((self.num_labels, self.k + 1), dtype='float')
         cond_prob_false = sparse.lil_matrix((self.num_labels, self.k + 1), dtype='float')
-        for label in xrange(self.num_labels):
-            for neighbor in xrange(self.k + 1):
+        for label in range(self.num_labels):
+            for neighbor in range(self.k + 1):
                 cond_prob_true[label, neighbor] = (self.s + c[label, neighbor]) / (
                 self.s * (self.k + 1) + c_sum[label, 0])
                 cond_prob_false[label, neighbor] = (self.s + cn[label, neighbor]) / (
@@ -83,10 +84,10 @@ class MLkNN(MLClassifierBase):
         result = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='i8')
         neighbors = [a[self.ignore_first_neighbours:] for a in
                      self.knn.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)]
-        for instance in xrange(X.shape[0]):
+        for instance in range(X.shape[0]):
             deltas = self.train_labels[neighbors[instance],].sum(axis=0)
 
-            for label in xrange(self.num_labels):
+            for label in range(self.num_labels):
                 p_true = self.prior_prob_true[label] * self.cond_prob_true[label, deltas[0, label]]
                 p_false = self.prior_prob_false[label] * self.cond_prob_false[label, deltas[0, label]]
                 result[instance, label] = int(p_true >= p_false)
@@ -96,10 +97,10 @@ class MLkNN(MLClassifierBase):
         result = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='float')
         neighbors = [a[self.ignore_first_neighbours:] for a in
                      self.knn.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)]
-        for instance in xrange(X.shape[0]):
+        for instance in range(X.shape[0]):
             deltas = self.train_labels[neighbors[instance],].sum(axis=0)
 
-            for label in xrange(self.num_labels):
+            for label in range(self.num_labels):
                 p_true = self.prior_prob_true[label] * self.cond_prob_true[label, deltas[0, label]]
                 p_false = self.prior_prob_false[label] * self.cond_prob_false[label, deltas[0, label]]
                 result[instance, label] = p_true

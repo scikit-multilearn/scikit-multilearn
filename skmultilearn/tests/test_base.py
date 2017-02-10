@@ -1,3 +1,5 @@
+from builtins import zip
+from builtins import range
 import itertools
 import unittest
 import numpy as np
@@ -12,16 +14,16 @@ class ProblemTransformationBaseTest(unittest.TestCase):
 
     def dense_and_dense_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), len(ensured_X))
-        for row in xrange(len(X)):
+        for row in range(len(X)):
             self.assertEqual(len(X[row]), len(ensured_X[row]))
-            for col in xrange(len(X[row])):
+            for col in range(len(X[row])):
                 self.assertEqual(X[row][col], ensured_X[row][col])
 
     def dense_and_sparse_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), ensured_X.shape[0])
-        for row in xrange(len(X)):
+        for row in range(len(X)):
             self.assertEqual(len(X[row]), ensured_X.shape[1])
-            for col in xrange(len(X[row])):
+            for col in range(len(X[row])):
                 self.assertEqual(X[row][col], ensured_X[row, col])
 
     def sparse_and_sparse_matrices_are_the_same(self, X, ensured_X):
