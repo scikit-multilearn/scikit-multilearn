@@ -1,3 +1,4 @@
+from __future__ import print_function
 import subprocess
 import tempfile
 import shlex
@@ -94,7 +95,7 @@ class Meka(MLClassifierBase):
         self.output, self.error = pipes.communicate()
 
         if pipes.returncode != 0:
-            raise Exception, self.output + self.error
+            raise Exception(self.output + self.error)
 
     def fit(self, X, y):
         self.clean()
@@ -138,7 +139,7 @@ class Meka(MLClassifierBase):
         self.instance_count = X.shape[0]
 
         if self.classifier_dump is None:
-            raise Exception, 'Not classified'
+            raise Exception('Not classified')
 
         sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype=int)
 
@@ -210,8 +211,6 @@ class Meka(MLClassifierBase):
             self.results = None
             self.statistics = None
             return None
-
-        print self.output
 
         predictions_split_head = '==== PREDICTIONS'
         predictions_split_foot = '|==========='
