@@ -16,18 +16,16 @@ class Neuron:
 
 class MLARAM(MLClassifierBase):
     """Multi-label ARAM   classifier. See http://dx.doi.org/10.1109/ICDMW.2015.14
-    
- 
+
     Parameters
     ----------
 
-    vigilance = vigilance parameter for adaptiv resonance theory networks, controls how large a hyperbox can be, 1 it is small (no compression), 0 should assume all range. Normally set between 0.8 and 0.999, it is dataset dependent. It is responsible for the creation of the prototypes, therefore training of the network.    
-    threshold = controls how many prototypes participate by the prediction, can be changed at the testing phase.
-    tneurons =  if the network should inherited neurons (prototypes) from another network
-    tdebug = set debug modus 
-    
-    require_dense : boolean
-        Whether the base classifier requires input as dense arrays, False by default"""
+    vigilance : vigilance parameter for adaptiv resonance theory networks, controls how large a hyperbox can be, 1 it is small (no compression), 0 should assume all range. Normally set between 0.8 and 0.999, it is dataset dependent. It is responsible for the creation of the prototypes, therefore training of the network.
+    threshold : controls how many prototypes participate by the prediction, can be changed at the testing phase.
+    tneurons  : if the network should inherited neurons (prototypes) from another network
+    tdebug : set debug modus
+
+    Whether the base classifier requires input as dense arrays, False by default"""
     BRIEFNAME = "ML-ARAM"
 
     def __init__(self, vigilance=0.9,threshold=0.02, tneurons=None):
