@@ -1,6 +1,13 @@
 skmultilearn.base package
 =========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    skmultilearn.base.tests
+
 Submodules
 ----------
 

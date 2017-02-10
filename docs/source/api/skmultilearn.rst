@@ -11,6 +11,7 @@ Subpackages
     skmultilearn.cluster
     skmultilearn.ensemble
     skmultilearn.ext
+    skmultilearn.neurofuzzy
     skmultilearn.problem_transform
     skmultilearn.tests
 
