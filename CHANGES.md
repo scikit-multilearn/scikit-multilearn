@@ -1,4 +1,9 @@
-scikit-multilearn - 0.0.4 (released 2017-07-04)
+scikit-multilearn Changelog
+===========================
+
+0.0.4 (released 2017-02-04)
+---------------------------
+
 -  *kNN classifiers support sparse matrices properly
 - support for the new model_selection API from scikit-learn
 - extended graph-based label space clusteres to allow taking probability of a label occuring alone into consideration
@@ -8,7 +13,8 @@ scikit-multilearn - 0.0.4 (released 2017-07-04)
 - predict_proba added to problem transformation classifiers
 - ported to python 3 
 
-scikit-multilearn - 0.0.3 (released 2016-06-03)
+0.0.3 (released 2016-06-03)
+---------------------------
 
 - support for new multi-label classification methods:
     - classsifier chains (CC)
@@ -20,9 +26,20 @@ scikit-multilearn - 0.0.3 (released 2016-06-03)
 - interface to meka 1.9, meka can work as a scikit-ml classifier
 - loading arff files to sparse matrices by default
 
-scikit-multilearn - 0.0.2 (removed due to bug in PyPi)
+0.0.2 (removed due to bug in PyPi)
+---------------------------
 
-scikit-multilearn - 0.0.1 (released 2014-12-01)
+- support for new multi-label classification methods:
+    - classsifier chains (CC)
+    - multi-label kNN methods: BRkNN and MLkNN
+    - all classifiers use sparse matrices internally
+    - a general network for clustering label space with a flat classifier
+    - the classifiers work with scikit pipelines / CVs
+
+
+
+0.0.1 (released 2014-12-01)
+---------------------------
 
 - initial release
 - support for initial set of multi-label classification methods:
