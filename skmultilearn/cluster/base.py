@@ -3,12 +3,23 @@ from ..utils import get_matrix_in_format
 
 
 class LabelSpaceClustererBase(object):
-    """docstring for LabelSpaceClustererBase"""
+    """An abstract base class for Label Space clustering
+
+    Implement it in your classifier according to :doc:`../clusterer`.
+
+    """
 
     def __init__(self):
         super(LabelSpaceClustererBase, self).__init__()
 
     def fit_predict(self, X, y):
+        """ Abstract method for clustering label space
+
+        Implement it in your classifier according to :doc:`../clusterer`.
+
+        :raises NotImplementedError: this is just an abstract method
+
+        """
         raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")
 
 
@@ -40,11 +51,13 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
 
 
     def generate_coocurence_adjacency_matrix(self, y):
-        """This function generates a weighted or unweighted cooccurence graph based on input binary label vectors 
+        """Generate adjacency matrix from label matrix
+
+        This function generates a weighted or unweighted cooccurence graph based on input binary label vectors 
         and sets it to self.coocurence_graph
 
-        y : array-like of edges
-            An array-like of binary label vectors.
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
 
 
         Returns
@@ -52,6 +65,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
 
         edge_map: dict{ (int, int) : float }
             Returns a dict of weights
+
         """
         label_data = get_matrix_in_format(y, 'lil')
         self.label_count = label_data.shape[1]

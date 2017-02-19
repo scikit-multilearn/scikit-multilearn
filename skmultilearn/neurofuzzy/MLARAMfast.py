@@ -17,7 +17,9 @@ class Neuron(object):
         self.label=label
 
 class MLARAM(MLClassifierBase):
-    """Multi-label ARAM   classifier. See http://dx.doi.org/10.1109/ICDMW.2015.14
+    """HARAM: A Hierarchical ARAM Neural Network for Large-Scale Text Classification
+
+    See http://dx.doi.org/10.1109/ICDMW.2015.14
 
     Parameters
     ----------
@@ -27,7 +29,7 @@ class MLARAM(MLClassifierBase):
     tneurons  : if the network should inherited neurons (prototypes) from another network
     tdebug : set debug modus
 
-    Whether the base classifier requires input as dense arrays, False by default"""
+    """
     BRIEFNAME = "ML-ARAM"
 
     def __init__(self, vigilance=0.9,threshold=0.02, tneurons=None):
@@ -44,7 +46,7 @@ class MLARAM(MLClassifierBase):
         self.allneu=""
         self.online=1
         self.alpha=0.0000000000001
-        self.copyable_attrs += ["neurons", "labels", "vigilance","threshold", "allneu", "online", "alpha"]
+        self.copyable_attrs += ["neurons", "vigilance", "threshold", "allneu", "online", "alpha"]
         
     def reset(self):
         self.labels=[]
@@ -52,7 +54,16 @@ class MLARAM(MLClassifierBase):
 
     #@profile
     def fit(self,X,y):
-        
+        """Fit classifier with training data
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+        :returns: Fitted instance of self
+
+        """
+
         labdict = {}
         if len(X[0].shape)==1:
             ismatrix=0
@@ -119,6 +130,18 @@ class MLARAM(MLClassifierBase):
     
     #@profile
     def predict(self,X):
+        """Predict labels for X
+
+        Internally this method uses a sparse CSR representation for X 
+        (:py:class:`scipy.sparse.csr_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :returns: binary indicator matrix with label assignments
+        :rtype: array of arrays of int (n_samples, n_labels)
+
+        """
+
         result=[]
         ranks=self.predict_proba(X)
         for rank in ranks:
@@ -140,6 +163,17 @@ class MLARAM(MLClassifierBase):
 
     #@profile
     def predict_proba(self,X):
+        """Predict probabilities of label assignments for X
+
+        Internally this method uses a sparse CSR representation for X 
+        (:py:class:`scipy.sparse.csr_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_labels)
+        :returns: matrix with label assignment probabilities
+        :rtype: array of arrays of float (n_samples, n_labels)
+        
+        """
         result = []
         if len(X) == 0: 
             return

@@ -1,4 +1,3 @@
-from __future__ import print_function
 from builtins import map
 from builtins import str
 from builtins import filter
@@ -15,7 +14,9 @@ from ..dataset import Dataset
 
 
 class Meka(MLClassifierBase):
-    """ Runs the MEKA classifier
+    """ Wrapper for the MEKA classifier
+
+        For more information on how to use this class see the tutorial: :doc:`../meka`
 
         Parameters
         ----------
@@ -73,6 +74,7 @@ class Meka(MLClassifierBase):
         self.instance_count = None
 
     def remove_temporary_files(self, temporary_files):
+        """Internal function for cleaning temporary files"""
         for file_name in temporary_files:
             os.remove(file_name.name)
 
@@ -102,6 +104,20 @@ class Meka(MLClassifierBase):
             raise Exception(self.output + self.error)
 
     def fit(self, X, y):
+        """Fit classifier with training data
+
+        Internally this method dumps X and y to temporary arff files and 
+        runs MEKA with relevant arguments using :func:`run`. It uses a 
+        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`) 
+        of the X matrix.
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+        :returns: Fitted instance of self
+
+        """
         self.clean()
         X = self.ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
@@ -138,6 +154,19 @@ class Meka(MLClassifierBase):
         return self
 
     def predict(self, X):
+        """Predict label assignments for X
+
+        Internally this method dumps X to temporary arff files and 
+        runs MEKA with relevant arguments using :func:`run`. It uses a 
+        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`) 
+        of the X matrix.
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :returns: binary indicator matrix with label assignments
+        :rtype: sparse matrix of int (n_samples, n_labels)
+
+        """
         X = self.ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
         self.instance_count = X.shape[0]

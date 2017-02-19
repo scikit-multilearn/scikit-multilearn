@@ -16,7 +16,18 @@ class RakelD(LabelSpacePartitioningClassifier):
         self.copyable_attrs = ['labelset_size', 'classifier', 'require_dense']
 
     def generate_partition(self, X, y):
-        """Internal method for sampling k-labELsets"""
+        """Randomly partition the label space
+
+        This function randomly partitions the label space of n_labels into n_label/k 
+        equipartitions of size k.  
+
+        :param X: not used, maintained for api compatibility
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+
+        Sets `self.partition`, `self.model_count` and `self.label_count`.
+
+        """
 
         label_sets = []
         self.label_count = y.shape[1]

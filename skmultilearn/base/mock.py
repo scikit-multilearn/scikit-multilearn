@@ -2,7 +2,7 @@ from .base import MLClassifierBase
 
 
 class MockClassifier(MLClassifierBase):
-    """docstring for MockClassifier"""
+    """A stub classifier"""
 
     def __init__(self):
         super(MockClassifier, self).__init__()

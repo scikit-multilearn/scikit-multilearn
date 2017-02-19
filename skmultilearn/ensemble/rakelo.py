@@ -24,7 +24,18 @@ class RakelO(RakelD):
                                'labelset_size', 'require_dense', 'classifier']
 
     def generate_partition(self, X, y):
-        """Internal method for sampling k-labELsets"""
+        """Randomly divide the label space
+
+        This function randomly divides the label space of `n_labels` into `model_count`  
+        equal subspaces of size `labelset_size`.  
+
+        :param X: not used, maintained for api compatibility
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+
+        Sets `self.partition`, `self.label_count`.
+
+        """
         label_sets = []
         self.label_count = y.shape[1]
         free_labels = range(self.label_count)
@@ -38,7 +49,17 @@ class RakelO(RakelD):
         assert len(self.partition) == self.model_count
 
     def predict(self, X):
-        """Predict labels for X, see base method's documentation."""
+        """Predict probabilities of label assignments for X
+
+        Internally this method uses a sparse CSC representation for X 
+        (:py:class:`scipy.sparse.csr_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_labels)
+        :returns: matrix with label assignment probabilities
+        :rtype: sparse matrix of float (n_samples, n_labels)
+        
+        """
         predictions = [
             self.ensure_input_format(self.ensure_input_format(
                 c.predict(X)), sparse_format='csc', enforce_sparse=True)

@@ -41,10 +41,8 @@ class Dataset(object):
         Returns
         -------
 
-        data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
-            The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
-            and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-            then the input vector has label no. 5)
+        X: scipy sparse matrix with ``input_feature_type`` elements,
+        y: scipy sparse matrix of binary label indicator matrix
 
         """
         matrix = None
@@ -78,7 +76,7 @@ class Dataset(object):
 
     @classmethod
     def save_to_arff(cls, X, y, endian="little", save_sparse=True):
-        """Method for loading ARFF files as numpy array
+        """Method for dumping data to ARFF files
 
         Parameters
         ----------
@@ -93,23 +91,13 @@ class Dataset(object):
             Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
             or at the end ("little" endianness, MULAN format)
 
-        input_feature_type: numpy.type as string
-            The desire type of the contents of the return 'X' array-likes, default 'i8', 
-            should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
-
-        encode_nominal: boolean
-            Whether convert categorical data into numeric factors - required for some scikit classifiers that can't handle non-numeric input featuers.
-
         save_sparse: boolean
             Whether to read arff file as a sparse file format, liac-arff breaks if sparse reading is enabled for non-sparse ARFFs.
 
         Returns
         -------
 
-        data: dictionary {'X': scipy sparse matrix with input_feature_type elements, 'y': scipy sparse matrix of binary (int8) label vectors }
-            The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
-            and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-            then the input vector has label no. 5)
+        string: the ARFF dump string
 
         """
         X = X.todok()

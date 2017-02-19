@@ -71,6 +71,16 @@ class MLkNN(MLClassifierBase):
         return cond_prob_true, cond_prob_false
 
     def fit(self, X, y):
+        """Fit classifier with training data
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+        :returns: Fitted instance of self
+
+        """
+
         self.train_labels = get_matrix_in_format(y, 'lil')
         self.num_instances = self.train_labels.shape[0]
         self.num_labels = self.train_labels.shape[1]
@@ -81,6 +91,15 @@ class MLkNN(MLClassifierBase):
         return self
 
     def predict(self, X):
+        """Predict labels for X
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :returns: binary indicator matrix with label assignments
+        :rtype: sparse matrix of int (n_samples, n_labels)
+
+        """
+
         result = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='i8')
         neighbors = [a[self.ignore_first_neighbours:] for a in
                      self.knn.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)]
@@ -94,6 +113,14 @@ class MLkNN(MLClassifierBase):
         return result
 
     def predict_proba(self, X):
+        """Predict probabilities of label assignments for X
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_labels)
+        :returns: matrix with label assignment probabilities
+        :rtype: sparse matrix of float (n_samples, n_labels)
+        
+        """
         result = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='float')
         neighbors = [a[self.ignore_first_neighbours:] for a in
                      self.knn.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)]

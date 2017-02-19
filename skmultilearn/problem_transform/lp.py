@@ -7,7 +7,17 @@ from scipy import sparse
 
 
 class LabelPowerset(ProblemTransformationBase):
-    """Label Powerset multi-label classifier."""
+    """Label Powerset Multi-Label Classifier.
+
+    Label Powerset is a problem transformation approach to multi-label
+    classification that transforms a multi-label problem to a multi-class 
+    problem with 1 multi-class classifier trained on all unique label 
+    combinations found in the training data. 
+
+    More information about this method can be found in an introduction 
+    to multi-label classification by Tsoumakas et. al.
+
+    """
     BRIEFNAME = "LP"
 
     def __init__(self, classifier=None, require_dense=None):
@@ -21,7 +31,19 @@ class LabelPowerset(ProblemTransformationBase):
         self.label_count = None
 
     def fit(self, X, y):
-        """Fit classifier according to X,y, see base method's documentation."""
+        """Fit classifier with training data
+
+        Internally this method uses a sparse CSR representation 
+        (:py:class:`scipy.sparse.csr_matrix`) of the X matrix and 
+        a sparse LIL representation (:py:class:`scipy.sparse.lil_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :param y: binary indicator matrix with label assignments
+        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
+        :returns: Fitted instance of self
+                    
+        """
         X = self.ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
         y = self.ensure_output_format(
@@ -45,7 +67,18 @@ class LabelPowerset(ProblemTransformationBase):
         return self
 
     def predict(self, X):
-        """Predict labels for X, see base method's documentation."""
+        """Predict labels for X
+
+        Internally this method uses a sparse CSR representation for X 
+        (:py:class:`scipy.sparse.csr_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_features)
+        :returns: binary indicator matrix with label assignments
+        :rtype: sparse matrix of int (n_samples, n_labels)
+
+        """
+
         # this will be an np.array of integers representing classes
         lp_prediction = self.classifier.predict(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='i8')
@@ -57,7 +90,18 @@ class LabelPowerset(ProblemTransformationBase):
         return result
 
     def predict_proba(self, X):
-        """Predict probabilities for labels for `X`, see base method's documentation."""
+        """Predict probabilities of label assignments for X
+
+        Internally this method uses a sparse CSR representation for X 
+        (:py:class:`scipy.sparse.csr_matrix`).
+
+        :param X: input features
+        :type X: dense or sparse matrix (n_samples, n_labels)
+        :returns: matrix with label assignment probabilities
+        :rtype: sparse matrix of float (n_samples, n_labels)
+
+        """
+        
         lp_prediction = self.classifier.predict_proba(self.ensure_input_format(X))
         result = sparse.lil_matrix((X.shape[0], self.label_count), dtype='float')
         for row in range(len(lp_prediction)):
@@ -70,7 +114,6 @@ class LabelPowerset(ProblemTransformationBase):
 
 
     def transform(self, y):
-        """ Transform the label set to a multi-class problem """
         return [int("".join(map(str, x))) for x in y]
 
     def inverse_transform(self, y):
