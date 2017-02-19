@@ -1,6 +1,11 @@
 skmultilearn.adapt package
 ==========================
 
+.. automodule:: skmultilearn.adapt
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -21,10 +26,3 @@ skmultilearn.adapt.mlknn module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn.adapt
-    :members:
-    :undoc-members:
-    :show-inheritance:

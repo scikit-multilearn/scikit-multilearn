@@ -1,12 +1,10 @@
 skmultilearn.ensemble package
 =============================
 
-Subpackages
------------
-
-.. toctree::
-
-    skmultilearn.ensemble.tests
+.. automodule:: skmultilearn.ensemble
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Submodules
 ----------
@@ -15,6 +13,14 @@ skmultilearn.ensemble.fixed module
 ----------------------------------
 
 .. automodule:: skmultilearn.ensemble.fixed
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skmultilearn.ensemble.majorityvote module
+-----------------------------------------
+
+.. automodule:: skmultilearn.ensemble.majorityvote
     :members:
     :undoc-members:
     :show-inheritance:
@@ -44,10 +50,3 @@ skmultilearn.ensemble.rakelo module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn.ensemble
-    :members:
-    :undoc-members:
-    :show-inheritance:

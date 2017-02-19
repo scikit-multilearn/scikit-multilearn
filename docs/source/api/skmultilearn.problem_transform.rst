@@ -1,12 +1,10 @@
 skmultilearn.problem_transform package
 ======================================
 
-Subpackages
------------
-
-.. toctree::
-
-    skmultilearn.problem_transform.tests
+.. automodule:: skmultilearn.problem_transform
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Submodules
 ----------
@@ -35,19 +33,4 @@ skmultilearn.problem_transform.lp module
     :undoc-members:
     :show-inheritance:
 
-skmultilearn.problem_transform.transformations module
------------------------------------------------------
 
-.. automodule:: skmultilearn.problem_transform.transformations
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: skmultilearn.problem_transform
-    :members:
-    :undoc-members:
-    :show-inheritance:

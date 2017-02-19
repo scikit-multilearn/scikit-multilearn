@@ -1,82 +1,43 @@
 .. _classify:
-Classify your dataset
-=====================
 
-To classify data with a multi-label classifier, you need to have:
+Selecting a multi-label classifier
+==================================
 
-- selected a base classifier, ex. a naive bayes one
-- selected the multi-label classification method, ex. Binary Relevance
-- an array or (dense/sparse) matrix with feature vectors to classify
-- a training data set: 
-    - ``X``: array of input feature vectors
-    - ``y`` arary of binary label indicator vectors associated with each row
+In this document you will learn:
 
-Loading the data set
---------------------
-``scikit-multilearn`` lets you load two formats of data, one of them is the traditional ARFF format, using `liac-arff <https://pythonhosted.org/liac-arff/>`_ package. The other uses scikit-multilearn format that is a BZ2-pped pickle of a dict containing two sparse matrices.
+- what classifier approaches are available in scikit-multilearn
+- how to perform classification
 
-Loading from arff
-^^^^^^^^^^^^^^^^^
+This section assumes that you have prepared a data set for classification and:
 
-This approach uses the ``liac-arff`` library to load ARFF files into ``scikit-multilearn``. Many benchmark ARFF data sets can be found in `MULAN's collection <http://mulan.sourceforge.net/datasets-mlc.html>`_. This can be done using the :class:`Dataset` static method :func:`Dataset::load_arff_to_numpy`.
-
-.. code-block:: python
-
-    from skmultilearn.dataset import Dataset
-    
-    ## some information about the data set 
-    # number of labels
-    labelcount = 16 
-    
-    # where the labels are located, 
-    # big = at the beginning of the file
-    endianness = 'big' 
-    
-    # dtype used in the feature space
-    feature_type = 'float' 
-    
-    # whether the nominal attributes should be encoded as integers
-    encode_nominal = True
-
-    # if True - use the sparse loading mechanism from liac-arff
-    # if False - load dense representation and convert to sparse
-    load_sparse = True
-
-    # load data
-    X_train, y_train = Dataset.load_arff_to_numpy("path_to_data/dataset-train.dump.bz2", 
-        labelcount = labelcount, 
-        endian = "big", 
-        input_feature_type = feature_type,
-        encode_nominal = encode_nominal,
-        load_sparse = load_sparse)
-
-    X_test, y_test = Dataset.load_arff_to_numpy("path_to_data/dataset-train.dump.bz2",
-        labelcount = labelcount, 
-        endian = "big", 
-        input_feature_type = feature_type,
-        encode_nominal = encode_nominal,
-        load_sparse = load_sparse)
+- `x_train`, `x_test` variables contain input feature train and test matrices
+- `y_train`, `y_test` variables contain output label train and test matrices
 
 
-Classifying input using scikit-multilearn
------------------------------------------
+As we noted in :ref:`concepts` multi-label classification can be performed under three approaches:
 
-The easiest way to perform multi-label classification is to transform it to a single-label classification task and then use scikit classifiers for that new job. There is a variety of such classifiers available in the :module:`skmultilearn.problem_transformation` module. :class:`Binary Relevance` is an example of such approach. 
+- algorithm adaption approach 
+- problem transformation approach
+- ensemble of multi-label classifiers approach
 
-Binary Relevance requires a base classifier to use in the single-label problem. It clones a new one for each label and performs per label classification, summing the results together in the end. It can be done using scikit-multilearn as follows.
+
+Adapted algorithms
+------------------
+
+The algorithm adaptation approach is based on a single-label classification method adapted for multi-label classification problem. Scikit-multilearn provides:
+
+- k-NearestNeighbours classifiers adapted to multi-label purposes by `Zhang et, al. <http://www.sciencedirect.com/science/article/pii/S0031320307000027>`_: ``BrkNN``, ``MLkNN`` available from :mod:`skmultilearn.adapt`
+- a hierarchical neurofuzzy classifier HARAM adapted to multi-label purposes by `Benites et. al. <https://kops.uni-konstanz.de/handle/123456789/33471>`_ ``ML-ARAM`` available in :mod:`skmultilearn.neurofuzzy`.
+
+Algorithm adaption methods methods usually require parameter estimation.  Selecting best parameters of algorithm adaptation classifiers is discussed in :ref:`model_estimation`.
+
+An example code for using :class:`skmultilearn.adapt.MLkNN` looks like this:
 
 .. code-block:: python
 
-    from skmultilearn.problem_transform import BinaryRelevance
-    from sklearn.naive_bayes import GaussianNB
-    import sklearn.metrics
+    from skmultilearn.adapt import MLkNN
 
-    # assume data is loaded using 
-    # and is available in X_train/X_test, y_train/y_test
-
-    # initialize Binary Relevance multi-label classifier 
-    # with gaussian naive bayes base classifier
-    classifier = BinaryRelevance(GaussianNB(), require_dense)
+    classifier = MLkNN(k=3)
     
     # train
     classifier.fit(X_train, y_train)
@@ -84,24 +45,58 @@ Binary Relevance requires a base classifier to use in the single-label problem. 
     # predict
     predictions = classifier.predict(X_test)
 
-    # measure
-    print(sklearn.metrics.hamming_loss(y_test, predictions))
+
+Problem transformation
+----------------------
+
+Problem transformation approaches are provided in the :mod:`skmultilearn.problem_transform` module and they require a selection of a scikit-learn compatible single-label base classificatier that will be cloned one or more times during the problem transformation. Scikit-learn provides a variety of base classifiers such as:
+
+- `decision trees <http://scikit-learn.org/stable/modules/tree.html>`_
+- `Support Vector Machines <http://scikit-learn.org/stable/modules/svm.html>`_
+- `Stochastic Gradient Descent <http://scikit-learn.org/stable/modules/sgd.html>`_
+- `Nearest Neighbors <http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html>`_
+- `Naive Bayesian Classifiers <http://scikit-learn.org/stable/modules/naive_bayes.html>`_ 
+
+Scikit-multilearn provides three problem transformation approaches:
+
+- :class:`skmultilearn.problem_transform.BinaryRelevance` -  treats each label as a separate single-class classification problem 
+- :class:`skmultilearn.problem_transform.ClassifierChain`-  treats each label as a part of a conditioned chain of single-class classification problems
+- :class:`skmultilearn.problem_transform.LabelPowerset` - treats each label combination as a separate class with one multi-class classification problem
+
+Problem transformation classifiers take two arguments:
+
+- ``classifier`` - an instance of a base classifier object, to be cloned and refitted upon the multi-label classifiers ``fit`` stage
+- ``require_dense`` - a ``[boolean, boolean]`` parameter explained in :ref:`datasets`
 
 
-As described in :class:`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While ``scikit-multilearn`` uses sparse matrices everywhere, ``scikit-learn`` is still in transition - to enable this (and a large speed up) use the following example:
+An example of a Label Powerset transformation from multi-label classification to a single-label multi-class problem to be solved using a Gaussian Naive Bayes classifier:
+
+.. code-block:: python
+
+    from skmultilearn.problem_transform import LabelPowerset
+    from sklearn.naive_bayes import GaussianNB
+
+    # initialize Label Powerset multi-label classifier 
+    # with a gaussian naive bayes base classifier
+    classifier = LabelPowerset(GaussianNB())
+    
+    # train
+    classifier.fit(X_train, y_train)
+    
+    # predict
+    predictions = classifier.predict(X_test)
+
+By default the base classifier will be provided with a dense representation, but some scikit-learn classifiers also support sparse representations. This is an example use of a Binary Relevance classifier with a single-class SVM classifier that does can handle sparse input matrix:
 
 .. code-block:: python
 
     from skmultilearn.problem_transform import BinaryRelevance
     from sklearn.svm import SVC
-    import sklearn.metrics
-
-    # assume data is loaded using 
-    # and is available in X_train/X_test, y_train/y_test
 
     # initialize Binary Relevance multi-label classifier 
     # with an SVM classifier
-    # SVM in scikit only supports the X matrix in sparse representation 
+    # SVM in scikit only supports the X matrix in sparse representation
+
     classifier = BinaryRelevance(classifier = SVC(), require_dense = [False, True])
 
     # train
@@ -110,5 +105,54 @@ As described in :class:`ProblemTransformationBase`, the ``requires_dense`` param
     # predict
     predictions = classifier.predict(X_test)
 
-    # measure
-    print(sklearn.metrics.hamming_loss(y_test, predictions))
+
+
+As described in :class:`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While ``scikit-multilearn`` uses sparse matrices everywhere, ``scikit-learn`` is still in transition - to enable this (and a large speed up) use the following example.
+
+Ensemble approaches
+-------------------
+
+It is often useful to train more than one model for a subset of labels in multi-label classification, especially for large label spaces - a well-selected smaller label subspace `can allow more efficient classification <http://www.mdpi.com/1099-4300/18/8/282>`_. For this purpose the module implements ensemble classification schemes that construct an ensemble of base multi-label classifiers.
+
+Currently the following ensemble classification schemes are available in scikit-multilearn:
+
+- :class:`skmultilearn.ensemble.RakelD` - Distinct RAndom k-labELsets multi-label classifier
+- :class:`skmultilearn.ensemble.RakelO` - Overlapping RAndom k-labELsets multi-label classifier.
+- :class:`skmultilearn.ensemble.LabelSpacePartitioningClassifier` - a label space partitioning classifier that trains a classifier per label subspace as clustered using methods from :mod:`skmultilearn.cluster`.
+- :class:`skmultilearn.ensemble.FixedLabelPartitionClassifier` - a classifier that trains a classifier per label subspace for a given fixed partition
+
+An example code for an ensemble of RandomForests under a Label Powerset multi-label classifiers trained for each label subspace - partitioned using fast greedy community detection methods on a label co-occurrence graph looks like this:
+
+.. code-block:: python
+
+    from sklearn.ensemble import RandomForestClassifier
+    from skmultilearn.problem_transform import LabelPowerset
+    from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
+    from skmultilearn.ensemble import LabelSpacePartitioningClassifier
+
+    # construct base forest classifier
+    base_classifier = RandomForestClassifier()
+
+    # setup problem transformation approach with sparse matrices for random forest
+    problem_transform_classifier = LabelPowerset(classifier=base_classifier, 
+        require_dense=[False, False])
+
+    # setup the label space cluster using fastgreedy community detection
+    # on a weighted label co-occurrence graph with self-loops allowed
+    clusterer = IGraphLabelCooccurenceClusterer('fastgreedy', weighted=True, 
+        include_self_edges=True)
+
+    # setup ensemble classifier
+    classifier = LabelSpacePartitioningClassifier(problem_transform_classifier, clusterer)
+
+    # train
+    classifier.fit(X_train, y_train)
+    
+    # predict
+    predictions = classifier.predict(X_test)
+
+
+MEKA classifiers
+----------------
+
+In a situation when one needs a method not yet implemented in scikit-multilearn - a MEKA/MULAN wrapper is provided and described in section :ref:`mekawrapper`.

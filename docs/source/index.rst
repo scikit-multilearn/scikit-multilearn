@@ -1,8 +1,3 @@
-.. scikit-multilearn documentation master file, created by
-   sphinx-quickstart on Thu Nov 27 08:47:28 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to scikit-multilearn's documentation!
 =============================================
 
@@ -16,39 +11,41 @@ How do I start?
 If you are new to multi-label classification alltogether, start with the 
 :ref:`Concepts <concepts>` chapter which goes through the concepts and shows where different methods fit.
 
-If you've already performed multi-label classification, you're probably interested in some 
-:ref:`examples of how to use scikit-multilearn <classify>` and find out how to: load a data set, learn a classifier and test the results using scikit measures.
+If you've already performed multi-label classification or you've used scikit-learn before, you should:
 
-If you came here to use the wrapper around the well known `meka library <http://meka.sf.net>`_, there's an example of how to do it in: :ref:`Using the meka wrapper <mekawrapper>`.
+1. read about :ref:`datasets` in scikit-multilearn
+2. learn about :ref:`loading`
+3. start the fun with classification by :ref:`classify`
+4. see how you can improve your results by :ref:`model_estimation`
+
+If you came here to use the wrapper around the well known `meka library <http://meka.sf.net>`_, there's an example of how to do this in: :ref:`mekawrapper`.
 
 If you are a developer and want to join scikit-multilearn, here you can find out how to:
 
 - :ref:`implement a classifier <implementing-classifier>`
 - :ref:`implement a new clusterer for ensemble methods based on label space division <implementclusterer>`
 
-.. - :ref:`find some Junior Jobs and help the team <junior-jobs>`
-
-
-.. todo: write useful scenarios such as CV, train/test split etc.
+Some candidates for implementation are listed in the `Junior Jobs section of the website <http://scikit.ml/#tasks>`_ if you'd like to help.
 
 If you used previous versions of the library, you might want to :ref:`document goes through the changes <changes>`.
 
-Contents:
-
 .. toctree::
-   :maxdepth: 2
-   
+   :caption: User Guide
+
    concepts
    datasets
+   loading
    classify
+   model_estimation
    meka
+
+.. toctree::
+   :caption: Developer's Guide
+
    base
    clusterer
-   model_estimation
-   api/modules
-
    changes
-
+   API documentation <api/skmultilearn>
 
 Indices and tables
 ==================

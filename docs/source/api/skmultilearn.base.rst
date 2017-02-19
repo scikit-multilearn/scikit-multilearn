@@ -1,12 +1,10 @@
 skmultilearn.base package
 =========================
 
-Subpackages
------------
-
-.. toctree::
-
-    skmultilearn.base.tests
+.. automodule:: skmultilearn.base
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Submodules
 ----------
@@ -36,10 +34,3 @@ skmultilearn.base.problem_transformation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn.base
-    :members:
-    :undoc-members:
-    :show-inheritance:

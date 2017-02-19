@@ -1,6 +1,11 @@
 skmultilearn package
 ====================
 
+.. automodule:: skmultilearn
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -13,7 +18,6 @@ Subpackages
     skmultilearn.ext
     skmultilearn.neurofuzzy
     skmultilearn.problem_transform
-    skmultilearn.tests
 
 Submodules
 ----------
@@ -43,10 +47,3 @@ skmultilearn.utils module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,6 +1,11 @@
 skmultilearn.ext package
 ========================
 
+.. automodule:: skmultilearn.ext
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,10 +18,3 @@ skmultilearn.ext.meka module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn.ext
-    :members:
-    :undoc-members:
-    :show-inheritance:

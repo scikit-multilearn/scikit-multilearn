@@ -1,12 +1,10 @@
 skmultilearn.cluster package
 ============================
 
-Subpackages
------------
-
-.. toctree::
-
-    skmultilearn.cluster.tests
+.. automodule:: skmultilearn.cluster
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Submodules
 ----------
@@ -36,10 +34,3 @@ skmultilearn.cluster.igraph module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: skmultilearn.cluster
-    :members:
-    :undoc-members:
-    :show-inheritance:

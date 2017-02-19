@@ -1,4 +1,5 @@
 .. _changes:
+
 Changes from previous releases
 ==============================
 
