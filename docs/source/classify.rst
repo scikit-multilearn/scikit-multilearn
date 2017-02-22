@@ -10,8 +10,8 @@ In this document you will learn:
 
 This section assumes that you have prepared a data set for classification and:
 
-- `x_train`, `x_test` variables contain input feature train and test matrices
-- `y_train`, `y_test` variables contain output label train and test matrices
+- ``x_train``, ``x_test`` variables contain input feature train and test matrices
+- ``y_train``, ``y_test`` variables contain output label train and test matrices
 
 
 As we noted in :ref:`concepts` multi-label classification can be performed under three approaches:
@@ -66,7 +66,7 @@ Scikit-multilearn provides three problem transformation approaches:
 Problem transformation classifiers take two arguments:
 
 - ``classifier`` - an instance of a base classifier object, to be cloned and refitted upon the multi-label classifiers ``fit`` stage
-- ``require_dense`` - a ``[boolean, boolean]`` parameter explained in :ref:`datasets`
+- ``require_dense`` - a ``[boolean, boolean]`` governing whether the base classifier receives dense or sparse arguments. It is explained in detail in :ref:`datasets`
 
 
 An example of a Label Powerset transformation from multi-label classification to a single-label multi-class problem to be solved using a Gaussian Naive Bayes classifier:
@@ -107,8 +107,6 @@ By default the base classifier will be provided with a dense representation, but
 
 
 
-As described in :class:`ProblemTransformationBase`, the ``requires_dense`` parameter can be used to make scikit-multilearn pass sparse representations of data down to scikit-learn (only a few classifiers support this). While ``scikit-multilearn`` uses sparse matrices everywhere, ``scikit-learn`` is still in transition - to enable this (and a large speed up) use the following example.
-
 Ensemble approaches
 -------------------
 
@@ -137,12 +135,12 @@ An example code for an ensemble of RandomForests under a Label Powerset multi-la
     problem_transform_classifier = LabelPowerset(classifier=base_classifier, 
         require_dense=[False, False])
 
-    # setup the label space cluster using fastgreedy community detection
+    # partition the label space using fastgreedy community detection
     # on a weighted label co-occurrence graph with self-loops allowed
     clusterer = IGraphLabelCooccurenceClusterer('fastgreedy', weighted=True, 
         include_self_edges=True)
 
-    # setup ensemble classifier
+    # setup the ensemble metaclassifier
     classifier = LabelSpacePartitioningClassifier(problem_transform_classifier, clusterer)
 
     # train

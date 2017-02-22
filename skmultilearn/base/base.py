@@ -96,7 +96,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             else:
                 return matrix_creation_function_for_format(sparse_format)(X)
 
-    def ensure_output_format(self, y, sparse_format='csr', enforce_sparse=False):
+    def ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired output format
 
         This function ensures that output format follows the density/sparsity requirements of base classifier. 
@@ -104,7 +104,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         Parameters
         ----------
 
-        y : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+        matrix : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
             An input feature matrix
 
         sparse_format: string
@@ -116,34 +116,34 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         Returns
         -------
 
-        transformed y: array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
+        transformed matrix: array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
             If require_dense was set to True for input features in the constructor, 
             the returned value is an array-like of array-likes. If require_dense is 
             set to False, a sparse matrix of format sparse_format is returned, if 
             possible - without cloning.
         """
-        is_sparse = issparse(y)
+        is_sparse = issparse(matrix)
 
         if is_sparse:
             if self.require_dense[1] and not enforce_sparse:
-                if y.shape[1] != 1:
-                    return y.toarray()
-                elif y.shape[1] == 1:
-                    return np.ravel(y.toarray())
+                if matrix.shape[1] != 1:
+                    return matrix.toarray()
+                elif matrix.shape[1] == 1:
+                    return np.ravel(matrix.toarray())
             else:
                 if sparse_format is None:
-                    return y
+                    return matrix
                 else:
-                    return get_matrix_in_format(y, sparse_format)
+                    return get_matrix_in_format(matrix, sparse_format)
         else:
             if self.require_dense[1] and not enforce_sparse:
                 # ensuring 1d
-                if len(y[0]) == 1:
-                    return np.ravel(y)
+                if len(matrix[0]) == 1:
+                    return np.ravel(matrix)
                 else:
-                    return y
+                    return matrix
             else:
-                return matrix_creation_function_for_format(sparse_format)(y)
+                return matrix_creation_function_for_format(sparse_format)(matrix)
 
     def fit(self, X, y):
         """Abstract method to fit classifier with training data

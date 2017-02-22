@@ -27,8 +27,6 @@ If you are a developer and want to join scikit-multilearn, here you can find out
 
 Some candidates for implementation are listed in the `Junior Jobs section of the website <http://scikit.ml/#tasks>`_ if you'd like to help.
 
-If you used previous versions of the library, you might want to :ref:`document goes through the changes <changes>`.
-
 .. toctree::
    :caption: User Guide
 
@@ -36,15 +34,20 @@ If you used previous versions of the library, you might want to :ref:`document g
    datasets
    loading
    classify
+
+.. toctree::
+   :caption: Tutorials
+
    model_estimation
    meka
+
 
 .. toctree::
    :caption: Developer's Guide
 
    base
    clusterer
-   changes
+   Changelog <https://github.com/scikit-multilearn/scikit-multilearn/blob/master/CHANGES.md>
    API documentation <api/skmultilearn>
 
 Indices and tables

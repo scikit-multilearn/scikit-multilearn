@@ -46,3 +46,44 @@ class ProblemTransformationBase(MLClassifierBase):
                 self.require_dense = [False, False]
             else:
                 self.require_dense = [True, True]
+
+    def ensure_multi_label_from_single_class(self, matrix, matrix_format='csr'):
+        """Transform single class outputs to a 2D sparse matrix"""
+        is_2d = None
+        dim_1 = None
+        dim_2 = None
+
+        # check if array like of array likes
+        if isinstance(matrix, (list, tuple, np.ndarray)):
+            if isinstance(matrix[0], (list, tuple, np.ndarray)):
+                is_2d = True
+                dim_1 = len(matrix)
+                dim_2 = len(matrix[0])
+            # 1d list or array
+            else:
+                is_2d = False
+                # shape is n_samples of 1 class assignment
+                dim_1 = len(matrix)
+                dim_2 = 1
+                
+        # not an array but 2D, probably a matrix
+        elif matrix.ndim == 2:
+            is_2d = True
+            dim_1=matrix.shape[0]
+            dim_2=matrix.shape[1]
+
+        # what is it? 
+        else:
+            raise ValueError("Matrix dimensions too large (>2) or other value error")
+
+        new_matrix = None    
+        if is_2d:
+            if issparse(matrix):
+                new_matrix = matrix
+            else:
+                new_matrix = matrix_creation_function_for_format(matrix_format)(matrix, shape=(dim_1, dim_2))
+        else:
+            new_matrix = matrix_creation_function_for_format(matrix_format)(matrix).T
+
+        assert new_matrix.shape == (dim_1, dim_2)
+        return new_matrix

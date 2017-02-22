@@ -5,11 +5,11 @@ Loading and generating multi-label datasets
 
 In this section you will learn how to generate multi-label classification, where to find real world data and how to load it, and how to prepare your data for classification.
 
-The multi-label classification can be performed on different kinds of data - usually it is done on either artificially generated data for analytical purposes or on real-world data sets stored in ``ARFF`` files.
+The multi-label classification can be performed on different kinds of data - usually it is done on either artificially generated data for analytical purposes or on real-world data sets stored in `ARFF <http://www.cs.waikato.ac.nz/ml/weka/arff.html>` files.
 
 Generating artificial data
 --------------------------
-Scikit-learn's :mod:`sklearn.model_selection` framework can be used to generate artificial multi-label classification data:
+Scikit-learn's `sklearn.datasets.make_multilabel_classification <http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_multilabel_classification.html>`_ framework can be used to generate artificial multi-label classification data:
 
 .. code-block:: python
 
@@ -23,14 +23,14 @@ Scikit-learn's :mod:`sklearn.model_selection` framework can be used to generate 
 Getting real-world data sets
 ----------------------------
 
-http://mulan.sourceforge.net/datasets-mlc.html
-
+The ``MULAN`` package provides a `repository <http://mulan.sourceforge.net/datasets-mlc.html>`_ of multi-label datasets used in a variety of publications. The data sets are provided in the ``ARFF`` format, with labels provided as last elements of the ``ARFF`` data frame (little endian). Scikit-multilearn provides support for loading ``ARFF`` data files.
 
 Loading from ARFF
------------------
-The class :class:`skmultilearn.dataset.Dataset` allows loading data from ``WEKA``, ``MULAN`` or ``MEKA`` provided data sets in `ARFF <http://www.cs.waikato.ac.nz/ml/weka/arff.html>`_ format. The module depends on `liac-arff <https://pypi.python.org/pypi/liac-arff>`_ and is capable of loading sparse and dense represented ARFF data, the `X`, `y` are returned as sparse matrices. See the :meth:`skmultilearn.dataset.Dataset.load_arff_to_numpy` for more information. 
+^^^^^^^^^^^^^^^^^
 
-Example code for converting ARFF file to data dumps:
+The class :class:`skmultilearn.dataset.Dataset` allows loading data from ``WEKA``, ``MULAN`` or ``MEKA`` provided data sets in ``ARFF`` format. The module depends on `liac-arff <https://pypi.python.org/pypi/liac-arff>`_ and is capable of loading sparse and dense represented ``ARFF`` data, the `X`, `y` are returned as sparse matrices. See the :meth:`skmultilearn.dataset.Dataset.load_arff_to_numpy` for more information. 
+
+Example code for converting ``ARFF`` file to data dumps:
 
 .. code-block:: python
 
@@ -42,7 +42,7 @@ Example code for converting ARFF file to data dumps:
     
     # where the labels are located, 
     # big = at the beginning of the file
-    endianness = 'big' 
+    endianness = 'little' 
     
     # dtype used in the feature space
     feature_type = 'float' 

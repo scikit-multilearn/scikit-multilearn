@@ -62,6 +62,8 @@ class LabelPowerset(ProblemTransformationBase):
 
             train_vector.append(self.unique_combinations[label_string])
 
+        train_vector = np.array(train_vector)
+
         self.classifier.fit(self.ensure_input_format(X), train_vector)
 
         return self

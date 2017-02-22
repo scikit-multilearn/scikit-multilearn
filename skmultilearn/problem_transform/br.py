@@ -66,8 +66,7 @@ class BinaryRelevance(ProblemTransformationBase):
         for i in range(self.model_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, self.partition[i], axis=1)
-            classifier.fit(self.ensure_input_format(
-                X), self.ensure_output_format(y_subset))
+            classifier.fit(self.ensure_input_format(X), self.ensure_output_format(y_subset))
             self.classifiers.append(classifier)
 
         return self
@@ -76,7 +75,7 @@ class BinaryRelevance(ProblemTransformationBase):
         """Predict labels for X
 
         Internally this method uses a sparse CSR representation for X 
-        (:py:class:`scipy.sparse.csr_matrix`).
+        (:py:class:`scipy.sparse.coo_matrix`).
 
         :param X: input features
         :type X: dense or sparse matrix (n_samples, n_features)
@@ -84,18 +83,17 @@ class BinaryRelevance(ProblemTransformationBase):
         :rtype: sparse matrix of int (n_samples, n_labels)
 
         """
-        predictions = [self.classifiers[label].predict(
-            self.ensure_input_format(X)) for label in range(self.model_count)]
-        if isinstance(self.classifier, ProblemTransformationBase):
-            return hstack(predictions)
-        else:
-            return coo_matrix(predictions).T
+        predictions = [self.ensure_multi_label_from_single_class(
+                self.classifiers[label].predict(self.ensure_input_format(X))) 
+            for label in range(self.model_count)]
 
+        return hstack(predictions)
+    
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
         Internally this method uses a sparse CSR representation for X 
-        (:py:class:`scipy.sparse.csr_matrix`).
+        (:py:class:`scipy.sparse.coo_matrix`).
 
         :param X: input features
         :type X: dense or sparse matrix (n_samples, n_labels)
@@ -103,10 +101,8 @@ class BinaryRelevance(ProblemTransformationBase):
         :rtype: sparse matrix of float (n_samples, n_labels)
         
         """
-        predictions = [self.classifiers[label].predict_proba(
-            self.ensure_input_format(X))[:, 1] for label in range(self.model_count)]
+        predictions = [self.ensure_multi_label_from_single_class(
+            self.classifiers[label].predict_proba(
+            self.ensure_input_format(X))[:, 1] for label in range(self.model_count))]
 
-        if isinstance(self.classifier, ProblemTransformationBase):
-            return hstack(predictions)
-        else:
-            return coo_matrix(predictions).T
+        return hstack(predictions)

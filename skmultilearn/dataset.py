@@ -5,14 +5,25 @@ import arff
 import bz2
 import pickle
 import numpy as np
-
+import os
+import csv
+import sys
+import shutil
+from os import environ
+from os.path import dirname
+from os.path import join
+from os.path import exists
+from os.path import expanduser
+from os.path import isdir
+from os.path import splitext
+from os import listdir
+from os import makedirs
 from scipy import sparse
-
 
 class Dataset(object):
 
     @classmethod
-    def load_arff_to_numpy(cls, filename, labelcount, endian="big", input_feature_type='float', encode_nominal=True, load_sparse=False):
+    def load_arff_to_numpy(cls, filename, labelcount, endian="big", input_feature_type='float', encode_nominal=True, load_sparse=False, return_attribute_definitions=False):
         """Method for loading ARFF files as numpy array
 
         Parameters
@@ -25,11 +36,11 @@ class Dataset(object):
             Number of labels in the ARFF file
 
         endian: string{"big", "little"}
-            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
+            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format)
             or at the end ("little" endianness, MULAN format)
 
         input_feature_type: numpy.type as string
-            The desire type of the contents of the return 'X' array-likes, default 'i8', 
+            The desire type of the contents of the return 'X' array-likes, default 'i8',
             should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
 
         encode_nominal: boolean
@@ -72,7 +83,10 @@ class Dataset(object):
             # unknown endian
             return None
 
-        return X, y
+        if return_attribute_definitions:
+            return X, y, arff_frame['attributes']
+        else:
+            return X, y
 
     @classmethod
     def save_to_arff(cls, X, y, endian="little", save_sparse=True):
@@ -88,7 +102,7 @@ class Dataset(object):
             Number of labels in the ARFF file
 
         endian: string{"big", "little"}
-            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format) 
+            Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format)
             or at the end ("little" endianness, MULAN format)
 
         save_sparse: boolean
@@ -184,7 +198,7 @@ class Dataset(object):
         data: dictionary {'X': array-like of array-likes, 'y': array-like of binary label vectors }
             The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
             and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-            then the input vector has label no. 5) 
+            then the input vector has label no. 5)
 
         """
         data = None
@@ -195,4 +209,4 @@ class Dataset(object):
         with bz2.BZ2File(filename, "r") as file_handle:
             data = pickle.load(file_handle)
 
-        return data
+        return X, y
