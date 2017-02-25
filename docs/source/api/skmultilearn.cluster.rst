@@ -33,4 +33,12 @@ skmultilearn.cluster.igraph module
     :undoc-members:
     :show-inheritance:
 
+skmultilearn.cluster.matrix module
+----------------------------------
+
+.. automodule:: skmultilearn.cluster.matrix
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 

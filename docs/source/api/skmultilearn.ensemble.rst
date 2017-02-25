@@ -17,14 +17,6 @@ skmultilearn.ensemble.fixed module
     :undoc-members:
     :show-inheritance:
 
-skmultilearn.ensemble.majorityvote module
------------------------------------------
-
-.. automodule:: skmultilearn.ensemble.majorityvote
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 skmultilearn.ensemble.partition module
 --------------------------------------
 
