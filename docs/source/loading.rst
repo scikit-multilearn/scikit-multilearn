@@ -106,27 +106,56 @@ To perform a train-test split for multi-label classification - having `X` and `y
 	# predict labels for test data
 	predictions = classifier.predict(X_test)
 
-As there is no established stratified folding procedure for multi-label classification and scikit-learn's StratifiedFold will fail on multi-label data. We are left to use a traditional k-fold cross-validation approach with `sklearn.model_selection.KFold <http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html>`_:
+As there is no established stratified folding procedure for multi-label classification we can use a traditional k-fold cross-validation approach with `sklearn.model_selection.KFold <http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html>`_:
 
 .. code-block:: python
 
-	from sklearn.model_selection import KFold
-	
-	kf = KFold(n_splits=n_splits, random_state=None, shuffle=shuffle)
-	for train_index, test_index in kf.split(X, y):
-		# assuming classifier object exists
+    from sklearn.model_selection import KFold
 
-		X_train = X[train_index,:]
-		y_train = y[train_index,:]
+    # remember to set n_splits and shuffle!
+    kf = KFold(n_splits=n_splits, random_state=None, shuffle=shuffle)
 
-		X_test = X[test_index,:]
-		y_test = y[test_index,:]
+    for train_index, test_index in kf.split(X, y):
+    	# assuming classifier object exists
+    	X_train = X[train_index,:]
+    	y_train = y[train_index,:]
 
-		# learn the classifier
-		classifier.fit(X_train, y_train)
+    	X_test = X[test_index,:]
+    	y_test = y[test_index,:]
 
-		# predict labels for test data
-		predictions = classifier.predict(X_test)
+    	# learn the classifier
+    	classifier.fit(X_train, y_train)
+
+    	# predict labels for test data
+    	predictions = classifier.predict(X_test)
+
+It is noteworthy that traditional ``k``-folding may lead to severe problems with label combination representability across folds, thus if your data set exhibits a strong label co-occurrence structure you might want to use a label-combination based `stratified k-fold <http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html>`_:
+
+.. code-block:: python
+
+    from sklearn.model_selection import StratifiedKFold
+    from skmultilearn.problem_transform import LabelPowerset
+
+    lp = LabelPowerset()
+
+    # remember to set n_splits and shuffle!
+    kf = StratifiedKFold(n_splits=n_splits, random_state=None, shuffle=shuffle)
+
+    for train_index, test_index in kf.split(X, lp.transform(y)):
+
+        # assuming classifier object exists
+        X_train = X[train_index,:]
+        y_train = y[train_index,:]
+
+        X_test = X[test_index,:]
+        y_test = y[test_index,:]
+
+        # learn the classifier
+        classifier.fit(X_train, y_train)
+
+        # predict labels for test data
+        predictions = classifier.predict(X_test)
+
 
 In the next section you will learn what classification methods are available in scikit-multilearn.
 
