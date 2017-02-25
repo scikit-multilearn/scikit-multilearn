@@ -84,9 +84,10 @@ def get_dataset_list():
 
     - each row corresponds to a variant of a data set
     - variants include: train, test and undivided, note that sometimes data
-    sets are not provided in train, test division by their authors
+        sets are not provided in train, test division by their authors
     - in each row column 0 is the md5, column 1 is the file name available
-    under :func:`get_download_base_url`
+        under :func:`get_download_base_url`
+
     """
 
     f = urllib.request.urlopen(get_download_base_url() + "data.list")
