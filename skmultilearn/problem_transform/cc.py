@@ -7,32 +7,33 @@ import random
 
 
 class ClassifierChain(ProblemTransformationBase):
+
     """Classifier Chains Multi-Label Classifier.
 
     This class provides implementation of Jesse Read's problem transformation
     method called Classifier Chains. For L labels it trains L classifiers
-    ordered in a chain according to the 
+    ordered in a chain according to the
     `Bayesian chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_.
-    The first classifier is trained just on the input space, and then each next 
+    The first classifier is trained just on the input space, and then each next
     classifier is trained on the input space and all previous classifiers in the
-    chain. 
+    chain.
 
     The default classifier chains follow the same ordering as provided in the
     training set, i.e. label in column 0, then 1, etc.
 
-    You can find more information about this method in Jesse Read's 
+    You can find more information about this method in Jesse Read's
     `ECML presentation <https://users.ics.aalto.fi/jesse/talks/chains-ECML-2009-presentation.pdf>`_
     or `journal paper <http://www.cs.waikato.ac.nz/~eibe/pubs/ccformlc.pdf>`_.
     """
     BRIEFNAME = "CC"
 
-    def __init__(self, classifier=None, require_dense=False):
+    def __init__(self, classifier=None, require_dense=None):
         super(ClassifierChain, self).__init__(classifier, require_dense)
 
     def fit(self, X, y):
         """Fit classifier with training data
 
-        Internally this method uses a sparse CSC representation 
+        Internally this method uses a sparse CSC representation
         (:py:class:`scipy.sparse.csc_matrix`) of the X & y matrices.
 
         :param X: input features
@@ -43,22 +44,22 @@ class ClassifierChain(ProblemTransformationBase):
 
         """
 
-
         # fit L = len(y[0]) BR classifiers h_i
         # on X + y[:i] as input space and y[i+1] as output
-        #
+
         X_extended = self.ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
         y = self.ensure_output_format(
             y, sparse_format='csc', enforce_sparse=True)
+
         self.label_count = y.shape[1]
         self.classifiers = [None for x in range(self.label_count)]
 
         for label in range(self.label_count):
-            classifier = copy.deepcopy(self.classifier)
+            self.classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, label, axis=1)
 
-            self.classifiers[label] = classifier.fit(self.ensure_input_format(
+            self.classifiers[label] = self.classifier.fit(self.ensure_input_format(
                 X_extended), self.ensure_output_format(y_subset))
             X_extended = hstack([X_extended, y_subset])
 
@@ -81,10 +82,8 @@ class ClassifierChain(ProblemTransformationBase):
         for label in range(self.label_count):
             prediction = self.classifiers[label].predict(
                 self.ensure_input_format(X_extended))
-            prediction = self.ensure_output_format(
-                prediction, sparse_format='csc', enforce_sparse=True)
-            X_extended = hstack([X_extended, prediction.T]).tocsc()
-
+            prediction = self.ensure_multi_label_from_single_class(prediction)
+            X_extended = hstack([X_extended, prediction])
         return X_extended[:, -self.label_count:]
 
     def predict_proba(self, X):
@@ -96,9 +95,10 @@ class ClassifierChain(ProblemTransformationBase):
         :type X: dense or sparse matrix (n_samples, n_labels)
         :returns: matrix with label assignment probabilities
         :rtype: sparse matrix of float (n_samples, n_labels)
-        
+
         """
-        X_extended = self.ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
+        X_extended = self.ensure_input_format(
+            X, sparse_format='csc', enforce_sparse=True)
         prediction = None
         results = []
         for label in range(self.label_count):
