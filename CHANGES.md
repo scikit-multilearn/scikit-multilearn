@@ -1,6 +1,15 @@
 scikit-multilearn Changelog
 ===========================
 
+0.0.5 (released 2017-02-25)
+---------------------------
+
+- a general matrix-based label space clusterer has been added which can cluster the output space using any scikit-learn compatible clusterer (incl. k-means)
+- support for more single-class and multi-class classifiers you can now use problem transformation approaches with your favourite neural networks/deep learning libraries: theano, tensorflow, keras, scikit-neuralnetworks
+- support for label powerset based stratified kfold added
+- graph-tool clusterer supports weighted graphs again and includes stochastic blockmodel calibration
+- bugs were fixed in: classifier chains and hierarchical neuro fuzzy clasifiers
+
 0.0.4 (released 2017-02-04)
 ---------------------------
 

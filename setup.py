@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='scikit-multilearn',
-    version='0.0.4',
+    version='0.0.5',
     packages=find_packages(exclude=['docs', 'tests', '*.tests']),
     author=u'Piotr Szymański',
     author_email='niedakh@gmail.com',
