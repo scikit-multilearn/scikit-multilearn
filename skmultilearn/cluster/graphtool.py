@@ -1,11 +1,14 @@
 from __future__ import absolute_import
+from __future__ import print_function
 from builtins import range
 from .base import LabelCooccurenceClustererBase
+import copy
 import numpy as np
 import graph_tool.all as gt
 
 
 class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
+
     """ Clusters the label space using graph tool's stochastic block modelling community detection method
 
         Parameters
@@ -14,23 +17,20 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         weighted: boolean
                 Decide whether to generate a weighted or unweighted graph.
 
-        allow_overlap: boolean
-                Allow overlapping of clusters or not.
-
         include_self_edges : boolean
             Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
 
+        allow_overlap: boolean
+                Allow overlapping of clusters or not.
+
         n_iters : int
-                Number of iterations to perform in sweeping 
+                Number of iterations to perform in sweeping
 
         n_init_iters: int
-                Number of iterations to perform 
+                Number of iterations to perform
 
-        collect_community_statistics: bool
-                Whether to collect statistics related to detected community
-
-        use_degree_corr: 'auto' or bool
-                Whether to use a degree correlated stochastic blockmodel, or not - if auto, it is selected based on selection criterium
+        use_degree_corr: None or bool
+                Whether to use a degree correlated stochastic blockmodel, or not - if None, it is selected based on selection criterium
 
         model_selection_criterium: 'mean_field' or 'bethe'
                 Approach to use in case
@@ -38,18 +38,31 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         verbose: bool
                 Be verbose about the output
 
+        equlibrate_options: dict
+                additional options to pass to `graphtool's mcmc_equilibrate <https://graph-tool.skewed.de/static/doc/inference.html#graph_tool.inference.mcmc_equilibrate>`_
+
 
     """
 
-    def __init__(self, weighted=None, include_self_edges = None, allow_overlap=None):
-        super(GraphToolCooccurenceClusterer, self).__init__(weighted=weighted, include_self_edges=include_self_edges)
+    def __init__(self, weighted=None,
+                 include_self_edges=None,
+                 allow_overlap=None,
+                 n_iters=100,
+                 n_init_iters=10,
+                 use_degree_corr=None,
+                 model_selection_criterium='mean_field',
+                 verbose=False,
+                 equlibrate_options={}):
+        super(GraphToolCooccurenceClusterer, self).__init__(
+            weighted=weighted, include_self_edges=include_self_edges)
 
         self.allow_overlap = allow_overlap
-        self.n_iters
-        self.n_init_iters
-        self.use_degree_corr
-        self.model_selection_criterium
-        self.collect_community_statistics
+        self.n_iters = n_iters
+        self.n_init_iters = n_init_iters
+        self.use_degree_corr = use_degree_corr
+        self.model_selection_criterium = model_selection_criterium
+        self.verbose = verbose
+        self.equlibrate_options = equlibrate_options
 
         if allow_overlap not in [True, False]:
             raise ValueError("allow_overlap needs to be a boolean")
@@ -98,23 +111,49 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         Returns
         -------
         partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
-        
+
         """
         self.dls_ = {}
-        self.vm_  = {}
-        self.en_  = {}
-        self.h_   = {}
+        self.vm_ = {}
+        self.em_ = {}
+        self.h_ = {}
+        self.state_ = {}
+        self.S_bethe_ = {}
+        self.S_mf_ = {}
+        self.L_ = {}
 
         self.generate_coocurence_adjacency_matrix(y)
         self.generate_coocurence_graph()
 
-        d = gt.minimize_blockmodel_dl(
-            self.coocurence_graph, overlap=self.allow_overlap) #, ec=self.weights), broken in graphtool for now
-        A = d.get_blocks().a
+        which_model_to_use = None
 
-        self.label_sets = [[] for i in range(d.B)]
-        for k in range(len(A)):
-            self.label_sets[A[k]].append(k)
+        if self.use_degree_corr is None:
+            for deg_corr in [True, False]:
+                self.predict_communities(deg_corr)
+
+            decision_criterion = self.S_mf_
+
+            if self.model_selection_criterium == 'bethe':
+                decision_criterion = self.S_bethe_
+
+            which_model_to_use = decision_criterion[
+                True] < decision_criterion[False]
+
+        else:
+            self.predict_communities(self.use_degree_corr)
+            which_model_to_use = self.use_degree_corr
+
+        state_to_use = self.state_[which_model_to_use]
+
+        found_blocks = state_to_use.get_blocks().get_array()
+
+        self.label_sets = {b: [] for b in range(len(found_blocks))}
+
+        for label_id, block_id in enumerate(found_blocks):
+            self.label_sets[block_id].append(label_id)
+
+        self.label_sets = filter(
+            lambda x: len(x) > 0, self.label_sets.values())
 
         self.model_count = len(self.label_sets)
 
@@ -122,50 +161,47 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
     def predict_communities(self, deg_corr):
         if self.is_weighted:
-            state = gt.minimize_blockmodel_dl(self.coocurence_graph, overlap=self.allow_overlap,
+            state = gt.minimize_blockmodel_dl(
+                self.coocurence_graph, overlap=self.allow_overlap,
                 deg_corr=deg_corr, layers=True, state_args=dict(ec=self.weights, layers=False))
         else:
-            state = gt.minimize_blockmodel_dl(self.coocurence_graph, overlap=self.allow_overlap, deg_corr=deg_corr)
-            
-        state = state.copy(B=g.num_vertices())
+            state = gt.minimize_blockmodel_dl(
+                self.coocurence_graph, overlap=self.allow_overlap, deg_corr=deg_corr)
 
-        if self.collect_community_statistics:
-            dls = []         # description length history
-            vm = None        # vertex marginals
-            em = None        # edge marginals
-            h = np.zeros(g.num_vertices() + 1)
+        state = state.copy(B=self.coocurence_graph.num_vertices())
 
-        def collect_marginals(s):
-            global vm, em, dls, h
-            vm = s.collect_vertex_marginals(vm)
-            em = s.collect_edge_marginals(em)
-            dls.append(s.entropy())
+        self.dls_[deg_corr] = []          # description length history
+        self.vm_[deg_corr] = None        # vertex marginals
+        self.em_[deg_corr] = None        # edge marginals
+        self.h_[deg_corr] = np.zeros(
+            self.coocurence_graph.num_vertices() + 1)
+
+        def collect_marginals(s, deg_corr, obj):
+            obj.vm_[deg_corr] = s.collect_vertex_marginals(obj.vm_[deg_corr])
+            obj.em_[deg_corr] = s.collect_edge_marginals(obj.em_[deg_corr])
+            obj.dls_[deg_corr].append(s.entropy())
             B = s.get_nonempty_B()
-            h[B] += 1
+            obj.h_[deg_corr][B] += 1
+
+        collect_marginals_for_class = lambda s: collect_marginals(
+            s, deg_corr, self)
 
         # Now we collect the marginal distributions for exactly 200,000 sweeps
-        if self.collect_community_statistics:
-            gt.mcmc_equilibrate(state, force_niter=n_iters, mcmc_args=dict(niter=10),
-                            callback=collect_marginals)
-            
-            self.dls_[deg_corr] = copy.copy(dls)
-            self.vm_[deg_corr] = copy.copy(vm)
-            self.en_[deg_corr] = copy.copy(em)
-            self.h_[deg_corr] =copy.copy(h)
+        gt.mcmc_equilibrate(
+            state, force_niter=self.n_iters, mcmc_args=dict(
+                niter=self.n_init_iters),
+                        callback=collect_marginals_for_class, **self.equlibrate_options)
 
-        else:
-            gt.mcmc_equilibrate(state, force_niter=n_iters, mcmc_args=dict(niter=10))
+        S_mf = gt.mf_entropy(self.coocurence_graph, self.vm_[deg_corr])
+        S_bethe = gt.bethe_entropy(
+            self.coocurence_graph, self.em_[deg_corr])[0]
+        L = -np.mean(self.dls_[deg_corr])
 
+        self.state_[deg_corr] = copy.copy(state)
+        self.S_bethe_[deg_corr] = copy.copy(S_bethe)
+        self.S_mf_[deg_corr] = copy.copy(S_mf)
+        self.L_[deg_corr] = copy.copy(L)
 
-
-        S_mf = gt.mf_entropy(g, vm)
-        S_bethe = gt.bethe_entropy(g, em)[0]
-        L = -np.mean(dls)
-
-        self.state_[deg_corr] =copy.copy(state)
-        self.S_bethe_[deg_corr] =copy.copy(S_bethe)
-        self.S_mf_[deg_corr] =copy.copy(S_mf)
-        self.L_[deg_corr] =copy.copy(L)
-
-        print("Model evidence for deg_corr = %s:" % deg_corr,
-              L + S_mf, "(mean field),", L + S_bethe, "(Bethe)")
+        if self.verbose:
+            print(("Model evidence for deg_corr = %s:" % deg_corr,
+                  L + S_mf, "(mean field),", L + S_bethe, "(Bethe)"))

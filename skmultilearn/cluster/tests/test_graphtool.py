@@ -19,13 +19,26 @@ class GraphtoolClustererBaseTests(unittest.TestCase):
         for allow_overlap in [True, False]:
             for weighted in [True, False]:
                 for include_self_edges in [True, False]:
-                    clusterer = GraphToolCooccurenceClusterer(
-                        weighted=weighted, allow_overlap=allow_overlap, include_self_edges=include_self_edges)
-                    self.assertEqual(clusterer.allow_overlap, allow_overlap)
-                    self.assertEqual(clusterer.is_weighted, weighted)
-                    self.assertEqual(clusterer.include_self_edges, include_self_edges)
-                    partition = clusterer.fit_predict(X, y)
-                    self.assertIsInstance(partition, np.ndarray)
+                    for use_degree_corr in [True, False, None]:
+                        for model_selection_criterium in ['mean_field', 'bethe']:
+                            for verbose in [True, False]:
+                                clusterer = GraphToolCooccurenceClusterer(
+                                    weighted=weighted, allow_overlap=allow_overlap, 
+                                    include_self_edges=include_self_edges,
+                                    n_iters=2, n_init_iters=2, 
+                                    use_degree_corr=use_degree_corr,
+                                    model_selection_criterium=model_selection_criterium,
+                                    verbose=verbose)
+                                self.assertEqual(clusterer.allow_overlap, allow_overlap)
+                                self.assertEqual(clusterer.is_weighted, weighted)
+                                self.assertEqual(clusterer.include_self_edges, include_self_edges)
+                                self.assertEqual(clusterer.n_iters, 2)
+                                self.assertEqual(clusterer.n_init_iters, 2)
+                                self.assertEqual(clusterer.model_selection_criterium, model_selection_criterium)
+                                self.assertEqual(clusterer.verbose, verbose)
+
+                                partition = clusterer.fit_predict(X, y)
+                                self.assertIsInstance(partition, np.ndarray)
 
 if __name__ == '__main__':
     unittest.main()
