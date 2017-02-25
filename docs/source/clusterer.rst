@@ -1,4 +1,5 @@
 .. _implementclusterer:
+
 Developing a label space clusterer
 ==================================
 
