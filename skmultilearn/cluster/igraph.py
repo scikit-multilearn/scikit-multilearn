@@ -24,12 +24,12 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     """
 
     METHODS = {
-        'fastgreedy': lambda graph, w = None: np.array(graph.community_fastgreedy(weights=w).as_clustering()),
-        'infomap': lambda graph, w = None: np.array(graph.community_infomap(edge_weights=w)),
-        'label_propagation': lambda graph, w = None: np.array(graph.community_label_propagation(weights=w)),
-        'leading_eigenvector': lambda graph, w = None: np.array(graph.community_leading_eigenvector(weights=w)),
-        'multilevel': lambda graph, w = None: np.array(graph.community_multilevel(weights=w)),
-        'walktrap': lambda graph, w = None: np.array(graph.community_walktrap(weights=w).as_clustering()),
+        'fastgreedy': lambda graph, w = None: graph.community_fastgreedy(weights=w).as_clustering(),
+        'infomap': lambda graph, w = None: graph.community_infomap(edge_weights=w),
+        'label_propagation': lambda graph, w = None: graph.community_label_propagation(weights=w),
+        'leading_eigenvector': lambda graph, w = None: graph.community_leading_eigenvector(weights=w),
+        'multilevel': lambda graph, w = None: graph.community_multilevel(weights=w),
+        'walktrap': lambda graph, w = None: graph.community_walktrap(weights=w).as_clustering(),
     }
 
     def __init__(self, method=None, weighted=None, include_self_edges=None):
@@ -70,6 +70,6 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
             edge_attrs=self.weights
         )
 
-        partition = IGraphLabelCooccurenceClusterer.METHODS[
+        self.partition = IGraphLabelCooccurenceClusterer.METHODS[
             self.method](self.coocurence_graph, self.weights['weight'])
-        return partition
+        return np.array(self.partition)
