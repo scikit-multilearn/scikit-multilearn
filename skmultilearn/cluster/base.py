@@ -87,5 +87,9 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
                     if self.is_weighted:
                         edge_map[p] += 1.0
 
+        for i in range(self.label_count):
+            if (i,i) in edge_map:
+                edge_map[(i,i)] = edge_map[(i,i)]/2.0
+
         self.edge_map = edge_map
         return edge_map
