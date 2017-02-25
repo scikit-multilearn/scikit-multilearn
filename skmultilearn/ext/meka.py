@@ -10,10 +10,11 @@ import arff
 import os
 
 from ..base import MLClassifierBase
-from ..dataset import Dataset
+from ..dataset import save_to_arff
 
 
 class Meka(MLClassifierBase):
+
     """ Wrapper for the MEKA classifier
 
         For more information on how to use this class see the tutorial: :doc:`../meka`
@@ -106,9 +107,9 @@ class Meka(MLClassifierBase):
     def fit(self, X, y):
         """Fit classifier with training data
 
-        Internally this method dumps X and y to temporary arff files and 
-        runs MEKA with relevant arguments using :func:`run`. It uses a 
-        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`) 
+        Internally this method dumps X and y to temporary arff files and
+        runs MEKA with relevant arguments using :func:`run`. It uses a
+        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
         :param X: input features
@@ -126,7 +127,7 @@ class Meka(MLClassifierBase):
         self.label_count = y.shape[1]
 
         # we need this in case threshold needs to be recalibrated in meka
-        self.train_data_ = Dataset.save_to_arff(X, y)
+        self.train_data_ = save_to_arff(X, y)
         train_arff = tempfile.NamedTemporaryFile(delete=False)
         classifier_dump_file = tempfile.NamedTemporaryFile(delete=False)
 
@@ -156,9 +157,9 @@ class Meka(MLClassifierBase):
     def predict(self, X):
         """Predict label assignments for X
 
-        Internally this method dumps X to temporary arff files and 
-        runs MEKA with relevant arguments using :func:`run`. It uses a 
-        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`) 
+        Internally this method dumps X to temporary arff files and
+        runs MEKA with relevant arguments using :func:`run`. It uses a
+        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
         :param X: input features
@@ -188,7 +189,7 @@ class Meka(MLClassifierBase):
                 fp.write(self.classifier_dump)
 
             with open(test_arff.name + '.arff', 'wb') as fp:
-                fp.write(Dataset.save_to_arff(X, sparse_y))
+                fp.write(save_to_arff(X, sparse_y))
 
             args = [
                 '-l', classifier_dump_file.name
@@ -249,7 +250,8 @@ class Meka(MLClassifierBase):
         predictions_split_foot = '|==========='
 
         if self.label_count is None:
-            self.label_count = map(lambda y: int(y.split(')')[1].strip()), [x for x in self.output.split('\n') if 'Number of labels' in x])[0]
+            self.label_count = map(lambda y: int(y.split(')')[1].strip()), [
+                                   x for x in self.output.split('\n') if 'Number of labels' in x])[0]
 
         if self.instance_count is None:
             self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split(
@@ -257,8 +259,10 @@ class Meka(MLClassifierBase):
         self.predictions = self.output.split(predictions_split_head)[1].split(
             predictions_split_foot)[0].split('\n')[1:-1]
 
-        self.predictions = [y.split(']')[0] for y in [x.split('] [')[1] for x in self.predictions]]
-        self.predictions = [[a for a in [f.strip() for f in z.split(',')] if len(a) > 0] for z in self.predictions]
+        self.predictions = [y.split(']')[0]
+                            for y in [x.split('] [')[1] for x in self.predictions]]
+        self.predictions = [[a for a in [f.strip() for f in z.split(',')] if len(a) > 0]
+                            for z in self.predictions]
         self.predictions = [[int(a) for a in z] for z in self.predictions]
 
         assert self.verbosity == 5

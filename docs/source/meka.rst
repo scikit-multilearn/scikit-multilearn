@@ -11,7 +11,7 @@ In order to use the python interface to `MEKA <http://meka.sourceforge.net/>`_  
 
 The currently officially released MEKA version is 1.9.0 from 2015 and has a `bug <https://github.com/Waikato/meka/issues/1>`_
 that prevents the wrapper from working. Please `download a compiled 1.9.1+ snapshot <https://adams.cms.waikato.ac.nz/snapshots/meka/>`_
-instead of using the 1.9.0 version, unzip it to ``<MEKA_DIR>`` and use ``<MEKA_DIR>/lib/`` as the MEKA classpath for the constructor.
+instead of using the 1.9.0 version, unzip it to ``<meka_directory>`` and use ``<meka_directory>/lib/`` as the MEKA classpath for the constructor. 
 
 Note that you will need to have ``liac-arff`` installed if you want to use the MEKA wrapper, you can get them using: ``pip install liac-arff``.
 
