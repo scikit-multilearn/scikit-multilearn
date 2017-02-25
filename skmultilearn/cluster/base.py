@@ -3,6 +3,7 @@ from ..utils import get_matrix_in_format
 
 
 class LabelSpaceClustererBase(object):
+
     """An abstract base class for Label Space clustering
 
     Implement it in your classifier according to :doc:`../clusterer`.
@@ -24,6 +25,7 @@ class LabelSpaceClustererBase(object):
 
 
 class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
+
     """Base class providing API and common functions for all label cooccurence based multi-label classifiers.
 
     Parameters
@@ -37,7 +39,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
 
     """
 
-    def __init__(self, weighted=None, include_self_edges = None):
+    def __init__(self, weighted=None, include_self_edges=None):
         super(LabelCooccurenceClustererBase, self).__init__()
 
         self.is_weighted = weighted
@@ -47,13 +49,13 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
             raise ValueError("Weighted needs to be a boolean")
 
         if include_self_edges not in [True, False]:
-            raise ValueError("Decision about whether to include self edges needs to be a boolean")
-
+            raise ValueError(
+                "Decision about whether to include self edges needs to be a boolean")
 
     def generate_coocurence_adjacency_matrix(self, y):
         """Generate adjacency matrix from label matrix
 
-        This function generates a weighted or unweighted cooccurence graph based on input binary label vectors 
+        This function generates a weighted or unweighted cooccurence graph based on input binary label vectors
         and sets it to self.coocurence_graph
 
         :param y: binary indicator matrix with label assignments

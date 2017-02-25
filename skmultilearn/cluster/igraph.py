@@ -6,6 +6,7 @@ import igraph as ig
 
 
 class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
+
     """Clusters the label space using igraph community detection methods
 
     Parameters
@@ -31,14 +32,14 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
         'walktrap': lambda graph, w = None: np.array(graph.community_walktrap(weights=w).as_clustering()),
     }
 
-    def __init__(self, method=None, weighted=None, include_self_edges = None):
-        super(IGraphLabelCooccurenceClusterer, self).__init__(weighted=weighted, include_self_edges=include_self_edges)
+    def __init__(self, method=None, weighted=None, include_self_edges=None):
+        super(IGraphLabelCooccurenceClusterer, self).__init__(
+            weighted=weighted, include_self_edges=include_self_edges)
         self.method = method
 
         if method not in IGraphLabelCooccurenceClusterer.METHODS:
             raise ValueError(
                 "{} not a supported igraph community detection method".format(method))
-
 
     def fit_predict(self, X, y):
         """Performs clustering on y and returns list of label lists
