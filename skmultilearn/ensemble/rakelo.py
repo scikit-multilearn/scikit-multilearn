@@ -66,14 +66,15 @@ class RakelO(RakelD):
             for c in self.classifiers
         ]
 
+        voters = np.zeroes(self.label_count)
+
         votes = sparse.csc_matrix(
             (predictions[0].shape[0], self.label_count), dtype='int')
         for model in range(self.model_count):
             for label in range(len(self.partition[model])):
                 votes[:, self.partition[model][label]] = votes[
                     :, self.partition[model][label]] + predictions[model][:, label]
-
-        voters = list(map(float, votes.sum(axis=0).tolist()[0]))
+                voters[self.partition[model][label]]+=1
 
         nonzeros = votes.nonzero()
         for row, column in zip(nonzeros[0], nonzeros[1]):
