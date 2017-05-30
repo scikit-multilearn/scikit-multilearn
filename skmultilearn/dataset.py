@@ -218,12 +218,12 @@ def load_from_arff(filename, labelcount, endian="big", input_feature_type='float
     matrix = None
     if not load_sparse:
         arff_frame = arff.load(
-            open(filename, 'rb'), encode_nominal=encode_nominal, return_type=arff.DENSE)
+            open(filename, 'r'), encode_nominal=encode_nominal, return_type=arff.DENSE)
         matrix = sparse.csr_matrix(
             arff_frame['data'], dtype=input_feature_type)
     else:
         arff_frame = arff.load(
-            open(filename, 'rb'), encode_nominal=encode_nominal, return_type=arff.COO)
+            open(filename, 'r'), encode_nominal=encode_nominal, return_type=arff.COO)
         data = arff_frame['data'][0]
         row = arff_frame['data'][1]
         col = arff_frame['data'][2]
