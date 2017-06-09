@@ -245,6 +245,8 @@ class Meka(MLClassifierBase):
             self.results = None
             self.statistics = None
             return None
+        
+        self.output = self.output.decode('utf-8')
 
         predictions_split_head = '==== PREDICTIONS'
         predictions_split_foot = '|==========='
