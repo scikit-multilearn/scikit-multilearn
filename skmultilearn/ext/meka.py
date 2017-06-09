@@ -92,6 +92,8 @@ class Meka(MLClassifierBase):
 
         if self.weka_classifier is not None:
             command_args += ['-W', self.weka_classifier]
+        if self.meka_classifier == "meka.classifiers.multilabel.MULAN":
+            command_args += ['-S', 'CLR']
 
         command_args += args
 
