@@ -92,6 +92,8 @@ class Meka(MLClassifierBase):
 
         if self.weka_classifier is not None:
             command_args += ['-W', self.weka_classifier]
+        if self.meka_classifier == "meka.classifiers.multilabel.MULAN":
+            command_args += ['-S', 'CLR']
 
         command_args += args
 
@@ -245,6 +247,8 @@ class Meka(MLClassifierBase):
             self.results = None
             self.statistics = None
             return None
+        
+        self.output = self.output.decode('utf-8')
 
         predictions_split_head = '==== PREDICTIONS'
         predictions_split_foot = '|==========='
