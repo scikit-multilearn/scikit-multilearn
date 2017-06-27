@@ -15,9 +15,9 @@ class FixedLabelPartitionClassifier(LabelSpacePartitioningClassifier):
         self.copyable_attrs = ['partition', 'classifier', 'require_dense']
 
     def generate_partition(self, X, y):
-    	"""Assign fixed partition of the label space
+        """Assign fixed partition of the label space
 
-    	Mock function, the partition is assigned in the constructor.
+        Mock function, the partition is assigned in the constructor.
 
         :param X: not used, maintained for api compatibility
         :param y: binary indicator matrix with label assignments
