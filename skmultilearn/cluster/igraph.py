@@ -6,22 +6,7 @@ import igraph as ig
 
 
 class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
-
-    """Clusters the label space using igraph community detection methods
-
-    Parameters
-    ----------
-
-    method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
-        the igraph community detection method that will be used
-
-    weighted: boolean
-            Decide whether to generate a weighted or unweighted graph.
-
-    include_self_edges : boolean
-            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
-
-    """
+    """Clusters the label space using igraph community detection methods"""
 
     METHODS = {
         'fastgreedy': lambda graph, w = None: graph.community_fastgreedy(weights=w).as_clustering(),
@@ -33,6 +18,18 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     }
 
     def __init__(self, method=None, weighted=None, include_self_edges=None):
+        """Initializes the clusterer
+
+        Attributes
+        ----------
+        method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
+            the igraph community detection method that will be used
+        weighted: boolean
+            decide whether to generate a weighted or unweighted graph.
+        include_self_edges : boolean
+            decide whether to include self-edge i.e. label 1 - label 1
+            in co-occurrence graph
+        """
         super(IGraphLabelCooccurenceClusterer, self).__init__(
             weighted=weighted, include_self_edges=include_self_edges)
         self.method = method
@@ -44,18 +41,22 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     def fit_predict(self, X, y):
         """Performs clustering on y and returns list of label lists
 
-        Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
+        Builds a label coocurence_graph using
+        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
+        on `y` and then detects communities using a selected `method`.
 
         Parameters
         ----------
-        X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
-        y : sparse matrix (n_samples, n_labels), label space
+        X : scipy.sparse 
+            feature space of shape :code:`(n_samples, n_features)`
+        y : scipy.sparse
+            label space of shape :code:`(n_samples, n_features)`
 
         Returns
         -------
-        partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
-
-
+        list of lists
+            list of lists label indexes, each sublist represents labels
+            that are in that community
         """
         self.generate_coocurence_adjacency_matrix(y)
 

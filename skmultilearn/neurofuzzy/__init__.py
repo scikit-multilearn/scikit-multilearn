@@ -1,10 +1,10 @@
 """
-The :mod:`skmultilearn.neurofuzzy` module provides implementations of neural network
-and fuzzy approaches to multi-label classification.
+The :mod:`skmultilearn.neurofuzzy` module provides implementations of
+neural network and fuzzy approaches to multi-label classification.
 
 Currently the available classes include:
 
-- :class:`MLARAM` - A Multi-Label Hierarchical ARAM Neural Network
+- :class:`skmultilearn.neurofuzzy.MLARAMfast.MLARAM` - A Multi-Label Hierarchical ARAM Neural Network
 
 """
 

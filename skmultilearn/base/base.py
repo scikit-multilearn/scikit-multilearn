@@ -6,15 +6,17 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
-    """Base class providing API and common functions for all multi-label classifiers.
+    """Base class providing API and common functions for all multi-label
+    classifiers.
 
-    Parameters
+    Attributes
     ----------
-
-    classifier : scikit classifier type
-        The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
-    require_dense : boolean
-        Whether the base classifier requires input as dense arrays, False by default
+    classifier : sklearb.base.BaseEstimator
+        The base classifier that will be used in a class, will 
+        automatically be put under :code:`self.classifier` for future
+        access.
+    require_dense : bool (default is False)
+        Whether the base classifier requires input as dense arrays.
     """
 
     def __init__(self):
@@ -25,25 +27,25 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def generate_data_subset(self, y, subset, axis):
         """Subset rows or columns from matrix
 
-        This function subsets the array of binary label vectors to include only certain labels. 
+        This function subsets the array of binary label vectors to 
+        include only certain labels. 
 
         Parameters
         ----------
-
         y : array-like of array-likes
             An array-like of binary label vectors.
-
         subset: array-like of integers
-            array of integers, indices that will be subsetted from array-likes in y
-
+            array of integers, indices that will be subsetted from
+            array-likes in y
         axis: integer 0 for 'rows', 1 for 'labels', 
-            control variable for whether to return rows or labels as indexed by subset
+            control variable for whether to return rows or labels as
+            indexed by subset
 
         Returns
         -------
-
         multi-label binary label vector : array-like of array-likes of {0,1}
-            array of binary label vectors including label data only for labels from parameter labels
+            array of binary label vectors including label data only for
+            labels from parameter labels
         """
         return_data = None
         if axis == 1:
@@ -56,28 +58,28 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired input format
 
-        This function ensures that input format follows the density/sparsity requirements of base classifier. 
+        This function ensures that input format follows the
+        density/sparsity requirements of base classifier. 
 
         Parameters
         ----------
-
-        X : array-like or sparse matrix, shape = [n_samples, n_features]
-            An input feature matrix
-
-        sparse_format: string
+        X : array-like or sparse matrix
+            An input feature matrix of shape :code:`(n_samples, n_features)`
+        sparse_format: str
             Requested format of returned scipy.sparse matrix, if sparse is returned
-
         enforce_sparse : bool
             Ignore require_dense and enforce sparsity, useful internally
 
         Returns
         -------
-
-        transformed X : array-like or sparse matrix, shape = [n_samples, n_features]
-            If require_dense was set to true for input features in the constructor, 
-            the returned value is an array-like of array-likes. If require_dense is 
-            set to false, a sparse matrix of format sparse_format is returned, if 
-            possible - without cloning.
+        array-like or sparse matrix
+            Transformed X values of shape :code:`(n_samples, n_features)`
+            
+        .. note:: If :code:`require_dense` was set to :code:`True` for
+            input features in the constructor, the returned value is an
+            array-like of array-likes. If :code:`require_dense` is 
+            set to :code:`false`, a sparse matrix of format
+            :code:`sparse_format` is returned, if possible - without cloning.
         """
         is_sparse = issparse(X)
 
@@ -99,28 +101,35 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired output format
 
-        This function ensures that output format follows the density/sparsity requirements of base classifier. 
+        This function ensures that output format follows the
+        density/sparsity requirements of base classifier. 
 
         Parameters
         ----------
 
-        matrix : array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
-            An input feature matrix
+        matrix : array-like matrix
+            An input feature matrix of shape :code:`(n_samples)` or
+            :code:`(n_samples, n_outputs)` or a sparse matrix of shape
+            :code:`(n_samples, n_outputs)`
 
-        sparse_format: string
-            Requested format of returned scipy.sparse matrix, if sparse is returned
+        sparse_format: str (default is csr)
+            Requested format of returned :code:`scipy.sparse` matrix,
+            if sparse is returned
 
-        enforce_sparse : bool
-            Ignore require_dense and enforce sparsity, useful internally
+        enforce_sparse : bool (default is False)
+            Ignore :code:`require_dense` and enforce sparsity, useful
+            internally
 
         Returns
         -------
-
-        transformed matrix: array-like with shape = [n_samples] or [n_samples, n_outputs]; or sparse matrix, shape = [n_samples, n_outputs]  
-            If require_dense was set to True for input features in the constructor, 
-            the returned value is an array-like of array-likes. If require_dense is 
-            set to False, a sparse matrix of format sparse_format is returned, if 
-            possible - without cloning.
+        array-like or sparse matrix
+            Transformed X values of shape :code:`(n_samples, n_features)`
+            
+        .. note:: If :code:`require_dense` was set to :code:`True` for
+            input features in the constructor, the returned value is an
+            array-like of array-likes. If :code:`require_dense` is 
+            set to :code:`false`, a sparse matrix of format
+            :code:`sparse_format` is returned, if possible - without cloning.
         """
         is_sparse = issparse(matrix)
 
@@ -148,16 +157,25 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def fit(self, X, y):
         """Abstract method to fit classifier with training data
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-        
-        Should return self - a trained instance of the classifier.
+        It must return a fitted instance of :code:`self`.
 
-        :raises NotImplementedError: this is just an abstract method
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features, can be a dense or sparse matrix of size
+            :code:`(n_samples, n_features)`
+        y : numpy.ndaarray or scipy.sparse {0,1}
+            binary indicator matrix with label assignments.
 
+        Returns
+        -------
+        object
+            fitted instance of self
 
+        Raises
+        ------
+        NotImplementedError
+            this is just an abstract method
         """
 
         raise NotImplementedError("MLClassifierBase::fit()")
@@ -165,37 +183,43 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def predict(self, X):
         """Abstract method to predict labels
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
-        Should return sparse matrix of {0, 1} (n_samples, n_labels).
+        Returns
+        -------
+        scipy.sparse of int
+            binary indicator matrix with label assignments with shape
+            :code:`(n_samples, n_labels)`
 
-        :raises NotImplementedError: this is just an abstract method
-
+        Raises
+        ------
+        NotImplementedError
+            this is just an abstract method
         """
         raise NotImplementedError("MLClassifierBase::predict()")
 
     def get_params(self, deep=True):
-        """Get parameters to subobjects
+        """Get parameters to sub-objects
 
-        Introspection of classifier for search models like cross validation and grid
-        search.
-        
+        Introspection of classifier for search models like
+        cross-validation and grid search.
+
         Parameters
         ----------
-        
-        deep : boolean
-            If true all params will be introspected also and appended to the output dict.
-        
+        deep : bool
+            if :code:`True` all params will be introspected also and
+            appended to the output dictionary.
+
         Returns
         -------
-        
-        out : dictionary
-            Dictionary of all parameters and their values. If deep=True the dictionary
-            also holds the parameters of the parameters.
-        
+        out : dict
+            dictionary of all parameters and their values. If 
+            :code:`deep=True` the dictionary also holds the parameters
+            of the parameters.
         """
-
         out = dict()
 
         for attr in self.copyable_attrs:
@@ -208,17 +232,18 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         return out
 
     def set_params(self, **parameters):
-        """Propagate parameters to subobjects
+        """Propagate parameters to sub-objects
 
-        Set parameters as returned by `get_params`.
-        @see https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
+        Set parameters as returned by :code:`get_params`. Please 
+        see this `link`_.
+
+        .. _link: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
         """
 
         if not parameters:
             return self
 
         valid_params = self.get_params(deep=True)
-
 
         parameters_current_level = [x for x in parameters if '__' not in x]
         for parameter in parameters_current_level:

@@ -9,11 +9,7 @@ from scipy import sparse
 
 
 class RakelO(RakelD):
-    """
-
-    Overlapping RAndom k-labELsets multi-label classifier.
-
-    """
+    """Overlapping RAndom k-labELsets multi-label classifier"""
 
     def __init__(self, classifier=None, model_count=None, labelset_size=None, require_dense=None):
         super(RakelO, self).__init__(
@@ -26,15 +22,18 @@ class RakelO(RakelD):
     def generate_partition(self, X, y):
         """Randomly divide the label space
 
-        This function randomly divides the label space of `n_labels` into `model_count`  
-        equal subspaces of size `labelset_size`.  
+        This function randomly divides the label space of :code:`n_labels`
+        into :code:`model_count` equal subspaces of size
+        :code:`labelset_size`. Sets :code:`self.partition`
+        and :code:`self.label_count`.
 
-        :param X: not used, maintained for api compatibility
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-
-        Sets `self.partition`, `self.label_count`.
-
+        Parameters
+        -----------
+        X : numpy.ndarray or scipy.sparse
+            not used, maintained for API compatibility
+        y : numpy.ndarray or scipy.sparse
+            binary indicator matrix with label assigments of shape
+            :code:`(n_samples, n_labels)`
         """
         label_sets = []
         self.label_count = y.shape[1]
@@ -52,13 +51,18 @@ class RakelO(RakelD):
         """Predict probabilities of label assignments for X
 
         Internally this method uses a sparse CSC representation for X 
-        (:py:class:`scipy.sparse.csr_matrix`).
+        (:class:`scipy.sparse.csr_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_labels)
-        :returns: matrix with label assignment probabilities
-        :rtype: sparse matrix of float (n_samples, n_labels)
-        
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
+
+        Returns
+        -------
+        scipy.sparse of float
+            binary indicator matrix with label assignments with shape
+            :code:`(n_samples, n_labels)`
         """
         predictions = [
             self.ensure_input_format(self.ensure_input_format(

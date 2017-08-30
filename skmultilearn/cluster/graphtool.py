@@ -8,51 +8,39 @@ import graph_tool.all as gt
 
 
 class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
+    """Clusters the label space using graph tool's stochastic block
+    modelling community detection method"""
 
-    """ Clusters the label space using graph tool's stochastic block modelling community detection method
+    def __init__(self, weighted=None,include_self_edges=None,allow_overlap=None,
+                 n_iters=100,n_init_iters=10,use_degree_corr=None,model_selection_criterium='mean_field',
+                 verbose=False,equlibrate_options={}):
+        """Initializes the clusterer
 
-        Parameters
+        Attributes
         ----------
-
         weighted: boolean
                 Decide whether to generate a weighted or unweighted graph.
-
         include_self_edges : boolean
             Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
-
         allow_overlap: boolean
                 Allow overlapping of clusters or not.
-
         n_iters : int
                 Number of iterations to perform in sweeping
-
         n_init_iters: int
                 Number of iterations to perform
-
         use_degree_corr: None or bool
-                Whether to use a degree correlated stochastic blockmodel, or not - if None, it is selected based on selection criterium
-
+                Whether to use a degree correlated stochastic blockmodel,
+                or not - if None, it is selected based on selection criterium
         model_selection_criterium: 'mean_field' or 'bethe'
                 Approach to use in case
-
         verbose: bool
                 Be verbose about the output
-
         equlibrate_options: dict
-                additional options to pass to `graphtool's mcmc_equilibrate <https://graph-tool.skewed.de/static/doc/inference.html#graph_tool.inference.mcmc_equilibrate>`_
+                additional options to pass to graphtool's
+                `mcmc_equilibrate`_.
 
-
-    """
-
-    def __init__(self, weighted=None,
-                 include_self_edges=None,
-                 allow_overlap=None,
-                 n_iters=100,
-                 n_init_iters=10,
-                 use_degree_corr=None,
-                 model_selection_criterium='mean_field',
-                 verbose=False,
-                 equlibrate_options={}):
+        .. _mcmc_equilibrate: https://graph-tool.skewed.de/static/doc/inference.html#graph_tool.inference.mcmc_equilibrate
+        """
         super(GraphToolCooccurenceClusterer, self).__init__(
             weighted=weighted, include_self_edges=include_self_edges)
 
@@ -68,19 +56,25 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
             raise ValueError("allow_overlap needs to be a boolean")
 
     def generate_coocurence_graph(self):
-        """ Constructs the label coocurence graph
+        """Constructs the label coocurence graph
 
-        This function constructs a graph-tool :py:class:`graphtool.Graph` object representing the label cooccurence graph. Run after self.edge_map has been populated using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` in `fit_predict`.
+        This function constructs a graph-tool :py:class:`graphtool.Graph`
+        object representing the label co-occurence graph. Run after 
+        :code:`self.edge_map` has been populated using
+        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
+        on `y` in `fit_predict`.
 
-        The graph is available as self.coocurence_graph, and a weight `double` graphtool.PropertyMap on edges is set as self.weights.
+        The graph is available as self.coocurence_graph, and a weight
+        `double` graphtool.PropertyMap on edges is set as self.weights.
 
-        Edge weights are all 1.0 if self.weighted is false, otherwise they contain the number of samples that are labelled with the two labels present in the edge.
+        Edge weights are all 1.0 if self.weighted is False, otherwise
+        they contain the number of samples that are labelled with the
+        two labels present in the edge.
 
         Returns
         -------
-
-        g : graphtool.Graph object representing a label co-occurence graph
-
+        g : graphtool.Graph 
+            object representing a label co-occurence graph
         """
         g = gt.Graph(directed=False)
         g.add_vertex(self.label_count)
@@ -101,17 +95,23 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
     def fit_predict(self, X, y):
         """ Performs clustering on y and returns list of label lists
 
-        Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using graph tool's stochastic block modeling.
+        Builds a label coocurence_graph using 
+        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
+        on `y` and then detects communities using graph tool's
+        stochastic block modeling.
 
         Parameters
         ----------
-        X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
-        y : sparse matrix (n_samples, n_labels), label space
+        X : scipy.sparse 
+            feature space of shape :code:`(n_samples, n_features)`
+        y : scipy.sparse
+            label space of shape :code:`(n_samples, n_features)`
 
         Returns
         -------
-        partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
-
+        list of lists
+            list of lists label indexes, each sublist represents labels
+            that are in that community
         """
         self.dls_ = {}
         self.vm_ = {}

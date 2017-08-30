@@ -6,38 +6,42 @@ import copy
 
 
 class BinaryRelevance(ProblemTransformationBase):
-
     """Binary Relevance Multi-Label Classifier.
 
     Transforms a multi-label classification problem with L labels
     into L single-label separate binary classification problems
     using the same base classifier provided in the constructor. The
     prediction output is the union of all per label classifiers.
-
-    :param classifier: clonable scikit-compatible base classifier
-    :type classifier: :py:class:`sklearn.base.BaseEstimator` or compatible
-
-    :param require_dense: whether the base classifier requires dense
-        representations for input features and classes/labels matrices in fit/predict.
-    :type require_dense: [bool, bool]
-
     """
 
     BRIEFNAME = "BR"
 
     def __init__(self, classifier=None, require_dense=None):
+        """Initializes the BinaryRelevance class
+
+        Attributes
+        ----------
+        classifier : sklear.base.BaseEstimator
+            scikit-compatible base classifier
+        require_dense : list of bools ([bool, bool])
+            whether the base classifier requires dense representations
+            for input features and classes/labels matrices in fit/predict.
+        """
         super(BinaryRelevance, self).__init__(classifier, require_dense)
 
     def generate_partition(self, X, y):
-        """ Partitions the label space into singletons
+        """Partitions the label space into singletons
 
-            :param X: not used
-            :param y: binary indicator matrix with label assignments -
-                only used for learning # of labels
-            :type y: matrix or sparse matrix
+        Sets :code:`self.partition` (list of single item lists) and
+        :code:`self.model_count` (equal to number of labels).
 
-            Sets self.partition (list of single item lists) and self.model_count (equal to number of labels)
-
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            not used, only for API compatibility
+        y : numpy.ndarray or scipy.sparse
+            binary indicator matrix with label assignments. Use for
+            learning the number of labels
         """
         self.partition = list(range(y.shape[1]))
         self.model_count = y.shape[1]
@@ -46,15 +50,21 @@ class BinaryRelevance(ProblemTransformationBase):
         """Fit classifier with training data
 
         Internally this method uses a sparse CSR representation for X
-        (:py:class:`scipy.sparse.csr_matrix`) and sparse CSC representation for y
-        (:py:class:`scipy.sparse.csc_matrix`).
+        (:class:`scipy.sparse.csr_matrix`) and sparse CSC representation for y
+        (:class:`scipy.sparse.csc_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-        :returns: Fitted instance of self
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features, can be a dense or sparse matrix of size
+            :code:`(n_samples, n_features)`
+        y : numpy.ndaarray or scipy.sparse {0,1}
+            binary indicator matrix with label assignments.
 
+        Returns
+        -------
+        skmultilearn.problem_transform.br.BinaryRelevance
+            fitted instance of self
         """
         X = self.ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
@@ -77,13 +87,18 @@ class BinaryRelevance(ProblemTransformationBase):
         """Predict labels for X
 
         Internally this method uses a sparse CSR representation for X
-        (:py:class:`scipy.sparse.coo_matrix`).
+        (:class:`scipy.sparse.coo_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :returns: binary indicator matrix with label assignments
-        :rtype: sparse matrix of int (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of int
+            binary indicator matrix with label assignments with shape
+            :code:`(n_samples, n_labels)`
         """
         predictions = [self.ensure_multi_label_from_single_class(
             self.classifiers[label].predict(self.ensure_input_format(X)))
@@ -95,13 +110,18 @@ class BinaryRelevance(ProblemTransformationBase):
         """Predict probabilities of label assignments for X
 
         Internally this method uses a sparse CSR representation for X
-        (:py:class:`scipy.sparse.coo_matrix`).
+        (:class:`scipy.sparse.coo_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_labels)
-        :returns: matrix with label assignment probabilities
-        :rtype: sparse matrix of float (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of float
+            matrix with label assignment probabilities of shape
+            :code:`(n_samples, n_labels)`
         """
         predictions = [self.ensure_multi_label_from_single_class(
             self.classifiers[label].predict_proba(

@@ -3,7 +3,6 @@ from ..utils import get_matrix_in_format
 
 
 class LabelSpaceClustererBase(object):
-
     """An abstract base class for Label Space clustering
 
     Implement it in your classifier according to :doc:`../clusterer`.
@@ -18,28 +17,30 @@ class LabelSpaceClustererBase(object):
 
         Implement it in your classifier according to :doc:`../clusterer`.
 
-        :raises NotImplementedError: this is just an abstract method
-
+        Raises
+        ------
+        NotImplementedError
+            this is an abstract method
         """
         raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")
 
 
 class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
-
-    """Base class providing API and common functions for all label cooccurence based multi-label classifiers.
-
-    Parameters
-    ----------
-
-    weighted: boolean
-            Decide whether to generate a weighted or unweighted graph.
-
-    include_self_edges : boolean
-            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
-
+    """Base class providing API and common functions for all label
+    co-occurence based multi-label classifiers.
     """
 
     def __init__(self, weighted=None, include_self_edges=None):
+        """Initializes the clusterer
+
+        Attributes
+        ----------
+        weighted: bool
+            decide whether to generate a weighted or unweighted graph.
+        include_self_edges : bool
+            decide whether to include self-edge i.e. label 1 - label 1 in
+            co-occurrence graph
+        """
         super(LabelCooccurenceClustererBase, self).__init__()
 
         self.is_weighted = weighted
@@ -55,19 +56,21 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
     def generate_coocurence_adjacency_matrix(self, y):
         """Generate adjacency matrix from label matrix
 
-        This function generates a weighted or unweighted cooccurence graph based on input binary label vectors
-        and sets it to self.coocurence_graph
+        This function generates a weighted or unweighted co-occurence
+        graph based on input binary label vectors
+        and sets it to :code:`self.coocurence_graph`
 
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-
+        Parameters
+        ----------
+        y : numpy.ndarray or scipy.sparse
+            dense or sparse binary matrix with shape
+            :code:`(n_samples, n_labels)`
 
         Returns
         -------
-
-        edge_map: dict{ (int, int) : float }
-            Returns a dict of weights
-
+        dict
+            weight map with a tuple of ints as keys
+            and a float value :code:`{ (int, int) : float }`
         """
         label_data = get_matrix_in_format(y, 'lil')
         self.label_count = label_data.shape[1]

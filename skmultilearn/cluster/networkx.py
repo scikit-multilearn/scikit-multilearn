@@ -6,24 +6,21 @@ import community
 import networkx as nx
 
 class NetworkXLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
-
-    """Clusters the label space using igraph community detection methods
-
-    Parameters
-    ----------
-
-    method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
-        the igraph community detection method that will be used
-
-    weighted: boolean
-            Decide whether to generate a weighted or unweighted graph.
-
-    include_self_edges : boolean
-            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
-
-    """
+    """Clusters the label space using igraph community detection methods"""
 
     def __init__(self, weighted=None, include_self_edges=None):
+        """Initializes the clusterer
+
+        Attributes
+        ----------
+        method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
+            the igraph community detection method that will be used
+        weighted: bool
+            decide whether to generate a weighted or unweighted graph.
+        include_self_edges : bool
+            decide whether to include self-edge i.e. label 1 - label 1
+            in co-occurrence graph
+        """
         super(NetworkXLabelCooccurenceClusterer, self).__init__(
             weighted=weighted, include_self_edges=include_self_edges)
 
@@ -31,18 +28,22 @@ class NetworkXLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
     def fit_predict(self, X, y):
         """Performs clustering on y and returns list of label lists
 
-        Builds a label coocurence_graph using :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix` on `y` and then detects communities using a selected `method`.
+        Builds a label coocurence_graph using
+        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
+        on `y` and then detects communities using a selected `method`.
 
         Parameters
         ----------
-        X : sparse matrix (n_samples, n_features), feature space, not used in this clusterer
-        y : sparse matrix (n_samples, n_labels), label space
+        X : scipy.sparse 
+            feature space of shape :code:`(n_samples, n_features)`
+        y : scipy.sparse
+            label space of shape :code:`(n_samples, n_features)`
 
         Returns
         -------
-        partition: list of lists : list of lists label indexes, each sublist represents labels that are in that community
-
-
+        list of lists
+            list of lists label indexes, each sublist represents labels
+            that are in that community
         """
         self.generate_coocurence_adjacency_matrix(y)
 

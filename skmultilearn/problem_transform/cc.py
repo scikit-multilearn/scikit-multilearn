@@ -7,50 +7,69 @@ import random
 
 
 class ClassifierChain(ProblemTransformationBase):
-
     """Classifier Chains Multi-Label Classifier.
 
-    This class provides implementation of Jesse Read's problem transformation
-    method called Classifier Chains. For L labels it trains L classifiers
-    ordered in a chain according to the
-    `Bayesian chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_.
-    The first classifier is trained just on the input space, and then each next
-    classifier is trained on the input space and all previous classifiers in the
-    chain.
+    This class provides implementation of Jesse Read's problem
+    transformation method called Classifier Chains. For L labels it
+    trains L classifiers ordered in a chain according to the
+    `Bayesian chain rule`_.
 
-    The default classifier chains follow the same ordering as provided in the
-    training set, i.e. label in column 0, then 1, etc.
+    The first classifier is trained just on the input space, and then
+    each next classifier is trained on the input space and all previous
+    classifiers in the chain.
+
+    The default classifier chains follow the same ordering as provided
+    in the training set, i.e. label in column 0, then 1, etc.
 
     You can find more information about this method in Jesse Read's
-    `ECML presentation <https://users.ics.aalto.fi/jesse/talks/chains-ECML-2009-presentation.pdf>`_
-    or `journal paper <http://www.cs.waikato.ac.nz/~eibe/pubs/ccformlc.pdf>`_.
+    `ECML presentation`_ or `journal paper`_.
+
+    .. _Bayesian chain rule: https://en.wikipedia.org/wiki/Chain_rule_(probability)
+    .. _ECML presentation: https://users.ics.aalto.fi/jesse/talks/chains-ECML-2009-presentation.pdf
+    .. _journal paper: http://www.cs.waikato.ac.nz/~eibe/pubs/ccformlc.pdf
+
     """
     BRIEFNAME = "CC"
 
     def __init__(self, classifier=None, require_dense=None):
+        """Initializes the ClassifierChain class
+
+        Attributes
+        ----------
+        classifier : sklear.base.BaseEstimator
+            scikit-compatible base classifier
+        require_dense : list of bools ([bool, bool])
+            whether the base classifier requires dense representations
+            for input features and classes/labels matrices in fit/predict.
+        """
         super(ClassifierChain, self).__init__(classifier, require_dense)
 
     def fit(self, X, y):
         """Fit classifier with training data
 
-        Internally this method uses a sparse CSC representation
-        (:py:class:`scipy.sparse.csc_matrix`) of the X & y matrices.
+        Internally this method uses a sparse CSR representation for X
+        (:class:`scipy.sparse.csr_matrix`) and sparse CSC representation for y
+        (:class:`scipy.sparse.csc_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-        :returns: Fitted instance of self
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features, can be a dense or sparse matrix of size
+            :code:`(n_samples, n_features)`
+        y : numpy.ndaarray or scipy.sparse {0,1}
+            binary indicator matrix with label assignments.
 
+        Returns
+        -------
+        skmultilearn.problem_transform.cc.ClassifierChain
+            fitted instance of self
         """
 
         # fit L = len(y[0]) BR classifiers h_i
         # on X + y[:i] as input space and y[i+1] as output
 
-        X_extended = self.ensure_input_format(
-            X, sparse_format='csc', enforce_sparse=True)
-        y = self.ensure_output_format(
-            y, sparse_format='csc', enforce_sparse=True)
+        X_extended = self.ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
+        y = self.ensure_output_format(y, sparse_format='csc', enforce_sparse=True)
 
         self.label_count = y.shape[1]
         self.classifiers = [None for x in range(self.label_count)]
@@ -68,14 +87,21 @@ class ClassifierChain(ProblemTransformationBase):
     def predict(self, X):
         """Predict labels for X
 
-        Internally this method uses a sparse CSC representation (:py:class:`scipy.sparse.csc_matrix`) of the X matrix.
+        Internally this method uses a sparse CSR representation for X
+        (:class:`scipy.sparse.coo_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :returns: binary indicator matrix with label assignments
-        :rtype: sparse matrix of int (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of int
+            binary indicator matrix with label assignments with shape
+            :code:`(n_samples, n_labels)`
         """
+
         X_extended = self.ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
         prediction = None
@@ -89,13 +115,19 @@ class ClassifierChain(ProblemTransformationBase):
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
-        Internally this method uses a sparse CSC representation (:py:class:`scipy.sparse.csc_matrix`) of the X matrix.
+        Internally this method uses a sparse CSR representation for X
+        (:class:`scipy.sparse.coo_matrix`).
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_labels)
-        :returns: matrix with label assignment probabilities
-        :rtype: sparse matrix of float (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of float
+            matrix with label assignment probabilities of shape
+            :code:`(n_samples, n_labels)`
         """
         X_extended = self.ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)

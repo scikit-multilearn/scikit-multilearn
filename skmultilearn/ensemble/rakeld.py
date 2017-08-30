@@ -18,15 +18,19 @@ class RakelD(LabelSpacePartitioningClassifier):
     def generate_partition(self, X, y):
         """Randomly partition the label space
 
-        This function randomly partitions the label space of n_labels into n_label/k 
-        equipartitions of size k.  
+        This function randomly partitions the label space of 
+        :code:`n_labels` into :code:`n_label/k`
+        equipartitions of size :code:`k`. Sets 
+        :code:`self.partition`, :code:`self.model_count` and
+        :code:`self.label_count`.
 
-        :param X: not used, maintained for api compatibility
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-
-        Sets `self.partition`, `self.model_count` and `self.label_count`.
-
+        Parameters
+        -----------
+        X : numpy.ndarray or scipy.sparse
+            not used, maintained for API compatibility
+        y : numpy.ndarray or scipy.sparse
+            binary indicator matrix with label assigments of shape
+            :code:`(n_samples, n_labels)`
         """
 
         label_sets = []

@@ -14,29 +14,29 @@ from ..dataset import save_to_arff
 
 
 class Meka(MLClassifierBase):
+    """Wrapper for the MEKA classifier
 
-    """ Wrapper for the MEKA classifier
-
-        For more information on how to use this class see the tutorial: :doc:`../meka`
-
-        Parameters
-        ----------
-
-        meka_classifier : string
-            The MEKA classifier string and parameters from the MEKA API, such as: "meka.classifiers.multilabel.MULAN -S RAkEL2"
-
-        weka_classifier : string
-            The WEKA classifier string and parameters from the WEKA API, such as: "weka.classifiers.trees.J48"
-
-        java_command : string
-            Path to test the java command
-
-        meka_classpath: string
-            Path to the MEKA class path folder, usually the folder lib in the directory MEKA was extracted to
-
+    For more information on how to use this class see the tutorial: :doc:`../meka`
     """
 
-    def __init__(self, meka_classifier=None, weka_classifier=None, java_command=None, meka_classpath=None):
+    def __init__(self, meka_classifier=None, weka_classifier=None,
+        java_command=None, meka_classpath=None):
+        """Initializes the MEKA Wrapper
+
+        Attributes
+        ----------
+        meka_classifier : str
+            The MEKA classifier string and parameters from the MEKA API,
+            such as :code:`meka.classifiers.multilabel.MULAN -S RAkEL2`
+        weka_classifier : str
+            The WEKA classifier string and parameters from the WEKA API,
+            such as :code:`weka.classifiers.trees.J48`
+        java_command : str
+            Path to test the java command
+        meka_classpath: str
+            Path to the MEKA class path folder, usually the folder lib
+            in the directory MEKA was extracted into
+        """
         super(Meka, self).__init__()
 
         self.java_command = java_command
@@ -62,11 +62,16 @@ class Meka(MLClassifierBase):
         self.output = None
         self.warnings = None
         self.require_dense = [False, False]
-        self.copyable_attrs = ['meka_classifier',
-                               'weka_classifier', 'java_command', 'meka_classpath']
+        self.copyable_attrs = [
+            'meka_classifier',
+            'weka_classifier', 
+            'java_command', 
+            'meka_classpath'
+        ]
         self.clean()
 
     def clean(self):
+        """Sets various attributes to :code:`None`"""
         self.results = None
         self.statistics = None
         self.output = None
@@ -84,6 +89,13 @@ class Meka(MLClassifierBase):
                 os.remove(arff_file_name)
 
     def run_meka_command(self, args):
+        """Runs the MEKA command
+        
+        Parameters
+        ----------
+        args : str 
+            the Java command to run
+        """
         command_args = [
             self.java_command,
             '-cp', "{}*".format(self.meka_classpath),
@@ -109,15 +121,21 @@ class Meka(MLClassifierBase):
 
         Internally this method dumps X and y to temporary arff files and
         runs MEKA with relevant arguments using :func:`run`. It uses a
-        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`)
+        sparse DOK representation (:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-        :returns: Fitted instance of self
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features of shape :code:`(n_samples, n_features)`
+        y : numpy.ndarray or scipy.sparse
+            binary indicator matrix with label assigments of shape
+            :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        skmultilearn.ext.meka.Meka
+            fitted instance of self
         """
         self.clean()
         X = self.ensure_input_format(
@@ -143,12 +161,9 @@ class Meka(MLClassifierBase):
             ]
 
             self.run_meka_command(input_args)
-
             self.classifier_dump = None
-
             with open(classifier_dump_file.name, 'rb') as fp:
                 self.classifier_dump = fp.read()
-
         finally:
             self.remove_temporary_files([train_arff, classifier_dump_file])
 
@@ -159,14 +174,18 @@ class Meka(MLClassifierBase):
 
         Internally this method dumps X to temporary arff files and
         runs MEKA with relevant arguments using :func:`run`. It uses a
-        sparse DOK representation (:py:class:`scipy.sparse.dok_matrix`)
+        sparse DOK representation (:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :returns: binary indicator matrix with label assignments
-        :rtype: sparse matrix of int (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of int
+            sparse matrix of integers with shape :code:`(n_samples, n_features)`
         """
         X = self.ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
@@ -205,23 +224,22 @@ class Meka(MLClassifierBase):
         return self.results
 
     def run(self, train_file, test_file, additional_arguments=[]):
-        """ Runs the meka classifiers
+        """Runs the meka classifiers
 
         Parameters
         ----------
-
-        train_file : string
-            Path to train .arff file in meka format (big endian, labels first in attributes list).
-
-        test_file : string
-            Path to test .arff file in meka format (big endian, labels first in attributes list).
+        train_file : str
+            path to train :code:`.arff` file in meka format 
+            (big endian, labels first in attributes list).
+        test_file : str
+            path to test :code:`.arff` file in meka format
+            (big endian, labels first in attributes list).
 
         Returns
         -------
-
         predictions: sparse binary indicator matrix [n_test_samples, n_labels]
-            array of binary label vectors including label predictions
-
+            array of binary label vectors including label predictions of
+            shape :code:`(n_test_samples, n_labels)`
         """
         self.output = None
         self.warnings = None
@@ -240,7 +258,7 @@ class Meka(MLClassifierBase):
         return self
 
     def parse_output(self):
-        """ Internal function for parsing MEKA output."""
+        """Internal function for parsing MEKA output."""
         if self.output is None:
             self.results = None
             self.statistics = None
