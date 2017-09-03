@@ -7,23 +7,26 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 
 class ProblemTransformationBase(MLClassifierBase):
-    """Base class providing common functions for multi-label classifiers that follow the problem transformation approach.
+    """Base class providing common functions for multi-label classifiers
+    that follow the problem transformation approach.
 
-    Problem transformation is the approach in which the original multi-label classification problem is transformed into one or more single-label problems, which are then solved by single-class or multi-class classifiers.
+    Problem transformation is the approach in which the
+    original multi-label classification problem is transformed into one
+    or more single-label problems, which are then solved by single-class
+    or multi-class classifiers.
 
     Scikit-multilearn provides a number of such methods:
 
-    - :class:`BinaryRelevance` - which performs a single-label single-class classification for each label and sums the results :class:`BinaryRelevance`
-    - :class:`ClassifierChains` - which performs a single-label single-class classification for each label and sums the results :class:`ClassifierChain`
-    - :class:`LabelPowerset` - which performs a single-label single-class classification for each label and sums the results :class:`LabelPowerset`
+    - :class:`BinaryRelevance` - performs a single-label single-class classification for each label and sums the results :class:`BinaryRelevance`
+    - :class:`ClassifierChains` - performs a single-label single-class classification for each label and sums the results :class:`ClassifierChain`
+    - :class:`LabelPowerset` - performs a single-label single-class classification for each label and sums the results :class:`LabelPowerset`
 
     Parameters
     ----------
-
     classifier : scikit classifier type
         The base classifier that will be used in a class, will be automagically put under self.classifier for future access.
-    require_dense : boolean
-        Whether the base classifier requires input as dense arrays, False by default
+    require_dense : boolean (default is False)
+        Whether the base classifier requires input as dense arrays.
     """
 
     def __init__(self, classifier=None, require_dense=None):
@@ -48,7 +51,20 @@ class ProblemTransformationBase(MLClassifierBase):
                 self.require_dense = [True, True]
 
     def ensure_multi_label_from_single_class(self, matrix, matrix_format='csr'):
-        """Transform single class outputs to a 2D sparse matrix"""
+        """Transform single class outputs to a 2D sparse matrix
+        
+        Parameters
+        ----------
+        matrix : array-like
+            input matrix to be checked
+        matrix_format : str (default is csr)
+            the matrix format to validate with
+
+        Returns
+        -------
+        scipy.sparse
+            a 2-dimensional sparse matrix
+        """
         is_2d = None
         dim_1 = None
         dim_2 = None
@@ -76,7 +92,7 @@ class ProblemTransformationBase(MLClassifierBase):
         else:
             raise ValueError("Matrix dimensions too large (>2) or other value error")
 
-        new_matrix = None    
+        new_matrix = None
         if is_2d:
             if issparse(matrix):
                 new_matrix = matrix

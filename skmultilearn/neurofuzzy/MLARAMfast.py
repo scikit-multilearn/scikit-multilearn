@@ -14,29 +14,45 @@ class Neuron(object):
     def __init__(self, startpoint, label):
         # vector must be in complement form
         self.vc = startpoint
-#        ones = scipy.ones(startpoint.shape);
-#        self.vc=numpy.concatenate((startpoint, ones - startpoint))
         self.label = label
 
 
 class MLARAM(MLClassifierBase):
-
     """HARAM: A Hierarchical ARAM Neural Network for Large-Scale Text Classification
 
-    See http://dx.doi.org/10.1109/ICDMW.2015.14
+    This method aims at increasing the classification speed by adding an
+    extra ART layer for clustering learned prototypes into large clusters.
+    In this case the activation of all prototypes can be replaced by the
+    activation of a small fraction of them, leading to a significant
+    reduction of the classification time [ICDMW2015]_. 
 
-    Parameters
-    ----------
+    Published work available `here`_.
 
-    vigilance : vigilance parameter for adaptiv resonance theory networks, controls how large a hyperbox can be, 1 it is small (no compression), 0 should assume all range. Normally set between 0.8 and 0.999, it is dataset dependent. It is responsible for the creation of the prototypes, therefore training of the network.
-    threshold : controls how many prototypes participate by the prediction, can be changed at the testing phase.
-    tneurons  : if the network should inherited neurons (prototypes) from another network
-    tdebug : set debug modus
+    .. _here: http://dx.doi.org/10.1109/ICDMW.2015.14
 
+    .. [ICDMW2015] F. Benites and E. Sapozhnikova, "HARAM: A Hierarchical
+        ARAM Neural Network for Large-Scale Text Classification," 
+        2015 IEEE International Conference on Data Mining Workshop
     """
     BRIEFNAME = "ML-ARAM"
 
     def __init__(self, vigilance=0.9, threshold=0.02, neurons=[]):
+        """Initializes the network
+
+        Attributes
+        ----------
+        vigilance : float (default is 0.9)
+            parameter for adaptiv resonance theory networks, controls how
+            large a hyperbox can be, 1 it is small (no compression), 0
+            should assume all range. Normally set between 0.8 and 0.999,
+            it is dataset dependent. It is responsible for the creation
+            of the prototypes, therefore training of the network.
+        threshold : float (default is 0.02)
+            controls how many prototypes participate by the prediction,
+            can be changed at the testing phase.
+        neurons : list
+            the neurons in the network
+        """
         super(MLARAM, self).__init__()
 
         self.neurons = neurons
@@ -46,6 +62,7 @@ class MLARAM(MLClassifierBase):
         self.copyable_attrs += ["neurons", "vigilance", "threshold"]
 
     def reset(self):
+        """Resets the labels and neurons"""
         self.labels = []
         self.neurons = []
 
@@ -53,12 +70,18 @@ class MLARAM(MLClassifierBase):
     def fit(self, X, y):
         """Fit classifier with training data
 
-        :param X: input features
-        :type X: matrix (n_samples, n_features)
-        :param y: binary indicator matrix with label assignments
-        :type y: dense or sparse matrix of {0, 1} (n_samples, n_labels)
-        :returns: Fitted instance of self
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse
+            input features, can be a dense or sparse matrix of size
+            :code:`(n_samples, n_features)`
+        y : numpy.ndarray or scipy.sparse {0,1}
+            binary indicator matrix with label assignments.
 
+        Returns
+        -------
+        skmultilearn.MLARAMfast.MLARAM
+            fitted instance of self
         """
 
         self.labels = []
@@ -130,11 +153,16 @@ class MLARAM(MLClassifierBase):
     def predict(self, X):
         """Predict labels for X
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_features)
-        :returns: binary indicator matrix with label assignments
-        :rtype: array of arrays of int (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        scipy.sparse of int
+            binary indicator matrix with label assignments with shape
+            :code:`(n_samples, n_labels)`
         """
 
         result = []
@@ -160,11 +188,16 @@ class MLARAM(MLClassifierBase):
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
-        :param X: input features
-        :type X: dense or sparse matrix (n_samples, n_labels)
-        :returns: matrix with label assignment probabilities
-        :rtype: array of arrays of float (n_samples, n_labels)
+        Parameters
+        ----------
+        X : numpy.ndarray or scipy.sparse.csc_matrix
+            input features of shape :code:`(n_samples, n_features)`
 
+        Returns
+        -------
+        array of arrays of float
+            matrix with label assignment probabilities of shape
+            :code:`(n_samples, n_labels)`
         """
         result = []
         if len(X) == 0:

@@ -35,21 +35,26 @@ def get_data_home(data_home=None):
     This folder is used by some large dataset loaders to avoid
     downloading the data several times.
 
-    By default the data dir is set to a folder named 'scikit_ml_learn_data'
-    in the user home folder.
+    By default the :code:`data_home` is set to a folder named
+    :code:`'scikit_ml_learn_data'` in the user home folder.
 
-    Alternatively, it can be set by the 'SCIKIT_ML_LEARN_DATA' environment
-    variable or programmatically by giving an explicit folder path. The
-    '~' symbol is expanded to the user home folder.
+    Alternatively, it can be set by the :code:`'SCIKIT_ML_LEARN_DATA'`
+    environment variable or programmatically by giving an explicit
+    folder path. The :code:`'~'` symbol is expanded to the user home
+    folder.
 
     If the folder does not already exist, it is automatically created.
 
-    :param data_home string or None: the path to the directory in which scikit-multilearn
-        data sets should be stored, if None the path is generated as stated above
+    Parameters
+    ----------
+    data_home : str (default is None)
+        the path to the directory in which scikit-multilearn data sets
+        should be stored, if None the path is generated as stated above
 
-    :returns: the path to the data home
-    :rtype: string
-
+    Returns
+    --------
+    str
+        the path to the data home
     """
     if data_home is None:
         data_home = environ.get('SCIKIT_ML_LEARN_DATA',
@@ -63,9 +68,11 @@ def get_data_home(data_home=None):
 def clear_data_home(data_home=None):
     """Delete all the content of the data home cache.
 
-    :param data_home string or None: the path to the directory in which scikit-multilearn
-        data sets should be stored
-
+    Parameters
+    ----------
+    data_home : str (default is None)
+        the path to the directory in which scikit-multilearn data sets
+        should be stored.
     """
     data_home = get_data_home(data_home)
     shutil.rmtree(data_home)
@@ -82,14 +89,17 @@ def get_dataset_list():
 
     The format of the list is a follows:
 
-    - each row corresponds to a variant of a data set
-    - variants include: train, test and undivided, note that sometimes data
+    - Each row corresponds to a variant of a data set
+    - Variants include: train, test and undivided, note that sometimes data
         sets are not provided in train, test division by their authors
-    - in each row column 0 is the md5, column 1 is the file name available
+    - In each row column 0 is the md5, column 1 is the file name available
         under :func:`get_download_base_url`
 
+    Returns
+    -------
+    list
+        the raw data with the format as above
     """
-
     f = urllib.request.urlopen(get_download_base_url() + "data.list")
     raw_data_list = f.read()
     return raw_data_list
@@ -98,9 +108,11 @@ def get_dataset_list():
 def available_data_sets():
     """Lists available data sets and their variants
 
-    :returns: list of available data sets and their variants
-    :rtype dict[set_name] with list of variants:
-
+    Returns
+    -------
+    dict
+        available datasets and their variants with the key pertaining
+        to the :code:`set_name`
     """
 
     archives = get_dataset_list()
@@ -118,10 +130,17 @@ def available_data_sets():
 def download_dataset(set_name, variant):
     """Downloads a data set
 
-    :param set_name string: name of set from :func:`available_data_sets`
-    :param variant string: variant of the data set
+    Parameters
+    ----------
+    set_name : str
+        name of set from :func:`available_data_sets`
+    variant : str
+        variant of the data set
 
-    :returns: path to the downloaded data set file
+    Returns
+    -------
+    str
+        path to the downloaded data set file
     """
 
     def get_md5(file_name):
@@ -168,11 +187,18 @@ def download_dataset(set_name, variant):
 def load_dataset(set_name, variant):
     """Loads a selected variant of the given data set
 
-    :param set_name string: name of set from :func:`available_data_sets`
-    :param variant string: variant of the data set
+    Parameters
+    ----------
+    set_name : str
+        name of set from :func:`available_data_sets`
+    variant : str
+        variant of the data set
 
-    :returns: the loaded multilabel data set variant in the scikit-multilearn format, see data_sets
-
+    Returns
+    --------
+    dict
+        the loaded multilabel data set variant in the scikit-multilearn
+        format, see data_sets
     """
 
     path = download_dataset(set_name, variant)
@@ -182,38 +208,42 @@ def load_dataset(set_name, variant):
     return None
 
 
-def load_from_arff(filename, labelcount, endian="big", input_feature_type='float', encode_nominal=True, load_sparse=False, return_attribute_definitions=False):
+def load_from_arff(filename, labelcount, endian="big",
+    input_feature_type='float', encode_nominal=True, load_sparse=False,
+    return_attribute_definitions=False):
     """Method for loading ARFF files as numpy array
 
     Parameters
     ----------
-
-    filename : string
-        Path to ARFF file
-
+    filename : str
+        path to ARFF file
     labelcount: integer
-        Number of labels in the ARFF file
-
-    endian: string{"big", "little"}
-        Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format)
-        or at the end ("little" endianness, MULAN format)
-
-    input_feature_type: numpy.type as string
-        The desire type of the contents of the return 'X' array-likes, default 'i8',
-        should be a numpy type, see http://docs.scipy.org/doc/numpy/user/basics.types.html
-
-    encode_nominal: boolean
-        Whether convert categorical data into numeric factors - required for some scikit classifiers that can't handle non-numeric input featuers.
-
-    load_sparse: boolean
-        Whether to read arff file as a sparse file format, liac-arff breaks if sparse reading is enabled for non-sparse ARFFs.
+        number of labels in the ARFF file
+    endian: str {"big", "little"} (default is "big")
+        whether the ARFF file contains labels at the beginning of the
+        attributes list ("big" endianness, MEKA format) or at the end
+        ("little" endianness, MULAN format)
+    input_feature_type: numpy.type as string (default is "float")
+        the desire type of the contents of the return 'X' array-likes,
+        default 'i8', should be a numpy type,
+        see http://docs.scipy.org/doc/numpy/user/basics.types.html
+    encode_nominal: bool (default is True)
+        whether convert categorical data into numeric factors - required
+        for some scikit classifiers that can't handle non-numeric
+        input features.
+    load_sparse: boolean (default is False)
+        whether to read arff file as a sparse file format, liac-arff
+        breaks if sparse reading is enabled for non-sparse ARFFs.
+    return_attribute_definitions: boolean (default is False)
+        whether to return the definitions for each attribute in the
+        dataset
 
     Returns
     -------
-
-    X: scipy sparse matrix with ``input_feature_type`` elements,
-    y: scipy sparse matrix of binary label indicator matrix
-
+    X : scipy.sparse
+        matrix with :code:`input_feature_type` elements
+    y: scipy.sparse
+        matrix of binary label indicator matrix
     """
     matrix = None
     if not load_sparse:
@@ -253,25 +283,22 @@ def save_to_arff(X, y, endian="little", save_sparse=True):
 
     Parameters
     ----------
-
-    filename : string
+    filename : str
         Path to ARFF file
-
-    labelcount: integer
+    labelcount: int
         Number of labels in the ARFF file
-
-    endian: string{"big", "little"}
-        Whether the ARFF file contains labels at the beginning of the attributes list ("big" endianness, MEKA format)
+    endian: string {"big", "little"} (default is "little")
+        Whether the ARFF file contains labels at the beginning of the
+        attributes list ("big" endianness, MEKA format)
         or at the end ("little" endianness, MULAN format)
-
-    save_sparse: boolean
-        Whether to read arff file as a sparse file format, liac-arff breaks if sparse reading is enabled for non-sparse ARFFs.
+    save_sparse: boolean (default is True)
+        Whether to read arff file as a sparse file format, liac-arff
+        breaks if sparse reading is enabled for non-sparse ARFFs.
 
     Returns
     -------
-
-    string: the ARFF dump string
-
+    str
+        the ARFF dump string
     """
     X = X.todok()
     y = y.todok()
@@ -324,20 +351,17 @@ def save_dataset_dump(filename, input_space, labels, feature_names, label_names)
 
     Parameters
     ----------
-
-    filename : string
-        Path to dump file, if without .bz2, the .bz2 extension will be appended.
-
+    filename : str
+        Path to dump file, if without .bz2, the .bz2 extension will be
+        appended.
     input_space: array-like of array-likes
         Input space array-like of input feature vectors
-
     labels: array-like of binary label vectors
-        Array-like of labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
+        Array-like of labels assigned to each input vector, as a binary
+        indicator vector (i.e. if 5th position has value 1
         then the input vector has label no. 5)
-
     feature_names: array-like
         optional, names of features
-
     label_names: array-like
         optional, names of labels
     """
@@ -354,17 +378,17 @@ def load_dataset_dump(filename):
 
     Parameters
     ----------
-
-    filename : string
-        Path to dump file, if without .bz2, the .bz2 extension will be appended.
+    filename : str
+        path to dump file, if without .bz2, the .bz2 extension will be appended.
 
     Returns
     -------
-
-    data: dictionary {'X': array-like of array-likes, 'y': array-like of binary label vectors }
-        The dictionary containing the data frame, with 'X' key storing the input space array-like of input feature vectors
-        and 'y' storing labels assigned to each input vector, as a binary indicator vector (i.e. if 5th position has value 1
-        then the input vector has label no. 5)
+    dic {'X': array-like of array-likes, 'y': array-like of binary label vectors }
+        the dictionary containing the data frame, with 'X' key storing
+        the input space array-like of input feature vectors and 'y'
+        storing labels assigned to each input vector, as a binary
+        indicator vector (i.e. if 5th position has value 1 then the
+        input vector has label no. 5)
 
     """
     data = None

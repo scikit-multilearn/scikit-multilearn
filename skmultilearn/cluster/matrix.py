@@ -5,37 +5,36 @@ import numpy as np
 
 
 class MatrixLabelSpaceClusterer(LabelSpaceClustererBase):
-
-    """Clusters the label space using a matrix-based clusterer
-
-        :param clusterer: a clonable instance of a
-            `scikit-compatible matrix-based <http://scikit-learn.org/stable/modules/generated/sklearn.base.ClusterMixin.html>`_ clusterer
-
-        :param pass_input_space bool: whether to take ``X`` into
-            consideration upon clustering, use only if you know that the clusterer
-            can handle two parameters for clustering
-
-    """
+    """Clusters the label space using a matrix-based clusterer"""
 
     def __init__(self, clusterer=None, pass_input_space=False):
+        """Initializes the clusterer
+
+        Attributes
+        ----------
+        clusterer : sklearn.base.ClusterMixin
+            a clonable instance of a scikit-compatible clusterer
+        pass_input_space : bool (default is False)
+            whether to take :code:`X` into consideration upon clustering,
+            use only if you know that the clusterer can handle two
+            parameters for clustering
+        """
         super(MatrixLabelSpaceClusterer, self).__init__()
 
         self.clusterer = clusterer
         self.pass_input_space = pass_input_space
 
     def fit_predict(self, X, y):
-        """ Cluster the output space
+        """Cluster the output space
 
-        Uses the ``fit_predict`` method of provided ``clusterer``
+        Uses the :code:`fit_predict` method of provided :code:`clusterer`
         to perform label space division.
 
-        :returns: partition of labels, each sublist contains
-            label indices related to label positions in ``y``
-
-        :rtype: nd.array of nd.arrays
-
-        :returns: this is just an abstract method
-
+        Returns
+        -------
+        numpy.ndarray
+            partition of labels, each sublist contains label indices
+            related to label positions in :code:`y`
         """
 
         if self.pass_input_space:

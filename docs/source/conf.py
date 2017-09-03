@@ -39,8 +39,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
-    'numpydoc'
-]
+    'sphinx.ext.napoleon'
+    ]
 
 numpydoc_show_class_members = False 
 
