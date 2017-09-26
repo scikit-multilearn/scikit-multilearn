@@ -168,6 +168,8 @@ class MLARAM(MLClassifierBase):
             labadd[y_i1.nonzero()] = 1
             self.neurons[winner].label += labadd
 
+        return self
+
     #@profile
     def predict(self, X):
         """Predict labels for X
