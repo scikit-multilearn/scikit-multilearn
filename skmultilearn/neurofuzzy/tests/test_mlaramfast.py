@@ -2,6 +2,7 @@ import unittest
 
 from skmultilearn.neurofuzzy import MLARAM
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
+import numpy as np
 
 
 class MLARAMTest(ClassifierBaseTest):
@@ -15,6 +16,11 @@ class MLARAMTest(ClassifierBaseTest):
         classifier = MLARAM()
 
         self.assertClassifierWorksWithCV(classifier)
+
+    def test_if_works_with_sparsity(self):
+        classifier = MLARAM()
+
+        self.assertClassifierWorksWithSparsity(classifier, 'sparse')
 
 if __name__ == '__main__':
     unittest.main()
