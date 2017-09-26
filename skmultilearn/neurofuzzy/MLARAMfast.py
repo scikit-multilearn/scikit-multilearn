@@ -99,36 +99,55 @@ class MLARAM(MLClassifierBase):
         if xma < 0 or xma > 1 or xmi < 0 or xmi > 1:
             X = numpy.multiply(X - xmi, 1 / (xma - xmi))
 
+        issparse = scipy.sparse.issparse
+        if issparse(y):
+            y_0 = numpy.squeeze(numpy.asarray(y[0].todense()))
+        else:
+            y_0 = y[0]
+
+        ones = scipy.ones(X[0].shape)
         if len(self.neurons) == 0:
-            ones = scipy.ones(X[0].shape)
-            self.neurons.append(
-                Neuron(numpy.concatenate((X[0], ones - X[0]), ismatrix), y[0]))
+            if issparse(X):
+                X_0 = numpy.squeeze(numpy.asarray(X[0].todense()))
+                if ismatrix:
+                    neuron_vc = scipy.sparse.hstack((X_0, ones - X_0))
+                else:
+                    neuron_vc = scipy.sparse.vstack((X_0, ones - X_0))
+                self.neurons.append(Neuron(neuron_vc, y_0))
+            else:
+                self.neurons.append(
+                    Neuron(numpy.concatenate((X[0], ones - X[0]), ismatrix), y_0))
             startc = 1
-            labdict[y[0].nonzero()[0].tostring()] = [0]
+            labdict[y_0.nonzero()[0].tostring()] = [0]
         else:
             startc = 0
         newlabel = 0
-        ones = scipy.ones(X[0].shape)
+
         for i1, f1 in enumerate(X[startc:], startc):
+            if issparse(y):
+                y_i1 = numpy.squeeze(numpy.asarray(y[i1].todense()))
+            else:
+                y_i1 = y[i1]
+
             found = 0
-            if scipy.sparse.issparse(f1):
+            if issparse(f1):
                 f1 = f1.todense()
             fc = numpy.concatenate((f1, ones - f1), ismatrix)
 
             activationn = [0] * len(self.neurons)
             activationi = [0] * len(self.neurons)
-            ytring = y[i1].nonzero()[0].tostring()
-            if ytring in labdict:
+            ystring = y_i1.nonzero()[0].tostring()
+            if ystring in labdict:
                 fcs = fc.sum()
-                for i2 in labdict[ytring]:
+                for i2 in labdict[ystring]:
                     minnfs = umath.minimum(self.neurons[i2].vc, fc).sum()
                     activationi[i2] = minnfs / fcs
                     activationn[i2] = minnfs / self.neurons[i2].vc.sum()
 
             if numpy.max(activationn) == 0:
                 newlabel += 1
-                self.neurons.append(Neuron(fc, y[i1]))
-                labdict.setdefault(ytring, []). append(len(self.neurons) - 1)
+                self.neurons.append(Neuron(fc, y_i1))
+                labdict.setdefault(ystring, []). append(len(self.neurons) - 1)
 
                 continue
             inds = numpy.argsort(activationn)
@@ -136,17 +155,17 @@ class MLARAM(MLClassifierBase):
             indc = numpy.where(
                 numpy.array(activationi)[inds[::-1]] > self.vigilance)[0]
             if indc.shape[0] == 0:
-                self.neurons.append(Neuron(fc, y[i1]))
+                self.neurons.append(Neuron(fc, y_i1))
 
-                labdict.setdefault(ytring, []). append(len(self.neurons) - 1)
+                labdict.setdefault(ystring, []). append(len(self.neurons) - 1)
                 continue
 
             winner = inds[::- 1][indc[0]]
             self.neurons[winner].vc = umath.minimum(
                 self.neurons[winner].vc, fc)
 
-            labadd = numpy.zeros(y[0].shape, dtype=y[0].dtype)
-            labadd[y[i1].nonzero()] = 1
+            labadd = numpy.zeros(y_0.shape, dtype=y_0.dtype)
+            labadd[y_i1.nonzero()] = 1
             self.neurons[winner].label += labadd
 
     #@profile
@@ -199,8 +218,12 @@ class MLARAM(MLClassifierBase):
             matrix with label assignment probabilities of shape
             :code:`(n_samples, n_labels)`
         """
+        issparse = scipy.sparse.issparse
         result = []
-        if len(X) == 0:
+        if issparse(X):
+            if X.getnnz() == 0:
+                return
+        elif len(X) == 0:
             return
         if len(X[0].shape) == 1:
             ismatrix = 0
@@ -219,7 +242,7 @@ class MLARAM(MLClassifierBase):
         allneusum = allneu.sum(1) + self.alpha
 
         for i1, f1 in enumerate(X):
-            if scipy.sparse.issparse(f1):
+            if issparse(f1):
 
                 f1 = f1.todense()
             fc = numpy.concatenate((f1, ones - f1), ismatrix)
@@ -252,6 +275,7 @@ class MLARAM(MLClassifierBase):
             activity_actives = []
             actives.append(winner)
             activity_actives.append(activity[winner])
+
             for i in range(1, largest_activ):
                 rank += activity[sortedact[i]] * self.neurons[
                     sortedact[i]].label
