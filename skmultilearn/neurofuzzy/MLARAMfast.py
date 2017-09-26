@@ -129,7 +129,6 @@ class MLARAM(MLClassifierBase):
             else:
                 y_i1 = y[i1]
 
-            found = 0
             if issparse(f1):
                 f1 = f1.todense()
             fc = numpy.concatenate((f1, ones - f1), ismatrix)
@@ -189,17 +188,17 @@ class MLARAM(MLClassifierBase):
         result = []
         ranks = self.predict_proba(X)
         for rank in ranks:
-            sortedRankarg = numpy.argsort(-rank)
-            diffs = -numpy.diff([rank[k] for k in sortedRankarg])
+            sorted_rank_arg = numpy.argsort(-rank)
+            diffs = -numpy.diff([rank[k] for k in sorted_rank_arg])
 
-            indcutt = numpy.where(diffs == (diffs).max())[0]
+            indcutt = numpy.where(diffs == diffs.max())[0]
             if len(indcutt.shape) == 1:
                 indcut = indcutt[0] + 1
             else:
                 indcut = indcutt[0, -1] + 1
             label = numpy.zeros(rank.shape)
 
-            label[sortedRankarg[0:indcut]] = 1
+            label[sorted_rank_arg[0:indcut]] = 1
 
             result.append(label)
 
@@ -221,7 +220,6 @@ class MLARAM(MLClassifierBase):
             :code:`(n_samples, n_labels)`
         """
         issparse = scipy.sparse.issparse
-        result = []
         if issparse(X):
             if X.getnnz() == 0:
                 return
@@ -236,9 +234,7 @@ class MLARAM(MLClassifierBase):
         if xma < 0 or xma > 1 or xmi < 0 or xmi > 1:
             X = numpy.multiply(X - xmi, 1 / (xma - xmi))
         ones = scipy.ones(X[0].shape)
-        n1s = [0] * len(self.neurons)
         allranks = []
-        neuronsactivated = []
 
         allneu = numpy.vstack([n1.vc for n1 in self.neurons])
         allneusum = allneu.sum(1) + self.alpha
