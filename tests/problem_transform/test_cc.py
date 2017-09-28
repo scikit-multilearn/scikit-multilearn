@@ -1,12 +1,21 @@
+# -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.problem_transform.cc module"""
+
+# Import modules
 import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
+# Import from package
 from skmultilearn.problem_transform import ClassifierChain
-from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
+
+# Import from test suite
+from tests.testsuite.classifier_base import ClassifierBaseTest
 
 
 class CCTest(ClassifierBaseTest):
+    """Test cases for ClassifierChain class"""
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
         classifier = ClassifierChain(

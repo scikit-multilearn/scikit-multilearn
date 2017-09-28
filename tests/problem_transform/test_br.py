@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test cases for skmultilearn.problem_transform.br module"""
+
 # Import modules
 import unittest
 from sklearn.naive_bayes import GaussianNB
@@ -8,10 +9,13 @@ from sklearn.svm import SVC
 
 # Import from package
 from skmultilearn.problem_transform import BinaryRelevance
-from .base.classifier_base_tests import ClassifierBaseTest
+
+# Import from testsuite
+from tests.testsuite.classifier_base import ClassifierBaseTest
 
 
 class BRTest(ClassifierBaseTest):
+    """Test cases for BinaryRelevance class"""
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
         classifier = BinaryRelevance(
