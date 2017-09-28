@@ -1,17 +1,28 @@
+# -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.utils"""
+
+# Import modules
 import unittest
 import numpy as np
 import scipy.sparse as sp
 
-from ..utils import get_matrix_in_format, matrix_creation_function_for_format
-
-SPARSE_MATRIX_FORMATS = ["bsr", "coo", "csc", "csr", "dia", "dok", "lil"]
-
+# Import from package
+from skmultilearn.utils import get_matrix_in_format, matrix_creation_function_for_format
 
 class UtilsTest(unittest.TestCase):
+    """Test cases for skmultilearn.utils"""
+
+    def setUp(self):
+        """Set-up test fixtures"""
+        self.SPARSE_MATRIX_FORMATS = [
+                "bsr", "coo", "csc", 
+                "csr", "dia", "dok", "lil"
+                ]
 
     def test_if_get_matrix_ensures_type(self):
         matrix = sp.csr_matrix([])
-        for sparse_format in SPARSE_MATRIX_FORMATS:
+        for sparse_format in self.SPARSE_MATRIX_FORMATS:
             new_matrix = get_matrix_in_format(matrix, sparse_format)
 
             self.assertTrue(sp.issparse(new_matrix))
@@ -19,7 +30,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_if_matrix_creation_follows_format(self):
         matrix = np.matrix([])
-        for sparse_format in SPARSE_MATRIX_FORMATS:
+        for sparse_format in self.SPARSE_MATRIX_FORMATS:
             new_matrix = matrix_creation_function_for_format(
                 sparse_format)(matrix)
 
@@ -28,7 +39,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_ensure_get_matrix_does_not_clone_if_format_agrees(self):
         matrix = np.matrix([])
-        for sparse_format in SPARSE_MATRIX_FORMATS:
+        for sparse_format in self.SPARSE_MATRIX_FORMATS:
             created_matrix = matrix_creation_function_for_format(
                 sparse_format)(matrix)
             converted_matrix = get_matrix_in_format(
