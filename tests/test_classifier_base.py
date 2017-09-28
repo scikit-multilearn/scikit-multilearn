@@ -1,9 +1,13 @@
-from builtins import range
+
+
+# Import modules
 import unittest
+from builtins import range
 from sklearn.datasets import make_multilabel_classification
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 
+# Import from package
 from skmultilearn.ensemble.rakeld import RakelD
 from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset
 
