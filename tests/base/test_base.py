@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.base module"""
+
+# Import from builtins
 from builtins import zip
 from builtins import range
+
+# Import modules
 import itertools
 import unittest
 import numpy as np
 import scipy.sparse as sp
-
-from .test_utils import SPARSE_MATRIX_FORMATS
-from ..base import ProblemTransformationBase
 from sklearn.base import BaseEstimator
 
+# Import from package
+from skmultilearn.base.problem_transformation import ProblemTransformationBase
+
+# Declare sparse formats
+SPARSE_MATRIX_FORMATS = ["bsr", "coo", "csc", "csr", "dia", "dok", "lil"]
 
 class ProblemTransformationBaseTest(unittest.TestCase):
+    """Test cases for skmultilearn.base.problem_transformation"""
 
     def dense_and_dense_matrices_are_the_same(self, X, ensured_X):
+        """Helper function to check similarity between dense matrices"""
         self.assertEqual(len(X), len(ensured_X))
         for row in range(len(X)):
             self.assertEqual(len(X[row]), len(ensured_X[row]))
@@ -21,6 +31,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
                 self.assertEqual(X[row][col], ensured_X[row][col])
 
     def dense_and_sparse_matrices_are_the_same(self, X, ensured_X):
+        """Helper function to check similarity between dense and sparse matrices"""
         self.assertEqual(len(X), ensured_X.shape[0])
         for row in range(len(X)):
             self.assertEqual(len(X[row]), ensured_X.shape[1])
@@ -28,6 +39,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
                 self.assertEqual(X[row][col], ensured_X[row, col])
 
     def sparse_and_sparse_matrices_are_the_same(self, X, ensured_X):
+        """Helper function to check similarity between sparse matrices"""
         self.assertEqual(X.shape, ensured_X.shape)
         # compare sparse matrices per
         # http://stackoverflow.com/questions/30685024/check-if-two-scipy-sparse-csr-matrix-are-equal

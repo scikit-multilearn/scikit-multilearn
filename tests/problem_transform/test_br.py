@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.problem_transform.br module"""
+# Import modules
 import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
+# Import from package
 from skmultilearn.problem_transform import BinaryRelevance
-from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
+from .base.classifier_base_tests import ClassifierBaseTest
 
 
 class BRTest(ClassifierBaseTest):
