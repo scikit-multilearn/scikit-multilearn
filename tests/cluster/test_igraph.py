@@ -1,11 +1,26 @@
+# -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.cluster module"""
+
+# Import modules
+import unittest
 import numpy as np
 import scipy.sparse as sp
-import unittest
 from sklearn.datasets import make_multilabel_classification
-from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
 
+# Import from package
+try:
+    # Try importing graph_tools
+    import graph_tool.all as gt
+except ImportError:
+    # Set check_env = True
+    check_env = True
+else:
+    from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
 
+@unittest.skipIf(check_env, 'Graphtool not found. Skipping all tests')
 class ClustererBaseTests(unittest.TestCase):
+    """Test cases for IGraphLabelCooccurenceClusterer class"""
 
     def test_unsupported_methods_raise_exception(self):
         assert 'foobar' not in IGraphLabelCooccurenceClusterer.METHODS

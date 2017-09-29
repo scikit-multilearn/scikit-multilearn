@@ -1,9 +1,24 @@
+# -*- coding: utf-8 -*-
+
+"""Test cases for skmultilearn.cluster module"""
+
+# Import modules
 import unittest
 import scipy.sparse as sp
-from skmultilearn.cluster import LabelSpaceClustererBase, LabelCooccurenceClustererBase
 
+# Import from package
+try:
+    # Try importing graph_tools
+    import graph_tool.all as gt
+except ImportError:
+    # Set check_env = True
+    check_env = True
+else:
+    from skmultilearn.cluster import LabelSpaceClustererBase, LabelCooccurenceClustererBase
 
+@unittest.skipIf(check_env, 'Graphtool not found. Skipping all tests')
 class ClustererBaseTests(unittest.TestCase):
+    """Test cases for LabelSpaceClustererBase and LabelCooccurenceClustererBase"""
 
     def test_base_fit_predict_is_abstract(self):
         base_class = LabelSpaceClustererBase()
