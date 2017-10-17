@@ -23,7 +23,9 @@ class IterativeStratification(_BaseKFold):
                                                   for i in range(self.n_splits)])
         self.rows = sp.lil_matrix(X).rows
         self.rows_used = {i: False for i in range(self.n_samples)}
-
+        
+        self.folds = [[] for i in range(self.n_splits)]
+        
         self.init_row_and_label_data(X)
 
     def init_row_and_label_data(self, X):
@@ -122,7 +124,7 @@ class IterativeStratification(_BaseKFold):
 
     def _iter_test_indices(self, X, y=None, groups=None):
         self.init_values(X)
-        if self.shuffle:
+        if self.random_state:
             check_random_state(self.random_state)
 
         self.folds = [[] for i in range(self.n_splits)]
