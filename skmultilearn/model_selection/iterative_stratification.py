@@ -1,3 +1,62 @@
+"""Iteratively stratify a multi-label data set
+
+    The classifier follows methods outlined in Sechidis11 and Szymanski17 papers related to stratyfing
+    multi-label data. 
+
+    In general what we expect from a given stratification output is that a strata, or a fold, is close to a given, demanded size,
+    usually equal to 1/k in k-fold approach, or a x% train to test set division in 2-fold splits. 
+
+    The idea behind this stratification method is to assign label combinations to folds based on how much a given combination is desired
+    by a given fold, as more and more assignments are made, some folds are filled and positive evidence is directed into other folds,
+    in the end negative evidence is distributed based on a folds desirability of size.
+
+    You can also watch a `video presentation <http://videolectures.net/ecmlpkdd2011_tsoumakas_stratification/?q=stratification%20multi%20label>`_ by G. Tsoumakas which explains the algorithm. In 2017 Szymanski & Kajdanowicz extended the algorithm
+    to handle high-order relationships in the data set, if order = 1, the algorithm falls back to the original Sechidis11 setting. 
+
+    If order is larger than 1 this class constructs a list of label combinations with replacement, i.e. allowing combinations of lower
+    order to be take into account. For example for combinations of order 2, the stratifier will consider both
+    label pairs (1, 2) and single labels denoted as (1,1) in the algorithm. In higher order cases the 
+    when two combinations of different size have similar desirablity: the larger, i.e. more specific combination
+    is taken into consideration first, thus if a label pair (1,2) and label 1 represented as (1,1) are of similar
+    desirability, evidence for (1,2) will be assigned to folds first.
+
+
+    If you use this method to stratify data please cite both:
+    Sechidis, K., Tsoumakas, G., & Vlahavas, I. (2011). On the stratification of multi-label data. Machine Learning and Knowledge Discovery in Databases, 145-158.
+    http://lpis.csd.auth.gr/publications/sechidis-ecmlpkdd-2011.pdf
+
+    Piotr Szymański, Tomasz Kajdanowicz ; Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications, PMLR 74:22-35, 2017.
+    http://proceedings.mlr.press/v74/szyma%C5%84ski17a.html
+
+    Bibtex:
+
+    .. code-block:: bibtex
+
+        @article{sechidis2011stratification,
+          title={On the stratification of multi-label data},
+          author={Sechidis, Konstantinos and Tsoumakas, Grigorios and Vlahavas, Ioannis},
+          journal={Machine Learning and Knowledge Discovery in Databases},
+          pages={145--158},
+          year={2011},
+          publisher={Springer}
+        }
+
+        @InProceedings{pmlr-v74-szymański17a,
+          title =    {A Network Perspective on Stratification of Multi-Label Data},
+          author =   {Piotr Szymański and Tomasz Kajdanowicz},
+          booktitle =    {Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications},
+          pages =    {22--35},
+          year =     {2017},
+          editor =   {Luís Torgo and Bartosz Krawczyk and Paula Branco and Nuno Moniz},
+          volume =   {74},
+          series =   {Proceedings of Machine Learning Research},
+          address =      {ECML-PKDD, Skopje, Macedonia},
+          publisher =    {PMLR},
+        }
+"""
+
+
+
 from sklearn.model_selection._split import _BaseKFold
 import numpy as np
 import scipy.sparse as sp
@@ -5,7 +64,20 @@ import itertools
 
 
 class IterativeStratification(_BaseKFold):
+    """Iteratively stratify a multi-label data set
 
+    Construct an interative stratifier that conducts:
+
+    :param n_splits: with number of splits
+    :type n_splits: int
+
+    :param order: taking into account order-th order of relationship
+    :type order: int
+
+    :param random_state: and the random state seed (optional)
+    :type random_state: int
+
+    """
     def __init__(self, n_splits=3, order=1, random_state=None):
         self.order = order
         super(
