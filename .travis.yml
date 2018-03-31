@@ -3,6 +3,8 @@ language: python
 services:
     - docker
 script:
-  - docker run -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" -d niedakh/scikit-multilearn-dev:latest /bin/sh -c "python3 -m pytest /home/python-dev/repo"
+  - find $TRAVIS_BUILD_DIR -name \*.pyc -delete
+  - docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo
 before_install:
   - docker pull niedakh/scikit-multilearn-dev:latest
+  - docker run -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" -d niedakh/scikit-multilearn-dev:latest --name scikit_multilearn_dev_test_docker
