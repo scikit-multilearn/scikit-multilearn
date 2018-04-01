@@ -1,11 +1,15 @@
 sudo: required
 language: python
 services:
-    - docker
+- docker
 script:
-  - docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo
+- docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo
 before_install:
-  - docker pull niedakh/scikit-multilearn-dev:latest
+- docker pull niedakh/scikit-multilearn-dev:latest
 install:
-  - docker run -e "MEKA_CLASSPATH=/opt/meka/lib" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest
-  - find $TRAVIS_BUILD_DIR -name \*.pyc -delete
+- docker run -e "MEKA_CLASSPATH=/opt/meka/lib" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo"
+  --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest
+- find $TRAVIS_BUILD_DIR -name \*.pyc -delete
+notifications:
+  slack:
+    secure: aTCuexl+J0s+ll8sS+p65Atmr9hgOYg0Qkv1nOwb+2oVlJtIYpwLymYZdMymeMtcbK8nlCKGuZRj9jpowzLvSU5kmmmbUdCskEzLf8guE/TUN5iMcIdvKnlAxfJ/MBXw59bjIuF3saYmzpkYbaBvj150M/tXMkYMLSgqwFMQq6U=
