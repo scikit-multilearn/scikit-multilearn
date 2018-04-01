@@ -3,8 +3,9 @@ language: python
 services:
     - docker
 script:
-  - find $TRAVIS_BUILD_DIR -name \*.pyc -delete
   - docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo
 before_install:
   - docker pull niedakh/scikit-multilearn-dev:latest
-  - docker run -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" -d niedakh/scikit-multilearn-dev:latest --name scikit_multilearn_dev_test_docker
+install:
+  - docker run -e "MEKA_CLASSPATH=/opt/meka/lib" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest
+  - find $TRAVIS_BUILD_DIR -name \*.pyc -delete
