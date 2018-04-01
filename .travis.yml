@@ -1,9 +1,23 @@
-sudo: required
-language: python
-services:
-- docker
+matrix:
+    include:
+        - os: linux
+          dist: trusty
+          sudo: required
+          language: python
+          python: 2.7
+          services:
+            - docker
+          env: TOXENV=py2
+        - os: linux
+          dist: trusty
+          language: python
+          python: 3.3
+          services:
+            - docker
+          env: TOXENV=py3
 script:
-- docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo
+- if [[ "$TOXENV" == "py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker python -m pytest /home/python-dev/repo; fi
+- if [[ "$TOXENV" == "py3" ]]; then docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo; fi
 before_install:
 - docker pull niedakh/scikit-multilearn-dev:latest
 install:
