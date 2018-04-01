@@ -1,5 +1,5 @@
 liac-arff==2.1.0
-igraph
+python-igraph
 numpy
 scipy
 scikit-learn
