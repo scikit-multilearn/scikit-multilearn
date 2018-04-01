@@ -14,7 +14,7 @@ matrix:
           python: 3.3
           services:
             - docker
-          env: TOXENV=py3
+          env: TOXENV=linux_py3
         - os: osx
           language: generic
           env: TOXENV=py3
