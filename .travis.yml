@@ -26,7 +26,7 @@ script:
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull niedakh/scikit-multilearn-dev:latest; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew update                                     ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap homebrew/science                       ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/science                        ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install python3 graph-tool                 ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip install -r $TRAVIS_BUILD_DIR/requirements-test.txt; fi
 
