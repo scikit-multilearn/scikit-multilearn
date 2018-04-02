@@ -70,8 +70,7 @@ class RakelO(RakelD):
             for c in self.classifiers
         ]
 
-        voters = np.zeros(self.label_count)
-
+        voters = np.zeros(self.label_count, dtype='int')
         votes = sparse.csc_matrix(
             (predictions[0].shape[0], self.label_count), dtype='int')
         for model in range(self.model_count):
