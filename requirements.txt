@@ -1,4 +1,4 @@
-liac-arff==2.1.0
+liac-arff>=2.1.0
 python-igraph
 numpy
 scipy
