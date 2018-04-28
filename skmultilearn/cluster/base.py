@@ -1,4 +1,5 @@
 from builtins import object
+
 from ..utils import get_matrix_in_format
 
 
@@ -30,7 +31,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
     co-occurence based multi-label classifiers.
     """
 
-    def __init__(self, weighted=None, include_self_edges=None, normalize_self_edges = None):
+    def __init__(self, weighted=None, include_self_edges=None, normalize_self_edges=None):
         """Initializes the clusterer
 
         Attributes
@@ -55,8 +56,11 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
         if normalize_self_edges not in [True, False]:
             raise ValueError("Decision whether to normalize self edges needs to be a boolean")
 
-        if not include_self_edges and normalize_self_edges:
+        if normalize_self_edges and not include_self_edges:
             raise ValueError("Include self edges must be set to true if normalization is true")
+
+        if normalize_self_edges and not weighted:
+            raise ValueError("Normalizing self-edge weights does not make sense in an unweighted graph")
 
         self.is_weighted = weighted
         self.include_self_edges = include_self_edges
@@ -101,8 +105,8 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
 
         if self.normalize_self_edges:
             for i in range(self.label_count):
-                if (i,i) in edge_map:
-                    edge_map[(i,i)] = edge_map[(i,i)]/2.0
+                if (i, i) in edge_map:
+                    edge_map[(i, i)] = edge_map[(i, i)] / 2.0
 
         self.edge_map = edge_map
         return edge_map

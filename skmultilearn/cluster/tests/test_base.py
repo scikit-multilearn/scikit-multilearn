@@ -1,5 +1,7 @@
 import unittest
+
 import scipy.sparse as sp
+
 from skmultilearn.cluster import LabelSpaceClustererBase, LabelCooccurenceClustererBase
 
 
@@ -14,13 +16,21 @@ class ClustererBaseTests(unittest.TestCase):
         self.assertRaises(
             ValueError, LabelCooccurenceClustererBase, 'not bool', True, True)
 
-    def test_iclude_self_edges_is_not_bool_exception(self):
+    def test_include_self_edges_is_not_bool_exception(self):
         self.assertRaises(
             ValueError, LabelCooccurenceClustererBase, True, 'not bool', True)
 
-    def test_iclude_self_edges_is_not_bool_exception(self):
+    def test_normalize_self_edges_is_not_bool_exception(self):
         self.assertRaises(
             ValueError, LabelCooccurenceClustererBase, True, True, 'not bool')
+
+    def test_self_edge_normalization_requires_self_edge_inclusion(self):
+        self.assertRaises(
+            ValueError, LabelCooccurenceClustererBase, False, False, True)
+
+    def test_self_edge_normalization_requires_weighted_network(self):
+        self.assertRaises(
+            ValueError, LabelCooccurenceClustererBase, False, True, True)
 
     def test_edge_map_works_unweighted_non_self_edged_non_normalized(self):
         test_data = sp.lil_matrix([[0, 1], [1, 0], [1, 1], [1, 1]])
@@ -69,18 +79,6 @@ class ClustererBaseTests(unittest.TestCase):
         self.assertEqual(len(edge_map), 3)
         self.assertEqual(edge_map[(0, 1)], 2)
         self.assertEqual(edge_map[(1, 1)], 3)
-
-    def test_edge_map_works_unweighted_self_edged_normalized(self):
-        test_data = sp.lil_matrix([[0, 1], [1, 0], [1, 1], [1, 1]])
-
-        base_class = LabelCooccurenceClustererBase(weighted=False, include_self_edges=True, normalize_self_edges=True)
-        edge_map = base_class.generate_coocurence_adjacency_matrix(test_data)
-
-        self.assertEqual(edge_map, base_class.edge_map)
-        self.assertEqual(test_data.shape[1], base_class.label_count)
-        self.assertEqual(len(edge_map), 3)
-        self.assertEqual(edge_map[(0, 1)], 1)
-        self.assertEqual(edge_map[(1, 1)], 0.5)
 
     def test_edge_map_works_weighted_self_edged_normalized(self):
         test_data = sp.lil_matrix([[0, 1], [1, 0], [1, 1], [1, 1]])
