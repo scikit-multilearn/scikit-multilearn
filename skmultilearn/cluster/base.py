@@ -30,7 +30,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
     co-occurence based multi-label classifiers.
     """
 
-    def __init__(self, weighted=None, include_self_edges=None):
+    def __init__(self, weighted=None, include_self_edges=None, normalize_self_edges = None):
         """Initializes the clusterer
 
         Attributes
@@ -40,18 +40,27 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
         include_self_edges : bool
             decide whether to include self-edge i.e. label 1 - label 1 in
             co-occurrence graph
+        normalize_self_edges: bool
+            if including self edges, divide the (i, i) edge by 2.0
         """
         super(LabelCooccurenceClustererBase, self).__init__()
-
-        self.is_weighted = weighted
-        self.include_self_edges = include_self_edges
 
         if weighted not in [True, False]:
             raise ValueError("Weighted needs to be a boolean")
 
         if include_self_edges not in [True, False]:
             raise ValueError(
-                "Decision about whether to include self edges needs to be a boolean")
+                "Decision whether to include self edges needs to be a boolean")
+
+        if normalize_self_edges not in [True, False]:
+            raise ValueError("Decision whether to normalize self edges needs to be a boolean")
+
+        if not include_self_edges and normalize_self_edges:
+            raise ValueError("Include self edges must be set to true if normalization is true")
+
+        self.is_weighted = weighted
+        self.include_self_edges = include_self_edges
+        self.normalize_self_edges = normalize_self_edges
 
     def generate_coocurence_adjacency_matrix(self, y):
         """Generate adjacency matrix from label matrix
@@ -90,9 +99,10 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
                     if self.is_weighted:
                         edge_map[p] += 1.0
 
-        for i in range(self.label_count):
-            if (i,i) in edge_map:
-                edge_map[(i,i)] = edge_map[(i,i)]/2.0
+        if self.normalize_self_edges:
+            for i in range(self.label_count):
+                if (i,i) in edge_map:
+                    edge_map[(i,i)] = edge_map[(i,i)]/2.0
 
         self.edge_map = edge_map
         return edge_map
