@@ -1,23 +1,25 @@
 from __future__ import absolute_import
+
 from builtins import range
-from .base import LabelCooccurenceClustererBase
-import numpy as np
+
 import igraph as ig
+import numpy as np
 
+from .base import LabelSpaceNetworkClustererBase
 
-class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
+class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
     """Clusters the label space using igraph community detection methods"""
 
     METHODS = {
-        'fastgreedy': lambda graph, w = None: graph.community_fastgreedy(weights=w).as_clustering(),
-        'infomap': lambda graph, w = None: graph.community_infomap(edge_weights=w),
-        'label_propagation': lambda graph, w = None: graph.community_label_propagation(weights=w),
-        'leading_eigenvector': lambda graph, w = None: graph.community_leading_eigenvector(weights=w),
-        'multilevel': lambda graph, w = None: graph.community_multilevel(weights=w),
-        'walktrap': lambda graph, w = None: graph.community_walktrap(weights=w).as_clustering(),
+        'fastgreedy': lambda graph, w=None: graph.community_fastgreedy(weights=w).as_clustering(),
+        'infomap': lambda graph, w=None: graph.community_infomap(edge_weights=w),
+        'label_propagation': lambda graph, w=None: graph.community_label_propagation(weights=w),
+        'leading_eigenvector': lambda graph, w=None: graph.community_leading_eigenvector(weights=w),
+        'multilevel': lambda graph, w=None: graph.community_multilevel(weights=w),
+        'walktrap': lambda graph, w=None: graph.community_walktrap(weights=w).as_clustering(),
     }
 
-    def __init__(self, method=None, weighted=None, include_self_edges=None):
+    def __init__(self, graph_builder, method):
         """Initializes the clusterer
 
         Attributes
@@ -30,8 +32,7 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
             decide whether to include self-edge i.e. label 1 - label 1
             in co-occurrence graph
         """
-        super(IGraphLabelCooccurenceClusterer, self).__init__(
-            weighted=weighted, include_self_edges=include_self_edges)
+        super(IGraphLabelCooccurenceClusterer, self).__init__(graph_builder)
         self.method = method
 
         if method not in IGraphLabelCooccurenceClusterer.METHODS:
@@ -58,19 +59,20 @@ class IGraphLabelCooccurenceClusterer(LabelCooccurenceClustererBase):
             list of lists label indexes, each sublist represents labels
             that are in that community
         """
-        self.generate_coocurence_adjacency_matrix(y)
+        edge_map = self.graph_builder.transform(y)
 
-        if self.is_weighted:
-            self.weights = dict(weight=list(self.edge_map.values()))
+        if self.graph_builder.is_weighted:
+            self.weights = dict(weight=list(edge_map.values()))
         else:
             self.weights = dict(weight=None)
 
         self.coocurence_graph = ig.Graph(
-            edges=[x for x in self.edge_map],
-            vertex_attrs=dict(name=list(range(1, self.label_count + 1))),
+            edges=[x for x in edge_map],
+            vertex_attrs=dict(name=list(range(1, y.shape[1] + 1))),
             edge_attrs=self.weights
         )
 
         self.partition = IGraphLabelCooccurenceClusterer.METHODS[
             self.method](self.coocurence_graph, self.weights['weight'])
+        print(self.partition, type(self.partition))
         return np.array(self.partition)

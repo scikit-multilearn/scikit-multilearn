@@ -3,6 +3,29 @@ from builtins import object
 from ..utils import get_matrix_in_format
 
 
+class GraphBuilderBase(object):
+    """An abstract base class for a graph building class used in Label Space clustering
+
+    Implement it in your classifier according to :doc:`../clusterer`.
+
+    """
+
+    def __init__(self):
+        super(GraphBuilderBase, self).__init__()
+
+    def transform(self, y):
+        """ Abstract method for graph edge map builder for a label space clusterer
+
+        Implement it in your classifier according to :doc:`../clusterer`.
+
+        Raises
+        ------
+        NotImplementedError
+            this is an abstract method
+        """
+        raise NotImplementedError("GraphBuilderBase::transform()")
+
+
 class LabelSpaceClustererBase(object):
     """An abstract base class for Label Space clustering
 
@@ -26,7 +49,31 @@ class LabelSpaceClustererBase(object):
         raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")
 
 
-class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
+class LabelSpaceNetworkClustererBase(LabelSpaceClustererBase):
+    """An abstract base class for Label Space clustering
+
+    Implement it in your classifier according to :doc:`../clusterer`.
+
+    """
+
+    def __init__(self, graph_builder: GraphBuilderBase):
+        super(LabelSpaceNetworkClustererBase, self).__init__()
+        self.graph_builder = graph_builder
+
+    def fit_predict(self, X, y):
+        """ Abstract method for clustering label space
+
+        Implement it in your classifier according to :doc:`../clusterer`.
+
+        Raises
+        ------
+        NotImplementedError
+            this is an abstract method
+        """
+        raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")
+
+
+class LabelCooccurenceGraphBuilder(GraphBuilderBase):
     """Base class providing API and common functions for all label
     co-occurence based multi-label classifiers.
     """
@@ -44,7 +91,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
         normalize_self_edges: bool
             if including self edges, divide the (i, i) edge by 2.0
         """
-        super(LabelCooccurenceClustererBase, self).__init__()
+        super(LabelCooccurenceGraphBuilder, self).__init__()
 
         if weighted not in [True, False]:
             raise ValueError("Weighted needs to be a boolean")
@@ -66,7 +113,7 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
         self.include_self_edges = include_self_edges
         self.normalize_self_edges = normalize_self_edges
 
-    def generate_coocurence_adjacency_matrix(self, y):
+    def transform(self, y):
         """Generate adjacency matrix from label matrix
 
         This function generates a weighted or unweighted co-occurence
@@ -86,11 +133,10 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
             and a float value :code:`{ (int, int) : float }`
         """
         label_data = get_matrix_in_format(y, 'lil')
-        self.label_count = label_data.shape[1]
+        label_count = label_data.shape[1]
         edge_map = {}
 
         for row in label_data.rows:
-            pairs = None
             if self.include_self_edges:
                 pairs = [(a, b) for b in row for a in row if a <= b]
             else:
@@ -104,9 +150,8 @@ class LabelCooccurenceClustererBase(LabelSpaceClustererBase):
                         edge_map[p] += 1.0
 
         if self.normalize_self_edges:
-            for i in range(self.label_count):
+            for i in range(label_count):
                 if (i, i) in edge_map:
                     edge_map[(i, i)] = edge_map[(i, i)] / 2.0
 
-        self.edge_map = edge_map
         return edge_map

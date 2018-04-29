@@ -1,7 +1,6 @@
 from __future__ import absolute_import
-from builtins import range
+
 from .base import LabelSpaceClustererBase
-import numpy as np
 
 
 class MatrixLabelSpaceClusterer(LabelSpaceClustererBase):
