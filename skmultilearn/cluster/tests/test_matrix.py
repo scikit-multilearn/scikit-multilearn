@@ -8,8 +8,7 @@ from skmultilearn.cluster import MatrixLabelSpaceClusterer
 class MatrixLabelSpaceClustererTests(unittest.TestCase):
 
     def test_actually_works_on_proper_params(self):
-        X, y = make_multilabel_classification(
-            sparse=True, return_indicator='sparse')
+        X, y = make_multilabel_classification(sparse=True, return_indicator='sparse')
         assert sp.issparse(y)
         cluster_count = 3
         base_clusterer = KMeans(cluster_count)
