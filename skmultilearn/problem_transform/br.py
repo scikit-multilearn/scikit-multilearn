@@ -77,6 +77,8 @@ class BinaryRelevance(ProblemTransformationBase):
         for i in range(self.model_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, self.partition[i], axis=1)
+            if issparse(y_subset) and y_subset.ndim > 1 and y_subset.shape[1] == 1:
+                y_subset = np.ravel(y_subset.toarray())
             classifier.fit(self.ensure_input_format(
                 X), self.ensure_output_format(y_subset))
             self.classifiers.append(classifier)
