@@ -147,11 +147,14 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         else:
             if self.require_dense[1] and not enforce_sparse:
                 # ensuring 1d
-                if len(matrix[0]) == 1:
-                    return np.ravel(matrix)
+                if len(matrix.shape) > 1:
+                    return np.ravel(matrix.toarray())
                 else:
                     return matrix
             else:
+                # ensuring 2d
+                if len(matrix.shape) == 1:
+                    matrix = matrix.reshape((matrix.shape[0], 1))
                 return matrix_creation_function_for_format(sparse_format)(matrix)
 
     def fit(self, X, y):
