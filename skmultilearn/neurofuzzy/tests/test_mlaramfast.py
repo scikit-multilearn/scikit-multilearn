@@ -16,5 +16,11 @@ class MLARAMTest(ClassifierBaseTest):
 
         self.assertClassifierWorksWithCV(classifier)
 
+    def test_if_works_with_sparsity(self):
+        classifier = MLARAM()
+
+        self.assertClassifierWorksWithSparsity(classifier, 'sparse')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,12 +1,15 @@
-from builtins import range
 from builtins import object
-# copyright @Fernando Benites
+from builtins import range
+
+import numpy
+import numpy.core.umath as umath
+import scipy.sparse
+from scipy.sparse import issparse
 
 from ..base import MLClassifierBase
 
-import numpy.core.umath as umath
-import scipy.sparse
-import numpy
+
+# copyright @Fernando Benites
 
 
 class Neuron(object):
@@ -15,6 +18,24 @@ class Neuron(object):
         # vector must be in complement form
         self.vc = startpoint
         self.label = label
+
+
+def _get_label_combination_representation(label_assignment_binary_indicator_list):
+    return label_assignment_binary_indicator_list.nonzero()[0].tostring()
+
+
+def _get_label_vector(y, i):
+    if issparse(y):
+        return numpy.squeeze(numpy.asarray(y[i].todense()))
+    return y[i]
+
+
+def _normalize_input_space(X):
+    x_max = X.max()
+    x_min = X.min()
+    if x_max < 0 or x_max > 1 or x_min < 0 or x_min > 1:
+        return numpy.multiply(X - x_min, 1 / (x_max - x_min))
+    return X
 
 
 class MLARAM(MLClassifierBase):
@@ -66,7 +87,7 @@ class MLARAM(MLClassifierBase):
         self.labels = []
         self.neurons = []
 
-    #@profile
+    # @profile
     def fit(self, X, y):
         """Fit classifier with training data
 
@@ -89,67 +110,77 @@ class MLARAM(MLClassifierBase):
         self.online = 1
         self.alpha = 0.0000000000001
 
-        labdict = {}
-        if len(X[0].shape) == 1:
-            ismatrix = 0
-        else:
-            ismatrix = 1
-        xma = X.max()
-        xmi = X.min()
-        if xma < 0 or xma > 1 or xmi < 0 or xmi > 1:
-            X = numpy.multiply(X - xmi, 1 / (xma - xmi))
+        label_combination_to_class_map = {}
+        is_matrix = int(len(X[0].shape) != 1)
+        X = _normalize_input_space(X)
+
+        y_0 = _get_label_vector(y, 0)
+        ones = scipy.ones(X[0].shape)
 
         if len(self.neurons) == 0:
-            ones = scipy.ones(X[0].shape)
-            self.neurons.append(
-                Neuron(numpy.concatenate((X[0], ones - X[0]), ismatrix), y[0]))
-            startc = 1
-            labdict[y[0].nonzero()[0].tostring()] = [0]
+            if issparse(X):
+                X_0 = numpy.squeeze(numpy.asarray(X[0].todense()))
+                if is_matrix:
+                    neuron_vc = scipy.sparse.hstack((X_0, ones - X_0))
+                else:
+                    neuron_vc = scipy.sparse.vstack((X_0, ones - X_0))
+                self.neurons.append(Neuron(neuron_vc, y_0))
+            else:
+                self.neurons.append(
+                    Neuron(numpy.concatenate((X[0], ones - X[0]), is_matrix), y_0))
+            start_index = 1
+            label_combination_to_class_map[_get_label_combination_representation(y_0)] = [0]
         else:
-            startc = 0
-        newlabel = 0
-        ones = scipy.ones(X[0].shape)
-        for i1, f1 in enumerate(X[startc:], startc):
-            found = 0
-            if scipy.sparse.issparse(f1):
-                f1 = f1.todense()
-            fc = numpy.concatenate((f1, ones - f1), ismatrix)
+            start_index = 0
 
+        # denotes the class enumerator for label combinations
+        last_used_label_combination_class_id = 0
+
+        for row_no, input_vector in enumerate(X[start_index:], start_index):
+            label_assignment_vector = _get_label_vector(y, row_no)
+
+            if issparse(input_vector):
+                input_vector = input_vector.todense()
+
+            fc = numpy.concatenate((input_vector, ones - input_vector), is_matrix)
             activationn = [0] * len(self.neurons)
             activationi = [0] * len(self.neurons)
-            ytring = y[i1].nonzero()[0].tostring()
-            if ytring in labdict:
+            label_combination = _get_label_combination_representation(label_assignment_vector)
+
+            if label_combination in label_combination_to_class_map:
                 fcs = fc.sum()
-                for i2 in labdict[ytring]:
-                    minnfs = umath.minimum(self.neurons[i2].vc, fc).sum()
-                    activationi[i2] = minnfs / fcs
-                    activationn[i2] = minnfs / self.neurons[i2].vc.sum()
+                for class_number in label_combination_to_class_map[label_combination]:
+                    minnfs = umath.minimum(self.neurons[class_number].vc, fc).sum()
+                    activationi[class_number] = minnfs / fcs
+                    activationn[class_number] = minnfs / self.neurons[class_number].vc.sum()
 
             if numpy.max(activationn) == 0:
-                newlabel += 1
-                self.neurons.append(Neuron(fc, y[i1]))
-                labdict.setdefault(ytring, []). append(len(self.neurons) - 1)
+                last_used_label_combination_class_id += 1
+                self.neurons.append(Neuron(fc, label_assignment_vector))
+                label_combination_to_class_map.setdefault(label_combination, []).append(len(self.neurons) - 1)
 
                 continue
+
             inds = numpy.argsort(activationn)
+            indc = numpy.where(numpy.array(activationi)[inds[::-1]] > self.vigilance)[0]
 
-            indc = numpy.where(
-                numpy.array(activationi)[inds[::-1]] > self.vigilance)[0]
             if indc.shape[0] == 0:
-                self.neurons.append(Neuron(fc, y[i1]))
-
-                labdict.setdefault(ytring, []). append(len(self.neurons) - 1)
+                self.neurons.append(Neuron(fc, label_assignment_vector))
+                label_combination_to_class_map.setdefault(label_combination, []).append(len(self.neurons) - 1)
                 continue
 
             winner = inds[::- 1][indc[0]]
             self.neurons[winner].vc = umath.minimum(
                 self.neurons[winner].vc, fc)
 
-            labadd = numpy.zeros(y[0].shape, dtype=y[0].dtype)
-            labadd[y[i1].nonzero()] = 1
-            self.neurons[winner].label += labadd
+            # 1 if winner neuron won a given label 0 if not
+            labels_won_indicator = numpy.zeros(y_0.shape, dtype=y_0.dtype)
+            labels_won_indicator[label_assignment_vector.nonzero()] = 1
+            self.neurons[winner].label += labels_won_indicator
 
-    #@profile
+        return self
+
+    # @profile
     def predict(self, X):
         """Predict labels for X
 
@@ -168,23 +199,23 @@ class MLARAM(MLClassifierBase):
         result = []
         ranks = self.predict_proba(X)
         for rank in ranks:
-            sortedRankarg = numpy.argsort(-rank)
-            diffs = -numpy.diff([rank[k] for k in sortedRankarg])
+            sorted_rank_arg = numpy.argsort(-rank)
+            diffs = -numpy.diff([rank[k] for k in sorted_rank_arg])
 
-            indcutt = numpy.where(diffs == (diffs).max())[0]
+            indcutt = numpy.where(diffs == diffs.max())[0]
             if len(indcutt.shape) == 1:
                 indcut = indcutt[0] + 1
             else:
                 indcut = indcutt[0, -1] + 1
             label = numpy.zeros(rank.shape)
 
-            label[sortedRankarg[0:indcut]] = 1
+            label[sorted_rank_arg[0:indcut]] = 1
 
             result.append(label)
 
         return numpy.array(numpy.matrix(result))
 
-    #@profile
+    # @profile
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
@@ -199,65 +230,57 @@ class MLARAM(MLClassifierBase):
             matrix with label assignment probabilities of shape
             :code:`(n_samples, n_labels)`
         """
-        result = []
-        if len(X) == 0:
+        if issparse(X):
+            if X.getnnz() == 0:
+                return
+        elif len(X) == 0:
             return
-        if len(X[0].shape) == 1:
-            ismatrix = 0
-        else:
-            ismatrix = 1
-        xma = X.max()
-        xmi = X.min()
-        if xma < 0 or xma > 1 or xmi < 0 or xmi > 1:
-            X = numpy.multiply(X - xmi, 1 / (xma - xmi))
+
+        is_matrix = int(len(X[0].shape) != 1)
+        X = _normalize_input_space(X)
         ones = scipy.ones(X[0].shape)
-        n1s = [0] * len(self.neurons)
-        allranks = []
-        neuronsactivated = []
+        all_ranks = []
+        all_neurons = numpy.vstack([n1.vc for n1 in self.neurons])
+        all_neurons_sum = all_neurons.sum(1) + self.alpha
 
-        allneu = numpy.vstack([n1.vc for n1 in self.neurons])
-        allneusum = allneu.sum(1) + self.alpha
+        for row_number, input_vector in enumerate(X):
+            if issparse(input_vector):
+                input_vector = input_vector.todense()
 
-        for i1, f1 in enumerate(X):
-            if scipy.sparse.issparse(f1):
+            fc = numpy.concatenate((input_vector, ones - input_vector), is_matrix)
+            activity = (umath.minimum(fc, all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
 
-                f1 = f1.todense()
-            fc = numpy.concatenate((f1, ones - f1), ismatrix)
-            activity = (umath.minimum(fc, allneu)
-                        .sum(1) / allneusum).squeeze().tolist()
-            if ismatrix == 1:
+            if is_matrix:
                 activity = activity[0]
 
             # be very fast
-            sortedact = numpy.argsort(activity)[::-1]
-
-            winner = sortedact[0]
-            diff_act = activity[winner] - activity[sortedact[-1]]
-
-            largest_activ = 1
-
+            sorted_activity = numpy.argsort(activity)[::-1]
+            winner = sorted_activity[0]
+            activity_difference = activity[winner] - activity[sorted_activity[-1]]
+            largest_activity = 1
             par_t = self.threshold
+
             for i in range(1, len(self.neurons)):
-                activ_change = (
-                    activity[winner] - activity[sortedact[i]]) / activity[winner]
-                if activ_change > par_t * diff_act:
+                activity_change = (activity[winner] - activity[sorted_activity[i]]) / activity[winner]
+                if activity_change > par_t * activity_difference:
                     break
 
-                largest_activ += 1
+                largest_activity += 1
 
-            rbsum = sum([activity[k] for k in sortedact[0:largest_activ]])
-
+            rbsum = sum([activity[k] for k in sorted_activity[0:largest_activity]])
             rank = activity[winner] * self.neurons[winner].label
-            actives = []
-            activity_actives = []
-            actives.append(winner)
-            activity_actives.append(activity[winner])
-            for i in range(1, largest_activ):
-                rank += activity[sortedact[i]] * self.neurons[
-                    sortedact[i]].label
-                actives.append(sortedact[i])
-                activity_actives.append(activity[sortedact[i]])
-            rank /= rbsum
-            allranks.append(rank)
+            activated = []
+            activity_among_activated = []
+            activated.append(winner)
+            activity_among_activated.append(activity[winner])
 
-        return numpy.array(numpy.matrix(allranks))
+            for i in range(1, largest_activity):
+                rank += activity[sorted_activity[i]] * self.neurons[
+                    sorted_activity[i]].label
+                activated.append(sorted_activity[i])
+                activity_among_activated.append(activity[sorted_activity[i]])
+
+            rank /= rbsum
+            all_ranks.append(rank)
+
+        return numpy.array(numpy.matrix(all_ranks))
