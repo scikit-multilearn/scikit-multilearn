@@ -21,7 +21,7 @@ class IGraphClustererBaseTests(unittest.TestCase):
         assert sp.issparse(y)
 
         for graph in supported_graphbuilder_generator():
-            for method in list(IGraphLabelCooccurenceClusterer.METHODS.keys()):
+            for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
                 clusterer = IGraphLabelCooccurenceClusterer(graph_builder=graph, method=method)
                 self.assertEqual(clusterer.method, method)
                 partition = clusterer.fit_predict(X, y)
