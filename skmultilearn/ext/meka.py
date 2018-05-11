@@ -1,13 +1,14 @@
-from builtins import map
-from builtins import str
-from builtins import filter
-from builtins import range
-import subprocess
-import tempfile
-import shlex
-import scipy.sparse as sparse
-import arff
 import os
+import shlex
+import subprocess
+import sys
+import tempfile
+from builtins import filter
+from builtins import map
+from builtins import range
+from builtins import str
+
+import scipy.sparse as sparse
 
 from ..base import MLClassifierBase
 from ..dataset import save_to_arff
@@ -20,7 +21,7 @@ class Meka(MLClassifierBase):
     """
 
     def __init__(self, meka_classifier=None, weka_classifier=None,
-        java_command=None, meka_classpath=None):
+                 java_command=None, meka_classpath=None):
         """Initializes the MEKA Wrapper
 
         Attributes
@@ -64,8 +65,8 @@ class Meka(MLClassifierBase):
         self.require_dense = [False, False]
         self.copyable_attrs = [
             'meka_classifier',
-            'weka_classifier', 
-            'java_command', 
+            'weka_classifier',
+            'java_command',
             'meka_classpath'
         ]
         self.clean()
@@ -90,10 +91,10 @@ class Meka(MLClassifierBase):
 
     def run_meka_command(self, args):
         """Runs the MEKA command
-        
+
         Parameters
         ----------
-        args : str 
+        args : str
             the Java command to run
         """
         command_args = [
@@ -112,6 +113,10 @@ class Meka(MLClassifierBase):
         pipes = subprocess.Popen(shlex.split(
             meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.output, self.error = pipes.communicate()
+        if type(self.output) == bytes:
+            self.output = self.output.decode(sys.stdout.encoding)
+        if type(self.error) == bytes:
+            self.error = self.error.decode(sys.stdout.encoding)
 
         if pipes.returncode != 0:
             raise Exception(self.output + self.error)
@@ -201,13 +206,13 @@ class Meka(MLClassifierBase):
             test_arff = tempfile.NamedTemporaryFile(delete=False)
             classifier_dump_file = tempfile.NamedTemporaryFile(delete=False)
 
-            with open(train_arff.name + '.arff', 'wb') as fp:
+            with open(train_arff.name + '.arff', 'w') as fp:
                 fp.write(self.train_data_)
 
             with open(classifier_dump_file.name, 'wb') as fp:
                 fp.write(self.classifier_dump)
 
-            with open(test_arff.name + '.arff', 'wb') as fp:
+            with open(test_arff.name + '.arff', 'w') as fp:
                 fp.write(save_to_arff(X, sparse_y))
 
             args = [
@@ -229,7 +234,7 @@ class Meka(MLClassifierBase):
         Parameters
         ----------
         train_file : str
-            path to train :code:`.arff` file in meka format 
+            path to train :code:`.arff` file in meka format
             (big endian, labels first in attributes list).
         test_file : str
             path to test :code:`.arff` file in meka format
@@ -249,10 +254,10 @@ class Meka(MLClassifierBase):
         # meka.classifiers.multilabel.LC, weka.classifiers.bayes.NaiveBayes
 
         args = [
-            '-t', train_file,
-            '-T', test_file,
-            '-verbosity', str(5),
-        ] + additional_arguments
+                   '-t', train_file,
+                   '-T', test_file,
+                   '-verbosity', str(5),
+               ] + additional_arguments
 
         self.run_meka_command(args)
         return self
@@ -269,7 +274,7 @@ class Meka(MLClassifierBase):
 
         if self.label_count is None:
             self.label_count = map(lambda y: int(y.split(')')[1].strip()), [
-                                   x for x in self.output.split('\n') if 'Number of labels' in x])[0]
+                x for x in self.output.split('\n') if 'Number of labels' in x])[0]
 
         if self.instance_count is None:
             self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split(
