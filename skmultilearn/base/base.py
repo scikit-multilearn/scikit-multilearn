@@ -148,7 +148,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             if self.require_dense[1] and not enforce_sparse:
                 # ensuring 1d
                 if len(matrix.shape) > 1:
-                    return np.ravel(matrix.toarray())
+                    # a regular dense np.matrix or np.array of np.arrays
+                    return np.ravel(matrix)
                 else:
                     return matrix
             else:
