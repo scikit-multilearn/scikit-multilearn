@@ -1,8 +1,10 @@
-from builtins import range
-from ..base.problem_transformation import ProblemTransformationBase
-from scipy.sparse import hstack, coo_matrix
-from sklearn.utils import check_array
 import copy
+from builtins import range
+
+import numpy as np
+from scipy.sparse import hstack, issparse
+
+from ..base.problem_transformation import ProblemTransformationBase
 
 
 class BinaryRelevance(ProblemTransformationBase):
@@ -77,6 +79,8 @@ class BinaryRelevance(ProblemTransformationBase):
         for i in range(self.model_count):
             classifier = copy.deepcopy(self.classifier)
             y_subset = self.generate_data_subset(y, self.partition[i], axis=1)
+            if issparse(y_subset) and y_subset.ndim > 1 and y_subset.shape[1] == 1:
+                y_subset = np.ravel(y_subset.toarray())
             classifier.fit(self.ensure_input_format(
                 X), self.ensure_output_format(y_subset))
             self.classifiers.append(classifier)
@@ -125,6 +129,6 @@ class BinaryRelevance(ProblemTransformationBase):
         """
         predictions = [self.ensure_multi_label_from_single_class(
             self.classifiers[label].predict_proba(
-            self.ensure_input_format(X)))[:, 1] for label in range(self.model_count)]
+                self.ensure_input_format(X)))[:, 1] for label in range(self.model_count)]
 
         return hstack(predictions)

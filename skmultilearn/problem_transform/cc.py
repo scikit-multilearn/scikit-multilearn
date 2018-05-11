@@ -146,7 +146,7 @@ class ClassifierChain(ProblemTransformationBase):
             prediction_proba = self.ensure_output_format(
                 prediction_proba, sparse_format='csc', enforce_sparse=True)[:, 1]
 
-            X_extended = hstack([X_extended, prediction.T]).tocsc()
+            X_extended = hstack([X_extended, prediction]).tocsc()
             results.append(prediction_proba)
 
         return hstack(results)
