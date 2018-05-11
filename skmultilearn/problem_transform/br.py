@@ -1,8 +1,9 @@
-from builtins import range
-from ..base.problem_transformation import ProblemTransformationBase
-from scipy.sparse import hstack, coo_matrix
-from sklearn.utils import check_array
 import copy
+from builtins import range
+
+from scipy.sparse import hstack, issparse
+
+from ..base.problem_transformation import ProblemTransformationBase
 
 
 class BinaryRelevance(ProblemTransformationBase):
@@ -127,6 +128,6 @@ class BinaryRelevance(ProblemTransformationBase):
         """
         predictions = [self.ensure_multi_label_from_single_class(
             self.classifiers[label].predict_proba(
-            self.ensure_input_format(X)))[:, 1] for label in range(self.model_count)]
+                self.ensure_input_format(X)))[:, 1] for label in range(self.model_count)]
 
         return hstack(predictions)
