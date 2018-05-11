@@ -1,6 +1,7 @@
 import copy
 from builtins import range
 
+import numpy as np
 from scipy.sparse import hstack, issparse
 
 from ..base.problem_transformation import ProblemTransformationBase
