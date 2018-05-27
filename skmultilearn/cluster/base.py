@@ -49,14 +49,14 @@ class LabelSpaceClustererBase(object):
         raise NotImplementedError("LabelSpaceClustererBase::fit_predict()")
 
 
-class LabelSpaceNetworkClustererBase(LabelSpaceClustererBase):
+class LabelSpaceNetworkClustererBase(object):
     """An abstract base class for Label Space clustering
 
     Implement it in your classifier according to :doc:`../clusterer`.
 
     """
 
-    def __init__(self, graph_builder: GraphBuilderBase):
+    def __init__(self, graph_builder):
         super(LabelSpaceNetworkClustererBase, self).__init__()
         self.graph_builder = graph_builder
 
