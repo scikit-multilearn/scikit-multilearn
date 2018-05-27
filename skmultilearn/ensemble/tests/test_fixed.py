@@ -16,7 +16,7 @@ class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
         return LabelPowerset(classifier=GaussianNB(), require_dense=[True, True])
 
     def get_classifier(self, base_classifier):
-        partition = [[0, 1, 2], [3, 4]]
+        partition = [[0, 1], [2]]
         return FixedLabelPartitionClassifier(partition=partition, classifier=base_classifier)
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
