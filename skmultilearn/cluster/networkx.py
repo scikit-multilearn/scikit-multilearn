@@ -1,12 +1,12 @@
 from __future__ import absolute_import
 
-from builtins import range
-
 import community
 import networkx as nx
 import numpy as np
+from builtins import range
 
 from .base import LabelSpaceNetworkClustererBase
+from .helpers import _membership_to_list_of_communities
 
 
 class NetworkXLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
@@ -57,5 +57,7 @@ class NetworkXLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
             self.coocurence_graph.add_edge(e[0], e[1], weight=w)
 
         self.partition_dict = community.best_partition(self.coocurence_graph)
-        self.partition = [self.partition_dict[n] for n in range(y.shape[1])]
-        return np.array(self.partition)
+        self.partition = np.array(
+            _membership_to_list_of_communities([self.partition_dict[i] for i in range(y.shape[1])],
+                                               1+max(self.partition_dict.values())))
+        return self.partition

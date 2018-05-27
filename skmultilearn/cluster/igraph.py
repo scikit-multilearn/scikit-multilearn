@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from builtins import range
 
 import igraph as ig
@@ -74,5 +72,4 @@ class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
 
         self.partition = IGraphLabelCooccurenceClusterer.METHODS[
             self.method](self.coocurence_graph, self.weights['weight'])
-        print(self.partition, type(self.partition))
         return np.array(self.partition)

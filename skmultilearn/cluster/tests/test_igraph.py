@@ -8,6 +8,12 @@ from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
 from .test_base import supported_graphbuilder_generator
 
 
+def get_igraph_clusterers():
+    for graph in supported_graphbuilder_generator():
+        for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
+            yield IGraphLabelCooccurenceClusterer(graph_builder=graph, method=method), method
+
+
 class IGraphClustererBaseTests(unittest.TestCase):
 
     def test_unsupported_methods_raise_exception(self):
@@ -19,14 +25,9 @@ class IGraphClustererBaseTests(unittest.TestCase):
         X, y = make_multilabel_classification(
             sparse=True, return_indicator='sparse')
         assert sp.issparse(y)
-
-        for graph in supported_graphbuilder_generator():
-            for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
-                clusterer = IGraphLabelCooccurenceClusterer(graph_builder=graph, method=method)
-                self.assertEqual(clusterer.method, method)
-                partition = clusterer.fit_predict(X, y)
-                self.assertIsInstance(partition, np.ndarray)
-                self.assertEquals(partition.shape[0], y.shape[1])
-
-if __name__ == '__main__':
-    unittest.main()
+        for clusterer, method in get_igraph_clusterers():
+            self.assertEqual(clusterer.method, method)
+            partition = clusterer.fit_predict(X, y)
+            self.assertIsInstance(partition, np.ndarray)
+            for label in range(y.shape[1]):
+                assert any(label in subset for subset in partition)

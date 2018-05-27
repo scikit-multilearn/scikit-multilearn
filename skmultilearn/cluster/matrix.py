@@ -1,6 +1,9 @@
 from __future__ import absolute_import
 
+import numpy as np
+
 from .base import LabelSpaceClustererBase
+from .helpers import _membership_to_list_of_communities
 
 
 class MatrixLabelSpaceClusterer(LabelSpaceClustererBase):
@@ -39,4 +42,5 @@ class MatrixLabelSpaceClusterer(LabelSpaceClustererBase):
         if self.pass_input_space:
             return self.clusterer.fit_predict(X, y.transpose())
 
-        return self.clusterer.fit_predict(y.transpose())
+        result = self.clusterer.fit_predict(y.transpose())
+        return np.array(_membership_to_list_of_communities(result, 1 + max(result)))
