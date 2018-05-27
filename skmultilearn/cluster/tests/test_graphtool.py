@@ -1,38 +1,56 @@
-import numpy as np
-import scipy.sparse as sp
-import unittest
+import pytest
 from sklearn.datasets import make_multilabel_classification
+
 from skmultilearn.cluster import GraphToolCooccurenceClusterer
-from .test_base import supported_graphbuilder_generator
+from skmultilearn.cluster.base import LabelCooccurenceGraphBuilder
+from skmultilearn.cluster.graphtool import StochasticBlockModel
 
 
-class GraphtoolClustererBaseTests(unittest.TestCase):
-    def test_actually_works_on_proper_params(self):
-        X, y = make_multilabel_classification(
-            sparse=True, return_indicator='sparse')
-        assert sp.issparse(y)
+def get_graphtool_partitioners():
+    for nested in [True, False]:
+        for degree_correlation in [True, False]:
+            for weight_model in [None, 'real-exponential', 'real-normal',
+                                 'discrete-geometric', 'discrete-binomial',
+                                 'discrete-poisson']:
+                sbm = StochasticBlockModel(nested, degree_correlation, False, weight_model)
+                bld = LabelCooccurenceGraphBuilder(weighted=weight_model is not None,
+                                                   include_self_edges=False,
+                                                   normalize_self_edges=False)
+                clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
+                yield clf
 
-        for graph in supported_graphbuilder_generator():
-            for allow_overlap in [True, False]:
-                for use_degree_corr in [True, False, None]:
-                    for model_selection_criterium in ['mean_field', 'bethe']:
-                        for verbose in [True, False]:
-                            clusterer = GraphToolCooccurenceClusterer(
-                                graph_builder=graph,
-                                allow_overlap=allow_overlap,
-                                n_iters=2, n_init_iters=2,
-                                use_degree_corr=use_degree_corr,
-                                model_selection_criterium=model_selection_criterium,
-                                verbose=verbose)
-                            self.assertEqual(clusterer.allow_overlap, allow_overlap)
-                            self.assertEqual(clusterer.n_iters, 2)
-                            self.assertEqual(clusterer.n_init_iters, 2)
-                            self.assertEqual(clusterer.model_selection_criterium, model_selection_criterium)
-                            self.assertEqual(clusterer.verbose, verbose)
 
-                            partition = clusterer.fit_predict(X, y)
-                            self.assertIsInstance(partition, np.ndarray)
-                            self.assertEquals(partition.shape[0], y.shape[1])
-
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.parametrize("nested,degree_correlation,allow_overlap,weight_model", [
+    (True, True, True, None),
+    (True, True, True, 'real-exponential'),
+    (True, True, True, 'real-normal'),
+    (True, True, True, 'discrete-geometric'),
+    (True, True, True, 'discrete-binomial'),
+    (True, True, True, 'discrete-poisson'),
+    (True, True, False, None),
+    (True, True, False, 'real-exponential'),
+    (True, True, False, 'real-normal'),
+    (True, True, False, 'discrete-geometric'),
+    (True, True, False, 'discrete-binomial'),
+    (True, True, False, 'discrete-poisson'),
+    (True, False, False, None),
+    (True, False, False, 'real-exponential'),
+    (True, False, False, 'real-normal'),
+    (True, False, False, 'discrete-geometric'),
+    (True, False, False, 'discrete-binomial'),
+    (True, False, False, 'discrete-poisson'),
+    (False, False, False, None),
+    (False, False, False, 'real-exponential'),
+    (False, False, False, 'real-normal'),
+    (False, False, False, 'discrete-geometric'),
+    (False, False, False, 'discrete-binomial'),
+    (False, False, False, 'discrete-poisson')
+])
+def test_that_graph_tool_clusterer_works(nested, degree_correlation, allow_overlap, weight_model):
+    X, y = make_multilabel_classification(n_labels=5, sparse=True, return_indicator='sparse')
+    sbm = StochasticBlockModel(nested, degree_correlation, allow_overlap, weight_model)
+    bld = LabelCooccurenceGraphBuilder(weighted=True, include_self_edges=False, normalize_self_edges=False)
+    clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
+    division = clf.fit_predict(X, y)
+    for label in range(y.shape[1]):
+        assert any(label in partition for partition in division)
