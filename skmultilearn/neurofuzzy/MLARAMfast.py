@@ -112,6 +112,8 @@ class MLARAM(MLClassifierBase):
 
         label_combination_to_class_map = {}
         is_matrix = int(len(X[0].shape) != 1)
+        if isinstance(X, numpy.matrix):
+            X = X.toarray()
         X = _normalize_input_space(X)
 
         y_0 = _get_label_vector(y, 0)
@@ -197,6 +199,8 @@ class MLARAM(MLClassifierBase):
         """
 
         result = []
+        if isinstance(X, numpy.matrix):
+            X = X.toarray()
         ranks = self.predict_proba(X)
         for rank in ranks:
             sorted_rank_arg = numpy.argsort(-rank)
@@ -230,6 +234,8 @@ class MLARAM(MLClassifierBase):
             matrix with label assignment probabilities of shape
             :code:`(n_samples, n_labels)`
         """
+        if isinstance(X, numpy.matrix):
+            X = X.toarray()
         if issparse(X):
             if X.getnnz() == 0:
                 return
