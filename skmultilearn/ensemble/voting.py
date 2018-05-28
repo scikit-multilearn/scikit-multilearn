@@ -1,25 +1,43 @@
-from builtins import zip
-from builtins import map
-from builtins import range
-from .partition import LabelSpacePartitioningClassifier
-import copy
 import numpy as np
-import random
+from builtins import range
+from builtins import zip
 from scipy import sparse
+
+from .partition import LabelSpacePartitioningClassifier
 
 
 class MajorityVotingClassifier(LabelSpacePartitioningClassifier):
-    """Overlapping RAndom k-labELsets multi-label classifier"""
+    """Majority Voting ensemble classifier
+
+    Divides the label space using provided clusterer class, trains a provided base classifier
+    type classifier for each subset and assign a label to an instance
+    if more than half of all classifiers (majority) from clusters that contain the label
+    assigned the label to the instance.
+    """
 
     def __init__(self, classifier=None, clusterer=None, require_dense=None):
+        """
+
+        Attributes
+        ----------
+        classifier : sklearn.base
+            the base classifier that will be used in a class, will be
+            automatically put under :code:`self.classifier` for future
+            access.
+        require_dense : [bool, bool]
+            whether the base classifier requires [input, output] matrices
+            in dense representation, will be automatically
+            put under :code:`self.require_dense`
+        clusterer : skmultilearn.cluster.base
+            the clusterer that divides the label space into clusters, will be automatically
+            put under :code:`self.clusterer`
+        """
         super(MajorityVotingClassifier, self).__init__(
-            classifier=classifier, clusterer=clusterer, require_dense=require_dense)
+            classifier=classifier, clusterer=clusterer, require_dense=require_dense
+        )
 
     def predict(self, X):
-        """Predict probabilities of label assignments for X
-
-        Internally this method uses a sparse CSC representation for X
-        (:class:`scipy.sparse.csr_matrix`).
+        """Predict label assignments for X
 
         Parameters
         ----------
@@ -44,8 +62,8 @@ class MajorityVotingClassifier(LabelSpacePartitioningClassifier):
         for model in range(self.model_count):
             for label in range(len(self.partition[model])):
                 votes[:, self.partition[model][label]] = votes[
-                    :, self.partition[model][label]] + predictions[model][:, label]
-                voters[self.partition[model][label]]+=1
+                                                         :, self.partition[model][label]] + predictions[model][:, label]
+                voters[self.partition[model][label]] += 1
 
         nonzeros = votes.nonzero()
         for row, column in zip(nonzeros[0], nonzeros[1]):

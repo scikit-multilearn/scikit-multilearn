@@ -6,11 +6,37 @@ from ..problem_transform import LabelPowerset
 
 
 class RakelD(LabelSpacePartitioningClassifier):
-    """Distinct RAndom k-labELsets multi-label classifier."""
+    """Distinct RAndom k-labELsets multi-label classifier.
+
+    Divides the label space in to equal partitions of size k, trains a Label Powerset
+    classifier per partition and predicts by summing the result of all trained classifiers.
+
+    Implements the RAkELd classifier from Tsoumakas et. al.'s paper:
+    Random k-Labelsets for Multilabel Classification,
+    https://ieeexplore.ieee.org/document/5567103/
+    """
 
     def __init__(self, base_classifier=None, labelset_size=None, base_classifier_require_dense=None):
+        """Initialize the classifier
+
+        Attributes
+        ----------
+        base_classifier : sklearn.base
+            the base classifier that will be used in a class, will be
+            automatically put under :code:`self.classifier` for future
+            access.
+        base_classifier_require_dense : [bool, bool]
+            whether the base classifier requires [input, output] matrices
+            in dense representation, will be automatically
+            put under :code:`self.require_dense`
+        labelset_size : int
+            the desired size of each of the partitions, parameter k according to paper
+        """
         super(RakelD, self).__init__(
-            classifier=LabelPowerset(classifier=base_classifier, require_dense=base_classifier_require_dense),
+            classifier=LabelPowerset(
+                classifier=base_classifier,
+                require_dense=base_classifier_require_dense
+            ),
             clusterer=RandomLabelSpaceClusterer(
                 partition_size=labelset_size,
                 partition_count=None,
