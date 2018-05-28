@@ -52,5 +52,5 @@ class RakelD(LabelSpacePartitioningClassifier):
     def fit(self, X, y):
         self.label_count = y.shape[1]
         self.model_count = int(np.ceil(self.label_count / self.labelset_size))
-        self.clusterer.partition_count = self.model_count
+        self.clusterer.cluster_count = self.model_count
         return super(RakelD, self).fit(X, y)

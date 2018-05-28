@@ -16,8 +16,8 @@ class MLClassifierBaseTests(ClassifierBaseTest):
             parameters = {
                 'classifier': [LabelPowerset(), BinaryRelevance()],
                 'clusterer': [RandomLabelSpaceClusterer(None, None, False)],
-                'clusterer__partition_size': list(range(2, 3)),
-                'clusterer__partition_count': [3],
+                'clusterer__cluster_size': list(range(2, 3)),
+                'clusterer__cluster_count': [3],
                 'clusterer__allow_overlap': [False],
                 'classifier__classifier': [MultinomialNB()],
                 'classifier__classifier__alpha': [0.7, 1.0],
