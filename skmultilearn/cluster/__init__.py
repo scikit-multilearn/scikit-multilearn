@@ -8,6 +8,7 @@ from .graphtool import GraphToolCooccurenceClusterer
 from .igraph import IGraphLabelCooccurenceClusterer
 from .matrix import MatrixLabelSpaceClusterer
 from .networkx import NetworkXLabelCooccurenceClusterer
+from .random import RandomLabelSpaceClusterer
 
 __all__ = ['LabelSpaceNetworkClustererBase',
            'GraphBuilderBase',
@@ -15,4 +16,5 @@ __all__ = ['LabelSpaceNetworkClustererBase',
            'GraphToolCooccurenceClusterer',
            'IGraphLabelCooccurenceClusterer',
            'MatrixLabelSpaceClusterer',
-           'NetworkXLabelCooccurenceClusterer']
+           'NetworkXLabelCooccurenceClusterer',
+           'RandomLabelSpaceClusterer']

@@ -25,8 +25,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
         require_dense : list of bools ([bool, bool])
             whether the base classifier requires input as dense arrays
         """
-        super(LabelSpacePartitioningClassifier, self).__init__(
-            classifier, require_dense)
+        super(LabelSpacePartitioningClassifier, self).__init__(classifier, require_dense)
         self.clusterer = clusterer
         self.copyable_attrs = ['clusterer', 'classifier', 'require_dense']
 
