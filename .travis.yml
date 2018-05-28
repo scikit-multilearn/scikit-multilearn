@@ -22,9 +22,9 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then python3 -m pytest $TRAVIS_BUILD_DIR; fi
 
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker rmi -f niedakh/scikit-multilearn-dev           ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker rmi -f niedakh/scikit-multilearn-dev:latest    ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull niedakh/scikit-multilearn-dev:latest      ; fi
+- if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker pip u; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip2 uninstall -y numpy                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew cask uninstall oclint                            ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew update                                           ; fi
