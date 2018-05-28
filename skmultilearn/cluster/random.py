@@ -1,38 +1,45 @@
 from __future__ import absolute_import
 
-import numpy as np
 import random
 
+import numpy as np
+
 from .base import LabelSpaceClustererBase
-from .helpers import _membership_to_list_of_communities
 
 
 class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
-    """Clusters the label space using a matrix-based clusterer"""
+    """Randomly divides the label space into equally-sized clusters
 
-    def __init__(self, partition_size, partition_count, allow_overlap):
-        """Initializes the clusterer
+    This method divides the label space by drawing without replacement a desired number of
+    equally sized subsets of label space, in a partitioning or overlapping scheme.
+    """
+
+    def __init__(self, cluster_size, cluster_count, allow_overlap):
+        """Initializes the random clusterer
 
         Attributes
         ----------
-        clusterer : sklearn.base.ClusterMixin
-            a clonable instance of a scikit-compatible clusterer
-        pass_input_space : bool (default is False)
-            whether to take :code:`X` into consideration upon clustering,
-            use only if you know that the clusterer can handle two
-            parameters for clustering
+        cluster_size : int
+            desired size of a single cluster, will be automatically
+            put under :code:`self.cluster_size`.
+        cluster_count: int
+            number of clusters to divide into, will be automatically
+            put under :code:`self.cluster_count`.
+        allow_overlap : bool
+            whether to allow overlapping clusters or not, will be automatically
+            put under :code:`self.allow_overlap`.
         """
         super(RandomLabelSpaceClusterer, self).__init__()
 
-        self.partition_size = partition_size
-        self.partition_count = partition_count
+        self.cluster_size = cluster_size
+        self.cluster_count = cluster_count
         self.allow_overlap = allow_overlap
 
     def fit_predict(self, X, y):
         """Cluster the output space
 
-        Uses the :code:`fit_predict` method of provided :code:`clusterer`
-        to perform label space division.
+        Sets :code:`self.label_count` to number of labels and :code:`self.partition`
+        to the detected partition.
 
         Returns
         -------
@@ -45,22 +52,22 @@ class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
         self.label_count = y.shape[1]
         free_labels = range(self.label_count)
 
-        while len(label_sets) <= self.partition_count:
+        while len(label_sets) <= self.cluster_count:
             if not self.allow_overlap:
                 if len(free_labels) == 0:
                     break
 
                 # in this case, we are unable to draw new labels, add all that remain
-                if len(free_labels) < self.partition_size:
+                if len(free_labels) < self.cluster_size:
                     label_sets.append(free_labels)
                     break
 
-            label_set = random.sample(free_labels, self.partition_size)
+            label_set = random.sample(free_labels, self.cluster_size)
             if not self.allow_overlap:
                 free_labels = list(set(free_labels).difference(set(label_set)))
 
             if label_set not in label_sets:
                 label_sets.append(label_set)
 
-        self.partition = label_sets
-        return np.array(self.partition)
+        self.partition = np.array(label_sets)
+        return self.partition

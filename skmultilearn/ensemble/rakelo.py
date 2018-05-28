@@ -48,8 +48,8 @@ class RakelO(MajorityVotingClassifier):
                 require_dense=base_classifier_require_dense
             ),
             clusterer=RandomLabelSpaceClusterer(
-                partition_size=labelset_size,
-                partition_count=model_count,
+                cluster_size=labelset_size,
+                cluster_count=model_count,
                 allow_overlap=True
             ),
             require_dense=require_dense

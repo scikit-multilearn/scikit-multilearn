@@ -11,11 +11,11 @@ TEST_PARTITION_COUNT = 3
 def get_random_clusterers():
     for overlap in [True, False]:
         if overlap:
-            yield RandomLabelSpaceClusterer(partition_count=TEST_PARTITION_COUNT*TEST_PARTITION_SIZE,
-                                            partition_size=TEST_PARTITION_SIZE,
+            yield RandomLabelSpaceClusterer(cluster_count=TEST_PARTITION_COUNT * TEST_PARTITION_SIZE,
+                                            cluster_size=TEST_PARTITION_SIZE,
                                             allow_overlap=overlap)
         else:
-            yield RandomLabelSpaceClusterer(partition_count=TEST_PARTITION_COUNT, partition_size=TEST_PARTITION_SIZE,
+            yield RandomLabelSpaceClusterer(cluster_count=TEST_PARTITION_COUNT, cluster_size=TEST_PARTITION_SIZE,
                                             allow_overlap=overlap)
 
 

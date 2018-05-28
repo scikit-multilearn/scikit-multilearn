@@ -4,7 +4,7 @@ from ..utils import get_matrix_in_format
 from sklearn.base import BaseEstimator
 
 class GraphBuilderBase(object):
-    """An abstract base class for a graph building class used in Label Space clustering
+    """An abstract base class for a graph building class used in label Space clustering
 
     Implement it in your classifier according to :doc:`../clusterer`.
 
@@ -57,6 +57,13 @@ class LabelSpaceNetworkClustererBase(object):
     """
 
     def __init__(self, graph_builder):
+        """
+
+        Attributes
+        ----------
+        graph_builder : a  GraphBuilderBase derivative class
+            a graph building class for the clusterer
+        """
         super(LabelSpaceNetworkClustererBase, self).__init__()
         self.graph_builder = graph_builder
 

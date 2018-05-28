@@ -38,8 +38,8 @@ class RakelD(LabelSpacePartitioningClassifier):
                 require_dense=base_classifier_require_dense
             ),
             clusterer=RandomLabelSpaceClusterer(
-                partition_size=labelset_size,
-                partition_count=None,
+                cluster_size=labelset_size,
+                cluster_count=None,
                 allow_overlap=False
             ),
             require_dense=[False, False]

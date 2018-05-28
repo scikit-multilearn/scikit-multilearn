@@ -10,7 +10,13 @@ from .helpers import _membership_to_list_of_communities
 
 
 class NetworkXLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
-    """Clusters the label space using igraph community detection methods"""
+    """Cluster label space with NetworkX and louvain community detection
+
+    This clusterer builds a NetworkX graph using the graph from a provided
+    GraphBuilder instance. It then performs a weighted or unweighted,
+    depending on the GraphBuilder
+
+    """
 
     def __init__(self, graph_builder):
         """Initializes the clusterer
@@ -18,7 +24,7 @@ class NetworkXLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
         Attributes
         ----------
         graph_builder: a GraphBuilderBase inherited transformer
-                Class used to provide an underlying graph
+                Class used to provide an underlying graph for NetworkX
         """
         super(NetworkXLabelCooccurenceClusterer, self).__init__(graph_builder)
 
@@ -31,16 +37,15 @@ class NetworkXLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
 
         Parameters
         ----------
-        X : scipy.sparse 
-            feature space of shape :code:`(n_samples, n_features)`
+        X : currently unused, left for scikit compatibility
         y : scipy.sparse
             label space of shape :code:`(n_samples, n_labels)`
 
         Returns
         -------
-        list of lists
-            list of lists label indexes, each sublist represents labels
-            that are in that community
+        array of arrays
+            numpy array of arrays of label indexes, where each sub-array
+            represents labels that are in a separate community
         """
         edge_map = self.graph_builder.transform(y)
 

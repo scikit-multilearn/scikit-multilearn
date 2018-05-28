@@ -1,10 +1,11 @@
 from __future__ import absolute_import
-from builtins import range
 
-from igraph import Graph
 import numpy as np
+from builtins import range
+from igraph import Graph
 
 from .base import LabelSpaceNetworkClustererBase
+
 
 class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
     """Clusters the label space using igraph community detection methods"""
@@ -23,13 +24,10 @@ class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
 
         Attributes
         ----------
-        method : enum from `IGraphLabelCooccurenceClusterer.METHODS`
-            the igraph community detection method that will be used
-        weighted: boolean
+        graph_builder: a GraphBuilderBase inherited transformer
+            the graph builder to provide the adjacency matrix and weight map for the underlying graph
+        method: boolean
             decide whether to generate a weighted or unweighted graph.
-        include_self_edges : boolean
-            decide whether to include self-edge i.e. label 1 - label 1
-            in co-occurrence graph
         """
         super(IGraphLabelCooccurenceClusterer, self).__init__(graph_builder)
         self.method = method
@@ -41,9 +39,13 @@ class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
     def fit_predict(self, X, y):
         """Performs clustering on y and returns list of label lists
 
-        Builds a label coocurence_graph using
-        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
-        on `y` and then detects communities using a selected `method`.
+        Builds a label coocurence_graph using the provided graph builder's `fit_predict` method
+        on `y` and then detects communities using the selected `method`.
+
+        Sets :code:`self.weights` to a dictionary: {'weights': list of weights per label pair edge},
+        :code:`self.coocurence_graph` to the igraph Graph object contaning the graph representation
+        of graph builders weighted adjacency matrix. Sets :code:`self.partition` to the partition
+        obtained using selected community detection method on the constructed Graph.
 
         Parameters
         ----------
@@ -71,6 +73,6 @@ class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
             edge_attrs=self.weights
         )
 
-        self.partition = IGraphLabelCooccurenceClusterer.METHODS[
-            self.method](self.coocurence_graph, self.weights['weight'])
-        return np.array(self.partition)
+        self.partition = np.array(IGraphLabelCooccurenceClusterer.METHODS[
+                                      self.method](self.coocurence_graph, self.weights['weight']))
+        return self.partition
