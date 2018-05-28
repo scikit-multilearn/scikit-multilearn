@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from builtins import range
 
-import igraph as ig
+from igraph import Graph
 import numpy as np
 
 from .base import LabelSpaceNetworkClustererBase
@@ -64,7 +65,7 @@ class IGraphLabelCooccurenceClusterer(LabelSpaceNetworkClustererBase):
         else:
             self.weights = dict(weight=None)
 
-        self.coocurence_graph = ig.Graph(
+        self.coocurence_graph = Graph(
             edges=[x for x in edge_map],
             vertex_attrs=dict(name=list(range(1, y.shape[1] + 1))),
             edge_attrs=self.weights
