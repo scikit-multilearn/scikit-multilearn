@@ -7,28 +7,26 @@ from sklearn.naive_bayes import MultinomialNB
 from skmultilearn.ensemble.partition import LabelSpacePartitioningClassifier
 from skmultilearn.cluster import RandomLabelSpaceClusterer
 from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset
+from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
-
-class MLClassifierBaseTests(unittest.TestCase):
+class MLClassifierBaseTests(ClassifierBaseTest):
 
     def test_model_selection_works(self):
-        x, y = make_multilabel_classification(sparse=True, n_labels=5,
-                                              return_indicator='sparse', allow_unlabeled=False)
+        for x,y in self.get_multilabel_data_for_tests('dense'):
+            parameters = {
+                'classifier': [LabelPowerset(), BinaryRelevance()],
+                'clusterer': [RandomLabelSpaceClusterer(None, None, False)],
+                'clusterer__partition_size': list(range(2, 3)),
+                'clusterer__partition_count': [3],
+                'clusterer__allow_overlap': [False],
+                'classifier__classifier': [MultinomialNB()],
+                'classifier__classifier__alpha': [0.7, 1.0],
+            }
 
-        parameters = {
-            'classifier': [LabelPowerset(), BinaryRelevance()],
-            'clusterer': [RandomLabelSpaceClusterer(None, None, False)],
-            'clusterer__partition_size': list(range(2, 3)),
-            'clusterer__partition_count': [3],
-            'clusterer__allow_overlap': [False],
-            'classifier__classifier': [MultinomialNB()],
-            'classifier__classifier__alpha': [0.7, 1.0],
-        }
+            clf = GridSearchCV(LabelSpacePartitioningClassifier(), parameters, scoring='f1_macro')
+            clf.fit(x, y)
 
-        clf = GridSearchCV(LabelSpacePartitioningClassifier(), parameters, scoring='f1_macro')
-        clf.fit(x, y)
+            for p in list(parameters.keys()):
+                self.assertIn(p, clf.best_params_)
 
-        for p in list(parameters.keys()):
-            self.assertIn(p, clf.best_params_)
-
-        self.assertIsNotNone(clf.best_score_)
+            self.assertIsNotNone(clf.best_score_)

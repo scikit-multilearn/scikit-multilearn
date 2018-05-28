@@ -1,16 +1,14 @@
-import unittest
-
 import numpy as np
 import scipy.sparse as sp
-from sklearn.datasets import make_multilabel_classification
 
 from skmultilearn.cluster import RandomLabelSpaceClusterer
+from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 TEST_PARTITION_SIZE = 2
-TEST_PARTITION_COUNT = 2
+TEST_PARTITION_COUNT = 3
 
 
-def get_networkx_clusterers():
+def get_random_clusterers():
     for overlap in [True, False]:
         if overlap:
             yield RandomLabelSpaceClusterer(partition_count=TEST_PARTITION_COUNT + 1,
@@ -21,14 +19,13 @@ def get_networkx_clusterers():
                                             allow_overlap=overlap)
 
 
-class RandomClustererTests(unittest.TestCase):
+class RandomClustererTests(ClassifierBaseTest):
     def test_actually_works_on_proper_params(self):
-        X, y = make_multilabel_classification(sparse=True, return_indicator='sparse',
-                                              n_classes=TEST_PARTITION_COUNT * TEST_PARTITION_SIZE)
-        assert sp.issparse(y)
+        for X, y in self.get_multilabel_data_for_tests('sparse'):
+            assert sp.issparse(y)
 
-        for clusterer in get_networkx_clusterers():
-            partition = clusterer.fit_predict(X, y)
-            self.assertIsInstance(partition, np.ndarray)
-            for label in range(y.shape[1]):
-                assert any(label in subset for subset in partition)
+            for clusterer in get_random_clusterers():
+                partition = clusterer.fit_predict(X, y)
+                self.assertIsInstance(partition, np.ndarray)
+                for label in range(y.shape[1]):
+                    assert any(label in subset for subset in partition)

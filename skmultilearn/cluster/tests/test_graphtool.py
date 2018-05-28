@@ -1,10 +1,11 @@
 import pytest
-from sklearn.datasets import make_multilabel_classification
 
 from skmultilearn.cluster import GraphToolCooccurenceClusterer
 from skmultilearn.cluster.base import LabelCooccurenceGraphBuilder
 from skmultilearn.cluster.graphtool import StochasticBlockModel
+from skmultilearn.tests.example import EXAMPLE_X, EXAMPLE_y
 
+import scipy.sparse as sparse
 
 def get_graphtool_partitioners():
     for nested in [True, False]:
@@ -18,7 +19,6 @@ def get_graphtool_partitioners():
                                                    normalize_self_edges=False)
                 clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
                 yield clf
-
 
 @pytest.mark.parametrize("nested,degree_correlation,allow_overlap,weight_model", [
     (True, True, True, None),
@@ -47,10 +47,10 @@ def get_graphtool_partitioners():
     (False, False, False, 'discrete-poisson')
 ])
 def test_that_graph_tool_clusterer_works(nested, degree_correlation, allow_overlap, weight_model):
-    X, y = make_multilabel_classification(n_labels=5, sparse=True, return_indicator='sparse')
     sbm = StochasticBlockModel(nested, degree_correlation, allow_overlap, weight_model)
     bld = LabelCooccurenceGraphBuilder(weighted=True, include_self_edges=False, normalize_self_edges=False)
     clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
+    X, y = sparse.csr_matrix(EXAMPLE_X), sparse.csr_matrix(EXAMPLE_y)
     division = clf.fit_predict(X, y)
     for label in range(y.shape[1]):
         assert any(label in partition for partition in division)
