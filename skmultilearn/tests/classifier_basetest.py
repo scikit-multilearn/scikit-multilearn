@@ -2,17 +2,17 @@ import unittest
 from sklearn import model_selection
 from sklearn.datasets import make_multilabel_classification
 import numpy as np
+import scipy.sparse as sparse
+from .example import EXAMPLE_X, EXAMPLE_y
 
 class ClassifierBaseTest(unittest.TestCase):
     def get_multilabel_data_for_tests(self, sparsity_indicator):
         feed_sparse = sparsity_indicator == 'sparse'
 
-        x, y = make_multilabel_classification(n_labels=7,
-                                              sparse=feed_sparse,
-                                              return_indicator=sparsity_indicator,
-                                              allow_unlabeled=False,
-                                              n_classes=3)
-        return [(x, y)]
+        if feed_sparse:
+            return [(sparse.csr_matrix(EXAMPLE_X), sparse.csr_matrix(EXAMPLE_y))]
+        else:
+            return [(np.matrix(EXAMPLE_X), np.matrix(EXAMPLE_y))]
 
 
     def assertClassifierWorksWithSparsity(self, classifier, sparsity_indicator='sparse'):
@@ -49,11 +49,6 @@ class ClassifierBaseTest(unittest.TestCase):
             self.assertLessEqual(np.round(min_value), 1.0)
             self.assertLessEqual(np.round(max_value), 1.0)
 
-# this needs to be investigated
-#        for row in xrange(result.shape[0]):
-#            total_row = result[row,:].sum()
-#            self.assertGreaterEqual(np.round(total_row), 0.0)
-#            self.assertLessEqual(np.round(total_row), 1.0)
 
 if __name__ == '__main__':
     unittest.main()
