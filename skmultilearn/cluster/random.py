@@ -53,8 +53,6 @@ class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
                 # in this case, we are unable to draw new labels, add all that remain
                 if len(free_labels) < self.partition_size:
                     label_sets.append(free_labels)
-                    free_labels = list(set(free_labels).difference(set(label_set)))
-                    assert len(free_labels) == 0
                     break
 
             label_set = random.sample(free_labels, self.partition_size)

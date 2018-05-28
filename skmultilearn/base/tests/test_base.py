@@ -4,7 +4,8 @@ from sklearn.datasets import make_multilabel_classification
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 
-from skmultilearn.ensemble.rakeld import RakelD
+from skmultilearn.ensemble.partition import LabelSpacePartitioningClassifier
+from skmultilearn.cluster import RandomLabelSpaceClusterer
 from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset
 
 
@@ -15,13 +16,16 @@ class MLClassifierBaseTests(unittest.TestCase):
                                               return_indicator='sparse', allow_unlabeled=False)
 
         parameters = {
-            'labelset_size': list(range(2, 3)),
             'classifier': [LabelPowerset(), BinaryRelevance()],
+            'clusterer': [RandomLabelSpaceClusterer(None, None, False)],
+            'clusterer__partition_size': list(range(2, 3)),
+            'clusterer__partition_count': [3],
+            'clusterer__allow_overlap': [False],
             'classifier__classifier': [MultinomialNB()],
             'classifier__classifier__alpha': [0.7, 1.0],
         }
 
-        clf = GridSearchCV(RakelD(), parameters, scoring='f1_macro')
+        clf = GridSearchCV(LabelSpacePartitioningClassifier(), parameters, scoring='f1_macro')
         clf.fit(x, y)
 
         for p in list(parameters.keys()):

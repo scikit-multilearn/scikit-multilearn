@@ -1,7 +1,7 @@
 from builtins import object
 
 from ..utils import get_matrix_in_format
-
+from sklearn.base import BaseEstimator
 
 class GraphBuilderBase(object):
     """An abstract base class for a graph building class used in Label Space clustering
@@ -26,7 +26,7 @@ class GraphBuilderBase(object):
         raise NotImplementedError("GraphBuilderBase::transform()")
 
 
-class LabelSpaceClustererBase(object):
+class LabelSpaceClustererBase(BaseEstimator):
     """An abstract base class for Label Space clustering
 
     Implement it in your classifier according to :doc:`../clusterer`.
