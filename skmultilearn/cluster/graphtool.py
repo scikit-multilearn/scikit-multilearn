@@ -1,65 +1,150 @@
 from __future__ import absolute_import
 from __future__ import print_function
-from builtins import range
-from .base import LabelCooccurenceClustererBase
-import copy
-import numpy as np
+
 import graph_tool.all as gt
+import numpy as np
+from builtins import range
+
+from .base import LabelSpaceNetworkClustererBase
+from .helpers import _membership_to_list_of_communities, _overlapping_membership_to_list_of_communities
+
+class StochasticBlockModel:
+    """Stochastic Block Model estimator and state container
+
+    An extensive introduction into SBMs can be found in https://graph-tool.skewed.de/static/doc/demos/inference/inference.html
+    """
+    def __init__(self, nested, use_degree_correlation, allow_overlap, weight_model):
+        """
+
+        Attributes
+        ----------
+        nested: boolean
+            whether to build a nested Stochastic Block Model or the regular variant,
+            will be automatically put under :code:`self.nested`.
+        use_degree_correlation: boolean
+            whether to correct for degree correlation in modeling, will be automatically
+            put under :code:`self.use_degree_correlation`.
+        allow_overlap: boolean
+            whether to allow overlapping clusters or not, will be automatically
+            put under :code:`self.allow_overlap`.
+        weight_model: string or None
+            decide whether to generate a weighted or unweighted graph,
+            will be automatically put under :code:`self.weight_model`.
+        """
+        self.nested = nested
+        self.use_degree_correlation = use_degree_correlation
+        self.allow_overlap = allow_overlap
+        self.weight_model = weight_model
+        self._state = None
+
+    def model(self):
+        """
+        Returns
+        -------
+        Callable
+            relevant graph-tool's model construction function nested SBM or not
+        """
+        if self.nested:
+            return gt.minimize_nested_blockmodel_dl
+        else:
+            return gt.minimize_blockmodel_dl
+
+    def fit(self, graph, weights):
+        """Fits model to a given graph and weights list
+
+        Sets :code:`self._state` to the state of the model after fitting.
+
+        Attributes
+        ----------
+        graph: graphtool.Graph
+            the graph to fit the model to
+        weights: graphtool.EdgePropertyMap<double>
+            the property map: edge -> weight (double) to fit the model to, if weighted variant
+            is selected
+
+        Returns
+        -------
+        self
+            the fitted StochasticBlockModel
+        """
+        if self.weight_model:
+            self._state = self.model()(
+                graph,
+                deg_corr=self.use_degree_correlation,
+                overlap=self.allow_overlap,
+                state_args=dict(recs=[weights],
+                                rec_types=[self.weight_model])
+            )
+        else:
+            self._state = self.model()(
+                graph,
+                deg_corr=self.use_degree_correlation,
+                overlap=self.allow_overlap
+            )
+        return self
+
+    def entropy(self):
+        """Returns the entropy of the fit model
+
+        Returns
+        -------
+        float
+            Entropy
+        """
+        return self._state.entropy()
+
+    def communities(self):
+        """ Communities
+
+        Returns
+        -------
+        numpy.ndarray
+            partition of labels, each sublist contains label indices
+            related to label positions in :code:`y`
+        """
+        if self.nested:
+            lowest_level = self._state.get_levels()[0]
+        else:
+            lowest_level = self._state
+
+        number_of_communities = lowest_level.get_B()
+        if self.allow_overlap:
+            # the overlaps block returns
+            # membership vector, and also edges vectors, we need just the membership here at the moment
+            membership_vector = list(lowest_level.get_overlap_blocks()[0])
+        else:
+            membership_vector = list(lowest_level.get_blocks())
+
+        if self.allow_overlap:
+            return _overlapping_membership_to_list_of_communities(membership_vector, number_of_communities)
+
+        return _membership_to_list_of_communities(membership_vector, number_of_communities)
 
 
-class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
+class GraphToolCooccurenceClusterer(LabelSpaceNetworkClustererBase):
     """Clusters the label space using graph tool's stochastic block
     modelling community detection method"""
 
-    def __init__(self, weighted=None,include_self_edges=None,allow_overlap=None,
-                 n_iters=100,n_init_iters=10,use_degree_corr=None,model_selection_criterium='mean_field',
-                 verbose=False,equlibrate_options={}):
+    def __init__(self, graph_builder, model):
         """Initializes the clusterer
 
         Attributes
         ----------
-        weighted: boolean
-                Decide whether to generate a weighted or unweighted graph.
-        include_self_edges : boolean
-            Decide whether to include self-edge i.e. label 1 - label 1 in co-occurrence graph
-        allow_overlap: boolean
-                Allow overlapping of clusters or not.
-        n_iters : int
-                Number of iterations to perform in sweeping
-        n_init_iters: int
-                Number of iterations to perform
-        use_degree_corr: None or bool
-                Whether to use a degree correlated stochastic blockmodel,
-                or not - if None, it is selected based on selection criterium
-        model_selection_criterium: 'mean_field' or 'bethe'
-                Approach to use in case
-        verbose: bool
-                Be verbose about the output
-        equlibrate_options: dict
-                additional options to pass to graphtool's
-                `mcmc_equilibrate`_.
-
-        .. _mcmc_equilibrate: https://graph-tool.skewed.de/static/doc/inference.html#graph_tool.inference.mcmc_equilibrate
+        graph_builder: a GraphBuilderBase inherited transformer
+            the graph builder to provide the adjacency matrix and weight map for the underlying graph
+        model: StochasticBlockModel
+            the desired stochastic block model variant to use
         """
-        super(GraphToolCooccurenceClusterer, self).__init__(
-            weighted=weighted, include_self_edges=include_self_edges)
+        super(GraphToolCooccurenceClusterer, self).__init__(graph_builder)
 
-        self.allow_overlap = allow_overlap
-        self.n_iters = n_iters
-        self.n_init_iters = n_init_iters
-        self.use_degree_corr = use_degree_corr
-        self.model_selection_criterium = model_selection_criterium
-        self.verbose = verbose
-        self.equlibrate_options = equlibrate_options
+        self.model = model
+        self.graph_builder = graph_builder
 
-        if allow_overlap not in [True, False]:
-            raise ValueError("allow_overlap needs to be a boolean")
-
-    def generate_coocurence_graph(self):
+    def build_graph_instance(self, y):
         """Constructs the label coocurence graph
 
         This function constructs a graph-tool :py:class:`graphtool.Graph`
-        object representing the label co-occurence graph. Run after 
+        object representing the label co-occurence graph. Run after
         :code:`self.edge_map` has been populated using
         :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
         on `y` in `fit_predict`.
@@ -73,20 +158,20 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
 
         Returns
         -------
-        g : graphtool.Graph 
+        g : graphtool.Graph
             object representing a label co-occurence graph
         """
+
+        edge_map = self.graph_builder.transform(y)
+
         g = gt.Graph(directed=False)
-        g.add_vertex(self.label_count)
+        g.add_vertex(y.shape[1])
 
         self.weights = g.new_edge_property('double')
 
-        for edge, weight in self.edge_map.items():
+        for edge, weight in edge_map.items():
             e = g.add_edge(edge[0], edge[1])
-            if self.is_weighted:
-                self.weights[e] = weight
-            else:
-                self.weights[e] = 1.0
+            self.weights[e] = weight
 
         self.coocurence_graph = g
 
@@ -100,12 +185,13 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
         on `y` and then detects communities using graph tool's
         stochastic block modeling.
 
+
         Parameters
         ----------
         X : scipy.sparse 
             feature space of shape :code:`(n_samples, n_features)`
         y : scipy.sparse
-            label space of shape :code:`(n_samples, n_features)`
+            label space of shape :code:`(n_samples, n_labels)`
 
         Returns
         -------
@@ -113,95 +199,11 @@ class GraphToolCooccurenceClusterer(LabelCooccurenceClustererBase):
             list of lists label indexes, each sublist represents labels
             that are in that community
         """
-        self.dls_ = {}
-        self.vm_ = {}
-        self.em_ = {}
-        self.h_ = {}
-        self.state_ = {}
-        self.S_bethe_ = {}
-        self.S_mf_ = {}
-        self.L_ = {}
+        self.label_count = y.shape[1]
+        self.build_graph_instance(y)
+        self.model.fit(self.coocurence_graph, weights=self.weights)
 
-        self.generate_coocurence_adjacency_matrix(y)
-        self.generate_coocurence_graph()
-
-        which_model_to_use = None
-
-        if self.use_degree_corr is None:
-            for deg_corr in [True, False]:
-                self.predict_communities(deg_corr)
-
-            decision_criterion = self.S_mf_
-
-            if self.model_selection_criterium == 'bethe':
-                decision_criterion = self.S_bethe_
-
-            which_model_to_use = decision_criterion[
-                True] < decision_criterion[False]
-
-        else:
-            self.predict_communities(self.use_degree_corr)
-            which_model_to_use = self.use_degree_corr
-
-        state_to_use = self.state_[which_model_to_use]
-
-        found_blocks = state_to_use.get_blocks().get_array()
-
-        self.label_sets = {b: [] for b in range(len(found_blocks))}
-
-        for label_id, block_id in enumerate(found_blocks):
-            self.label_sets[block_id].append(label_id)
-
-        self.label_sets = filter(
-            lambda x: len(x) > 0, self.label_sets.values())
-
+        self.label_sets = [community for community in self.model.communities() if len(community) > 0]
         self.model_count = len(self.label_sets)
 
         return np.array(self.label_sets)
-
-    def predict_communities(self, deg_corr):
-        if self.is_weighted:
-            state = gt.minimize_blockmodel_dl(
-                self.coocurence_graph, overlap=self.allow_overlap,
-                deg_corr=deg_corr, layers=True, state_args=dict(ec=self.weights, layers=False))
-        else:
-            state = gt.minimize_blockmodel_dl(
-                self.coocurence_graph, overlap=self.allow_overlap, deg_corr=deg_corr)
-
-        state = state.copy(B=self.coocurence_graph.num_vertices())
-
-        self.dls_[deg_corr] = []          # description length history
-        self.vm_[deg_corr] = None        # vertex marginals
-        self.em_[deg_corr] = None        # edge marginals
-        self.h_[deg_corr] = np.zeros(
-            self.coocurence_graph.num_vertices() + 1)
-
-        def collect_marginals(s, deg_corr, obj):
-            obj.vm_[deg_corr] = s.collect_vertex_marginals(obj.vm_[deg_corr])
-            obj.em_[deg_corr] = s.collect_edge_marginals(obj.em_[deg_corr])
-            obj.dls_[deg_corr].append(s.entropy())
-            B = s.get_nonempty_B()
-            obj.h_[deg_corr][B] += 1
-
-        collect_marginals_for_class = lambda s: collect_marginals(
-            s, deg_corr, self)
-
-        # Now we collect the marginal distributions for exactly 200,000 sweeps
-        gt.mcmc_equilibrate(
-            state, force_niter=self.n_iters, mcmc_args=dict(
-                niter=self.n_init_iters),
-                        callback=collect_marginals_for_class, **self.equlibrate_options)
-
-        S_mf = gt.mf_entropy(self.coocurence_graph, self.vm_[deg_corr])
-        S_bethe = gt.bethe_entropy(
-            self.coocurence_graph, self.em_[deg_corr])[0]
-        L = -np.mean(self.dls_[deg_corr])
-
-        self.state_[deg_corr] = copy.copy(state)
-        self.S_bethe_[deg_corr] = copy.copy(S_bethe)
-        self.S_mf_[deg_corr] = copy.copy(S_mf)
-        self.L_[deg_corr] = copy.copy(L)
-
-        if self.verbose:
-            print(("Model evidence for deg_corr = %s:" % deg_corr,
-                  L + S_mf, "(mean field),", L + S_bethe, "(Bethe)"))

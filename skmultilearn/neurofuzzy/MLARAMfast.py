@@ -111,6 +111,11 @@ class MLARAM(MLClassifierBase):
         self.alpha = 0.0000000000001
 
         label_combination_to_class_map = {}
+        # FIXME: we should support dense matrices natively
+        if isinstance(X, numpy.matrix):
+            X = numpy.asarray(X)
+        if isinstance(y, numpy.matrix):
+            y = numpy.asarray(y)
         is_matrix = int(len(X[0].shape) != 1)
         X = _normalize_input_space(X)
 
@@ -197,6 +202,9 @@ class MLARAM(MLClassifierBase):
         """
 
         result = []
+        # FIXME: we should support dense matrices natively
+        if isinstance(X, numpy.matrix):
+            X = numpy.asarray(X)
         ranks = self.predict_proba(X)
         for rank in ranks:
             sorted_rank_arg = numpy.argsort(-rank)
@@ -230,6 +238,9 @@ class MLARAM(MLClassifierBase):
             matrix with label assignment probabilities of shape
             :code:`(n_samples, n_labels)`
         """
+        # FIXME: we should support dense matrices natively
+        if isinstance(X, numpy.matrix):
+            X = numpy.asarray(X)
         if issparse(X):
             if X.getnnz() == 0:
                 return
