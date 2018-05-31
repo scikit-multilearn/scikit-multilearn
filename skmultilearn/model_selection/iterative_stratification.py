@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Iteratively stratify a multi-label data set
 
     The classifier follows methods outlined in Sechidis11 and Szymanski17 papers related to stratyfing
@@ -19,6 +20,18 @@
     when two combinations of different size have similar desirablity: the larger, i.e. more specific combination
     is taken into consideration first, thus if a label pair (1,2) and label 1 represented as (1,1) are of similar
     desirability, evidence for (1,2) will be assigned to folds first.
+
+    You can use this class exactly the same way you would use a normal scikit KFold class:
+    .. code-block:: python
+
+        from skmultilearn.model_selection import IterativeStratification
+
+        k_fold = IterativeStratification(n_splits=2, order=1):
+        for train, test in k_fold.split(X, y):
+            classifier.fit(X[train], y[train])
+            result = classifier.predict(X[test])
+            # do something with the result, comparing it to y[test]
+
 
 
     If you use this method to stratify data please cite both:
@@ -55,30 +68,65 @@
         }
 """
 
-
-
 from sklearn.model_selection._split import _BaseKFold
 import numpy as np
 import scipy.sparse as sp
 import itertools
+from sklearn.utils import check_random_state
+
+
+def _label_tie_break(desired_samples_per_fold, M):
+    if len(M) == 1:
+        return M[0]
+    else:
+        max_val = max(desired_samples_per_fold[M])
+        M_prim = np.where(
+            np.array(desired_samples_per_fold) == max_val)[0]
+        M_prim = np.array([x for x in M_prim if x in M])
+        return np.random.choice(M_prim, 1)[0]
+
+
+def _get_most_desired_combination(samples_with_combination):
+    currently_chosen = None
+    best_number_of_combinations, best_support_size = None, None
+
+    for combination, evidence in samples_with_combination.items():
+        number_of_combinations, support_size = (len(set(combination)), len(evidence))
+        if support_size == 0:
+            continue
+        if currently_chosen is None or (
+                best_number_of_combinations < number_of_combinations and best_support_size > support_size
+        ):
+            currently_chosen = combination
+            best_number_of_combinations, best_support_size = number_of_combinations, support_size
+
+    return currently_chosen
 
 
 class IterativeStratification(_BaseKFold):
     """Iteratively stratify a multi-label data set
 
-    Construct an interative stratifier that conducts:
+    Construct an interative stratifier that splits the data set into folds trying to maintain balanced representation
+    with respect to order-th label combinations.
 
-    :param n_splits: with number of splits
-    :type n_splits: int
+    Attributes:
+    -----------
 
-    :param order: taking into account order-th order of relationship
-    :type order: int
+    n_splits : number of splits, int
+        the number of folds to stratify into
 
-    :param random_state: and the random state seed (optional)
-    :type random_state: int
+    order : int, >= 1
+        the order of label relationship to take into account when balancing sample distribution across labels
 
+    sample_distribution_per_fold : None or List[float], :code:`(n_splits)`
+        desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
+        is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
+
+    random_state : int
+        the random state seed (optional)
     """
-    def __init__(self, n_splits=3, order=1, random_state=None):
+
+    def __init__(self, n_splits=3, order=1, sample_distribution_per_fold = None, random_state=None):
         self.order = order
         super(
             IterativeStratification,
@@ -86,122 +134,164 @@ class IterativeStratification(_BaseKFold):
                            shuffle=False,
                            random_state=random_state)
 
-    def init_values(self, X):
-        self.n_samples = X.shape[0]
-        self.n_labels = X.shape[1]
-        self.percentage_per_fold = [1 / float(self.n_splits)
-                                    for i in range(self.n_splits)]
+        if sample_distribution_per_fold:
+            self.percentage_per_fold = sample_distribution_per_fold
+        else:
+            self.percentage_per_fold = [1 / float(self.n_splits) for _ in range(self.n_splits)]
+
+    def _prepare_stratification(self, y):
+        """Prepares variables for performing stratification
+
+        For the purpose of clarity, the type Combination denotes List[int], :code:`(self.order)` and represents a
+        label combination of the order we want to preserve among folds in stratification. The total number of
+        combinations present in :code:`(y)` will be denoted as :code:`(n_combinations)`.
+
+        Sets
+        ----
+
+        self.n_samples, self.n_labels : int, int
+            shape of y
+
+        self.desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
+            number of samples desired per fold
+
+        self.desired_samples_per_combination_per_fold: Dict[Combination, np.array[Float]], :code:`(n_combinations, n_splits)`
+            number of samples evidencing each combination desired per each fold
+
+        Parameters
+        ----------
+
+        y : output matrix or array of arrays (n_samples, n_labels)
+
+        Returns
+        -------
+
+        rows : List[List[int]], :code:`(n_samples, n_labels)`
+            list of label indices assigned to each sample
+
+        rows_used : Dict[int, bool], :code:`(n_samples)`
+            boolean map from a given sample index to boolean value whether it has been already assigned to a fold or not
+
+        all_combinations :  List[Combination], :code:`(n_combinations)`
+            list of all label combinations of order self.order present in y
+
+        per_row_combinations : List[Combination], :code:`(n_samples)`
+            list of all label combinations of order self.order present in y per row
+
+        samples_with_combination : Dict[Combination, List[int]], :code:`(n_combinations)`
+            map from each label combination present in y to list of sample indexes that have this combination assigned
+
+        folds: List[List[int]] (n_splits)
+            list of lists to be populated with samples
+
+        """
+        self.n_samples, self.n_labels = y.shape
         self.desired_samples_per_fold = np.array([self.percentage_per_fold[i] * self.n_samples
                                                   for i in range(self.n_splits)])
-        self.rows = sp.lil_matrix(X).rows
-        self.rows_used = {i: False for i in range(self.n_samples)}
-        
-        self.folds = [[] for i in range(self.n_splits)]
-        
-        self.init_row_and_label_data(X)
+        rows = sp.lil_matrix(y).rows
+        rows_used = {i: False for i in range(self.n_samples)}
+        all_combinations = []
+        per_row_combinations = [[] for i in range(self.n_samples)]
+        samples_with_combination = {}
+        folds = [[] for _ in range(self.n_splits)]
 
-    def init_row_and_label_data(self, X):
-        self.all_combinations = []
-        self.per_row_combinations = [[] for i in range(self.n_samples)]
-        self.samples_with_combination = {}
-        for i, x in enumerate(self.rows):
-            for y in itertools.combinations_with_replacement(x, self.order):
-                if y not in self.samples_with_combination:
-                    self.samples_with_combination[y] = []
+        # for every row
+        for sample_index, label_assignment in enumerate(rows):
+            # for every n-th order label combination
+            # register combination in maps and lists used later
+            for combination in itertools.combinations_with_replacement(label_assignment, self.order):
+                if combination not in samples_with_combination:
+                    samples_with_combination[combination] = []
 
-                self.samples_with_combination[y].append(i)
+                samples_with_combination[combination].append(sample_index)
+                all_combinations.append(combination)
+                per_row_combinations[sample_index].append(combination)
 
-                self.all_combinations.append(y)
-                self.per_row_combinations[i].append(y)
+        all_combinations = [list(x) for x in set(all_combinations)]
 
-        self.all_combinations = [list(x) for x in set(self.all_combinations)]
-
-        self.desired_samples_per_label_per_fold = {
-            i:
-               [len(self.samples_with_combination[i]) * self.percentage_per_fold[j]
-                for j in range(self.n_splits)]
-                for i in self.samples_with_combination
+        self.desired_samples_per_combination_per_fold = {
+            combination:
+                np.array([len(evidence_for_combination) * self.percentage_per_fold[j]
+                          for j in range(self.n_splits)])
+            for combination, evidence_for_combination in samples_with_combination.items()
         }
+        return rows, rows_used, all_combinations, per_row_combinations, samples_with_combination, folds
 
-    def label_tie_break(self, M):
-        if len(M) == 1:
-            return M[0]
-        else:
-            max_val = max(self.desired_samples_per_fold[M])
-            M_prim = np.where(
-                np.array(self.desired_samples_per_fold) == max_val)[0]
-            M_prim = np.array([x for x in M_prim if x in M])
-            return np.random.choice(M_prim, 1)[0]
+    def _distribute_positive_evidence(self, rows_used, folds, samples_with_combination, per_row_combinations):
+        """Internal method to distribute evidence for labeled samples across folds
 
-    def get_most_desired_combination(self):
-        currently_chosen = None
-        currently_best_score = None
-        for combination, evidence in self.samples_with_combination.items():
-            current_score = (len(set(combination)), len(evidence))
-            if current_score[1] == 0:
-                continue
-            if currently_chosen is None:
-                currently_chosen = combination
-                currently_best_score = current_score
-                continue
-
-            if currently_best_score[1] > current_score[1] and currently_best_score[0] < current_score[0]:
-                print(currently_best_score, current_score)
-                currently_chosen = combination
-                currently_best_score = current_score
-
-        if current_score is not None:
-            return currently_chosen
-
-        return None
-
-    def distribute_positive_evidence(self):
-        l = self.get_most_desired_combination()
+        For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
+        modifies params.
+        """
+        l = _get_most_desired_combination(samples_with_combination)
         while l is not None:
-            print(l)
-            while len(self.samples_with_combination[l]) > 0:
-                row = self.samples_with_combination[l].pop()
-                print(len(self.samples_with_combination[l]), l, row)
-                if self.rows_used[row]:
+            while len(samples_with_combination[l]) > 0:
+                row = samples_with_combination[l].pop()
+                if rows_used[row]:
                     continue
 
-                max_val = max(self.desired_samples_per_label_per_fold[l])
+                max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
-                    np.array(self.desired_samples_per_label_per_fold[l]) == max_val)[0]
-                m = self.label_tie_break(M)
-                self.folds[m].append(row)
-                self.rows_used[row] = True
-                for i in self.per_row_combinations[row]:
-                    if row in self.samples_with_combination[i]:
-                        self.samples_with_combination[i].remove(row)
-                    self.desired_samples_per_label_per_fold[i][m] -= 1
+                    np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
+                m = _label_tie_break(self.desired_samples_per_combination_per_fold[l], M)
+                folds[m].append(row)
+                rows_used[row] = True
+                for i in per_row_combinations[row]:
+                    if row in samples_with_combination[i]:
+                        samples_with_combination[i].remove(row)
+                    self.desired_samples_per_combination_per_fold[i][m] -= 1
                 self.desired_samples_per_fold[m] -= 1
 
-            l = self.get_most_desired_combination()
+            l = _get_most_desired_combination(samples_with_combination)
 
-    def distribute_negative_evidence(self):
-        self.available_samples = [
-            i for i, v in self.rows_used.items() if not v]
-        self.samples_left = len(self.available_samples)
+    def _distribute_negative_evidence(self, rows_used, folds):
+        """Internal method to distribute evidence for unlabeled samples across folds
 
-        while self.samples_left > 0:
-            row = self.available_samples.pop()
-            self.rows_used[row] = True
-            self.samples_left -= 1
-            fold_selected = np.random.choice(
-                np.where(self.desired_samples_per_fold > 0)[0],
-                1)[0]
+        For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
+        modifies params.
+        """
+        available_samples = [
+            i for i, v in rows_used.items() if not v]
+        samples_left = len(available_samples)
+
+        while samples_left > 0:
+            row = available_samples.pop()
+            rows_used[row] = True
+            samples_left -= 1
+            fold_selected = np.random.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
             self.desired_samples_per_fold[fold_selected] -= 1
-            self.folds[fold_selected].append(row)
+            folds[fold_selected].append(row)
 
     def _iter_test_indices(self, X, y=None, groups=None):
-        self.init_values(X)
+        """Internal method for providing scikit-learn's split with folds
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data, where n_samples is the number of samples
+            and n_features is the number of features.
+            Note that providing ``y`` is sufficient to generate the splits and
+            hence ``np.zeros(n_samples)`` may be used as a placeholder for
+            ``X`` instead of actual training data.
+        y : array-like, shape (n_samples,)
+            The target variable for supervised learning problems.
+            Stratification is done based on the y labels.
+        groups : object
+            Always ignored, exists for compatibility.
+
+        Yields
+        ------
+        fold : List[int]
+            indexes of test samples for a given fold, yielded for each of the folds
+        """
         if self.random_state:
             check_random_state(self.random_state)
 
-        self.folds = [[] for i in range(self.n_splits)]
-        self.distribute_positive_evidence()
-        self.distribute_negative_evidence()
+        rows, rows_used, all_combinations, per_row_combinations, samples_with_combination, folds = \
+            self._prepare_stratification(y)
 
-        for fold in self.folds:
+        self._distribute_positive_evidence(rows_used, folds, samples_with_combination, per_row_combinations)
+        self._distribute_negative_evidence(rows_used, folds)
+
+        for fold in folds:
             yield fold
