@@ -32,7 +32,7 @@
             result = classifier.predict(X[test])
             # do something with the result, comparing it to y[test]
 
-
+    Most of the methods of this class are private, you will not need them unless you are extending the method.
 
     If you use this method to stratify data please cite both:
     Sechidis, K., Tsoumakas, G., & Vlahavas, I. (2011). On the stratification of multi-label data. Machine Learning and Knowledge Discovery in Databases, 145-158.
@@ -75,7 +75,21 @@ import itertools
 from sklearn.utils import check_random_state
 
 
-def _label_tie_break(desired_samples_per_fold, M):
+def _fold_tie_break(desired_samples_per_fold, M):
+    """Helper function to split a tie between folds with same desirability of a given sample
+
+    Parameters:
+    -----------
+    desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
+        number of samples desired per fold
+    M : np.array(int)
+        List of folds between which to break the tie
+
+    Returns
+    -------
+    fold_number : int
+        The selected fold index to put samples into
+    """
     if len(M) == 1:
         return M[0]
     else:
@@ -87,6 +101,18 @@ def _label_tie_break(desired_samples_per_fold, M):
 
 
 def _get_most_desired_combination(samples_with_combination):
+    """Select the next most desired combination whose evidence should be split among folds
+
+    Parameters
+    ----------
+    samples_with_combination : Dict[Combination, List[int]], :code:`(n_combinations)`
+            map from each label combination present in y to list of sample indexes that have this combination assigned
+
+    Returns
+    -------
+    combination: Combination
+        the combination to split next
+    """
     currently_chosen = None
     best_number_of_combinations, best_support_size = None, None
 
@@ -233,7 +259,7 @@ class IterativeStratification(_BaseKFold):
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _label_tie_break(self.desired_samples_per_combination_per_fold[l], M)
+                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M)
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
