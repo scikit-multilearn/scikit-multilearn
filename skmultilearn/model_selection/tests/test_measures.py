@@ -1,6 +1,6 @@
 import unittest
 from .fixtures import FIXTURE_Y, FOLDS_FIXTURES
-from skmultilearn.measures.imbalance import (
+from skmultilearn.model_selection import (
     example_distribution, label_combination_distribution, percentage_of_label_combinations_without_evidence_per_fold,
     folds_without_evidence_for_at_least_one_label_combination, folds_label_combination_pairs_without_evidence
 )
