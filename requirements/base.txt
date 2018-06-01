@@ -1,0 +1,6 @@
+scipy==1.0.0
+numpy==1.14.0
+liac-arff==2.2.1
+community==1.0.0b1
+future==0.16.0
+scikit_learn==0.19.1
