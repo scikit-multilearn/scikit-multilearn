@@ -6,6 +6,7 @@ from skmultilearn.cluster.graphtool import StochasticBlockModel
 from skmultilearn.tests.example import EXAMPLE_X, EXAMPLE_y
 
 import scipy.sparse as sparse
+import sys
 
 def get_graphtool_partitioners():
     for nested in [True, False]:
@@ -20,6 +21,7 @@ def get_graphtool_partitioners():
                 clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
                 yield clf
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 @pytest.mark.parametrize("nested,degree_correlation,allow_overlap,weight_model", [
     (True, True, True, None),
     (True, True, True, 'real-exponential'),
