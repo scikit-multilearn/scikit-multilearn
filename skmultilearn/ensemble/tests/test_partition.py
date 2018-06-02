@@ -7,11 +7,12 @@ from sklearn.svm import SVC
 from skmultilearn.ensemble import LabelSpacePartitioningClassifier
 from skmultilearn.problem_transform import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
-from skmultilearn.cluster.tests.test_igraph import get_igraph_clusterers
 from skmultilearn.cluster.tests.test_networkx import get_networkx_clusterers
-from skmultilearn.cluster.tests.test_graphtool import get_graphtool_partitioners
 from skmultilearn.cluster.tests.test_matrix import get_matrix_clusterers
 
+if sys.platform != 'win32':
+    from skmultilearn.cluster.tests.test_graphtool import get_graphtool_partitioners
+    from skmultilearn.cluster.tests.test_igraph import get_igraph_clusterers
 
 def generate_all_label_space_clusterers():
     for clusterer in get_networkx_clusterers():
