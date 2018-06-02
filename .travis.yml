@@ -36,8 +36,8 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install graph-tool                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip install -r requirements.txt ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip3 install -r requirements.txt; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip install community future; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip3 install community future; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip install community future networkx; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip3 install community future networkx; fi
 
 install:
 - if [[ "$TRAVIS_OS_NAME" != "osx" ]];   then docker run -e "MEKA_CLASSPATH=/opt/meka/lib/" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest; fi
