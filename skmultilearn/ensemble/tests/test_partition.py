@@ -1,9 +1,9 @@
 import unittest
+import sys
 
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
-from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
 from skmultilearn.ensemble import LabelSpacePartitioningClassifier
 from skmultilearn.problem_transform import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
@@ -12,18 +12,20 @@ from skmultilearn.cluster.tests.test_networkx import get_networkx_clusterers
 from skmultilearn.cluster.tests.test_graphtool import get_graphtool_partitioners
 from skmultilearn.cluster.tests.test_matrix import get_matrix_clusterers
 
+
 def generate_all_label_space_clusterers():
-    for clusterer, _ in get_igraph_clusterers():
-        yield clusterer
-
     for clusterer in get_networkx_clusterers():
-        yield clusterer
-
-    for clusterer in get_graphtool_partitioners():
         yield clusterer
 
     for clusterer in get_matrix_clusterers():
         yield clusterer
+
+    if sys.platform != 'win32':
+        for clusterer, _ in get_igraph_clusterers():
+            yield clusterer
+
+        for clusterer in get_graphtool_partitioners():
+            yield clusterer
 
 
 class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
