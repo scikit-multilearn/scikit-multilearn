@@ -100,9 +100,10 @@ def get_dataset_list():
     list
         the raw data with the format as above
     """
-    f = urllib.request.urlopen(get_download_base_url() + "data.list")
-    raw_data_list = f.read()
-    return raw_data_list
+    req = urllib.request.urlopen(get_download_base_url() + "data.list")
+    charset = req.info().get_content_charset()
+    raw_data_list = req.read()
+    return raw_data_list.decode(charset)
 
 
 def available_data_sets():

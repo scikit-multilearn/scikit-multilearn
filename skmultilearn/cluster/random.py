@@ -1,0 +1,73 @@
+from __future__ import absolute_import
+
+import random
+
+import numpy as np
+
+from .base import LabelSpaceClustererBase
+
+
+class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
+    """Randomly divides the label space into equally-sized clusters
+
+    This method divides the label space by drawing without replacement a desired number of
+    equally sized subsets of label space, in a partitioning or overlapping scheme.
+    """
+
+    def __init__(self, cluster_size, cluster_count, allow_overlap):
+        """Initializes the random clusterer
+
+        Attributes
+        ----------
+        cluster_size : int
+            desired size of a single cluster, will be automatically
+            put under :code:`self.cluster_size`.
+        cluster_count: int
+            number of clusters to divide into, will be automatically
+            put under :code:`self.cluster_count`.
+        allow_overlap : bool
+            whether to allow overlapping clusters or not, will be automatically
+            put under :code:`self.allow_overlap`.
+        """
+        super(RandomLabelSpaceClusterer, self).__init__()
+
+        self.cluster_size = cluster_size
+        self.cluster_count = cluster_count
+        self.allow_overlap = allow_overlap
+
+    def fit_predict(self, X, y):
+        """Cluster the output space
+
+        Sets :code:`self.label_count` to number of labels and :code:`self.partition`
+        to the detected partition.
+
+        Returns
+        -------
+        numpy.ndarray
+            partition of labels, each sublist contains label indices
+            related to label positions in :code:`y`
+        """
+
+        label_sets = []
+        self.label_count = y.shape[1]
+        free_labels = range(self.label_count)
+
+        while len(label_sets) <= self.cluster_count:
+            if not self.allow_overlap:
+                if len(free_labels) == 0:
+                    break
+
+                # in this case, we are unable to draw new labels, add all that remain
+                if len(free_labels) < self.cluster_size:
+                    label_sets.append(free_labels)
+                    break
+
+            label_set = random.sample(free_labels, self.cluster_size)
+            if not self.allow_overlap:
+                free_labels = list(set(free_labels).difference(set(label_set)))
+
+            if label_set not in label_sets:
+                label_sets.append(label_set)
+
+        self.partition = np.array(label_sets)
+        return self.partition

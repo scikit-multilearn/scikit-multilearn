@@ -26,3 +26,19 @@ def matrix_creation_function_for_format(sparse_format):
         return None
 
     return SPARSE_FORMAT_TO_CONSTRUCTOR[sparse_format]
+
+def measure_per_label(measure, y_true, y_predicted):
+    """
+    Return per label results of a scikit-learn compatible quality measure
+    :param measure: callable, scikit-compatible quality measure function
+    :param y_true: sparse matrix, ground truth
+    :param y_predicted: sparse matrix, the predicted result
+    :return:
+    """
+    return [
+        measure(
+            y_true[:, i].toarray(),
+            y_predicted[:, i].toarray()
+        )
+        for i in range(y_true.shape[1])
+    ]

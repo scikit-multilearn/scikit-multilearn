@@ -137,7 +137,7 @@ class BRkNNbClassifier(BinaryRelevanceKNN):
         self.avg_labels = [int(np.average(self.train_labelspace[n,:].sum(axis=1)).round()) for n in self.neighbors]
 
         prediction = sparse.lil_matrix((X.shape[0], self.num_labels), dtype='i8')
-        top_labels = np.argpartition(self.confidences, kth=min(self.avg_labels, len(self.confidences[0])), axis=1).tolist()
+        top_labels = np.argpartition(self.confidences, kth=min(self.avg_labels + [len(self.confidences[0])]), axis=1).tolist()
 
         for i in range(X.shape[0]):
             for j in top_labels[i][-self.avg_labels[i]:]:

@@ -1,48 +1,47 @@
 import unittest
+
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
 from skmultilearn.ensemble import RakelD
-from skmultilearn.problem_transform import LabelPowerset
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
+TEST_LABELSET_SIZE = 3
 
 class RakelDTest(ClassifierBaseTest):
 
-    def get_labelpowerset_with_svc(self):
-        return LabelPowerset(classifier=SVC(), require_dense=[False, True])
+    def get_rakeld_with_svc(self):
+        return RakelD(
+            base_classifier=SVC(),
+            base_classifier_require_dense=[False, True],
+            labelset_size=TEST_LABELSET_SIZE
+        )
 
-    def get_labelpowerset_with_nb(self):
-        return LabelPowerset(classifier=GaussianNB(), require_dense=[True, True])
+    def get_rakeld_with_nb(self):
+        return RakelD(
+            base_classifier=GaussianNB(),
+            base_classifier_require_dense=[True, True],
+            labelset_size=TEST_LABELSET_SIZE
+        )
 
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
-        classifier = RakelD(
-            classifier=self.get_labelpowerset_with_svc(), labelset_size=3)
-
+        classifier = self.get_rakeld_with_svc()
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_non_dense_base_classifier(self):
-        classifier = RakelD(
-            classifier=self.get_labelpowerset_with_svc(), labelset_size=3)
-
+        classifier = self.get_rakeld_with_svc()
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
 
     def test_if_sparse_classification_works_on_dense_base_classifier(self):
-        classifier = RakelD(
-            classifier=self.get_labelpowerset_with_nb(), labelset_size=3)
-
+        classifier = self.get_rakeld_with_nb()
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_dense_base_classifier(self):
-        classifier = RakelD(
-            classifier=self.get_labelpowerset_with_nb(), labelset_size=3)
-
+        classifier = self.get_rakeld_with_nb()
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
 
     def test_if_works_with_cross_validation(self):
-        classifier = RakelD(
-            classifier=self.get_labelpowerset_with_nb(), labelset_size=3)
-
+        classifier = self.get_rakeld_with_nb()
         self.assertClassifierWorksWithCV(classifier)
 
 if __name__ == '__main__':

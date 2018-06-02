@@ -1,16 +1,28 @@
-from builtins import zip
-from builtins import range
 import itertools
 import unittest
+
 import numpy as np
 import scipy.sparse as sp
+from builtins import range
+from builtins import zip
+from sklearn.base import BaseEstimator
 
 from .test_utils import SPARSE_MATRIX_FORMATS
 from ..base import ProblemTransformationBase
-from sklearn.base import BaseEstimator
 
 
 class ProblemTransformationBaseTest(unittest.TestCase):
+
+    def ensure_output_spaces_contain_the_same_data(self, y, y_ensured):
+        stride = y.shape[1]
+        self.assertEqual(y.shape[0] * y.shape[1], y_ensured.shape[0])
+        self.assertEqual(len(y_ensured.shape), 1)
+        for row in range(y.shape[0]):
+            for column in range(y.shape[1]):
+                if sp.issparse(y):
+                    self.assertEqual(y[row, column], y_ensured[row * stride + column])
+                else:
+                    self.assertEqual(y[row][column], y_ensured[row * stride + column])
 
     def dense_and_dense_matrices_are_the_same(self, X, ensured_X):
         self.assertEqual(len(X), len(ensured_X))
@@ -160,7 +172,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         ensured_y = classifier.ensure_output_format(y)
 
         self.assertTrue(not sp.issparse(ensured_y))
-        self.dense_and_dense_matrices_are_the_same(y, ensured_y)
+        self.ensure_output_spaces_contain_the_same_data(y, ensured_y)
 
     def test_ensure_output_format_returns_dense_from_sparse_if_required(self):
         classifier = ProblemTransformationBase(require_dense=True)
@@ -247,6 +259,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             self.assertIsInstance(ensured_y_single, np.ndarray)
             self.assertEqual(len(ensured_y_single.shape), 1)
             self.assertEqual(ensured_y_single.shape[0], shape[0])
+
 
 if __name__ == '__main__':
     unittest.main()
