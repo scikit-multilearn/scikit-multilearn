@@ -51,7 +51,7 @@ install:
   - mkdir C:\projects\scikit-multilearn\MEKA\
   - ps: Start-FileDownload 'https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip'
   - 7z x meka-snapshot.zip -oC:\\projects\\scikit-multilearn\\MEKA -y > nul
-  - ps: "ls \"C:\projects\scikit-multilearn\MEKA\""
+  - ps: "ls \"C:\\projects\\scikit-multilearn\\MEKA\\\""
 
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
