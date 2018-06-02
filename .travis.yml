@@ -47,3 +47,4 @@ install:
 notifications:
   slack:
     secure: aTCuexl+J0s+ll8sS+p65Atmr9hgOYg0Qkv1nOwb+2oVlJtIYpwLymYZdMymeMtcbK8nlCKGuZRj9jpowzLvSU5kmmmbUdCskEzLf8guE/TUN5iMcIdvKnlAxfJ/MBXw59bjIuF3saYmzpkYbaBvj150M/tXMkYMLSgqwFMQq6U=
+
