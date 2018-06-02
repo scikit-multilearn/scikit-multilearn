@@ -88,7 +88,7 @@ install:
 
 test_script:
   # Run the project tests
-  - "python py.test"
+  - "py.test skmultilearn"
 
 after_test:
   # If tests are successful, create binary packages for the project.
