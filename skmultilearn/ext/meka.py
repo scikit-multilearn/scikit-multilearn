@@ -87,7 +87,7 @@ class Meka(MLClassifierBase):
             file_object.close()
             os.remove(file_name)
 
-            arff_file_name = file_name.name + '.arff'
+            arff_file_name = file_name + '.arff'
             if os.path.exists(arff_file_name):
                 os.remove(arff_file_name)
 
