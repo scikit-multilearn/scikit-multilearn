@@ -3,7 +3,9 @@ environment:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
-    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\_appveyor\\run_with_env.cmd"
+    # CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\_appveyor\\run_with_env.cmd"
+    JAVA_HOME: C:\\Program Files\\Java\\jdk1.7.0
+    MEKA_CLASSPATH: MEKA_CLASSPATH=C:\\projects\\scikit-multilearn\\MEKA\\meka-release-1.9.3-SNAPSHOT\\lib
 
   matrix:
 
@@ -46,6 +48,14 @@ install:
   - ECHO "Installed SDKs:"
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
+  - ECHO "Installed Java:"
+  - ps: "ls \"%JAVA_HOME%\""
+
+  - mkdir C:\projects\scikit-multilearn\MEKA\
+  - Start-FileDownload 'https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip'
+  - 7z x meka-snapshot.zip -oC:\\projects\\scikit-multilearn\\MEKA -y > nul
+  - ps: "ls \"%MEKA_CLASSPATH%\""
+
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
   - ps: if (-not(Test-Path($env:PYTHON))) { & _appveyor\install.ps1 }
@@ -69,7 +79,7 @@ install:
   # target Python version and architecture
   - "pip install -r requirements\\base.txt"
   - "pip install -r requirements\\meka.txt"
-  - "pip install -r requirements\\gpl.txt"
+  # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
 
 #build_script:

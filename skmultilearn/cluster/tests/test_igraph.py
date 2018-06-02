@@ -1,5 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
+import pytest
+import sys
 
 from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
@@ -19,6 +21,7 @@ class IGraphClustererBaseTests(ClassifierBaseTest):
         self.assertRaises(
             ValueError, IGraphLabelCooccurenceClusterer, 'foobar', False)
 
+    @pytest.mark.skipif(sys.platform == 'win32', reason="problematic to compile on windows")
     def test_actually_works_on_proper_params(self):
         for X, y in self.get_multilabel_data_for_tests('sparse'):
             assert sp.issparse(y)
