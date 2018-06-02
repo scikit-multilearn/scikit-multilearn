@@ -83,6 +83,7 @@ class Meka(MLClassifierBase):
     def remove_temporary_files(self, temporary_files):
         """Internal function for cleaning temporary files"""
         for file_name in temporary_files:
+            os.close(file_name)
             os.remove(file_name.name)
 
             arff_file_name = file_name.name + '.arff'
