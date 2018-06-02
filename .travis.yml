@@ -21,11 +21,13 @@ script:
 - if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker python -m pytest /home/python-dev/repo; fi
 - if [[ "$TOXENV" == "linux_py3" ]]; then docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then python3 -m pytest $TRAVIS_BUILD_DIR; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then python -m pytest $TRAVIS_BUILD_DIR; fi
 
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker rmi -f niedakh/scikit-multilearn-dev:latest    ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull niedakh/scikit-multilearn-dev:latest      ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip2 uninstall -y numpy                               ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip2 uninstall -y scipy                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew cask uninstall oclint                            ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew update                                           ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/science                              ; fi
