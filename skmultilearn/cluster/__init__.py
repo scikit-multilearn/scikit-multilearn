@@ -1,6 +1,5 @@
 """
 The :mod:`skmultilearn.cluster` module gathers label space clustering methods.
-
 """
 
 from .base import LabelSpaceNetworkClustererBase, LabelCooccurenceGraphBuilder, GraphBuilderBase
@@ -34,4 +33,4 @@ try:
     from .networkx import NetworkXLabelCooccurenceClusterer
     __all__ += ['NetworkXLabelCooccurenceClusterer']
 except ImportError:
-    pass
+pass

@@ -1,3 +1,4 @@
+
 import numpy as np
 import scipy.sparse as sp
 import sys
@@ -29,4 +30,4 @@ if sys.platform != 'win32':
                     partition = clusterer.fit_predict(X, y)
                     self.assertIsInstance(partition, np.ndarray)
                     for label in range(y.shape[1]):
-                        assert any(label in subset for subset in partition)
+assert any(label in subset for subset in partition)
