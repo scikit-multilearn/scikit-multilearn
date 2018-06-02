@@ -5,7 +5,6 @@
 [![Build Status Linux and OSX](https://travis-ci.org/scikit-multilearn/scikit-multilearn.svg?branch=master)](https://travis-ci.org/scikit-multilearn/scikit-multilearn)
 [![Build Status Windows](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)
 
-
 __scikit-multilearn__ is a Python module capable of performing multi-label
 learning tasks. It is built on-top of various scientific Python packages
 ([numpy](http://www.numpy.org/), [scipy](https://www.scipy.org/)) and

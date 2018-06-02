@@ -13,14 +13,19 @@ SPARSE_FORMAT_TO_CONSTRUCTOR = {
 
 def get_matrix_in_format(original_matrix, matrix_format):
     """Converts matrix to format
+
     Parameters:
     -----------
+
     original_matrix : np.matrix or scipy matrix or np.array of np. arrays
         matrix to convert
+
     matrix_format : string
         format
+
     Returns
     -------
+
     matrix : scipy matrix
         matrix in given format
     """
@@ -42,6 +47,7 @@ def matrix_creation_function_for_format(sparse_format):
 def measure_per_label(measure, y_true, y_predicted):
     """
     Return per label results of a scikit-learn compatible quality measure
+
     Parameters
     ----------
     measure : callable
@@ -50,6 +56,7 @@ def measure_per_label(measure, y_true, y_predicted):
         ground truth
     y_predicted : sparse matrix
         the predicted result
+
     Returns
     -------
     List[int or float]
@@ -61,4 +68,4 @@ def measure_per_label(measure, y_true, y_predicted):
             y_predicted[:, i].toarray()
         )
         for i in range(y_true.shape[1])
-]
+    ]
