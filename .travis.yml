@@ -15,6 +15,7 @@ matrix:
           services:
             - docker
           env: TOXENV=linux_py3
+        - os: osx
 
 script:
 - if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker python -m pytest /home/python-dev/repo; fi
