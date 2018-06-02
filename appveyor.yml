@@ -49,7 +49,7 @@ install:
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
   - mkdir C:\projects\scikit-multilearn\MEKA\
-  - Start-FileDownload 'https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip'
+  - ps: Start-FileDownload 'https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip'
   - 7z x meka-snapshot.zip -oC:\\projects\\scikit-multilearn\\MEKA -y > nul
   - ps: "ls %MEKA_CLASSPATH"
 
