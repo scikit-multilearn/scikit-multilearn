@@ -114,7 +114,7 @@ class Meka(MLClassifierBase):
         meka_command = " ".join(command_args)
 
         pipes = subprocess.Popen(shlex.split(
-            meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         self.output, self.error = pipes.communicate()
         if type(self.output) == bytes:
             self.output = self.output.decode(sys.stdout.encoding)
