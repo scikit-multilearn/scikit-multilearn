@@ -85,7 +85,8 @@ class Meka(MLClassifierBase):
         for file_object in temporary_files:
             file_name = file_object.name
             file_object.close()
-            os.remove(file_name)
+            if os.path.exists(file_name):
+                os.remove(file_name)
 
             arff_file_name = file_name + '.arff'
             if os.path.exists(arff_file_name):
