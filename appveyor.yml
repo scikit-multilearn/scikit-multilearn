@@ -19,7 +19,7 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     # CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\_appveyor\\run_with_env.cmd"
     JAVA_HOME: C:\\Program Files\\Java\\jdk1.7.0
-    MEKA_CLASSPATH: C:\\projects\\scikit-multilearn\\MEKA\\meka-release-1.9.3-SNAPSHOT\\lib
+    MEKA_CLASSPATH: C:\\projects\\scikit-multilearn\\MEKA\\meka-release-1.9.3-SNAPSHOT\\lib\\
 
   matrix:
 
