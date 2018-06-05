@@ -121,6 +121,7 @@ class Meka(MLClassifierBase):
             meka_command = shlex.split(meka_command)
 
         print(meka_command)
+        print(os.listdir('C:\\users\\appveyor\\appdata\\local\\temp\\1\\'))
 
         pipes = subprocess.Popen(meka_command,
                                  stdout=subprocess.PIPE,
