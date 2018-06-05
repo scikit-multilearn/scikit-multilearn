@@ -13,6 +13,10 @@ import scipy.sparse as sparse
 from ..base import MLClassifierBase
 from ..dataset import save_to_arff
 
+try:
+    from shlex import quote as cmd_quote
+except ImportError:
+    from pipes import quote as cmd_quote
 
 class Meka(MLClassifierBase):
     """Wrapper for the MEKA classifier
@@ -111,7 +115,7 @@ class Meka(MLClassifierBase):
 
         command_args += args
 
-        meka_command = shlex.quote(" ".join(command_args))
+        meka_command = cmd_quote(" ".join(command_args))
 
         pipes = subprocess.Popen(shlex.split(
             meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
