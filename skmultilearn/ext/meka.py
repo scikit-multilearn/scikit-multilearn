@@ -120,6 +120,8 @@ class Meka(MLClassifierBase):
         if sys.platform != 'win32':
             meka_command = shlex.split(meka_command)
 
+        print(meka_command)
+
         pipes = subprocess.Popen(meka_command,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
