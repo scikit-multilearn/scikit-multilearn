@@ -1,35 +1,26 @@
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import filter
-from builtins import str
-from builtins import range
-from builtins import object
 import arff
 import bz2
 import pickle
-import numpy as np
-import os
-import csv
-import sys
-import shutil
-import urllib.request
-import urllib.parse
-import urllib.error
-from os import environ
-from os.path import dirname
-from os.path import join
-from os.path import exists
-from os.path import expanduser
-from os.path import isdir
-from os.path import splitext
-from os import listdir
-from os import makedirs
 from scipy import sparse
 import hashlib
 
+import os
+import requests
+import shutil
+from collections import defaultdict
 
-def get_data_home(data_home=None):
+
+def _download_a_file(data_file_name, target_file_name):
+    r = requests.get(get_download_base_url() + data_file_name, stream=True)
+    if r.status_code == 200:
+        with open(target_file_name, 'wb') as f:
+            r.raw.decode_content = True
+            shutil.copyfileobj(r.raw, f)
+    else:
+        r.raise_for_status()
+
+
+def get_data_home(data_home=None, subdirectory=''):
     """Return the path of the scikit-multilearn data dir.
 
     This folder is used by some large dataset loaders to avoid
@@ -57,11 +48,13 @@ def get_data_home(data_home=None):
         the path to the data home
     """
     if data_home is None:
-        data_home = environ.get('SCIKIT_ML_LEARN_DATA',
-                                join('~', 'scikit_ml_learn_data'))
-    data_home = expanduser(data_home)
-    if not exists(data_home):
-        makedirs(data_home)
+        if len(subdirectory) > 0:
+            data_home = os.environ.get('SCIKIT_ML_LEARN_DATA', os.path.join('~', 'scikit_ml_learn_data', subdirectory))
+        else:
+            data_home = os.environ.get('SCIKIT_ML_LEARN_DATA', os.path.join('~', 'scikit_ml_learn_data'))
+    data_home = os.path.expanduser(data_home)
+    if not os.path.exists(data_home):
+        os.makedirs(data_home)
     return data_home
 
 
@@ -84,51 +77,32 @@ def get_download_base_url():
     return 'http://scikit.ml/datasets/'
 
 
-def get_dataset_list():
-    """Loads data set list
-
-    The format of the list is a follows:
-
-    - Each row corresponds to a variant of a data set
-    - Variants include: train, test and undivided, note that sometimes data
-        sets are not provided in train, test division by their authors
-    - In each row column 0 is the md5, column 1 is the file name available
-        under :func:`get_download_base_url`
-
-    Returns
-    -------
-    list
-        the raw data with the format as above
-    """
-    req = urllib.request.urlopen(get_download_base_url() + "data.list")
-    charset = req.info().get_content_charset()
-    raw_data_list = req.read()
-    return raw_data_list.decode(charset)
-
-
 def available_data_sets():
     """Lists available data sets and their variants
 
     Returns
     -------
-    dict
+    dict[(set_name, variant_name)] -> [md5, file_name]
         available datasets and their variants with the key pertaining
-        to the :code:`set_name`
+        to the :code:`(set_name, variant_name)` and values include md5 and file name on server
     """
+    r = requests.get(get_download_base_url() + 'data.list')
+    if r.status_code != 200:
+        r.raise_for_status()
+    else:
+        raw_data_list = r.text
 
-    archives = get_dataset_list()
-    archives = [x.split(';')[-1].split('.')[0].split('-')
-                for x in archives.split('\n')]
-    variants = {}
-    for a in archives:
-        if a[0] not in variants:
-            variants[a[0]] = []
-        if len(a) > 1:
-            variants[a[0]].append(a[-1])
-    return variants
+        variant_information = defaultdict(list)
+        for row in raw_data_list.split('\n'):
+            md5, file_name = row.split(';')
+            set_name, variant = file_name.split('.')[0].split('-')
+            if (set_name, variant) in variant_information:
+                raise Exception('Data file broken, file doubled, please file bug report.')
+            variant_information[(set_name, variant)] = [md5, file_name]
+        return variant_information
 
 
-def download_dataset(set_name, variant):
+def download_dataset(set_name, variant, data_home = None):
     """Downloads a data set
 
     Parameters
@@ -136,12 +110,14 @@ def download_dataset(set_name, variant):
     set_name : str
         name of set from :func:`available_data_sets`
     variant : str
-        variant of the data set
+        variant of the data set from :func:`available_data_sets`
+    data_home : default None, str
+        custom base folder for data, if None, default is used
 
     Returns
     -------
     str
-        path to the downloaded data set file
+        path to the downloaded data set file on disk
     """
 
     def get_md5(file_name):
@@ -151,41 +127,39 @@ def download_dataset(set_name, variant):
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
 
-    data_sets = get_dataset_list()
-    data_sets = [x.split(';') for x in data_sets.split('\n')]
+    data_sets = available_data_sets()
+    if (set_name, variant) not in data_sets:
+        raise ValueError('The set {} in variant {} does not exist on server.'.format(set_name, variant))
 
-    filter_function = lambda x: variant in x[1] and set_name in x[1]
+    md5, name = data_sets[set_name, variant]
 
-    for md5, name in filter(filter_function, data_sets):
-        target_name = join(get_data_home(), name)
-        if exists(target_name):
-            if md5 == get_md5(target_name):
-                print (
-                    "{} - exists, not redownloading".format(set_name, variant))
+    if data_home is None:
+        target_name = os.path.join(get_data_home(), name)
+    else:
+        target_name = os.path.join(data_home, name)
 
-                return target_name
-
-            else:
-                print (
-                    "{} - exists, but MD5 sum mismatch - redownloading".format(set_name, variant))
+    if os.path.exists(target_name):
+        if md5 == get_md5(target_name):
+            print ("{} - exists, not redownloading".format(set_name, variant))
+            return target_name
         else:
-            print("{} - does not exists downloading".format(set_name, variant))
+            print ("{} - exists, but MD5 sum mismatch - redownloading".format(set_name, variant))
+    else:
+        print("{} - does not exists downloading".format(set_name, variant))
 
-        # not found or broken md5
-        urllib.request.urlretrieve(get_download_base_url() + name, target_name)
-        found_md5 = get_md5(target_name)
-        if md5 != found_md5:
-            raise Exception(
-                "{}: MD5 mismatch {} vs {} - possible download error".format(name, md5, found_md5))
+    # not found or broken md5
+    _download_a_file(name, target_name)
+    found_md5 = get_md5(target_name)
+    if md5 != found_md5:
+        raise Exception(
+            "{}: MD5 mismatch {} vs {} - possible download error".format(name, md5, found_md5))
 
-        print("Downloaded {}-{}".format(set_name, variant))
+    print("Downloaded {}-{}".format(set_name, variant))
 
-        return target_name
-
-    return None
+    return target_name
 
 
-def load_dataset(set_name, variant):
+def load_dataset(set_name, variant, data_home = None):
     """Loads a selected variant of the given data set
 
     Parameters
@@ -194,6 +168,8 @@ def load_dataset(set_name, variant):
         name of set from :func:`available_data_sets`
     variant : str
         variant of the data set
+    data_home : default None, str
+        custom base folder for data, if None, default is used
 
     Returns
     --------
@@ -202,7 +178,7 @@ def load_dataset(set_name, variant):
         format, see data_sets
     """
 
-    path = download_dataset(set_name, variant)
+    path = download_dataset(set_name, variant, data_home)
     if path is not None:
         return load_dataset_dump(path)
 
@@ -210,8 +186,8 @@ def load_dataset(set_name, variant):
 
 
 def load_from_arff(filename, labelcount, endian="big",
-    input_feature_type='float', encode_nominal=True, load_sparse=False,
-    return_attribute_definitions=False):
+                   input_feature_type='float', encode_nominal=True, load_sparse=False,
+                   return_attribute_definitions=False):
     """Method for loading ARFF files as numpy array
 
     Parameters
@@ -265,10 +241,10 @@ def load_from_arff(filename, labelcount, endian="big",
 
     if endian == "big":
         X, y = matrix.tocsc()[:, labelcount:].tolil(), matrix.tocsc()[
-            :, :labelcount].astype(int).tolil()
+                                                       :, :labelcount].astype(int).tolil()
     elif endian == "little":
         X, y = matrix.tocsc()[
-            :, :-labelcount].tolil(), matrix.tocsc()[:, -labelcount:].astype(int).tolil()
+               :, :-labelcount].tolil(), matrix.tocsc()[:, -labelcount:].astype(int).tolil()
     else:
         # unknown endian
         return None
