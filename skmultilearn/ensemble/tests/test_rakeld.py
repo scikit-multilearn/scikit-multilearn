@@ -8,6 +8,7 @@ from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 
 TEST_LABELSET_SIZE = 3
 
+
 class RakelDTest(ClassifierBaseTest):
 
     def get_rakeld_with_svc(self):
@@ -29,7 +30,6 @@ class RakelDTest(ClassifierBaseTest):
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
         self.assertClassifierPredictsProbabilities(classifier, 'sparse')
 
-
     def test_if_dense_classification_works_on_non_dense_base_classifier(self):
         classifier = self.get_rakeld_with_svc()
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
@@ -40,7 +40,6 @@ class RakelDTest(ClassifierBaseTest):
         self.assertClassifierWorksWithSparsity(classifier, 'sparse')
         self.assertClassifierPredictsProbabilities(classifier, 'sparse')
 
-
     def test_if_dense_classification_works_on_dense_base_classifier(self):
         classifier = self.get_rakeld_with_nb()
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
@@ -49,6 +48,7 @@ class RakelDTest(ClassifierBaseTest):
     def test_if_works_with_cross_validation(self):
         classifier = self.get_rakeld_with_nb()
         self.assertClassifierWorksWithCV(classifier)
+
 
 if __name__ == '__main__':
     unittest.main()
