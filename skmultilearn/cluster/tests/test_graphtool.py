@@ -57,4 +57,4 @@ if sys.platform != 'win32':
         X, y = sparse.csr_matrix(EXAMPLE_X), sparse.csr_matrix(EXAMPLE_y)
         division = clf.fit_predict(X, y)
         for label in range(y.shape[1]):
-assert any(label in partition for partition in division)
+            assert any(label in partition for partition in division)

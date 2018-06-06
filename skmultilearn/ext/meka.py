@@ -13,6 +13,10 @@ import scipy.sparse as sparse
 from ..base import MLClassifierBase
 from ..dataset import save_to_arff
 
+try:
+    from shlex import quote as cmd_quote
+except ImportError:
+    from pipes import quote as cmd_quote
 
 class Meka(MLClassifierBase):
     """Wrapper for the MEKA classifier
@@ -84,10 +88,11 @@ class Meka(MLClassifierBase):
         """Internal function for cleaning temporary files"""
         for file_object in temporary_files:
             file_name = file_object.name
-            os.close(file_name)
-            os.remove(file_name)
+            file_object.close()
+            if os.path.exists(file_name):
+                os.remove(file_name)
 
-            arff_file_name = file_name.name + '.arff'
+            arff_file_name = file_name + '.arff'
             if os.path.exists(arff_file_name):
                 os.remove(arff_file_name)
 
@@ -112,8 +117,15 @@ class Meka(MLClassifierBase):
 
         meka_command = " ".join(command_args)
 
-        pipes = subprocess.Popen(shlex.split(
-            meka_command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if sys.platform != 'win32':
+            meka_command = shlex.split(meka_command)
+
+        print(meka_command)
+
+        pipes = subprocess.Popen(meka_command,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True)
         self.output, self.error = pipes.communicate()
         if type(self.output) == bytes:
             self.output = self.output.decode(sys.stdout.encoding)

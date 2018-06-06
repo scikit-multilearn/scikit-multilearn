@@ -32,7 +32,7 @@ def generate_all_label_space_clusterers():
 class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
 
     def get_labelpowerset_with_svc(self):
-        return LabelPowerset(classifier=SVC(), require_dense=[False, True])
+        return LabelPowerset(classifier=SVC(probability=True), require_dense=[False, True])
 
     def get_labelpowerset_with_nb(self):
         return LabelPowerset(classifier=GaussianNB(), require_dense=[True, True])
@@ -44,18 +44,22 @@ class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
     def test_if_sparse_classification_works_on_non_dense_base_classifier(self):
         for classifier in self.get_classifier(self.get_labelpowerset_with_svc()):
             self.assertClassifierWorksWithSparsity(classifier, 'sparse')
+            self.assertClassifierPredictsProbabilities(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_non_dense_base_classifier(self):
         for classifier in self.get_classifier(self.get_labelpowerset_with_svc()):
             self.assertClassifierWorksWithSparsity(classifier, 'dense')
+            self.assertClassifierPredictsProbabilities(classifier, 'dense')
 
     def test_if_sparse_classification_works_on_dense_base_classifier(self):
         for classifier in self.get_classifier(self.get_labelpowerset_with_nb()):
             self.assertClassifierWorksWithSparsity(classifier, 'sparse')
+            self.assertClassifierPredictsProbabilities(classifier, 'sparse')
 
     def test_if_dense_classification_works_on_dense_base_classifier(self):
         for classifier in self.get_classifier(self.get_labelpowerset_with_nb()):
             self.assertClassifierWorksWithSparsity(classifier, 'dense')
+            self.assertClassifierPredictsProbabilities(classifier, 'dense')
 
     def test_if_works_with_cross_validation(self):
         for classifier in self.get_classifier(self.get_labelpowerset_with_nb()):
@@ -63,4 +67,4 @@ class LabelSpacePartitioningClassifierTest(ClassifierBaseTest):
 
 
 if __name__ == '__main__':
-unittest.main()
+    unittest.main()
