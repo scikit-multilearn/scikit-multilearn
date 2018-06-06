@@ -44,6 +44,7 @@ class ClassifierBaseTest(unittest.TestCase):
             max_value = result.max()
             min_value = result.min()
 
+            self.assertEqual(result.shape, (X_test.shape[0], y.shape[1]))
             self.assertGreaterEqual(np.round(max_value), 0.0)
             self.assertGreaterEqual(np.round(min_value), 0.0)
             self.assertLessEqual(np.round(min_value), 1.0)

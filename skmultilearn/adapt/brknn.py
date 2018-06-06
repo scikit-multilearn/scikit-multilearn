@@ -52,7 +52,7 @@ class BinaryRelevanceKNN(MLClassifierBase):
         have a given label assigned, then summed over each label columns
         after subsetting for neighbours.Then normalization is done.
         """
-        self.confidences = np.vstack([self.train_labelspace[n,:].tocsc().sum(axis=0) / float(self.num_labels) for n in self.neighbors])
+        self.confidences = np.vstack([self.train_labelspace[n,:].tocsc().sum(axis=0) / self.k for n in self.neighbors])
         return self.confidences
 
     def predict(self, X):

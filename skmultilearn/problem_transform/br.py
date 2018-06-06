@@ -2,9 +2,10 @@ import copy
 from builtins import range
 
 import numpy as np
-from scipy.sparse import hstack, issparse
+from scipy.sparse import hstack, issparse, lil_matrix
 
 from ..base.problem_transformation import ProblemTransformationBase
+from ..base.base import MLClassifierBase
 
 
 class BinaryRelevance(ProblemTransformationBase):
@@ -75,6 +76,7 @@ class BinaryRelevance(ProblemTransformationBase):
 
         self.generate_partition(X, y)
         self.classifiers = []
+        self.label_count = y.shape[1]
 
         for i in range(self.model_count):
             classifier = copy.deepcopy(self.classifier)
@@ -127,8 +129,20 @@ class BinaryRelevance(ProblemTransformationBase):
             matrix with label assignment probabilities of shape
             :code:`(n_samples, n_labels)`
         """
-        predictions = [self.ensure_multi_label_from_single_class(
-            self.classifiers[label].predict_proba(
-                self.ensure_input_format(X)))[:, 1] for label in range(self.model_count)]
 
-        return hstack(predictions)
+        result = lil_matrix((X.shape[0], self.label_count), dtype='float')
+        for label_assignment, classifier in zip(self.partition, self.classifiers):
+            if isinstance(self.classifier, MLClassifierBase):
+                # the multilabel classifier should provide a (n_samples, n_labels) matrix
+                # we just need to reorder it column wise
+                result[:, label_assignment] = classifier.predict_proba(X)
+            else:
+                # a base classifier for binary relevance returns
+                # n_samples x n_classes, where n_classes = [0, 1] - 1 is the probability of
+                # the label being assigned
+                result[:, label_assignment] = self.ensure_multi_label_from_single_class(
+                    classifier.predict_proba(
+                        self.ensure_input_format(X))
+                )[:, 1]  # probability that label is assigned
+
+        return result

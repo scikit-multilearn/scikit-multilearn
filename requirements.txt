@@ -1,5 +1,1 @@
-liac-arff>=2.1.0
-python-igraph
-numpy
-scipy
-scikit-learn
+-r requirements/base.txt

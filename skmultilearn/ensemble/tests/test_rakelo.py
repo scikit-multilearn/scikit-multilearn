@@ -9,6 +9,7 @@ from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 TEST_MODEL_COUNT = 3
 TEST_LABELSET_SIZE = 2
 
+
 class RakelOTest(ClassifierBaseTest):
 
     def get_rakeld_with_svc(self):
@@ -23,7 +24,7 @@ class RakelOTest(ClassifierBaseTest):
         return RakelO(
             base_classifier=GaussianNB(),
             base_classifier_require_dense=[True, True],
-            labelset_size = TEST_LABELSET_SIZE,
+            labelset_size=TEST_LABELSET_SIZE,
             model_count=TEST_MODEL_COUNT
         )
 
@@ -44,14 +45,8 @@ class RakelOTest(ClassifierBaseTest):
         self.assertClassifierWorksWithSparsity(classifier, 'dense')
 
     def test_if_works_with_cross_validation(self):
-        # scikit does not support sparse output matrix in CV
-        classifier = RakelO(
-            base_classifier=GaussianNB(),
-            base_classifier_require_dense=[True, True],
-            labelset_size = TEST_LABELSET_SIZE,
-            model_count=TEST_MODEL_COUNT,
-            require_dense=[False, True]
-        )
+        classifier = self.get_rakeld_with_nb()
+
         self.assertClassifierWorksWithCV(classifier)
 
 

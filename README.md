@@ -2,7 +2,8 @@
 
 [![PyPI version](https://badge.fury.io/py/scikit-multilearn.svg)](https://badge.fury.io/py/scikit-multilearn)
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Build Status](https://travis-ci.org/scikit-multilearn/scikit-multilearn.svg?branch=master)](https://travis-ci.org/scikit-multilearn/scikit-multilearn)
+[![Build Status Linux and OSX](https://travis-ci.org/scikit-multilearn/scikit-multilearn.svg?branch=master)](https://travis-ci.org/scikit-multilearn/scikit-multilearn)
+[![Build Status Windows](https://ci.appveyor.com/api/projects/status/vd4k18u1lp5btaql/branch/master?svg=true)](https://ci.appveyor.com/project/niedakh/scikit-multilearn/branch/master)
 
 __scikit-multilearn__ is a Python module capable of performing multi-label
 learning tasks. It is built on-top of various scientific Python packages

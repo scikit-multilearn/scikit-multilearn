@@ -57,7 +57,7 @@ class MajorityVotingClassifier(LabelSpacePartitioningClassifier):
         ]
 
         voters = np.zeros(self.label_count, dtype='int')
-        votes = sparse.csc_matrix(
+        votes = sparse.lil_matrix(
             (predictions[0].shape[0], self.label_count), dtype='int')
         for model in range(self.model_count):
             for label in range(len(self.partition[model])):
@@ -71,3 +71,6 @@ class MajorityVotingClassifier(LabelSpacePartitioningClassifier):
                 votes[row, column] / float(voters[column]))
 
         return self.ensure_output_format(votes, enforce_sparse=False)
+
+    def predict_proba(self, X):
+        raise NotImplemented("The voting scheme does not define a method for calculating probabilities")
