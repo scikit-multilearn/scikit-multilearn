@@ -1,1 +1,4 @@
--r requirements/base.txt -r requirements/gpl.txt -r requirements/meka.txt -r requirements/test.txt
+-r requirements/base.txt
+-r requirements/gpl.txt
+-r requirements/meka.txt
+-r requirements/test.txt
