@@ -1,20 +1,20 @@
 matrix:
     include:
-#        - os: linux
-#          dist: trusty
-#          sudo: required
-#          language: python
-#          python: 2.7
-#          services:
-#            - docker
-#          env: TOXENV=linux_py2
-#        - os: linux
-#          dist: trusty
-#          language: python
-#          python: 3.3
-#          services:
-#            - docker
-#          env: TOXENV=linux_py3
+        - os: linux
+          dist: trusty
+          sudo: required
+          language: python
+          python: 2.7
+          services:
+            - docker
+          env: TOXENV=linux_py2
+        - os: linux
+          dist: trusty
+          language: python
+          python: 3.3
+          services:
+            - docker
+          env: TOXENV=linux_py3
         - os: osx
           env: MEKA_CLASSPATH=/Users/travis/MEKA/meka/lib/
 
