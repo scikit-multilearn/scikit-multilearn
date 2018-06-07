@@ -1,6 +1,27 @@
 scikit-multilearn Changelog
 ===========================
 
+0.1.0 (release planned 2018-06-14)
+---------------------------
+
+Fix a lot of bugs and generally improve stability, cross-platform functionality standard
+and unit test coverage. This release has been tested with a large set of unit tests that
+work across Windows
+
+Also, new features:
+- multi-label stratification algorithm and stratification quality measures
+- a robust reorganization of label space division, alongside with a working stochastic blockmodel approach and new
+  underlying layer - graph builders that allow using graph models for dividing the label space based not just on
+  label co-occurence but on any kind of network relationships between labels you can come up with
+- meka wrapper works fully cross-platform now, including windows 10
+- multi-label data set downloading and load/save functionality brought in, like sklearn's dataset
+- kNN models support sparse input
+- neuro fuzzy models support sparse input
+- BSD-compatible label space partitioning via NetworkX
+- dependence on GPL libraries made optional
+- working predict_proba added for label space partitioning methods
+
+
 0.0.5 (released 2017-02-25)
 ---------------------------
 
