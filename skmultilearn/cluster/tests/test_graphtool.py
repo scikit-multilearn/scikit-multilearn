@@ -1,7 +1,8 @@
 import pytest
 import sys
 
-if sys.platform != 'win32':
+# no graphtool on win32 and no available package for osx built with python2
+if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[0] == 2):
     from skmultilearn.cluster import GraphToolCooccurenceClusterer
     from skmultilearn.cluster.base import LabelCooccurenceGraphBuilder
     from skmultilearn.cluster.graphtool import StochasticBlockModel
