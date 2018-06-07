@@ -36,7 +36,6 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/bio                                  ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew upgrade python                                   ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install graph-tool                               ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install graph-tool@2                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then mkdir ~/MEKA && wget https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip -O ~/MEKA/meka.zip; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd ~/MEKA/ && unzip -a meka.zip && mv meka-* meka; fi
 
