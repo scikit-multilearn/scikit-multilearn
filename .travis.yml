@@ -35,6 +35,7 @@ before_install:
 
 install:
 - if [[ "$TRAVIS_OS_NAME" != "osx" ]];   then docker run -e "MEKA_CLASSPATH=/opt/meka/lib/" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest; fi
+- if [[ "$TRAVIS_OS_NAME" != "osx"  ]]; then docker exec -it scikit_multilearn_dev_test_docker ls /home/python-dev/repo/; fi
 - if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker pip install -r /home/python-dev/repo/requirements/*.txt; fi
 - if [[ "$TOXENV" == "linux_py3" ]]; then docker exec -it scikit_multilearn_dev_test_docker pip3 install -r /home/python-dev/repo/requirements/*.txt; fi
 
