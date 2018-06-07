@@ -10,7 +10,7 @@ from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from skmultilearn.cluster.tests.test_networkx import get_networkx_clusterers
 from skmultilearn.cluster.tests.test_matrix import get_matrix_clusterers
 
-if sys.platform != 'win32':
+if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[0] == 2):
     from skmultilearn.cluster.tests.test_graphtool import get_graphtool_partitioners
     from skmultilearn.cluster.tests.test_igraph import get_igraph_clusterers
 
@@ -21,7 +21,8 @@ def generate_all_label_space_clusterers():
     for clusterer in get_matrix_clusterers():
         yield clusterer
 
-    if sys.platform != 'win32':
+    if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[0] == 2):
+
         for clusterer, _ in get_igraph_clusterers():
             yield clusterer
 
