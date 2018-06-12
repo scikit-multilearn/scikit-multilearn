@@ -120,8 +120,6 @@ class Meka(MLClassifierBase):
         if sys.platform != 'win32':
             meka_command = shlex.split(meka_command)
 
-        print(meka_command)
-
         pipes = subprocess.Popen(meka_command,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -268,8 +266,8 @@ class Meka(MLClassifierBase):
         # meka.classifiers.multilabel.LC, weka.classifiers.bayes.NaiveBayes
 
         args = [
-                   '-t', train_file,
-                   '-T', test_file,
+                   '-t', '"{}"'.format(train_file),
+                   '-T', '"{}"'.format(test_file),
                    '-verbosity', str(5),
                ] + additional_arguments
 
