@@ -107,10 +107,13 @@ If you used scikit-multilearn in your research or project, please
 cite [our work](https://arxiv.org/abs/1702.01460):
 
 ```bibtex
-@article{szymanski2017scikit,
-  title={A scikit-based Python environment for performing multi-label classification},
-  author={Szyma{\'n}ski, Piotr},
-  journal={arXiv preprint arXiv:1702.01460},
-  year={2017}
+@ARTICLE{2017arXiv170201460S,
+   author = {{Szyma{\'n}ski}, P. and {Kajdanowicz}, T.},
+   title = "{A scikit-based Python environment for performing multi-label classification}",
+   journal = {ArXiv e-prints},
+   archivePrefix = "arXiv",
+   eprint = {1702.01460},
+   year = 2017,
+   month = feb
 }
 ```
