@@ -106,7 +106,7 @@ class Meka(MLClassifierBase):
         """
         command_args = [
             self.java_command,
-            '-cp', "{}*".format(self.meka_classpath),
+            '-cp', '"{}*"'.format(self.meka_classpath),
             self.meka_classifier,
         ]
 
