@@ -173,8 +173,8 @@ class Meka(MLClassifierBase):
             input_args = [
                 '-verbosity', "0",
                 '-split-percentage', "100",
-                '-t', train_arff.name + '.arff',
-                '-d', classifier_dump_file.name,
+                '-t', '"{}"'.format(train_arff.name + '.arff'),
+                '-d',  '"{}"'.format(classifier_dump_file.name),
             ]
 
             self.run_meka_command(input_args)
