@@ -228,7 +228,7 @@ class Meka(MLClassifierBase):
                 fp.write(save_to_arff(X, sparse_y))
 
             args = [
-                '-l', classifier_dump_file.name
+                '-l', '"{}"'.format(classifier_dump_file.name)
             ]
 
             self.run(train_arff.name + '.arff', test_arff.name + '.arff', args)
