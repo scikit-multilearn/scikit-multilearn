@@ -6,7 +6,7 @@ import random
 from .base import LabelSpaceClustererBase
 from .helpers import _euclidean_distance, _recalculateCenters, _countNumberOfAparitions
 
-class balancedKMeansClusterer(LabelSpaceClustererBase):
+class BalancedKMeansClusterer(LabelSpaceClustererBase):
     """Cluster the label space regarding the algorithm of balancedkMeans, used by HOMER"""
 
     def __init__(self, k = None, it = None):
