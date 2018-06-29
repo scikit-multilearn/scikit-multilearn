@@ -10,7 +10,7 @@ class BalancedKMeansClustererTest(ClassifierBaseTest):
         for X, y in self.get_multilabel_data_for_tests('sparse'):
             assert sp.issparse(y)
             
-            balanced = BalancedKMeansClusterer(k=3, it=50)
+            balanced = balancedkmeans.BalancedKMeansClusterer(k=3, it=50)
             partition = balanced.fit_predict(X, y)
             self.assertIsInstance(partition, np.ndarray)
             for label in range(y.shape[1]):
