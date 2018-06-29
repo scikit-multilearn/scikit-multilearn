@@ -19,7 +19,7 @@ class BalancedKMeansClusterer(LabelSpaceClustererBase):
         it: int
                 Number of iterations for the algorithm to find the best neighbours
         """
-        super(balancedKMeansClusterer, self).__init__()
+        super(BalancedKMeansClusterer, self).__init__()
         self.k = k
         self.it = it
 
