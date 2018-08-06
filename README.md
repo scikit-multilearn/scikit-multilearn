@@ -24,11 +24,25 @@ follows a similar API to that of [scikit-learn](http://scikit-learn.org/).
 
 ## Dependencies
 
-- numpy
-- scipy
-- igraph
-- scikit-learn
-- liac-arf==2.1.0
+In most cases you will want to follow the requirements defined in the requirements/*.txt files in the package. 
+
+### Base dependencies
+```
+scipy
+numpy
+future
+scikit-learn
+liac-arff # for loading ARFF files
+requests # for dataset module
+networkx # for networkX base community detection clusterers
+python-louvain # for networkX base community detection clusterers
+```
+
+### GPL-incurring dependencies for two clusterers
+```
+python-igraph # for igraph library based clusterers
+python-graphtool # for graphtool base clusterers, see  [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
+```
 
 ## Installation
 
