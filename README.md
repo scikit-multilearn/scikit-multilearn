@@ -41,8 +41,10 @@ python-louvain # for networkX base community detection clusterers
 ### GPL-incurring dependencies for two clusterers
 ```
 python-igraph # for igraph library based clusterers
-python-graphtool # for graphtool base clusterers, see  [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
+python-graphtool # for graphtool base clusterers
 ```
+
+Note: Installing graphtool is complicated, please see: [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
 
 ## Installation
 
