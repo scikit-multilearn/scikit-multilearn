@@ -6,6 +6,6 @@ classification libraries. Currently it provides a wrapper for:
 
 """
 
-from .meka import Meka
+from .meka import Meka, download_meka
 
-__all__ = ["Meka"]
+__all__ = ["Meka", 'download_meka']

@@ -3,6 +3,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import zipfile
 from builtins import filter
 from builtins import map
 from builtins import range
@@ -11,37 +12,70 @@ from builtins import str
 import scipy.sparse as sparse
 
 from ..base import MLClassifierBase
-from ..dataset import save_to_arff
+from ..dataset import save_to_arff, get_data_home, _download_single_file, _get_md5
 
 try:
     from shlex import quote as cmd_quote
 except ImportError:
     from pipes import quote as cmd_quote
 
+SUPPORTED_VERSION = '1.9.2'
+SUPPORTED_VERSION_MD5 = 'e909044b39513bbad451b8d71098b22c'
+
+
+def download_meka(version=None):
+    version = version or SUPPORTED_VERSION
+    meka_release_string = "meka-release-{}".format(version)
+    file_name = meka_release_string + '-bin.zip'
+    meka_path = get_data_home(subdirectory='meka')
+    target_path = os.path.join(meka_path, file_name)
+    path_to_lib = os.path.join(meka_path, meka_release_string, 'lib')
+
+    if os.path.exists(target_path):
+        print("MEKA {} found, not downloading".format(version))
+
+    else:
+        print("MEKA {} not found, downloading".format(version))
+        release_url = "http://downloads.sourceforge.net/project/meka/meka-{}/".format(version)
+        _download_single_file(file_name, target_path, release_url)
+
+        found_md5 = _get_md5(target_path)
+        if SUPPORTED_VERSION_MD5 != found_md5:
+            raise Exception("MD5 mismatch - possible MEKA download error")
+
+    if not os.path.exists(path_to_lib):
+        with zipfile.ZipFile(target_path, 'r') as meka_zip:
+            print("Unzipping MEKA {} to {}".format(version, meka_path + os.path.sep))
+            meka_zip.extractall(path=meka_path + os.path.sep)
+
+    if not os.path.exists(os.path.join(path_to_lib, 'meka-{}.jar'.format(version))):
+        raise IOError("Something went wrong, MEKA files missing, please file a bug report")
+
+    return path_to_lib + os.path.sep
+
+
 class Meka(MLClassifierBase):
     """Wrapper for the MEKA classifier
+
+    Attributes
+    ----------
+    meka_classifier : str
+        The MEKA classifier string and parameters from the MEKA API,
+        such as :code:`meka.classifiers.multilabel.MULAN -S RAkEL2`
+    weka_classifier : str
+        The WEKA classifier string and parameters from the WEKA API,
+        such as :code:`weka.classifiers.trees.J48`
+    java_command : str
+        Path to test the java command
+    meka_classpath: str
+        Path to the MEKA class path folder, usually the folder lib
+        in the directory MEKA was extracted into
 
     For more information on how to use this class see the tutorial: :doc:`../meka`
     """
 
     def __init__(self, meka_classifier=None, weka_classifier=None,
                  java_command=None, meka_classpath=None):
-        """Initializes the MEKA Wrapper
-
-        Attributes
-        ----------
-        meka_classifier : str
-            The MEKA classifier string and parameters from the MEKA API,
-            such as :code:`meka.classifiers.multilabel.MULAN -S RAkEL2`
-        weka_classifier : str
-            The WEKA classifier string and parameters from the WEKA API,
-            such as :code:`weka.classifiers.trees.J48`
-        java_command : str
-            Path to test the java command
-        meka_classpath: str
-            Path to the MEKA class path folder, usually the folder lib
-            in the directory MEKA was extracted into
-        """
         super(Meka, self).__init__()
 
         self.java_command = java_command
@@ -73,9 +107,9 @@ class Meka(MLClassifierBase):
             'java_command',
             'meka_classpath'
         ]
-        self.clean()
+        self._clean()
 
-    def clean(self):
+    def _clean(self):
         """Sets various attributes to :code:`None`"""
         self.results = None
         self.statistics = None
@@ -84,7 +118,7 @@ class Meka(MLClassifierBase):
         self.label_count = None
         self.instance_count = None
 
-    def remove_temporary_files(self, temporary_files):
+    def _remove_temporary_files(self, temporary_files):
         """Internal function for cleaning temporary files"""
         for file_object in temporary_files:
             file_name = file_object.name
@@ -96,13 +130,13 @@ class Meka(MLClassifierBase):
             if os.path.exists(arff_file_name):
                 os.remove(arff_file_name)
 
-    def run_meka_command(self, args):
+    def _run_meka_command(self, args):
         """Runs the MEKA command
 
         Parameters
         ----------
         args : str
-            the Java command to run
+            the Java command to _run
         """
         command_args = [
             self.java_command,
@@ -134,27 +168,26 @@ class Meka(MLClassifierBase):
             raise Exception(self.output + self.error)
 
     def fit(self, X, y):
-        """Fit classifier with training data
+        """Fits classifier to training data
 
         Internally this method dumps X and y to temporary arff files and
-        runs MEKA with relevant arguments using :func:`run`. It uses a
+        runs MEKA with relevant arguments using :meth:`_run`. It uses a
         sparse DOK representation (:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
         Parameters
         ----------
-        X : numpy.ndarray or scipy.sparse
-            input features of shape :code:`(n_samples, n_features)`
-        y : numpy.ndarray or scipy.sparse
-            binary indicator matrix with label assigments of shape
-            :code:`(n_samples, n_features)`
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
 
         Returns
         -------
-        skmultilearn.ext.meka.Meka
+        self
             fitted instance of self
         """
-        self.clean()
+        self._clean()
         X = self.ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
         y = self.ensure_output_format(
@@ -174,15 +207,15 @@ class Meka(MLClassifierBase):
                 '-verbosity', "0",
                 '-split-percentage', "100",
                 '-t', '"{}"'.format(train_arff.name + '.arff'),
-                '-d',  '"{}"'.format(classifier_dump_file.name),
+                '-d', '"{}"'.format(classifier_dump_file.name),
             ]
 
-            self.run_meka_command(input_args)
+            self._run_meka_command(input_args)
             self.classifier_dump = None
             with open(classifier_dump_file.name, 'rb') as fp:
                 self.classifier_dump = fp.read()
         finally:
-            self.remove_temporary_files([train_arff, classifier_dump_file])
+            self._remove_temporary_files([train_arff, classifier_dump_file])
 
         return self
 
@@ -190,7 +223,7 @@ class Meka(MLClassifierBase):
         """Predict label assignments for X
 
         Internally this method dumps X to temporary arff files and
-        runs MEKA with relevant arguments using :func:`run`. It uses a
+        runs MEKA with relevant arguments using :func:`_run`. It uses a
         sparse DOK representation (:class:`scipy.sparse.dok_matrix`)
         of the X matrix.
 
@@ -231,16 +264,16 @@ class Meka(MLClassifierBase):
                 '-l', '"{}"'.format(classifier_dump_file.name)
             ]
 
-            self.run(train_arff.name + '.arff', test_arff.name + '.arff', args)
-            self.parse_output()
+            self._run(train_arff.name + '.arff', test_arff.name + '.arff', args)
+            self._parse_output()
 
         finally:
-            self.remove_temporary_files(
+            self._remove_temporary_files(
                 [train_arff, test_arff, classifier_dump_file])
 
         return self.results
 
-    def run(self, train_file, test_file, additional_arguments=[]):
+    def _run(self, train_file, test_file, additional_arguments=[]):
         """Runs the meka classifiers
 
         Parameters
@@ -271,10 +304,10 @@ class Meka(MLClassifierBase):
                    '-verbosity', str(5),
                ] + additional_arguments
 
-        self.run_meka_command(args)
+        self._run_meka_command(args)
         return self
 
-    def parse_output(self):
+    def _parse_output(self):
         """Internal function for parsing MEKA output."""
         if self.output is None:
             self.results = None
