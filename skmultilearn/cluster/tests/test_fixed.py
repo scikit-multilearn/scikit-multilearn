@@ -16,7 +16,7 @@ def get_fixed_clusterers(cluster_count=3):
         clusters = np.array(clusters)
         yield clusters, FixedLabelSpaceClusterer(clusters)
 
-class MatrixLabelSpaceClustererTests(ClassifierBaseTest):
+class FixedLabelSpaceClustererTests(ClassifierBaseTest):
 
     def test_actually_works_on_proper_params(self):
         for X, y in self.get_multilabel_data_for_tests('sparse'):
