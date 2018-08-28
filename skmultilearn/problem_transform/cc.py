@@ -21,20 +21,20 @@ class ClassifierChain(ProblemTransformationBase):
 
     Parameters
     ----------
-    classifier : :class:`sklearn.base.BaseEstimator`
+    classifier : :class:`~sklearn.base.BaseEstimator`
         scikit-learn compatible base classifier
     require_dense : [bool, bool], optional
         whether the base classifier requires dense representations
         for input features and classes/labels matrices in fit/predict.
         If value not provided, sparse representations are used if base classifier is
-        an instance of :class:`skmultilearn.base.MLClassifierBase` and dense otherwise.
+        an instance of :class:`~skmultilearn.base.MLClassifierBase` and dense otherwise.
     order : List[int], permutation of ``range(n_labels)``, optional
         the order in which the chain should go through labels, the default is ``range(n_labels)``
 
 
     Attributes
     ----------
-    classifiers_ : List[:class:`sklearn.base.BaseEstimator`] of shape `n_labels`
+    classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `n_labels`
         list of classifiers trained per partition_, set in :meth:`fit`
 
 

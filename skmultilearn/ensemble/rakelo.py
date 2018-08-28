@@ -14,7 +14,7 @@ class RakelO(MLClassifierBase):
 
     Parameters
     ----------
-    base_classifier: :class:`sklearn.base.BaseEstimator`
+    base_classifier: :class:`~sklearn.base.BaseEstimator`
         scikit-learn compatible base classifier, will be set under `self.classifier.classifier`.
     base_classifier_require_dense : [bool, bool]
         whether the base classifier requires [input, output] matrices
@@ -30,7 +30,7 @@ class RakelO(MLClassifierBase):
 
     Attributes
     ----------
-    classifier : :class:`skmultilearn.ensemble.MajorityVotingClassifier`
+    classifier : :class:`~skmultilearn.ensemble.MajorityVotingClassifier`
         the voting classifier initialized with :class:`~skmultilearn.problem_transform.LabelPowerset` multi-label
         classifier with `base_classifier` and :class:`~skmultilearn.cluster.random.RandomLabelSpaceClusterer`
 

@@ -16,7 +16,7 @@ class LabelPowerset(ProblemTransformationBase):
 
     Parameters
     ----------
-    classifier : :class:`sklearn.base.BaseEstimator`
+    classifier : :class:`~sklearn.base.BaseEstimator`
         scikit-learn compatible base classifier
     require_dense : [bool, bool], optional
         whether the base classifier requires dense representations
@@ -26,8 +26,6 @@ class LabelPowerset(ProblemTransformationBase):
 
     Attributes
     ----------
-    classifiers_ : List[:class:`sklearn.base.BaseEstimator`] of shape `model_count_`
-        list of classifiers trained per partition_, set in :meth:`fit`
     unique_combinations_ : Dict[str, int]
         mapping from label combination as string to label combination id :meth:`transform:` via :meth:`fit`
     reverse_combinations_ : List[List[int]]

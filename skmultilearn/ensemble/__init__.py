@@ -7,15 +7,14 @@ Currently the following ensemble classification schemes are available in scikit-
 - :class:`RakelD` - Distinct RAndom k-labELsets multi-label classifier
 - :class:`RakelO` - Overlapping RAndom k-labELsets multi-label classifier.
 - :class:`LabelSpacePartitioningClassifier` - a label space partitioning classifier that trains a classifier per label subspace as clustered using methods from :mod:`skmultilearn.cluster`.
-- :class:`FixedLabelPartitionClassifier` - a classifier that trains a classifier per label subspace for a given fixed partition
-
+- :class:`MajorityVotingClassifier` - a label space division classifier that trains a classifier per label subspace as clustered using methods from :mod:`skmultilearn.cluster` and assign labels if the majority of classifiers that contain the label agree on the assignment.
 """
 
 from __future__ import absolute_import
 from .rakeld import RakelD
 from .rakelo import RakelO
-from .fixed import FixedLabelPartitionClassifier, LabelSpacePartitioningClassifier
 from .partition import LabelSpacePartitioningClassifier
+from .voting import MajorityVotingClassifier
 
 __all__ = ["RakelD", "RakelO", "LabelSpacePartitioningClassifier",
-           "FixedLabelPartitionClassifier", "LabelSpacePartitioningClassifier"]
+           "LabelSpacePartitioningClassifier", "MajorityVotingClassifier"]

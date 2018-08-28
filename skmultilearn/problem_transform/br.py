@@ -17,13 +17,13 @@ class BinaryRelevance(ProblemTransformationBase):
 
     Parameters
     ----------
-    classifier : :class:`sklearn.base.BaseEstimator`
+    classifier : :class:`~sklearn.base.BaseEstimator`
         scikit-learn compatible base classifier
     require_dense : [bool, bool], optional
         whether the base classifier requires dense representations
         for input features and classes/labels matrices in fit/predict.
         If value not provided, sparse representations are used if base classifier is
-        an instance of :class:`skmultilearn.base.MLClassifierBase` and dense otherwise.
+        an instance of :class:`~skmultilearn.base.MLClassifierBase` and dense otherwise.
 
     Attributes
     ----------
@@ -32,7 +32,7 @@ class BinaryRelevance(ProblemTransformationBase):
     partition_ : List[List[int]], shape=(`model_count_`,)
         list of lists of label indexes, used to index the output space matrix, set in :meth:`_generate_partition`
         via :meth:`fit`
-    classifiers_ : List[:class:`sklearn.base.BaseEstimator`] of shape `model_count`
+    classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
         list of classifiers trained per partition, set in :meth:`fit`
 
     Notes
