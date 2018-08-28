@@ -1,5 +1,6 @@
 from ..base.problem_transformation import ProblemTransformationBase
-from scipy.sparse import hstack, coo_matrix, issparse
+from scipy.sparse import hstack
+from sklearn.exceptions import NotFittedError
 import copy
 
 
@@ -27,6 +28,8 @@ class ClassifierChain(ProblemTransformationBase):
         for input features and classes/labels matrices in fit/predict.
         If value not provided, sparse representations are used if base classifier is
         an instance of :class:`skmultilearn.base.MLClassifierBase` and dense otherwise.
+    order : List[int], permutation of ``range(n_labels)``, optional
+        the order in which the chain should go through labels, the default is ``range(n_labels)``
 
 
     Attributes
@@ -110,10 +113,12 @@ class ClassifierChain(ProblemTransformationBase):
 
     """
 
-    def __init__(self, classifier=None, require_dense=None):
+    def __init__(self, classifier=None, require_dense=None, order=None):
         super(ClassifierChain, self).__init__(classifier, require_dense)
+        self.order = order
+        self.copyable_attrs = ['classifier', 'require_dense', 'order']
 
-    def fit(self, X, y):
+    def fit(self, X, y, order=None):
         """Fits classifier to training data
 
         Parameters
@@ -142,7 +147,7 @@ class ClassifierChain(ProblemTransformationBase):
         self._label_count = y.shape[1]
         self.classifiers_ = [None for x in range(self._label_count)]
 
-        for label in range(self._label_count):
+        for label in self._order():
             self.classifier = copy.deepcopy(self.classifier)
             y_subset = self._generate_data_subset(y, label, axis=1)
 
@@ -169,7 +174,7 @@ class ClassifierChain(ProblemTransformationBase):
         X_extended = self._ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
 
-        for label in range(self._label_count):
+        for label in self._order():
             prediction = self.classifiers_[label].predict(
                 self._ensure_input_format(X_extended))
             prediction = self._ensure_multi_label_from_single_class(prediction)
@@ -193,7 +198,7 @@ class ClassifierChain(ProblemTransformationBase):
             X, sparse_format='csc', enforce_sparse=True)
 
         results = []
-        for label in range(self._label_count):
+        for label in self._order():
             prediction = self.classifiers_[label].predict(
                 self._ensure_input_format(X_extended))
 
@@ -210,3 +215,12 @@ class ClassifierChain(ProblemTransformationBase):
             results.append(prediction_proba)
 
         return hstack(results)
+
+    def _order(self):
+        if self.order is not None:
+            return self.order
+
+        try:
+            return list(range(self._label_count))
+        except AttributeError:
+            raise NotFittedError("This Classifier Chain has not been fit yet")

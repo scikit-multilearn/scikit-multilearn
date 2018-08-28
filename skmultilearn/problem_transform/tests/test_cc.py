@@ -1,6 +1,7 @@
 import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+from ..tests.example import EXAMPLE_X, EXAMPLE_y
 
 from skmultilearn.problem_transform import ClassifierChain
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
@@ -41,6 +42,26 @@ class CCTest(ClassifierBaseTest):
             classifier=GaussianNB(), require_dense=[True, True])
 
         self.assertClassifierWorksWithCV(classifier)
+
+    def test_if_order_is_set(self):
+        classifier = ClassifierChain(
+            classifier=GaussianNB(), require_dense=[True, True], order=None
+        )
+
+        classifier.fit(EXAMPLE_X, EXAMPLE_y)
+
+        self.assertEqual(classifier._order(), list(range(EXAMPLE_y.shape[1])))
+
+    def test_if_order_is_set(self):
+        reversed_chain = list(reversed(range(EXAMPLE_y.shape[1])))
+        classifier = ClassifierChain(
+            classifier=GaussianNB(), require_dense=[True, True], order=reversed_chain
+        )
+
+        classifier.fit(EXAMPLE_X, EXAMPLE_y)
+
+        self.assertEqual(classifier._order(), reversed_chain)
+
 
 if __name__ == '__main__':
     unittest.main()
