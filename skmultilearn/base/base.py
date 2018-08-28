@@ -8,15 +8,14 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label
     classifiers.
+    
+    Implements base functionality for ML classifiers, especially the get_/set_ params for
+    scikit-learn compatibility.
 
     Attributes
     ----------
-    classifier : sklearb.base.BaseEstimator
-        The base classifier that will be used in a class, will 
-        automatically be put under :code:`self.classifier` for future
-        access.
-    require_dense : bool (default is False)
-        Whether the base classifier requires input as dense arrays.
+    copyable_attrs : List[str]
+        list of attribute names that should be copied when class is cloned
     """
 
     def __init__(self):
@@ -24,7 +23,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         self.copyable_attrs = []
 
-    def generate_data_subset(self, y, subset, axis):
+    def _generate_data_subset(self, y, subset, axis):
         """Subset rows or columns from matrix
 
         This function subsets the array of binary label vectors to 
@@ -55,7 +54,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         return return_data
 
-    def ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
+    def _ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired input format
 
         This function ensures that input format follows the
@@ -98,7 +97,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             else:
                 return matrix_creation_function_for_format(sparse_format)(X)
 
-    def ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
+    def _ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired output format
 
         This function ensures that output format follows the
