@@ -1,3 +1,4 @@
+# copyright @Fernando Benites
 from builtins import object
 from builtins import range
 
@@ -9,14 +10,20 @@ from scipy.sparse import issparse
 from ..base import MLClassifierBase
 
 
-# copyright @Fernando Benites
-
-
 class Neuron(object):
+    """An implementation of a neuron for MLARAM
 
-    def __init__(self, startpoint, label):
+    Parameters
+    ----------
+    vc : array
+        neuron's assigned vector
+    label : int
+        label number
+    """
+
+    def __init__(self, vc, label):
         # vector must be in complement form
-        self.vc = startpoint
+        self.vc = vc
         self.label = label
 
 
@@ -45,7 +52,25 @@ class MLARAM(MLClassifierBase):
     extra ART layer for clustering learned prototypes into large clusters.
     In this case the activation of all prototypes can be replaced by the
     activation of a small fraction of them, leading to a significant
-    reduction of the classification time [ICDMW2015]_. 
+    reduction of the classification time [ICDMW2015]_.
+
+    Parameters:
+    -----------
+    vigilance : float (default is 0.9)
+        parameter for adaptive resonance theory networks, controls how
+        large a hyperbox can be, 1 it is small (no compression), 0
+        should assume all range. Normally set between 0.8 and 0.999,
+        it is dataset dependent. It is responsible for the creation
+        of the prototypes, therefore training of the network.
+    threshold : float (default is 0.02)
+        controls how many prototypes participate by the prediction,
+        can be changed for the testing phase.
+    neurons : list
+        the neurons in the network
+
+
+    References
+    ----------
 
     Published work available `here`_.
 
@@ -54,29 +79,44 @@ class MLARAM(MLClassifierBase):
     .. [ICDMW2015] F. Benites and E. Sapozhnikova, "HARAM: A Hierarchical
         ARAM Neural Network for Large-Scale Text Classification," 
         2015 IEEE International Conference on Data Mining Workshop
+
+    .. code :: latex
+        @INPROCEEDINGS{7395756,
+            author={F. Benites and E. Sapozhnikova},
+            booktitle={2015 IEEE International Conference on Data Mining Workshop (ICDMW)},
+            title={HARAM: A Hierarchical ARAM Neural Network for Large-Scale Text Classification},
+            year={2015},
+            volume={},
+            number={},
+            pages={847-854},
+            doi={10.1109/ICDMW.2015.14},
+            ISSN={2375-9259},
+            month={Nov},
+        }
+
+    Examples
+    --------
+
+    Here's an example code with a 5% threshold and vigilance of 0.95:
+
+    .. code :: python
+
+        from skmultilearn.neurofuzzy import MLARAM
+
+        classifier = MLARAM(threshold=0.05, vigilance=0.95)
+        classifier.fit(X_train, y_train)
+        prediction = classifier.predict(X_test)
+
+
     """
-    BRIEFNAME = "ML-ARAM"
 
-    def __init__(self, vigilance=0.9, threshold=0.02, neurons=[]):
-        """Initializes the network
-
-        Attributes
-        ----------
-        vigilance : float (default is 0.9)
-            parameter for adaptiv resonance theory networks, controls how
-            large a hyperbox can be, 1 it is small (no compression), 0
-            should assume all range. Normally set between 0.8 and 0.999,
-            it is dataset dependent. It is responsible for the creation
-            of the prototypes, therefore training of the network.
-        threshold : float (default is 0.02)
-            controls how many prototypes participate by the prediction,
-            can be changed at the testing phase.
-        neurons : list
-            the neurons in the network
-        """
+    def __init__(self, vigilance=0.9, threshold=0.02, neurons=None):
         super(MLARAM, self).__init__()
 
-        self.neurons = neurons
+        if neurons is not None:
+            self.neurons = neurons
+        else:
+            self.neurons = []
         self.vigilance = vigilance
         self.threshold = threshold
 
@@ -84,10 +124,9 @@ class MLARAM(MLClassifierBase):
 
     def reset(self):
         """Resets the labels and neurons"""
-        self.labels = []
+        self._labels = []
         self.neurons = []
 
-    # @profile
     def fit(self, X, y):
         """Fit classifier with training data
 
@@ -105,10 +144,10 @@ class MLARAM(MLClassifierBase):
             fitted instance of self
         """
 
-        self.labels = []
-        self.allneu = ""
-        self.online = 1
-        self.alpha = 0.0000000000001
+        self._labels = []
+        self._allneu = ""
+        self._online = 1
+        self._alpha = 0.0000000000001
 
         label_combination_to_class_map = {}
         # FIXME: we should support dense matrices natively
@@ -176,7 +215,8 @@ class MLARAM(MLClassifierBase):
 
             winner = inds[::- 1][indc[0]]
             self.neurons[winner].vc = umath.minimum(
-                self.neurons[winner].vc, fc)
+                self.neurons[winner].vc, fc
+            )
 
             # 1 if winner neuron won a given label 0 if not
             labels_won_indicator = numpy.zeros(y_0.shape, dtype=y_0.dtype)
@@ -185,7 +225,6 @@ class MLARAM(MLClassifierBase):
 
         return self
 
-    # @profile
     def predict(self, X):
         """Predict labels for X
 
@@ -223,7 +262,6 @@ class MLARAM(MLClassifierBase):
 
         return numpy.array(numpy.matrix(result))
 
-    # @profile
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
@@ -252,7 +290,7 @@ class MLARAM(MLClassifierBase):
         ones = scipy.ones(X[0].shape)
         all_ranks = []
         all_neurons = numpy.vstack([n1.vc for n1 in self.neurons])
-        all_neurons_sum = all_neurons.sum(1) + self.alpha
+        all_neurons_sum = all_neurons.sum(1) + self._alpha
 
         for row_number, input_vector in enumerate(X):
             if issparse(input_vector):
