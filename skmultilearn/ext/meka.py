@@ -188,6 +188,7 @@ class Meka(MLClassifierBase):
         self.output_ = None
         self._verbosity = 5
         self._warnings = None
+        self.require_dense = [False, False]
 
         self._clean()
 
@@ -233,9 +234,9 @@ class Meka(MLClassifierBase):
             fitted instance of self
         """
         self._clean()
-        X = self.ensure_input_format(
+        X = self._ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
-        y = self.ensure_output_format(
+        y = self._ensure_output_format(
             y, sparse_format='dok', enforce_sparse=True)
         self._label_count = y.shape[1]
 
@@ -282,7 +283,7 @@ class Meka(MLClassifierBase):
         scipy.sparse of int
             sparse matrix of integers with shape :code:`(n_samples, n_features)`
         """
-        X = self.ensure_input_format(
+        X = self._ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
         self._instance_count = X.shape[0]
 
