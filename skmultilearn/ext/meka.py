@@ -24,6 +24,25 @@ SUPPORTED_VERSION_MD5 = 'e909044b39513bbad451b8d71098b22c'
 
 
 def download_meka(version=None):
+    """Downloads a given version of the MEKA library and returns its classpath
+
+    Parameters
+    ----------
+    version : str
+        the MEKA version to download, default falls back to currently supported version 1.9.2
+
+    Returns
+    -------
+    string
+        meka class path string for installed version
+
+    Raises
+    ------
+    IOError
+        if unpacking the meka release file does not provide a proper setup
+    Exception
+        if MD5 mismatch happens after a download error
+    """
     version = version or SUPPORTED_VERSION
     meka_release_string = "meka-release-{}".format(version)
     file_name = meka_release_string + '-bin.zip'
@@ -57,7 +76,10 @@ def download_meka(version=None):
 class Meka(MLClassifierBase):
     """Wrapper for the MEKA classifier
 
-    Attributes
+    Allows using MEKA, WEKA and some of MULAN classifiers from scikit-compatible API. For more information on
+    how to use this class see the tutorial: :doc:`../meka`
+
+    Parameters
     ----------
     meka_classifier : str
         The MEKA classifier string and parameters from the MEKA API,
@@ -71,7 +93,66 @@ class Meka(MLClassifierBase):
         Path to the MEKA class path folder, usually the folder lib
         in the directory MEKA was extracted into
 
-    For more information on how to use this class see the tutorial: :doc:`../meka`
+    Attributes
+    ----------
+    output_ : str
+        the full text output of MEKA command
+
+    References
+    ----------
+
+    If you use this wrapper please also cite:
+
+    .. code-block :: latex
+
+        @article{MEKA,
+            author = {Read, Jesse and Reutemann, Peter and Pfahringer, Bernhard and Holmes, Geoff},
+            title = {{MEKA}: A Multi-label/Multi-target Extension to {Weka}},
+            journal = {Journal of Machine Learning Research},
+            year = {2016},
+            volume = {17},
+            number = {21},
+            pages = {1--5},
+            url = {http://jmlr.org/papers/v17/12-164.html},
+        }
+
+        @article{Hall:2009:WDM:1656274.1656278,
+            author = {Hall, Mark and Frank, Eibe and Holmes, Geoffrey and Pfahringer, Bernhard and Reutemann, Peter and Witten, Ian H.},
+            title = {The WEKA Data Mining Software: An Update},
+            journal = {SIGKDD Explor. Newsl.},
+            issue_date = {June 2009},
+            volume = {11},
+            number = {1},
+            month = nov,
+            year = {2009},
+            issn = {1931-0145},
+            pages = {10--18},
+            numpages = {9},
+            url = {http://doi.acm.org/10.1145/1656274.1656278},
+            doi = {10.1145/1656274.1656278},
+            acmid = {1656278},
+            publisher = {ACM},
+            address = {New York, NY, USA},
+        }
+
+    Examples
+    --------
+
+    Here's an example of performing Label Powerset classification using MEKA with a WEKA Naive Bayes classifier.
+
+    .. code-block:: python
+
+        from skmultilearn.ext import Meka, download_meka
+
+        meka = Meka(
+            meka_classifier = "meka.classifiers.multilabel.LC",
+            weka_classifier = "weka.classifiers.bayes.NaiveBayes",
+            meka_classpath = download_meka(),
+            java_command = '/usr/bin/java')
+
+        meka.fit(X_train, y_train)
+        predictions = meka.predict(X_test)
+
     """
 
     def __init__(self, meka_classifier=None, weka_classifier=None,
@@ -96,27 +177,28 @@ class Meka(MLClassifierBase):
                 raise ValueError("No meka classpath defined")
 
         self.meka_classifier = meka_classifier
-        self.verbosity = 5
         self.weka_classifier = weka_classifier
-        self.output = None
-        self.warnings = None
-        self.require_dense = [False, False]
+
         self.copyable_attrs = [
             'meka_classifier',
             'weka_classifier',
             'java_command',
             'meka_classpath'
         ]
+        self.output_ = None
+        self._verbosity = 5
+        self._warnings = None
+
         self._clean()
 
     def _clean(self):
         """Sets various attributes to :code:`None`"""
-        self.results = None
-        self.statistics = None
-        self.output = None
-        self.error = None
-        self.label_count = None
-        self.instance_count = None
+        self._results = None
+        self._statistics = None
+        self.output_ = None
+        self._error = None
+        self._label_count = None
+        self._instance_count = None
 
     def _remove_temporary_files(self, temporary_files):
         """Internal function for cleaning temporary files"""
@@ -129,43 +211,6 @@ class Meka(MLClassifierBase):
             arff_file_name = file_name + '.arff'
             if os.path.exists(arff_file_name):
                 os.remove(arff_file_name)
-
-    def _run_meka_command(self, args):
-        """Runs the MEKA command
-
-        Parameters
-        ----------
-        args : str
-            the Java command to _run
-        """
-        command_args = [
-            self.java_command,
-            '-cp', '"{}*"'.format(self.meka_classpath),
-            self.meka_classifier,
-        ]
-
-        if self.weka_classifier is not None:
-            command_args += ['-W', self.weka_classifier]
-
-        command_args += args
-
-        meka_command = " ".join(command_args)
-
-        if sys.platform != 'win32':
-            meka_command = shlex.split(meka_command)
-
-        pipes = subprocess.Popen(meka_command,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        self.output, self.error = pipes.communicate()
-        if type(self.output) == bytes:
-            self.output = self.output.decode(sys.stdout.encoding)
-        if type(self.error) == bytes:
-            self.error = self.error.decode(sys.stdout.encoding)
-
-        if pipes.returncode != 0:
-            raise Exception(self.output + self.error)
 
     def fit(self, X, y):
         """Fits classifier to training data
@@ -192,7 +237,7 @@ class Meka(MLClassifierBase):
             X, sparse_format='dok', enforce_sparse=True)
         y = self.ensure_output_format(
             y, sparse_format='dok', enforce_sparse=True)
-        self.label_count = y.shape[1]
+        self._label_count = y.shape[1]
 
         # we need this in case threshold needs to be recalibrated in meka
         self.train_data_ = save_to_arff(X, y)
@@ -239,12 +284,12 @@ class Meka(MLClassifierBase):
         """
         X = self.ensure_input_format(
             X, sparse_format='dok', enforce_sparse=True)
-        self.instance_count = X.shape[0]
+        self._instance_count = X.shape[0]
 
         if self.classifier_dump is None:
             raise Exception('Not classified')
 
-        sparse_y = sparse.coo_matrix((X.shape[0], self.label_count), dtype=int)
+        sparse_y = sparse.coo_matrix((X.shape[0], self._label_count), dtype=int)
 
         try:
             train_arff = tempfile.NamedTemporaryFile(delete=False)
@@ -269,9 +314,10 @@ class Meka(MLClassifierBase):
 
         finally:
             self._remove_temporary_files(
-                [train_arff, test_arff, classifier_dump_file])
+                [train_arff, test_arff, classifier_dump_file]
+            )
 
-        return self.results
+        return self._results
 
     def _run(self, train_file, test_file, additional_arguments=[]):
         """Runs the meka classifiers
@@ -291,8 +337,8 @@ class Meka(MLClassifierBase):
             array of binary label vectors including label predictions of
             shape :code:`(n_test_samples, n_labels)`
         """
-        self.output = None
-        self.warnings = None
+        self.output_ = None
+        self._warnings = None
 
         # meka_command_string = 'java -cp "/home/niedakh/pwr/old/meka-1.5/lib/*" meka.classifiers.multilabel.MULAN -S RAkEL2
         # -threshold 0 -t {train} -T {test} -verbosity {verbosity} -W weka.classifiers.bayes.NaiveBayes'
@@ -309,45 +355,45 @@ class Meka(MLClassifierBase):
 
     def _parse_output(self):
         """Internal function for parsing MEKA output."""
-        if self.output is None:
-            self.results = None
-            self.statistics = None
+        if self.output_ is None:
+            self._results = None
+            self._statistics = None
             return None
 
         predictions_split_head = '==== PREDICTIONS'
         predictions_split_foot = '|==========='
 
-        if self.label_count is None:
-            self.label_count = map(lambda y: int(y.split(')')[1].strip()), [
-                x for x in self.output.split('\n') if 'Number of labels' in x])[0]
+        if self._label_count is None:
+            self._label_count = map(lambda y: int(y.split(')')[1].strip()), [
+                x for x in self.output_.split('\n') if 'Number of labels' in x])[0]
 
-        if self.instance_count is None:
-            self.instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output.split(
+        if self._instance_count is None:
+            self._instance_count = int(float(filter(lambda x: '==== PREDICTIONS (N=' in x, self.output_.split(
                 '\n'))[0].split('(')[1].split('=')[1].split(')')[0]))
-        self.predictions = self.output.split(predictions_split_head)[1].split(
+        predictions = self.output_.split(predictions_split_head)[1].split(
             predictions_split_foot)[0].split('\n')[1:-1]
 
-        self.predictions = [y.split(']')[0]
-                            for y in [x.split('] [')[1] for x in self.predictions]]
-        self.predictions = [[a for a in [f.strip() for f in z.split(',')] if len(a) > 0]
-                            for z in self.predictions]
-        self.predictions = [[int(a) for a in z] for z in self.predictions]
+        predictions = [y.split(']')[0]
+                             for y in [x.split('] [')[1] for x in predictions]]
+        predictions = [[a for a in [f.strip() for f in z.split(',')] if len(a) > 0]
+                             for z in predictions]
+        predictions = [[int(a) for a in z] for z in predictions]
 
-        assert self.verbosity == 5
+        assert self._verbosity == 5
 
-        self.results = sparse.lil_matrix(
-            (self.instance_count, self.label_count), dtype='int')
-        for row in range(self.instance_count):
-            for label in self.predictions[row]:
-                self.results[row, label] = 1
+        self._results = sparse.lil_matrix(
+            (self._instance_count, self._label_count), dtype='int')
+        for row in range(self._instance_count):
+            for label in predictions[row]:
+                self._results[row, label] = 1
 
-        statistics = [x for x in self.output.split(
+        statistics = [x for x in self.output_.split(
             '== Evaluation Info')[1].split('\n') if len(x) > 0 and '==' not in x]
         statistics = [y for y in [z.strip() for z in statistics] if '  ' in y]
         array_data = [z for z in statistics if '[' in z]
         non_array_data = [z for z in statistics if '[' not in z]
 
-        self.statistics = {}
+        self._statistics = {}
         for row in non_array_data:
             r = row.strip().split('  ')
             r = [z for z in r if len(z) > 0]
@@ -360,7 +406,7 @@ class Meka(MLClassifierBase):
                 test_value = r[1]
 
             r[1] = test_value
-            self.statistics[r[0]] = r[1]
+            self._statistics[r[0]] = r[1]
 
         for row in array_data:
             r = row.strip().split('[')
@@ -368,6 +414,34 @@ class Meka(MLClassifierBase):
             r[1] = r[1].replace(', ', ' ').replace(
                 ',', '.').replace(']', '').split(' ')
             r[1] = [x for x in r[1] if len(x) > 0]
-            self.statistics[r[0]] = r[1]
+            self._statistics[r[0]] = r[1]
 
-        return self.results, self.statistics
+    def _run_meka_command(self, args):
+        command_args = [
+            self.java_command,
+            '-cp', '"{}*"'.format(self.meka_classpath),
+            self.meka_classifier,
+        ]
+
+        if self.weka_classifier is not None:
+            command_args += ['-W', self.weka_classifier]
+
+        command_args += args
+
+        meka_command = " ".join(command_args)
+
+        if sys.platform != 'win32':
+            meka_command = shlex.split(meka_command)
+
+        pipes = subprocess.Popen(meka_command,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        self.output_, self._error = pipes.communicate()
+        if type(self.output_) == bytes:
+            self.output_ = self.output_.decode(sys.stdout.encoding)
+        if type(self._error) == bytes:
+            self._error = self._error.decode(sys.stdout.encoding)
+
+        if pipes.returncode != 0:
+            raise Exception(self.output_ + self._error)
