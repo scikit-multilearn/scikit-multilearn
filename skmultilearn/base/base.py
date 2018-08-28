@@ -1,14 +1,13 @@
-import copy
 import numpy as np
 from ..utils import get_matrix_in_format, matrix_creation_function_for_format
-from scipy.sparse import issparse, csr_matrix
+from scipy.sparse import issparse
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label
     classifiers.
-    
+
     Implements base functionality for ML classifiers, especially the get_/set_ params for
     scikit-learn compatibility.
 
@@ -260,9 +259,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                                  'with `estimator.get_params().keys()`.' %
                                  (parameter, self))
 
-
         parameters_below_current_level = [x for x in parameters if '__' in x]
-        parameters_grouped_by_current_level = {object : {} for object in valid_params}
+        parameters_grouped_by_current_level = {object: {} for object in valid_params}
 
         for parameter in parameters_below_current_level:
             object_name, sub_param = parameter.split('__', 1)
