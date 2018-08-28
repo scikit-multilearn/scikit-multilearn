@@ -1,65 +1,140 @@
-from builtins import map
-from builtins import str
-from builtins import range
 from ..base.problem_transformation import ProblemTransformationBase
 import numpy as np
 from scipy import sparse
 
 
 class LabelPowerset(ProblemTransformationBase):
-    """Label Powerset Multi-Label Classifier.
+    """Transform multi-label problem to a multi-class problem
 
     Label Powerset is a problem transformation approach to multi-label
     classification that transforms a multi-label problem to a multi-class
     problem with 1 multi-class classifier trained on all unique label
     combinations found in the training data.
 
-    More information about this method can be found in an introduction
-    to multi-label classification by Tsoumakas et. al.
+    The method maps each combination to a unique combination id number, and performs multi-class classification
+    using the `classifier` as multi-class classifier and combination ids as classes.
+
+    Parameters
+    ----------
+    classifier : :class:`sklearn.base.BaseEstimator`
+        scikit-learn compatible base classifier
+    require_dense : [bool, bool], optional
+        whether the base classifier requires dense representations
+        for input features and classes/labels matrices in fit/predict.
+        If value not provided, sparse representations are used if base classifier is
+        an instance of :class:`skmultilearn.base.MLClassifierBase` and dense otherwise.
+
+    Attributes
+    ----------
+    classifiers_ : List[:class:`sklearn.base.BaseEstimator`] of shape `model_count_`
+        list of classifiers trained per partition_, set in :meth:`fit`
+    unique_combinations_ : Dict[str, int]
+        mapping from label combination as string to label combination id :meth:`transform:` via :meth:`fit`
+    reverse_combinations_ : List[List[int]]
+        label combination id ordered list to list of label indexes for a given combination  :meth:`transform:`
+        via :meth:`fit`
+
+    Notes
+    -----
+    .. note ::
+
+        `n_classes` in this document denotes the number of unique label combinations present in the training `y`
+        passed to :meth:`fit`, in practice it is equal to :code:`len(self.unique_combinations)`
+
+    Examples
+    --------
+    An example use case for Label Powerset with an :class:`sklearn.ensemble.RandomForestClassifier` base classifier
+    which supports sparse input:
+
+    .. code-block:: python
+
+        from skmultilearn.problem_transform import LabelPowerset
+        from sklearn.ensemble import RandomForestClassifier
+
+        # initialize LabelPowerset multi-label classifier with a RandomForest
+        classifier = ClassifierChain(
+            classifier = RandomForestClassifier(n_estimators=100),
+            require_dense = [False, True]
+        )
+
+        # train
+        classifier.fit(X_train, y_train)
+
+        # predict
+        predictions = classifier.predict(X_test)
+
+    Another way to use this classifier is to select the best scenario from a set of multi-class classifiers used
+    with Label Powerset, this can be done using cross validation grid search. In the example below, the model
+    with highest accuracy results is selected from either a :class:`sklearn.ensemble.RandomForestClassifier` or
+    :class:`sklearn.naive_bayes.MultinomialNB` base classifier, alongside with best parameters for
+    that base classifier.
+
+    .. code-block:: python
+
+        from skmultilearn.problem_transform import LabelPowerset
+        from sklearn.model_selection import GridSearchCV
+        from sklearn.naive_bayes import MultinomialNB
+        from sklearn.ensemble import RandomForestClassifier
+
+        parameters = [
+            {
+                'classifier': [MultinomialNB()],
+                'classifier__alpha': [0.7, 1.0],
+            },
+            {
+                'classifier': [RandomForestClassifier()],
+                'classifier__criterion': ['gini', 'entropy'],
+                'classifier__n_estimators': [10, 20, 50],
+            },
+        ]
+
+        clf = GridSearchCV(LabelPowerset(), parameters, scoring='accuracy')
+        clf.fit(x, y)
+
+        print (clf.best_params_, clf.best_score_)
+
+        # result
+        # {
+        #   'classifier': RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+        #             max_depth=None, max_features='auto', max_leaf_nodes=None,
+        #             min_impurity_decrease=0.0, min_impurity_split=None,
+        #             min_samples_leaf=1, min_samples_split=2,
+        #             min_weight_fraction_leaf=0.0, n_estimators=50, n_jobs=1,
+        #             oob_score=False, random_state=None, verbose=0,
+        #             warm_start=False), 'classifier__criterion': 'gini', 'classifier__n_estimators': 50
+        # } 0.16
+
     """
-    BRIEFNAME = "LP"
 
     def __init__(self, classifier=None, require_dense=None):
-        """Initializes the LabelPowerset class
-
-        Attributes
-        ----------
-        classifier : sklear.base.BaseEstimator
-            scikit-compatible base classifier
-        require_dense : list of bools ([bool, bool])
-            whether the base classifier requires dense representations
-            for input features and classes/labels matrices in fit/predict.
-        """
         super(LabelPowerset, self).__init__(
             classifier=classifier, require_dense=require_dense)
         self.clean()
 
     def clean(self):
         """Reset classifier internals before refitting"""
-        self.unique_combinations = {}
-        self.reverse_combinations = []
-        self.label_count = None
+        self.unique_combinations_ = {}
+        self.reverse_combinations_ = []
+        self._label_count = None
 
     def fit(self, X, y):
-        """Fit classifier with training data
-
-        Internally this method uses a sparse CSR representation
-        (:class:`scipy.sparse.csr_matrix`) of the X matrix and
-        a sparse LIL representation (:class:`scipy.sparse.lil_matrix`).
+        """Fits classifier to training data
 
         Parameters
         ----------
-        X : numpy.ndarray or scipy.sparse
-            input features, can be a dense or sparse matrix of size
-            :code:`(n_samples, n_features)`
-        y : numpy.ndaarray or scipy.sparse {0,1}
-            binary indicator matrix with label assignments.
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
 
         Returns
         -------
-        skmultilearn.problem_transform.lp.LabelPowerset
+        self
             fitted instance of self
 
+        Notes
+        -----
+        .. note :: Input matrices are converted to sparse format internally if a numpy representation is passed
         """
         X = self.ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
@@ -72,19 +147,15 @@ class LabelPowerset(ProblemTransformationBase):
     def predict(self, X):
         """Predict labels for X
 
-        Internally this method uses a sparse CSR representation for X
-        (:class:`scipy.sparse.csr_matrix`).
-
         Parameters
         ----------
-        X : numpy.ndarray or scipy.sparse.csc_matrix
-            input features of shape :code:`(n_samples, n_features)`
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
 
         Returns
         -------
-        scipy.sparse of int
-            binary indicator matrix with label assignments with shape
-            :code:`(n_samples, n_labels)`
+        :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
         """
 
         # this will be an np.array of integers representing classes
@@ -95,29 +166,25 @@ class LabelPowerset(ProblemTransformationBase):
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
-        Internally this method uses a sparse CSR representation for X
-        (:class:`scipy.sparse.coo_matrix`).
-
         Parameters
         ----------
-        X : numpy.ndarray or scipy.sparse.csc_matrix
-            input features of shape :code:`(n_samples, n_features)`
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
 
         Returns
         -------
-        scipy.sparse of float
-            matrix with label assignment probabilities of shape
-            :code:`(n_samples, n_labels)`
+        :mod:`scipy.sparse` matrix of `float in [0.0, 1.0]`, shape=(n_samples, n_labels)
+            matrix with label assignment probabilities
         """
 
         lp_prediction = self.classifier.predict_proba(
             self.ensure_input_format(X))
         result = sparse.lil_matrix(
-            (X.shape[0], self.label_count), dtype='float')
+            (X.shape[0], self._label_count), dtype='float')
         for row in range(len(lp_prediction)):
             assignment = lp_prediction[row]
             for combination_id in range(len(assignment)):
-                for label in self.reverse_combinations[combination_id]:
+                for label in self.reverse_combinations_[combination_id]:
                     result[row, label] += assignment[combination_id]
 
         return result
@@ -130,14 +197,13 @@ class LabelPowerset(ProblemTransformationBase):
 
         Parameters
         -----------
-        y : numpy.ndarray or scipy.sparse
-            output space of shape :code:`(n_samples, n_labels)`
-            of {0,1} of a multi-label classification problem
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
 
         Returns
         -------
-        numpy.ndarray
-            a multi-class output space of size :code:`(n_samples, )`
+        numpy.ndarray of `{0, ... , n_classes-1}`, shape=(n_samples,)
+            a multi-class output space vector
 
         """
 
@@ -145,19 +211,19 @@ class LabelPowerset(ProblemTransformationBase):
             y, sparse_format='lil', enforce_sparse=True)
 
         self.clean()
-        self.label_count = y.shape[1]
+        self._label_count = y.shape[1]
 
         last_id = 0
         train_vector = []
         for labels_applied in y.rows:
             label_string = ",".join(map(str, labels_applied))
 
-            if label_string not in self.unique_combinations:
-                self.unique_combinations[label_string] = last_id
-                self.reverse_combinations.append(labels_applied)
+            if label_string not in self.unique_combinations_:
+                self.unique_combinations_[label_string] = last_id
+                self.reverse_combinations_.append(labels_applied)
                 last_id += 1
 
-            train_vector.append(self.unique_combinations[label_string])
+            train_vector.append(self.unique_combinations_[label_string])
 
         return np.array(train_vector)
 
@@ -168,22 +234,19 @@ class LabelPowerset(ProblemTransformationBase):
         problem where each label combination is a separate class.
 
         Parameters
-        ----------
-        y : numpy.ndarray
-            output space of size :code:`(n_samples,)` as transformed by
-            :meth:`transform`
-        
+        -----------
+        y : numpy.ndarray of `{0, ... , n_classes-1}`, shape=(n_samples,)
+            binary indicator matrix with label assignments
+
         Returns
         -------
-        array
-            assignments following the label combinations of the original
-            multi-label classification problem. Binary matrix of shape
-            :code:`(n_samples, n_labels)`
+        :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
         """
         n_samples = len(y)
-        result = sparse.lil_matrix((n_samples, self.label_count), dtype='i8')
+        result = sparse.lil_matrix((n_samples, self._label_count), dtype='i8')
         for row in range(n_samples):
             assignment = y[row]
-            result[row, self.reverse_combinations[assignment]] = 1
+            result[row, self.reverse_combinations_[assignment]] = 1
 
         return result

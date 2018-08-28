@@ -1,10 +1,10 @@
 """
-The :mod:`skmultilearn.problem_transform` module provides classifiers 
+The :mod:`skmultilearn.problem_transform` module provides classifiers
 that follow the problem transformation approaches to multi-label classification:
 
-- :class:`BinaryRelevance` -  treats each label as a separate single-class classification problem 
-- :class:`ClassifierChain`-  treats each label as a part of a conditioned chain of single-class classification problems
-- :class:`LabelPowerset` - treats each label combination as a separate class with one multi-class classification problem
+- :class:`~skmultilearn.problem_transform.BinaryRelevance` -  treats each label as a separate single-class classification problem
+- :class:`~skmultilearn.problem_transform.ClassifierChain`-  treats each label as a part of a conditioned chain of single-class classification problems
+- :class:`~skmultilearn.problem_transform.LabelPowerset` - treats each label combination as a separate class with one multi-class classification problem
 
 """
 
