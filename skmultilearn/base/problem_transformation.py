@@ -1,9 +1,7 @@
-import copy
 import numpy as np
 from .base import MLClassifierBase
-from ..utils import get_matrix_in_format, matrix_creation_function_for_format
+from ..utils import matrix_creation_function_for_format
 from scipy.sparse import issparse, csr_matrix
-from sklearn.base import BaseEstimator, ClassifierMixin
 
 
 class ProblemTransformationBase(MLClassifierBase):
@@ -50,7 +48,7 @@ class ProblemTransformationBase(MLClassifierBase):
             else:
                 self.require_dense = [True, True]
 
-    def ensure_multi_label_from_single_class(self, matrix, matrix_format='csr'):
+    def _ensure_multi_label_from_single_class(self, matrix, matrix_format='csr'):
         """Transform single class outputs to a 2D sparse matrix
         
         Parameters
@@ -81,12 +79,12 @@ class ProblemTransformationBase(MLClassifierBase):
                 # shape is n_samples of 1 class assignment
                 dim_1 = len(matrix)
                 dim_2 = 1
-                
+
         # not an array but 2D, probably a matrix
         elif matrix.ndim == 2:
             is_2d = True
-            dim_1=matrix.shape[0]
-            dim_2=matrix.shape[1]
+            dim_1 = matrix.shape[0]
+            dim_2 = matrix.shape[1]
 
         # what is it? 
         else:
