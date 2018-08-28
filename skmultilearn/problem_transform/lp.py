@@ -109,9 +109,9 @@ class LabelPowerset(ProblemTransformationBase):
     def __init__(self, classifier=None, require_dense=None):
         super(LabelPowerset, self).__init__(
             classifier=classifier, require_dense=require_dense)
-        self.clean()
+        self._clean()
 
-    def clean(self):
+    def _clean(self):
         """Reset classifier internals before refitting"""
         self.unique_combinations_ = {}
         self.reverse_combinations_ = []
@@ -136,10 +136,10 @@ class LabelPowerset(ProblemTransformationBase):
         -----
         .. note :: Input matrices are converted to sparse format internally if a numpy representation is passed
         """
-        X = self.ensure_input_format(
+        X = self._ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
 
-        self.classifier.fit(self.ensure_input_format(X),
+        self.classifier.fit(self._ensure_input_format(X),
                             self.transform(y))
 
         return self
@@ -159,7 +159,7 @@ class LabelPowerset(ProblemTransformationBase):
         """
 
         # this will be an np.array of integers representing classes
-        lp_prediction = self.classifier.predict(self.ensure_input_format(X))
+        lp_prediction = self.classifier.predict(self._ensure_input_format(X))
 
         return self.inverse_transform(lp_prediction)
 
@@ -178,7 +178,7 @@ class LabelPowerset(ProblemTransformationBase):
         """
 
         lp_prediction = self.classifier.predict_proba(
-            self.ensure_input_format(X))
+            self._ensure_input_format(X))
         result = sparse.lil_matrix(
             (X.shape[0], self._label_count), dtype='float')
         for row in range(len(lp_prediction)):
@@ -207,10 +207,10 @@ class LabelPowerset(ProblemTransformationBase):
 
         """
 
-        y = self.ensure_output_format(
+        y = self._ensure_output_format(
             y, sparse_format='lil', enforce_sparse=True)
 
-        self.clean()
+        self._clean()
         self._label_count = y.shape[1]
 
         last_id = 0

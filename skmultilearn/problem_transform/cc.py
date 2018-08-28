@@ -136,18 +136,18 @@ class ClassifierChain(ProblemTransformationBase):
         # fit L = len(y[0]) BR classifiers h_i
         # on X + y[:i] as input space and y[i+1] as output
 
-        X_extended = self.ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
-        y = self.ensure_output_format(y, sparse_format='csc', enforce_sparse=True)
+        X_extended = self._ensure_input_format(X, sparse_format='csc', enforce_sparse=True)
+        y = self._ensure_output_format(y, sparse_format='csc', enforce_sparse=True)
 
         self._label_count = y.shape[1]
         self.classifiers_ = [None for x in range(self._label_count)]
 
         for label in range(self._label_count):
             self.classifier = copy.deepcopy(self.classifier)
-            y_subset = self.generate_data_subset(y, label, axis=1)
+            y_subset = self._generate_data_subset(y, label, axis=1)
 
-            self.classifiers_[label] = self.classifier.fit(self.ensure_input_format(
-                X_extended), self.ensure_output_format(y_subset))
+            self.classifiers_[label] = self.classifier.fit(self._ensure_input_format(
+                X_extended), self._ensure_output_format(y_subset))
             X_extended = hstack([X_extended, y_subset])
 
         return self
@@ -166,13 +166,13 @@ class ClassifierChain(ProblemTransformationBase):
             binary indicator matrix with label assignments
         """
 
-        X_extended = self.ensure_input_format(
+        X_extended = self._ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
 
         for label in range(self._label_count):
             prediction = self.classifiers_[label].predict(
-                self.ensure_input_format(X_extended))
-            prediction = self.ensure_multi_label_from_single_class(prediction)
+                self._ensure_input_format(X_extended))
+            prediction = self._ensure_multi_label_from_single_class(prediction)
             X_extended = hstack([X_extended, prediction])
         return X_extended[:, -self._label_count:]
 
@@ -189,21 +189,21 @@ class ClassifierChain(ProblemTransformationBase):
         :mod:`scipy.sparse` matrix of `float in [0.0, 1.0]`, shape=(n_samples, n_labels)
             matrix with label assignment probabilities
         """
-        X_extended = self.ensure_input_format(
+        X_extended = self._ensure_input_format(
             X, sparse_format='csc', enforce_sparse=True)
 
         results = []
         for label in range(self._label_count):
             prediction = self.classifiers_[label].predict(
-                self.ensure_input_format(X_extended))
+                self._ensure_input_format(X_extended))
 
-            prediction = self.ensure_output_format(
+            prediction = self._ensure_output_format(
                 prediction, sparse_format='csc', enforce_sparse=True)
 
             prediction_proba = self.classifiers_[label].predict_proba(
-                self.ensure_input_format(X_extended))
+                self._ensure_input_format(X_extended))
 
-            prediction_proba = self.ensure_output_format(
+            prediction_proba = self._ensure_output_format(
                 prediction_proba, sparse_format='csc', enforce_sparse=True)[:, 1]
 
             X_extended = hstack([X_extended, prediction]).tocsc()
