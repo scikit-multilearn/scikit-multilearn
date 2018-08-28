@@ -89,7 +89,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=True)
 
         X = np.zeros((2, 3))
-        ensured_X = classifier.ensure_input_format(X)
+        ensured_X = classifier._ensure_input_format(X)
 
         self.assertTrue(not sp.issparse(ensured_X))
         self.dense_and_dense_matrices_are_the_same(X, ensured_X)
@@ -98,7 +98,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=True)
 
         X = sp.csr_matrix(np.zeros((2, 3)))
-        ensured_X = classifier.ensure_input_format(X)
+        ensured_X = classifier._ensure_input_format(X)
 
         self.assertTrue(not sp.issparse(ensured_X))
         self.dense_and_sparse_matrices_are_the_same(ensured_X, X)
@@ -107,7 +107,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=False)
 
         X = np.zeros((2, 3))
-        ensured_X = classifier.ensure_input_format(X)
+        ensured_X = classifier._ensure_input_format(X)
 
         self.assertTrue(sp.issparse(ensured_X))
         self.dense_and_sparse_matrices_are_the_same(X, ensured_X)
@@ -116,7 +116,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=False)
 
         X = sp.csr_matrix(np.zeros((2, 3)))
-        ensured_X = classifier.ensure_input_format(X)
+        ensured_X = classifier._ensure_input_format(X)
 
         self.assertTrue(sp.issparse(ensured_X))
         self.sparse_and_sparse_matrices_are_the_same(X, ensured_X)
@@ -126,7 +126,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=require_dense)
 
             X = np.zeros((2, 3))
-            ensured_X = classifier.ensure_input_format(X, enforce_sparse=True)
+            ensured_X = classifier._ensure_input_format(X, enforce_sparse=True)
 
             self.assertTrue(sp.issparse(ensured_X))
             self.dense_and_sparse_matrices_are_the_same(X, ensured_X)
@@ -136,7 +136,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=require_dense)
 
             X = sp.csr_matrix(np.zeros((2, 3)))
-            ensured_X = classifier.ensure_input_format(X, enforce_sparse=True)
+            ensured_X = classifier._ensure_input_format(X, enforce_sparse=True)
 
             self.assertTrue(sp.issparse(ensured_X))
             self.sparse_and_sparse_matrices_are_the_same(X, ensured_X)
@@ -148,7 +148,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
                     require_dense=require_dense)
 
                 X = np.zeros((2, 3))
-                ensured_X = classifier.ensure_input_format(
+                ensured_X = classifier._ensure_input_format(
                     X, sparse_format=sparse_format, enforce_sparse=True)
 
                 self.assertTrue(sp.issparse(ensured_X))
@@ -159,7 +159,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=False)
 
             X = np.zeros((2, 3))
-            ensured_X = classifier.ensure_input_format(
+            ensured_X = classifier._ensure_input_format(
                 X, sparse_format=sparse_format)
 
             self.assertTrue(sp.issparse(ensured_X))
@@ -169,7 +169,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=True)
 
         y = np.zeros((2, 3))
-        ensured_y = classifier.ensure_output_format(y)
+        ensured_y = classifier._ensure_output_format(y)
 
         self.assertTrue(not sp.issparse(ensured_y))
         self.ensure_output_spaces_contain_the_same_data(y, ensured_y)
@@ -178,7 +178,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=True)
 
         y = sp.csr_matrix(np.zeros((2, 3)))
-        ensured_y = classifier.ensure_output_format(y)
+        ensured_y = classifier._ensure_output_format(y)
 
         self.assertTrue(not sp.issparse(ensured_y))
         self.dense_and_sparse_matrices_are_the_same(ensured_y, y)
@@ -187,7 +187,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=False)
 
         y = np.zeros((2, 3))
-        ensured_y = classifier.ensure_output_format(y)
+        ensured_y = classifier._ensure_output_format(y)
 
         self.assertTrue(sp.issparse(ensured_y))
         self.dense_and_sparse_matrices_are_the_same(y, ensured_y)
@@ -196,7 +196,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         classifier = ProblemTransformationBase(require_dense=False)
 
         y = sp.csr_matrix(np.zeros((2, 3)))
-        ensured_y = classifier.ensure_output_format(y)
+        ensured_y = classifier._ensure_output_format(y)
 
         self.assertTrue(sp.issparse(ensured_y))
         self.sparse_and_sparse_matrices_are_the_same(y, ensured_y)
@@ -206,7 +206,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=require_dense)
 
             y = np.zeros((2, 3))
-            ensured_y = classifier.ensure_output_format(y, enforce_sparse=True)
+            ensured_y = classifier._ensure_output_format(y, enforce_sparse=True)
 
             self.assertTrue(sp.issparse(ensured_y))
             self.dense_and_sparse_matrices_are_the_same(y, ensured_y)
@@ -216,7 +216,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=require_dense)
 
             y = sp.csr_matrix(np.zeros((2, 3)))
-            ensured_y = classifier.ensure_output_format(y, enforce_sparse=True)
+            ensured_y = classifier._ensure_output_format(y, enforce_sparse=True)
 
             self.assertTrue(sp.issparse(ensured_y))
             self.sparse_and_sparse_matrices_are_the_same(y, ensured_y)
@@ -228,7 +228,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
                     require_dense=require_dense)
 
                 y = np.zeros((2, 3))
-                ensured_y = classifier.ensure_output_format(
+                ensured_y = classifier._ensure_output_format(
                     y, sparse_format=sparse_format, enforce_sparse=True)
 
                 self.assertTrue(sp.issparse(ensured_y))
@@ -239,7 +239,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=False)
 
             y = np.zeros((2, 3))
-            ensured_y = classifier.ensure_output_format(
+            ensured_y = classifier._ensure_output_format(
                 y, sparse_format=sparse_format)
 
             self.assertTrue(sp.issparse(ensured_y))
@@ -254,7 +254,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             if input_sparse:
                 y_single = sp.csr_matrix(y_single)
 
-            ensured_y_single = classifier.ensure_output_format(y_single)
+            ensured_y_single = classifier._ensure_output_format(y_single)
 
             self.assertIsInstance(ensured_y_single, np.ndarray)
             self.assertEqual(len(ensured_y_single.shape), 1)
