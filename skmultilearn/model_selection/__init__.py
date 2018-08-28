@@ -1,4 +1,4 @@
-from .iterative_stratification import IterativeStratification
+from .iterative_stratification import IterativeStratification, iterative_train_test_split
 from .measures import (
     example_distribution,
     label_combination_distribution,
