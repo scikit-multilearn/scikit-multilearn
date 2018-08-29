@@ -108,9 +108,9 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
         """
         X = self._ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
-        result = sparse.lil_matrix((X.shape[0], self.label_count), dtype=int)
+        result = sparse.lil_matrix((X.shape[0], self._label_count), dtype=int)
 
-        for model in range(self.model_count):
+        for model in range(self.model_count_):
             predictions = self._ensure_output_format(self.classifiers_[model].predict(
                 X), sparse_format=None, enforce_sparse=True).nonzero()
             for row, column in zip(predictions[0], predictions[1]):
