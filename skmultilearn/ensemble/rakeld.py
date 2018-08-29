@@ -82,6 +82,8 @@ class RakelD(MLClassifierBase):
     """
 
     def __init__(self, base_classifier=None, labelset_size=None, base_classifier_require_dense=None):
+        super(RakelD, self).__init__()
+
         self.labelset_size = labelset_size
         self.base_classifier = base_classifier
         self.base_classifier_require_dense = base_classifier_require_dense
@@ -104,7 +106,7 @@ class RakelD(MLClassifierBase):
         fitted instance of self
         """
         self._label_count = y.shape[1]
-        self.model_count_ = int(np.ceil(self.label_count / self.labelset_size))
+        self.model_count_ = int(np.ceil(self._label_count / self.labelset_size))
         self.classifier_ = LabelSpacePartitioningClassifier(
             classifier=LabelPowerset(
                 classifier=self.base_classifier,

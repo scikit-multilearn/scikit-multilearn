@@ -3,8 +3,8 @@ import sys
 
 # no graphtool on win32 and no available package for osx built with python2
 if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[0] == 2):
-    from skmultilearn.cluster import GraphToolCooccurenceClusterer
-    from skmultilearn.cluster.base import LabelCooccurenceGraphBuilder
+    from skmultilearn.cluster import GraphToolLabelGraphClusterer
+    from skmultilearn.cluster.base import LabelCooccurrenceGraphBuilder
     from skmultilearn.cluster.graphtool import StochasticBlockModel
     from skmultilearn.tests.example import EXAMPLE_X, EXAMPLE_y
 
@@ -18,13 +18,13 @@ if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[
                                      'discrete-geometric', 'discrete-binomial',
                                      'discrete-poisson']:
                     sbm = StochasticBlockModel(nested, degree_correlation, False, weight_model)
-                    bld = LabelCooccurenceGraphBuilder(weighted=weight_model is not None,
-                                                       include_self_edges=False,
-                                                       normalize_self_edges=False)
-                    clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
+                    bld = LabelCooccurrenceGraphBuilder(weighted=weight_model is not None,
+                                                        include_self_edges=False,
+                                                        normalize_self_edges=False)
+                    clf = GraphToolLabelGraphClusterer(graph_builder=bld, model=sbm)
                     yield clf
 
-    @pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
+    @pytest.mark.skipif(sys.platform == 'win32', reason="does not _run on windows")
     @pytest.mark.parametrize("nested,degree_correlation,allow_overlap,weight_model", [
         (True, True, True, None),
         (True, True, True, 'real-exponential'),
@@ -53,8 +53,8 @@ if (sys.platform != 'win32') and (sys.platform != 'darwin' and sys.version_info[
     ])
     def test_that_graph_tool_clusterer_works(nested, degree_correlation, allow_overlap, weight_model):
         sbm = StochasticBlockModel(nested, degree_correlation, allow_overlap, weight_model)
-        bld = LabelCooccurenceGraphBuilder(weighted=True, include_self_edges=False, normalize_self_edges=False)
-        clf = GraphToolCooccurenceClusterer(graph_builder=bld, model=sbm)
+        bld = LabelCooccurrenceGraphBuilder(weighted=True, include_self_edges=False, normalize_self_edges=False)
+        clf = GraphToolLabelGraphClusterer(graph_builder=bld, model=sbm)
         X, y = sparse.csr_matrix(EXAMPLE_X), sparse.csr_matrix(EXAMPLE_y)
         division = clf.fit_predict(X, y)
         for label in range(y.shape[1]):

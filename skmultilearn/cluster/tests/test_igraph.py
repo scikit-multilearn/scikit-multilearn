@@ -3,23 +3,23 @@ import scipy.sparse as sp
 import sys
 
 if sys.platform != 'win32':
-    from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
+    from skmultilearn.cluster import IGraphLabelGraphClusterer
     from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
     from .test_base import supported_graphbuilder_generator
 
 
     def get_igraph_clusterers():
         for graph in supported_graphbuilder_generator():
-            for method in IGraphLabelCooccurenceClusterer.METHODS.keys():
-                yield IGraphLabelCooccurenceClusterer(graph_builder=graph, method=method), method
+            for method in IGraphLabelGraphClusterer._METHODS.keys():
+                yield IGraphLabelGraphClusterer(graph_builder=graph, method=method), method
 
 
     class IGraphClustererBaseTests(ClassifierBaseTest):
 
         def test_unsupported_methods_raise_exception(self):
-            assert 'foobar' not in IGraphLabelCooccurenceClusterer.METHODS
+            assert 'foobar' not in IGraphLabelGraphClusterer._METHODS
             self.assertRaises(
-                ValueError, IGraphLabelCooccurenceClusterer, 'foobar', False)
+                ValueError, IGraphLabelGraphClusterer, 'foobar', False)
 
         def test_actually_works_on_proper_params(self):
             for X, y in self.get_multilabel_data_for_tests('sparse'):

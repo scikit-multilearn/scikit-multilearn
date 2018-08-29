@@ -79,6 +79,8 @@ class RakelO(MLClassifierBase):
     """
 
     def __init__(self, base_classifier=None, model_count=None, labelset_size=None, base_classifier_require_dense=None):
+        super(RakelO, self).__init__()
+
         self.model_count = model_count
         self.labelset_size = labelset_size
         self.base_classifier = base_classifier

@@ -3,56 +3,49 @@ from __future__ import print_function
 
 import graph_tool.all as gt
 import numpy as np
-from builtins import range
 
-from .base import LabelSpaceNetworkClustererBase
+from .base import LabelGraphClustererBase
 from .helpers import _membership_to_list_of_communities, _overlapping_membership_to_list_of_communities
 
 class StochasticBlockModel:
-    """Stochastic Block Model estimator and state container
+    """A Stochastic Blockmodel fit to Label Graph
 
-    An extensive introduction into SBMs can be found in https://graph-tool.skewed.de/static/doc/demos/inference/inference.html
+    This contains a stochastic block model instance constructed for a block model variant specified in parameters.
+    It can be fit to an instance of a graph and set of weights_. More information on how to select parameters can be
+    found in `the extensive introduction into Stochastic Block Models
+    <https://graph-tool.skewed.de/static/doc/demos/inference/inference.html>`_ in graphtool documentation.
+
+    Parameters
+    ----------
+    nested: boolean
+        whether to build a nested Stochastic Block Model or the regular variant,
+        will be automatically put under :code:`self.nested`.
+    use_degree_correlation: boolean
+        whether to correct for degree correlation in modeling, will be automatically
+        put under :code:`self.use_degree_correlation`.
+    allow_overlap: boolean
+        whether to allow overlapping clusters or not, will be automatically
+        put under :code:`self.allow_overlap`.
+    weight_model: string or None
+        decide whether to generate a weighted or unweighted graph,
+        will be automatically put under :code:`self.weight_model`.
+
+    Attributes
+    ----------
+    model_: graph_tool.inference.BlockState or its subclass
+        an instance of the fitted model obtained from graph-tool
     """
     def __init__(self, nested, use_degree_correlation, allow_overlap, weight_model):
-        """
-
-        Attributes
-        ----------
-        nested: boolean
-            whether to build a nested Stochastic Block Model or the regular variant,
-            will be automatically put under :code:`self.nested`.
-        use_degree_correlation: boolean
-            whether to correct for degree correlation in modeling, will be automatically
-            put under :code:`self.use_degree_correlation`.
-        allow_overlap: boolean
-            whether to allow overlapping clusters or not, will be automatically
-            put under :code:`self.allow_overlap`.
-        weight_model: string or None
-            decide whether to generate a weighted or unweighted graph,
-            will be automatically put under :code:`self.weight_model`.
-        """
         self.nested = nested
         self.use_degree_correlation = use_degree_correlation
         self.allow_overlap = allow_overlap
         self.weight_model = weight_model
-        self._state = None
+        self.model_ = None
 
-    def model(self):
-        """
-        Returns
-        -------
-        Callable
-            relevant graph-tool's model construction function nested SBM or not
-        """
-        if self.nested:
-            return gt.minimize_nested_blockmodel_dl
-        else:
-            return gt.minimize_blockmodel_dl
-
-    def fit(self, graph, weights):
+    def fit_predict(self, graph, weights):
         """Fits model to a given graph and weights list
 
-        Sets :code:`self._state` to the state of the model after fitting.
+        Sets :code:`self.model_` to the state of graphtool's Stochastic Block Model the after fitting.
 
         Attributes
         ----------
@@ -64,11 +57,12 @@ class StochasticBlockModel:
 
         Returns
         -------
-        self
-            the fitted StochasticBlockModel
+        numpy.ndarray
+            partition_ of labels, each sublist contains label indices
+            related to label positions in :code:`y`
         """
         if self.weight_model:
-            self._state = self.model()(
+            self.model_ = self._model_fit_function()(
                 graph,
                 deg_corr=self.use_degree_correlation,
                 overlap=self.allow_overlap,
@@ -76,36 +70,18 @@ class StochasticBlockModel:
                                 rec_types=[self.weight_model])
             )
         else:
-            self._state = self.model()(
+            self.model_ = self._model_fit_function()(
                 graph,
                 deg_corr=self.use_degree_correlation,
                 overlap=self.allow_overlap
             )
-        return self
+        return self._detect_communities()
 
-    def entropy(self):
-        """Returns the entropy of the fit model
-
-        Returns
-        -------
-        float
-            Entropy
-        """
-        return self._state.entropy()
-
-    def communities(self):
-        """ Communities
-
-        Returns
-        -------
-        numpy.ndarray
-            partition of labels, each sublist contains label indices
-            related to label positions in :code:`y`
-        """
+    def _detect_communities(self):
         if self.nested:
-            lowest_level = self._state.get_levels()[0]
+            lowest_level = self.model_.get_levels()[0]
         else:
-            lowest_level = self._state
+            lowest_level = self.model_
 
         number_of_communities = lowest_level.get_B()
         if self.allow_overlap:
@@ -120,90 +96,160 @@ class StochasticBlockModel:
 
         return _membership_to_list_of_communities(membership_vector, number_of_communities)
 
+    def _model_fit_function(self):
+        if self.nested:
+            return gt.minimize_nested_blockmodel_dl
+        else:
+            return gt.minimize_blockmodel_dl
 
-class GraphToolCooccurenceClusterer(LabelSpaceNetworkClustererBase):
-    """Clusters the label space using graph tool's stochastic block
-    modelling community detection method"""
+
+class GraphToolLabelGraphClusterer(LabelGraphClustererBase):
+    """Fits a Stochastic Block Model to the Label Graph and infers the communities
+
+    This clusterer clusters the label space using by fitting a stochastic block
+    model to the label network and inferring the community structure using graph-tool.
+    The obtained community structure is returned as the label clustering. More information on the inference itself
+    can be found in `the extensive introduction into Stochastic Block Models
+    <https://graph-tool.skewed.de/static/doc/demos/inference/inference.html>`_ in graphtool documentation.
+
+    Parameters
+    ----------
+    graph_builder: a GraphBuilderBase inherited transformer
+        the graph builder to provide the adjacency matrix and weight map for the underlying graph
+    model: StochasticBlockModel
+        the desired stochastic block model variant to use
+
+
+    Attributes
+    ----------
+    graph_ : graphtool.Graph
+        object representing a label co-occurence graph
+    weights_ : graphtool.EdgeProperty<double>
+        edge weights_ defined by graph builder stored in a graphtool compatible format
+
+
+    .. note ::
+
+        This functionality is still undergoing research.
+
+
+    .. note ::
+
+        This clusterer is GPL-licenced and will taint your code with GPL restrictions.
+
+
+
+    References
+    ----------
+
+    If you use this class please cite:
+
+    .. code : latex
+
+        article{peixoto_graph-tool_2014,
+         title = {The graph-tool python library},
+         url = {http://figshare.com/articles/graph_tool/1164194},
+         doi = {10.6084/m9.figshare.1164194},
+         urldate = {2014-09-10},
+         journal = {figshare},
+         author = {Peixoto, Tiago P.},
+         year = {2014},
+         keywords = {all, complex networks, graph, network, other}}
+
+
+    Examples
+    --------
+
+    An example code for using this clusterer with a classifier looks like this:
+
+    .. code-block:: python
+
+        from sklearn.ensemble import RandomForestClassifier
+        from skmultilearn.problem_transform import LabelPowerset
+        from skmultilearn.cluster import IGraphLabelGraphClusterer, LabelCooccurrenceGraphBuilder
+        from skmultilearn.ensemble import LabelSpacePartitioningClassifier
+
+        # construct base forest classifier
+        base_classifier = RandomForestClassifier(n_estimators=1000)
+
+        # construct a graph builder that will include
+        # label relations weighted by how many times they
+        # co-occurred in the data, without self-edges
+        graph_builder = LabelCooccurrenceGraphBuilder(
+            weighted = True,
+            include_self_edges = False
+        )
+
+        # select parameters for the model, we fit a flat,
+        # non-degree correlated, partitioning model
+        # which will use fit the normal distribution as the weights model
+        model = StochasticBlockModel(
+            nested=False,
+            use_degree_correlation=True,
+            allow_overlap=False,
+            weight_model='real-normal'
+        )
+
+        # setup problem transformation approach with sparse matrices for random forest
+        problem_transform_classifier = LabelPowerset(classifier=base_classifier,
+            require_dense=[False, False])
+
+        # setup the clusterer to use, we selected the fast greedy modularity-maximization approach
+        clusterer = GraphToolLabelGraphClusterer(graph_builder=graph_builder, model=model)
+
+        # setup the ensemble metaclassifier
+        classifier = LabelSpacePartitioningClassifier(problem_transform_classifier, clusterer)
+
+        # train
+        classifier.fit(X_train, y_train)
+
+        # predict
+        predictions = classifier.predict(X_test)
+
+    For more use cases see `the label relations exploration guide <../labelrelations.ipynb>`_.
+
+    """
 
     def __init__(self, graph_builder, model):
-        """Initializes the clusterer
-
-        Attributes
-        ----------
-        graph_builder: a GraphBuilderBase inherited transformer
-            the graph builder to provide the adjacency matrix and weight map for the underlying graph
-        model: StochasticBlockModel
-            the desired stochastic block model variant to use
-        """
-        super(GraphToolCooccurenceClusterer, self).__init__(graph_builder)
+        super(GraphToolLabelGraphClusterer, self).__init__(graph_builder)
 
         self.model = model
         self.graph_builder = graph_builder
 
-    def build_graph_instance(self, y):
-        """Constructs the label coocurence graph
-
-        This function constructs a graph-tool :py:class:`graphtool.Graph`
-        object representing the label co-occurence graph. Run after
-        :code:`self.edge_map` has been populated using
-        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
-        on `y` in `fit_predict`.
-
-        The graph is available as self.coocurence_graph, and a weight
-        `double` graphtool.PropertyMap on edges is set as self.weights.
-
-        Edge weights are all 1.0 if self.weighted is False, otherwise
-        they contain the number of samples that are labelled with the
-        two labels present in the edge.
-
-        Returns
-        -------
-        g : graphtool.Graph
-            object representing a label co-occurence graph
-        """
-
-        edge_map = self.graph_builder.transform(y)
-
-        g = gt.Graph(directed=False)
-        g.add_vertex(y.shape[1])
-
-        self.weights = g.new_edge_property('double')
-
-        for edge, weight in edge_map.items():
-            e = g.add_edge(edge[0], edge[1])
-            self.weights[e] = weight
-
-        self.coocurence_graph = g
-
-        return g
-
     def fit_predict(self, X, y):
-        """ Performs clustering on y and returns list of label lists
+        """Performs clustering on y and returns list of label lists
 
-        Builds a label coocurence_graph using 
-        :func:`LabelCooccurenceClustererBase.generate_coocurence_adjacency_matrix`
-        on `y` and then detects communities using graph tool's
-        stochastic block modeling.
+        Builds a label graph using the provided graph builder's `transform` method
+        on `y` and then detects communities using the selected `method`.
 
+        Sets :code:`self.weights_` and :code:`self.graph_`.
 
         Parameters
         ----------
-        X : scipy.sparse 
-            feature space of shape :code:`(n_samples, n_features)`
+        X : None
+            currently unused, left for scikit compatibility
         y : scipy.sparse
             label space of shape :code:`(n_samples, n_labels)`
 
         Returns
         -------
-        list of lists
-            list of lists label indexes, each sublist represents labels
-            that are in that community
+        arrray of arrays of label indexes (numpy.ndarray)
+            label space division, each sublist represents labels that are in that community
         """
-        self.label_count = y.shape[1]
-        self.build_graph_instance(y)
-        self.model.fit(self.coocurence_graph, weights=self.weights)
+        self._build_graph_instance(y)
+        clusters = self.model.fit_predict(self.graph_, weights=self.weights_)
+        return np.array([community for community in clusters if len(community) > 0])
 
-        self.label_sets = [community for community in self.model.communities() if len(community) > 0]
-        self.model_count = len(self.label_sets)
+    def _build_graph_instance(self, y):
+        edge_map = self.graph_builder.transform(y)
 
-        return np.array(self.label_sets)
+        g = gt.Graph(directed=False)
+        g.add_vertex(y.shape[1])
+
+        self.weights_ = g.new_edge_property('double')
+
+        for edge, weight in edge_map.items():
+            e = g.add_edge(edge[0], edge[1])
+            self.weights_[e] = weight
+
+        self.graph_ = g

@@ -2,18 +2,19 @@ from __future__ import absolute_import
 from .base import LabelSpaceClustererBase
 
 class FixedLabelSpaceClusterer(LabelSpaceClustererBase):
-    """Return a fixed label space partition
+    """Return a fixed label space partition_
 
     This clusterer takes a predefined fixed ``clustering`` of the label space and returns it in fit_predict as the label
     space division. This is useful for employing expert knowledge about label space division or partitions in ensemble
-    classifiers such as: :class:`LabelSpacePartitioningClassifier` or :class:`MajorityVotingClassifier`.
+    classifiers such as: :class:`~skmultilearn.ensemble.LabelSpacePartitioningClassifier` or
+    :class:`~skmultilearn.ensemble.MajorityVotingClassifier`.
 
-    Attributes
+    Parameters
     ----------
-    clusters: array of arrays of int from range(0, label_count)
-        provided partition of the label space in the for of numpy array of
-        numpy arrays of indexes for each partition, will be
-        automatically put under :code:`self.cluster`
+    clusters : array of arrays of int
+        provided partition_ of the label space in the for of numpy array of
+        numpy arrays of indexes for each partition_, ex. ``[[0,1],[2,3]]``
+
 
     An example use of the fixed clusterer with a label partitioning classifier to train randomforests for a set of
     subproblems defined upon expert knowledge:
@@ -50,11 +51,17 @@ class FixedLabelSpaceClusterer(LabelSpaceClustererBase):
     def fit_predict(self, X, y):
         """Returns the provided label space division
 
+        Parameters
+        ----------
+        X : None
+            currently unused, left for scikit compatibility
+        y : scipy.sparse
+            label space of shape :code:`(n_samples, n_labels)`
+
         Returns
         -------
-        numpy.ndarray
-            partition of labels, each sublist contains label indices
-            related to label positions in :code:`y`
+        arrray of arrays of label indexes (numpy.ndarray)
+            label space division, each sublist represents labels that are in that community
         """
 
         return self.clusters
