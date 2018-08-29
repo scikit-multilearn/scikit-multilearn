@@ -46,7 +46,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
     References
     ----------
 
-    If you use this clusterer please cite the igraph paper and the clustering paper:
+    If you use this clusterer please cite the clustering paper:
 
     .. code:: latex
 
