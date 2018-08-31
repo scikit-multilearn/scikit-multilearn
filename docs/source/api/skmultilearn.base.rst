@@ -1,36 +1,24 @@
-skmultilearn.base package
-=========================
+skmultilearn\.base package
+==========================
 
 .. automodule:: skmultilearn.base
     :members:
     :undoc-members:
     :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+
+    skmultilearn.base.tests
+
 Submodules
 ----------
 
-skmultilearn.base.base module
------------------------------
+.. toctree::
 
-.. automodule:: skmultilearn.base.base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.base.mock module
------------------------------
-
-.. automodule:: skmultilearn.base.mock
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.base.problem_transformation module
------------------------------------------------
-
-.. automodule:: skmultilearn.base.problem_transformation
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   skmultilearn.base.base
+   skmultilearn.base.mock
+   skmultilearn.base.problem_transformation
 

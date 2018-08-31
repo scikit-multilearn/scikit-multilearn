@@ -1,5 +1,5 @@
-skmultilearn.cluster package
-============================
+Label space clustering methods
+==============================
 
 .. automodule:: skmultilearn.cluster
     :members:
@@ -9,36 +9,13 @@ skmultilearn.cluster package
 Submodules
 ----------
 
-skmultilearn.cluster.base module
---------------------------------
+.. toctree::
 
-.. automodule:: skmultilearn.cluster.base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.cluster.graphtool module
--------------------------------------
-
-.. automodule:: skmultilearn.cluster.graphtool
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.cluster.igraph module
-----------------------------------
-
-.. automodule:: skmultilearn.cluster.igraph
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-skmultilearn.cluster.matrix module
-----------------------------------
-
-.. automodule:: skmultilearn.cluster.matrix
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   skmultilearn.cluster.base
+   skmultilearn.cluster.graphtool
+   skmultilearn.cluster.helpers
+   skmultilearn.cluster.igraph
+   skmultilearn.cluster.matrix
+   skmultilearn.cluster.networkx
+   skmultilearn.cluster.random
 
