@@ -1,7 +1,7 @@
 import unittest
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from ..tests.example import EXAMPLE_X, EXAMPLE_y
+from ...tests.example import EXAMPLE_X, EXAMPLE_y
 
 from skmultilearn.problem_transform import ClassifierChain
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
