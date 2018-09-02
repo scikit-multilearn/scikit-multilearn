@@ -2,7 +2,16 @@
 The :mod:`skmultilearn.ext` provides wrappers for other multi-label
 classification libraries. Currently it provides a wrapper for:
 
-- :class:`Meka` - the Multilabel Extension to WEKA - `MEKA <http://meka.sf.net>`_ library and through it to `MULAN <http://mulan.sf.net>`_ by Tsoumakas. et. al.
+Currently the available classes include:
+
++--------------------------------------------+------------------------------------------------------------------+
+| Name                                       | Description                                                      |
++============================================+==================================================================+
+| :class:`~skmultilearn.ext.Meka`            | Wrapper for the Multilabel Extension to WEKA -                   |
+|                                            | `MEKA <http://meka.sf.net>`_ library                             |
++--------------------------------------------+------------------------------------------------------------------+
+| :func:`~skmultilearn.ext.download_meka`    | Helper function for installing MEKA                              |
++--------------------------------------------+------------------------------------------------------------------+
 
 """
 
