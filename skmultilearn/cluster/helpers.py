@@ -5,9 +5,9 @@ def _membership_to_list_of_communities(membership_vector, size):
     ----------
     membership_vector : list of int
         community membership i.e. vertex/label `i` is in community `membership_vector[i]`
-
     size : int
         the number of communities present in the membership vector
+
 
     Returns
     -------
@@ -27,9 +27,9 @@ def _overlapping_membership_to_list_of_communities(membership_vector, size):
     membership_vector : list of lists of int
         community membership i.e. vertex/label `i` is in communities
         from list `membership_vector[i]`
-
     size : int
         the number of communities present in the membership vector
+
 
     Returns
     -------

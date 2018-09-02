@@ -1,5 +1,5 @@
-skmultilearn.ext package
-========================
+skmultilearn\.ext package
+=========================
 
 .. automodule:: skmultilearn.ext
     :members:
@@ -9,12 +9,7 @@ skmultilearn.ext package
 Submodules
 ----------
 
-skmultilearn.ext.meka module
-----------------------------
+.. toctree::
 
-.. automodule:: skmultilearn.ext.meka
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   skmultilearn.ext.meka
 

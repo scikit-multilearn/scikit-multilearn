@@ -67,7 +67,7 @@ def get_combination_wise_output_matrix(y, order):
                          it.combinations_with_replacement(get_indicator_representation(row), order)) for row in y])
 
 
-def get_unique_combinatinos(combinations_per_row):
+def get_unique_combinations(combinations_per_row):
     """Performs set.union on a list of sets
 
     Parameters
@@ -108,8 +108,8 @@ def folds_without_evidence_for_at_least_one_label_combination(y, folds, order=1)
         the number of folds with missing evidence for at least one label combination
     """
     combinations_per_row = get_combination_wise_output_matrix(y, order)
-    all_combinations = get_unique_combinatinos(combinations_per_row)
-    return np.sum([get_unique_combinatinos(combinations_per_row[[fold]]) != all_combinations for fold in folds])
+    all_combinations = get_unique_combinations(combinations_per_row)
+    return np.sum([get_unique_combinations(combinations_per_row[[fold]]) != all_combinations for fold in folds])
 
 
 def folds_label_combination_pairs_without_evidence(y, folds, order):
@@ -137,9 +137,9 @@ def folds_label_combination_pairs_without_evidence(y, folds, order):
         the number of fold-label combination pairs with missing evidence
     """
     combinations_per_row = get_combination_wise_output_matrix(y, order)
-    all_combinations = get_unique_combinatinos(combinations_per_row)
+    all_combinations = get_unique_combinations(combinations_per_row)
     return np.sum(
-        [len(all_combinations.difference(get_unique_combinatinos(combinations_per_row[[fold]]))) for fold in folds])
+        [len(all_combinations.difference(get_unique_combinations(combinations_per_row[[fold]]))) for fold in folds])
 
 
 def percentage_of_label_combinations_without_evidence_per_fold(y, folds, order):
@@ -167,10 +167,10 @@ def percentage_of_label_combinations_without_evidence_per_fold(y, folds, order):
         the number of fold-label combination pairs with missing evidence
     """
     combinations_per_row = get_combination_wise_output_matrix(y, order)
-    all_combinations = get_unique_combinatinos(combinations_per_row)
+    all_combinations = get_unique_combinations(combinations_per_row)
     number_of_combinations = float(len(all_combinations))
     return [
-        1.0 - len(get_unique_combinatinos(combinations_per_row[[fold]])) / number_of_combinations for fold in folds
+        1.0 - len(get_unique_combinations(combinations_per_row[[fold]])) / number_of_combinations for fold in folds
     ]
 
 
@@ -205,7 +205,7 @@ def label_combination_distribution(y, folds, order):
         return y / float(x - y)
 
     combinations_per_row = get_combination_wise_output_matrix(y, order)
-    all_combinations = get_unique_combinatinos(combinations_per_row)
+    all_combinations = get_unique_combinations(combinations_per_row)
     number_of_samples = y.shape[0]
     number_of_combinations = float(len(all_combinations))
     number_of_folds = float(len(folds))

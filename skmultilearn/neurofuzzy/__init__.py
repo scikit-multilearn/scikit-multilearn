@@ -4,7 +4,11 @@ neural network and fuzzy approaches to multi-label classification.
 
 Currently the available classes include:
 
-- :class:`skmultilearn.neurofuzzy.MLARAMfast.MLARAM` - A Multi-Label Hierarchical ARAM Neural Network
++----------------------------------------------------+----------------------------------------------------------+
+| Name                                               | Description                                              |
++====================================================+==========================================================+
+| :class:`~skmultilearn.neurofuzzy.MLARAM`           | A Multi-Label Hierarchical ARAM Neural Network           |
++----------------------------------------------------+----------------------------------------------------------+
 
 """
 

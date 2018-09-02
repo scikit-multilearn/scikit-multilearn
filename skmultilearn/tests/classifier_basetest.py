@@ -1,6 +1,5 @@
 import unittest
 from sklearn import model_selection
-from sklearn.datasets import make_multilabel_classification
 import numpy as np
 import scipy.sparse as sparse
 from .example import EXAMPLE_X, EXAMPLE_y

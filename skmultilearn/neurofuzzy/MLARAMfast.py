@@ -1,3 +1,4 @@
+# copyright @Fernando Benites
 from builtins import object
 from builtins import range
 
@@ -9,14 +10,20 @@ from scipy.sparse import issparse
 from ..base import MLClassifierBase
 
 
-# copyright @Fernando Benites
-
-
 class Neuron(object):
+    """An implementation of a neuron for MLARAM
 
-    def __init__(self, startpoint, label):
+    Parameters
+    ----------
+    vc : array
+        neuron's assigned vector
+    label : int
+        label number
+    """
+
+    def __init__(self, vc, label):
         # vector must be in complement form
-        self.vc = startpoint
+        self.vc = vc
         self.label = label
 
 
@@ -29,6 +36,13 @@ def _get_label_vector(y, i):
         return numpy.squeeze(numpy.asarray(y[i].todense()))
     return y[i]
 
+def _concatenate_with_negation(row):
+    ones = scipy.ones(row.shape)
+    if issparse(row):
+        return scipy.sparse.hstack((row, ones - row))
+    else:
+        # concatenate and merge sublists in the row if it is matrix
+        return numpy.concatenate((row, ones - row), int(len(row.shape) != 1))
 
 def _normalize_input_space(X):
     x_max = X.max()
@@ -45,7 +59,25 @@ class MLARAM(MLClassifierBase):
     extra ART layer for clustering learned prototypes into large clusters.
     In this case the activation of all prototypes can be replaced by the
     activation of a small fraction of them, leading to a significant
-    reduction of the classification time [ICDMW2015]_. 
+    reduction of the classification time [ICDMW2015]_.
+
+    Parameters:
+    -----------
+    vigilance : float (default is 0.9)
+        parameter for adaptive resonance theory networks, controls how
+        large a hyperbox can be, 1 it is small (no compression), 0
+        should assume all range. Normally set between 0.8 and 0.999,
+        it is dataset dependent. It is responsible for the creation
+        of the prototypes, therefore training of the network.
+    threshold : float (default is 0.02)
+        controls how many prototypes participate by the prediction,
+        can be changed for the testing phase.
+    neurons : list
+        the neurons in the network
+
+
+    References
+    ----------
 
     Published work available `here`_.
 
@@ -54,29 +86,44 @@ class MLARAM(MLClassifierBase):
     .. [ICDMW2015] F. Benites and E. Sapozhnikova, "HARAM: A Hierarchical
         ARAM Neural Network for Large-Scale Text Classification," 
         2015 IEEE International Conference on Data Mining Workshop
+
+    .. code :: latex
+        @INPROCEEDINGS{7395756,
+            author={F. Benites and E. Sapozhnikova},
+            booktitle={2015 IEEE International Conference on Data Mining Workshop (ICDMW)},
+            title={HARAM: A Hierarchical ARAM Neural Network for Large-Scale Text Classification},
+            year={2015},
+            volume={},
+            number={},
+            pages={847-854},
+            doi={10.1109/ICDMW.2015.14},
+            ISSN={2375-9259},
+            month={Nov},
+        }
+
+    Examples
+    --------
+
+    Here's an example code with a 5% threshold and vigilance of 0.95:
+
+    .. code :: python
+
+        from skmultilearn.neurofuzzy import MLARAM
+
+        classifier = MLARAM(threshold=0.05, vigilance=0.95)
+        classifier.fit(X_train, y_train)
+        prediction = classifier.predict(X_test)
+
+
     """
-    BRIEFNAME = "ML-ARAM"
 
-    def __init__(self, vigilance=0.9, threshold=0.02, neurons=[]):
-        """Initializes the network
-
-        Attributes
-        ----------
-        vigilance : float (default is 0.9)
-            parameter for adaptiv resonance theory networks, controls how
-            large a hyperbox can be, 1 it is small (no compression), 0
-            should assume all range. Normally set between 0.8 and 0.999,
-            it is dataset dependent. It is responsible for the creation
-            of the prototypes, therefore training of the network.
-        threshold : float (default is 0.02)
-            controls how many prototypes participate by the prediction,
-            can be changed at the testing phase.
-        neurons : list
-            the neurons in the network
-        """
+    def __init__(self, vigilance=0.9, threshold=0.02, neurons=None):
         super(MLARAM, self).__init__()
 
-        self.neurons = neurons
+        if neurons is not None:
+            self.neurons = neurons
+        else:
+            self.neurons = []
         self.vigilance = vigilance
         self.threshold = threshold
 
@@ -84,10 +131,9 @@ class MLARAM(MLClassifierBase):
 
     def reset(self):
         """Resets the labels and neurons"""
-        self.labels = []
+        self._labels = []
         self.neurons = []
 
-    # @profile
     def fit(self, X, y):
         """Fit classifier with training data
 
@@ -105,10 +151,12 @@ class MLARAM(MLClassifierBase):
             fitted instance of self
         """
 
-        self.labels = []
-        self.allneu = ""
-        self.online = 1
-        self.alpha = 0.0000000000001
+        self._labels = []
+        self._allneu = ""
+        self._online = 1
+        self._alpha = 0.0000000000001
+
+        is_sparse_x = issparse(X)
 
         label_combination_to_class_map = {}
         # FIXME: we should support dense matrices natively
@@ -116,23 +164,14 @@ class MLARAM(MLClassifierBase):
             X = numpy.asarray(X)
         if isinstance(y, numpy.matrix):
             y = numpy.asarray(y)
-        is_matrix = int(len(X[0].shape) != 1)
+        is_more_dimensional = int(len(X[0].shape) != 1)
         X = _normalize_input_space(X)
 
         y_0 = _get_label_vector(y, 0)
-        ones = scipy.ones(X[0].shape)
 
         if len(self.neurons) == 0:
-            if issparse(X):
-                X_0 = numpy.squeeze(numpy.asarray(X[0].todense()))
-                if is_matrix:
-                    neuron_vc = scipy.sparse.hstack((X_0, ones - X_0))
-                else:
-                    neuron_vc = scipy.sparse.vstack((X_0, ones - X_0))
-                self.neurons.append(Neuron(neuron_vc, y_0))
-            else:
-                self.neurons.append(
-                    Neuron(numpy.concatenate((X[0], ones - X[0]), is_matrix), y_0))
+            neuron_vc = _concatenate_with_negation(X[0])
+            self.neurons.append(Neuron(neuron_vc, y_0))
             start_index = 1
             label_combination_to_class_map[_get_label_combination_representation(y_0)] = [0]
         else:
@@ -144,10 +183,7 @@ class MLARAM(MLClassifierBase):
         for row_no, input_vector in enumerate(X[start_index:], start_index):
             label_assignment_vector = _get_label_vector(y, row_no)
 
-            if issparse(input_vector):
-                input_vector = input_vector.todense()
-
-            fc = numpy.concatenate((input_vector, ones - input_vector), is_matrix)
+            fc = _concatenate_with_negation(input_vector)
             activationn = [0] * len(self.neurons)
             activationi = [0] * len(self.neurons)
             label_combination = _get_label_combination_representation(label_assignment_vector)
@@ -155,7 +191,11 @@ class MLARAM(MLClassifierBase):
             if label_combination in label_combination_to_class_map:
                 fcs = fc.sum()
                 for class_number in label_combination_to_class_map[label_combination]:
-                    minnfs = umath.minimum(self.neurons[class_number].vc, fc).sum()
+                    if issparse(self.neurons[class_number].vc):
+                        minnfs = self.neurons[class_number].vc.minimum(fc).sum()
+                    else:
+                        minnfs = umath.minimum(self.neurons[class_number].vc, fc).sum()
+
                     activationi[class_number] = minnfs / fcs
                     activationn[class_number] = minnfs / self.neurons[class_number].vc.sum()
 
@@ -175,8 +215,12 @@ class MLARAM(MLClassifierBase):
                 continue
 
             winner = inds[::- 1][indc[0]]
-            self.neurons[winner].vc = umath.minimum(
-                self.neurons[winner].vc, fc)
+            if issparse(self.neurons[winner].vc):
+                self.neurons[winner].vc = self.neurons[winner].vc.minimum(fc)
+            else:
+                self.neurons[winner].vc = umath.minimum(
+                    self.neurons[winner].vc, fc
+                )
 
             # 1 if winner neuron won a given label 0 if not
             labels_won_indicator = numpy.zeros(y_0.shape, dtype=y_0.dtype)
@@ -185,7 +229,6 @@ class MLARAM(MLClassifierBase):
 
         return self
 
-    # @profile
     def predict(self, X):
         """Predict labels for X
 
@@ -223,7 +266,6 @@ class MLARAM(MLClassifierBase):
 
         return numpy.array(numpy.matrix(result))
 
-    # @profile
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
 
@@ -249,17 +291,26 @@ class MLARAM(MLClassifierBase):
 
         is_matrix = int(len(X[0].shape) != 1)
         X = _normalize_input_space(X)
-        ones = scipy.ones(X[0].shape)
+
         all_ranks = []
-        all_neurons = numpy.vstack([n1.vc for n1 in self.neurons])
-        all_neurons_sum = all_neurons.sum(1) + self.alpha
+        neuron_vectors = [n1.vc for n1 in self.neurons]
+        if any(map(issparse, neuron_vectors)):
+            all_neurons = scipy.sparse.vstack(neuron_vectors)
+            # can't add a constant to a sparse matrix in scipy
+            all_neurons_sum = all_neurons.sum(1).A
+        else:
+            all_neurons = numpy.vstack(neuron_vectors)
+            all_neurons_sum = all_neurons.sum(1)
+
+        all_neurons_sum += self._alpha
 
         for row_number, input_vector in enumerate(X):
-            if issparse(input_vector):
-                input_vector = input_vector.todense()
+            fc = _concatenate_with_negation(input_vector)
 
-            fc = numpy.concatenate((input_vector, ones - input_vector), is_matrix)
-            activity = (umath.minimum(fc, all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
+            if issparse(fc):
+                activity = (fc.minimum(all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
+            else:
+                activity = (umath.minimum(fc, all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
 
             if is_matrix:
                 activity = activity[0]

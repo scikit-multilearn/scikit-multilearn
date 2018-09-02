@@ -69,12 +69,12 @@ class ClassifierBaseTest(unittest.TestCase):
     def test_dataset_works(self):
         data_home = dt.get_data_home(data_home=None, subdirectory='test')
         for set_name, variant in random.sample(ALL_SET_TEST_CASES, NUMBER_OF_SETS_TO_DOWNLOAD_IN_TEST):
-            data_dump = dt.load_dataset(set_name=set_name, variant=variant , data_home=data_home)
-            self.assertIsInstance(data_dump, dict)
-            self.assertIn('X', data_dump)
-            self.assertIn('y', data_dump)
-            self.assertEqual(len(data_dump['X'].shape), 2)
-            self.assertEqual(len(data_dump['y'].shape), 2)
+            X, y, feature_names, label_names = dt.load_dataset(set_name=set_name, variant=variant , data_home=data_home)
+            self.assertEqual(len(X.shape), 2)
+            self.assertEqual(len(y.shape), 2)
+            self.assertEqual(len(feature_names), X.shape[1])
+            self.assertEqual(len(label_names), y.shape[1])
+            self.assertEqual(X.shape[0], y.shape[0])
 
         dt.clear_data_home(data_home)
 

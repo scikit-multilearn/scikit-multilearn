@@ -1,5 +1,5 @@
-skmultilearn.neurofuzzy package
-===============================
+skmultilearn\.neurofuzzy package
+================================
 
 .. automodule:: skmultilearn.neurofuzzy
     :members:
@@ -9,12 +9,7 @@ skmultilearn.neurofuzzy package
 Submodules
 ----------
 
-skmultilearn.neurofuzzy.MLARAMfast module
------------------------------------------
+.. toctree::
 
-.. automodule:: skmultilearn.neurofuzzy.MLARAMfast
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   skmultilearn.neurofuzzy.MLARAMfast
 
