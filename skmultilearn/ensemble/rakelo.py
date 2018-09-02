@@ -85,7 +85,7 @@ class RakelO(MLClassifierBase):
         self.labelset_size = labelset_size
         self.base_classifier = base_classifier
         self.base_classifier_require_dense = base_classifier_require_dense
-        self.copyable_attrs = ['model_count_', 'labelset_size',
+        self.copyable_attrs = ['model_count', 'labelset_size',
                                'base_classifier_require_dense',
                                'base_classifier']
 

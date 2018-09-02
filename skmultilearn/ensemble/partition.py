@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from builtins import zip
-from builtins import range
 from ..problem_transform.br import BinaryRelevance
 
 from scipy import sparse
