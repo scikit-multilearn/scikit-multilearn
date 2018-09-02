@@ -2,8 +2,8 @@ from __future__ import absolute_import
 
 import community
 import networkx as nx
+from networkx.algorithms.community import asyn_lpa_communities
 import numpy as np
-from builtins import range
 
 from .base import LabelGraphClustererBase
 from .helpers import _membership_to_list_of_communities
@@ -158,14 +158,13 @@ class NetworkXLabelGraphClusterer(LabelGraphClustererBase):
 
         if self.method == 'louvain':
             partition_dict = community.best_partition(self.graph_)
-        else:
-            partition_dict = nx.asyn_lpa_communities(self.graph_, 'weight')
+            memberships = [partition_dict[i] for i in range(y.shape[1])]
 
-        return np.array(
-            _membership_to_list_of_communities(
-                [
-                    partition_dict[i] for i in range(y.shape[1])
-                ],
-                1+max(partition_dict.values())
+            return np.array(
+                _membership_to_list_of_communities(
+                    memberships,
+                    1 + max(memberships)
+                )
             )
-        )
+        else:
+            return np.array([list(i) for i in asyn_lpa_communities(self.graph_, 'weight')])
