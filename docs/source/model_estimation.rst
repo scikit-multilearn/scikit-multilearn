@@ -30,7 +30,7 @@ scikit-learn's GridSearchCV class. Then we define the values of parameters we wa
 combination of `k` - the number of neighbours, `s` - the smoothing parameter works best. We also need to select a measure
 which we want to optimize - we've chosen the `F1 macro score <http://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html>`_.
 
-After selecting the parameters we intialize and run the cross validation grid search and print the best hyper parameters.
+After selecting the parameters we intialize and _run the cross validation grid search and print the best hyper parameters.
 
 .. code-block:: python
 

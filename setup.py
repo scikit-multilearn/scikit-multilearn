@@ -8,7 +8,7 @@ with codecs.open('README.md', 'r', 'utf-8') as f:
 
 setup(
     name='scikit-multilearn',
-    version='0.1.0rc1',
+    version='0.1.0rc3',
     packages=find_packages(exclude=['docs', 'tests', '*.tests']),
     author=u'Piotr Szymański',
     author_email=u'niedakh@gmail.com',

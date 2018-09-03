@@ -23,14 +23,15 @@ Currently the following algorithm adaptation classification schemes are availabl
 | :class:`~skmultilearn.adapt.MLkNN`            | a multi-label adapted kNN classifier with bayesian prior  |
 |                                               | corrections                                               |
 +-----------------------------------------------+-----------------------------------------------------------+
-| :class:`~skmultilearn.neurofuzzy.MLARAM`      | a multi-Label Hierarchical ARAM Neural Network            |
+| :class:`~skmultilearn.adapt.MLARAM`           | a multi-Label Hierarchical ARAM Neural Network            |
 +-----------------------------------------------+-----------------------------------------------------------+
 
 """
 
 from .brknn import BRkNNaClassifier, BRkNNbClassifier
 from .mlknn import MLkNN
+from .mlaram import MLARAM
 
 __all__ = ["BRkNNaClassifier", 
            "BRkNNbClassifier", 
-           "MLkNN"]
+           "MLARAM"]

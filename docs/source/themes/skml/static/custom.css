@@ -1,0 +1,60 @@
+.justify {
+  text-align: justify;
+}
+
+body, .sans {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .condensed, .btn, .btn-large {
+  font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', Arial, sans-serif;
+}
+
+pre, code, tt {
+  font-family: 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;
+}
+
+.highlight {
+    background: #eeffcc;
+    padding: 1em;
+    overflow-y: auto;
+}
+
+.serif {
+  font-family: 'IBM Plex Serif', 'Georgia', Times, serif;
+}
+
+.pip {
+    padding: 1rem;
+    font-size: 2rem;
+}
+
+.headerlink {
+  font-size: 0.3em;
+  vertical-align: top;
+}
+
+div.nbinput,
+div.nboutput {
+    padding-top: 5px;
+    margin: 1.5em 0 !important
+}
+
+.col.feature.l4 {
+  min-height: 20rem;
+}
+
+
+.main-text  ul {
+    padding-left: 30px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.main-text  ul li {
+      list-style-type: disc!important;
+}
+
+.main-text  ul li ul li {
+  list-style-type: circle!important;
+}

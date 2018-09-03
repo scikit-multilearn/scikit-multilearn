@@ -1,59 +1,200 @@
-Welcome to scikit-multilearn's documentation!
-=============================================
+.. raw:: html
 
-Scikit-multilearn is a BSD-licensed library for multi-label classification that 
-is built on top of the well-known `scikit-learn <http://scikit-learn.org>`_ ecosystem. 
+    <div class="row">
+      <div class="col s12 m10 offset-m1 xl10 offset-xl1 center-on--only">
+        <h1 class="header">Multi-Label Classification in Python</h1>
+        <h5 class="light sans">
+        Scikit-multilearn is a BSD-licensed library for multi-label classification that
+        is built on top of the well-known <a href="http://scikit-learn.org">scikit-learn</a> ecosystem.
+        </h5>
+      </div>
+    </div>
+    <div class="row center">
+      <pre class="s10"><code class="blue-grey lighten-4 pip">pip install scikit-multilearn</code></pre>
+    </div>
+    <div class="row center">
+      <a class="current-version-number" href="https://scikit-multilearn/scikit-multilearn">Release: 0.1.0</a>
+        | Supported Python versions: 2.7 / 3.x
+        | <a href="https://github.com/scikit-multilearn/scikit-multilearn">Github</a>
+        | <a href="https://pypi.org/project/scikit-multilearn">PyPi</a>
+    </div>
+    <div class="row center">
+      <a href="tutorial.html" class="waves-effect waves-light btn-large">Get started</a>
+    </div>
+    <div class="row center">
+       <a class="github-button" href="https://github.com/scikit-multilearn/scikit-multilearn" data-icon="octicon-star" data-show-count="true" aria-label="Star scikit-multilearn/scikit-multilearn on GitHub">Star</a>
+          <!-- Place this tag where you want the button to render. -->
+          <a class="github-button" href="https://github.com/scikit-multilearn/scikit-multilearn/fork" data-icon="octicon-repo-forked" data-show-count="true" aria-label="Fork scikit-multilearn/scikit-multilearn on GitHub">Fork</a>
+    </div>
 
+    <div class="section">
+      <div class="row">
+        <div class="col feature s12 m12 l6">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fas fa-brain"></i> Lots of classifiers</span>
+              <p>Scikit-multilearn provides X native python classifiers and 50+ MEKA/MULAN classifiers.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="model_selection.html" class="waves-effect waves-light btn">Classifier selection</a>
+            </div>
 
-How do I start?
----------------
+          </div>
+        </div>
 
-If you are new to multi-label classification alltogether, start with the 
-:ref:`Concepts <concepts>` chapter which goes through the concepts and shows where different methods fit.
+        <div class="col feature s12 m6 l6">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fab fa-connectdevelop"></i> Label Relations</span>
+              <p>Use expert knowledge or infer label relationships from your data to improve your model.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="labelrelations.html" class="waves-effect waves-light btn">Learn more</a>
+            </div>
+          </div>
+        </div>
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fas fa-bolt"></i> Efficient classification</span>
+              <p>Scikit-multilearn is faster and takes much less memory than the standard
+              stack of MULAN, MEKA & WEKA.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="benchmark.html" class="waves-effect waves-light btn">Facts & Figures</a>
+            </div>
+          </div>
+        </div>
 
-If you've already performed multi-label classification or you've used scikit-learn before, you should:
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fab fa-freebsd"></i> Free as in BSD</span>
+              <p>The licensing model follows scikit's BSD licence, to allow maximum interopability.
+              Some libraries if used for label space division may incur GPL requirements.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="license.html" class="waves-effect waves-light btn right-align">License</a>
+            </div>
+          </div>
+        </div>
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fas fa-database"></i> Data management</span>
+              <p>Scikit-multilearn is faster and takes much less memory than the standard
+              stack of MULAN, MEKA & WEKA.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="datasets.html" class="waves-effect waves-light btn right-align">Learn more</a>
+            </div>
+          </div>
+        </div>
 
-1. read about :ref:`datasets` in scikit-multilearn
-2. learn about :ref:`loading`
-3. start the fun with classification by :ref:`classify`
-4. see how you can improve your results by :ref:`model_estimation`
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fas fa-random"></i> Multi-label stratification</span>
+              <p>Use expert knowledge or infer label relationships from your data to improve your model.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="stratification.html" class="waves-effect waves-light btn">Learn more</a>
+            </div>
+          </div>
+        </div>
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fas fa-box-open"></i> MEKA wrapper</span>
+              <p>Missing a particular classifier which exists in the Java MEKA and WEKA stack?
+              Now you can use it like a native scikit classifier!.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="meka.html" class="waves-effect waves-light btn">Using MEKA</a>
+            </div>
+          </div>
+        </div>
 
-If you came here to use the wrapper around the well known `meka library <http://meka.sf.net>`_, there's an example of how to do this in: :ref:`mekawrapper`.
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fas fa-wrench"></i> Well maintained</span>
+              <p>Scikit-multilearn has over 82% test coverage and undergoes continous integration on Windows 10, OS X and Ubuntu.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="https://travis-ci.org/scikit-multilearn/scikit-multilearn"
+               class="waves-effect waves-light"><img src="https://travis-ci.org/scikit-multilearn/scikit-multilearn.svg?branch=master" />
+               </a>
+               <a href="https://ci.appveyor.com/project/niedakh/scikit-multilearn/branch/master"
+                class="waves-effect waves-light"><img src="https://ci.appveyor.com/api/projects/status/vd4k18u1lp5btaql/branch/master?svg=true" />
+                </a>
+            </div>
+          </div>
+        </div>
 
-If you are a developer and want to join scikit-multilearn, here you can find out how to:
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fab fa-python"></i> Scikit-compatible</span>
+              <p>Scikit-multilearn is compatible with the Scipy and scikit-learn stack. Use our classifiers with scikit,
+              use scikit classifiers with our code.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col feature s12 m6 l4">
+          <div class="card   blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fab fa-github"></i> Widely used</span>
+              <p>With over 160 stars and 60 forks scikit-multilearn is the second most popular multi-label library on github.</p>
+            </div>
+            <div class="card-action right-align">
+            <!-- Place this tag where you want the button to render. -->
+              <a class="github-button" href="https://github.com/scikit-multilearn/scikit-multilearn" data-icon="octicon-star" data-show-count="true" aria-label="Star scikit-multilearn/scikit-multilearn on GitHub">Star</a>
+              <!-- Place this tag where you want the button to render. -->
+              <a class="github-button" href="https://github.com/scikit-multilearn/scikit-multilearn/fork" data-icon="octicon-repo-forked" data-show-count="true" aria-label="Fork scikit-multilearn/scikit-multilearn on GitHub">Fork</a>
+            </div>
+          </div>
+        </div>
+        <div class="col feature s12 m6 l4">
+          <div class="card   blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fab fa-stack-overflow"></i> We're on StackOverflow</span>
+              <p>Need help? Ask a question on Stack Overflow, our community will answer.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="https://stackoverflow.com/tags/scikit-multilearn" class="waves-effect waves-light btn">#scikit-multilearn on SO</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-- :ref:`implement a classifier <implementing-classifier>`
-- :ref:`implement a new clusterer for ensemble methods based on label space division <implementclusterer>`
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <div class="row center">
+        <div class="col s12 m6">
+          <h3 class="light header">Learn more</h3>
+          <p class="col s12 m8 offset-m2 caption">Scikit-multilearn offers extensive user documentation. Read the user docs, learn from recipes constructed on real data or browse the API reference to find a concrete class or function.</p>
+          <a href="userguide.html" class="s12 l4 btn-large waves-effect waves-light">User docs</a>
+          <a href="api/skmultilearn.html" class="s12 l4 btn-large waves-effect waves-light">Reference</a>
+        </div>
+        <div class="col s12 m6">
+          <h3 class="light header">Join the team!</h3>
+          <p class="col s12 m8 offset-m2 caption">Scikit-multilearn is developed</p>
+          <a href="developer.html" class="s12 l4 btn-large waves-effect waves-light"><i class="fab fa-python"></i> Developer docs</a>
+          <!-- a href="slack.html" class="s12 l4 btn-large waves-effect waves-light"><i class="fab fa-slack"></i> Join the slack</a-->
+          <a href="authors.html" class="s12 l4 btn-large waves-effect waves-light">About the project</a>
+        </div>
+      </div>
+    </div>
 
-Some candidates for implementation are listed in the `Junior Jobs section of the website <http://scikit.ml/#tasks>`_ if you'd like to help.
 
 .. toctree::
-   :caption: User Guide
+    :hidden:
 
-   concepts
-   datasets
-   loading
-   classify
-
-.. toctree::
-   :caption: Tutorials
-
-   model_estimation
-   meka
-
-
-.. toctree::
-   :caption: Developer's Guide
-
-   base
-   clusterer
-   Changelog <https://github.com/scikit-multilearn/scikit-multilearn/blob/master/CHANGES.md>
-   API documentation <api/skmultilearn>
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+    introduction
+    userguide
+    authors
+    benchmark
+    developer
+    license
