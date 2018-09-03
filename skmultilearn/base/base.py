@@ -8,7 +8,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label
     classifiers.
 
-    Implements base functionality for ML classifiers, especially the get_/set_ params for
+    Implements base functionality for ML classifiers, especially the get/set params for
     scikit-learn compatibility.
 
     Attributes

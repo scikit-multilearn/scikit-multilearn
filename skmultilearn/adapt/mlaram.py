@@ -59,7 +59,7 @@ class MLARAM(MLClassifierBase):
     extra ART layer for clustering learned prototypes into large clusters.
     In this case the activation of all prototypes can be replaced by the
     activation of a small fraction of them, leading to a significant
-    reduction of the classification time [ICDMW2015]_.
+    reduction of the classification time.
 
     Parameters:
     -----------
@@ -83,11 +83,7 @@ class MLARAM(MLClassifierBase):
 
     .. _here: http://dx.doi.org/10.1109/ICDMW.2015.14
 
-    .. [ICDMW2015] F. Benites and E. Sapozhnikova, "HARAM: A Hierarchical
-        ARAM Neural Network for Large-Scale Text Classification," 
-        2015 IEEE International Conference on Data Mining Workshop
-
-    .. code :: latex
+    .. code :: bibtex
         @INPROCEEDINGS{7395756,
             author={F. Benites and E. Sapozhnikova},
             booktitle={2015 IEEE International Conference on Data Mining Workshop (ICDMW)},

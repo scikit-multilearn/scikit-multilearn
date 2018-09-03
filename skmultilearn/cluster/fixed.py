@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from .base import LabelSpaceClustererBase
 
 class FixedLabelSpaceClusterer(LabelSpaceClustererBase):
-    """Return a fixed label space partition_
+    """Return a fixed label space partition
 
     This clusterer takes a predefined fixed ``clustering`` of the label space and returns it in fit_predict as the label
     space division. This is useful for employing expert knowledge about label space division or partitions in ensemble
@@ -12,8 +12,8 @@ class FixedLabelSpaceClusterer(LabelSpaceClustererBase):
     Parameters
     ----------
     clusters : array of arrays of int
-        provided partition_ of the label space in the for of numpy array of
-        numpy arrays of indexes for each partition_, ex. ``[[0,1],[2,3]]``
+        provided partition of the label space in the for of numpy array of
+        numpy arrays of indexes for each partition, ex. ``[[0,1],[2,3]]``
 
 
     An example use of the fixed clusterer with a label partitioning classifier to train randomforests for a set of

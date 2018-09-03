@@ -81,7 +81,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
         classifier.fit(X_train,y_train)
         predictions = classifier.predict(X_test)
 
-    More advanced examples can be found in :doc:`../labelrelations.ipynb`.
+    More advanced examples can be found in `the label relations exploration guide <../labelrelations.ipynb>`_
 
     """
 

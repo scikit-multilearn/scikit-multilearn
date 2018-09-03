@@ -13,7 +13,7 @@
       <pre class="s10"><code class="blue-grey lighten-4 pip">pip install scikit-multilearn</code></pre>
     </div>
     <div class="row center">
-      <a class="current-version-number" href="https://scikit-multilearn/scikit-multilearn">Release: 0.1.0</a>
+      <a class="current-version-number" href="https://github.com/scikit-multilearn/scikit-multilearn/archive/0.1.0.tar.gz">Release: 0.1.0</a>
         | Supported Python versions: 2.7 / 3.x
         | <a href="https://github.com/scikit-multilearn/scikit-multilearn">Github</a>
         | <a href="https://pypi.org/project/scikit-multilearn">PyPi</a>
@@ -36,7 +36,7 @@
               <p>Scikit-multilearn provides X native python classifiers and 50+ MEKA/MULAN classifiers.</p>
             </div>
             <div class="card-action right-align">
-              <a href="model_selection.html" class="waves-effect waves-light btn">Classifier selection</a>
+              <a href="modelselection.html" class="waves-effect waves-light btn">Classifier selection</a>
             </div>
 
           </div>

@@ -13,12 +13,12 @@ Currently the following algorithm adaptation classification schemes are availabl
 | Classifier                                    | Description                                               |
 +===============================================+===========================================================+
 | :class:`~skmultilearn.adapt.BRkNNaClassifier` | a Binary Relevance kNN classifier that assigns a label    |
-|                                               | if at least half of the neighbors_ are also classified    |
+|                                               | if at least half of the neighbors are also classified     |
 |                                               | with the label                                            |
 +-----------------------------------------------+-----------------------------------------------------------+
 | :class:`~skmultilearn.adapt.BRkNNbClassifier` | a Binary Relevance kNN classifier that assigns top m      |
-|                                               | labels of neighbors_ with m - average number of labels    |
-|                                               | assigned to neighbors_                                    |
+|                                               | labels of neighbors with m - average number of labels     |
+|                                               | assigned to neighbors                                     |
 +-----------------------------------------------+-----------------------------------------------------------+
 | :class:`~skmultilearn.adapt.MLkNN`            | a multi-label adapted kNN classifier with bayesian prior  |
 |                                               | corrections                                               |
