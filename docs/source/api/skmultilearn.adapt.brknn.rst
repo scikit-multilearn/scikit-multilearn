@@ -1,6 +1,10 @@
-skmultilearn\.adapt\.brknn module
-=================================
+Binary Relevance kNN
+====================
 
-.. automodule:: skmultilearn.adapt.brknn
+.. autoclass:: skmultilearn.adapt.BRkNNaClassifier
+    :members:
+    :inherited-members:
+
+.. autoclass:: skmultilearn.adapt.BRkNNbClassifier
     :members:
     :inherited-members:

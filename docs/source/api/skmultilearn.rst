@@ -13,13 +13,6 @@ Algorithm Adaptation approaches
 
 .. automodule:: skmultilearn.adapt
 
-.. toctree::
-    :hidden:
-
-    introduction
-    userguide
-    authors
-
 
 Problem Transformation approaches
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -50,36 +43,3 @@ Model selection and data manipulation
 .. automodule:: skmultilearn.model_selection
 
 .. automodule:: skmultilearn.dataset
-
-
-Developer API
--------------
-
-Base classes
-^^^^^^^^^^^^
-
-+-------------------------------------------------------------+-------------------------------------------------+
-| Name                                                        | Description                                     |
-+=============================================================+=================================================+
-| :class:`~skmutlilearn.base.MLClassifierBase`                | Base class for multi-label classifiers          |
-+-------------------------------------------------------------+-------------------------------------------------+
-| :class:`~skmutlilearn.base.ProblemTransformationBase`       | Base class for problem transformation           |
-|                                                             | multi-label classifiers                         |
-+-------------------------------------------------------------+-------------------------------------------------+
-| :class:`~skmutlilearn.cluster.base.GraphBuilderBase`        | Base class for Label Graph builders             |
-+-------------------------------------------------------------+-------------------------------------------------+
-| :class:`~skmutlilearn.cluster.base.LabelSpaceClustererBase` | Base class for label space clusterers           |
-+-------------------------------------------------------------+-------------------------------------------------+
-| :class:`~skmutlilearn.cluster.base.LabelGraphClustererBase` | Base class for Label Graph clusterers           |
-+-------------------------------------------------------------+-------------------------------------------------+
-
-Modules with helper functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-+--------------------------------------+--------------------------------------------------+
-| Name                                 | Description                                      |
-+======================================+==================================================+
-| :mod:`~skmutlilearn.cluster.helpers` | Functions for converting cluster representations |
-+--------------------------------------+--------------------------------------------------+
-| :mod:`~skmutlilearn.utils`           | Functions for matrix format manipulation         |
-+--------------------------------------+--------------------------------------------------+

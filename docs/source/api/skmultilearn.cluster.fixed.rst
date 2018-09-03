@@ -1,6 +1,6 @@
 skmultilearn\.cluster\.fixed module
 ====================================
 
-.. automodule:: skmultilearn.cluster.fixed
+.. autoclass:: skmultilearn.cluster.FixedLabelSpaceClusterer
     :members:
     :show-inheritance:

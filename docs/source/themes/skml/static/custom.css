@@ -30,7 +30,7 @@ pre, code, tt {
 }
 
 .headerlink {
-  font-size: 0.3em;
+  font-size: 30%;
   vertical-align: top;
 }
 
@@ -57,4 +57,13 @@ div.nboutput {
 
 .main-text  ul li ul li {
   list-style-type: circle!important;
+}
+
+
+.related {
+    display: none;
+}
+
+strong {
+    font-weight: 700;
 }

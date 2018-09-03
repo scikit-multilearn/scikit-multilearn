@@ -1,6 +1,6 @@
-skmultilearn\.adapt\.mlaram module
-===========================================
+Multi-label ARAM
+================
 
-.. automodule:: skmultilearn.adapt.mlaram
+.. autoclass:: skmultilearn.adapt.MLARAM
     :members:
-    :show-inheritance:
+    :inherited-members:

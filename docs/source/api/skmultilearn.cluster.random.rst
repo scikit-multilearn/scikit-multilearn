@@ -1,6 +1,6 @@
 skmultilearn\.cluster\.random module
 ====================================
 
-.. automodule:: skmultilearn.cluster.random
+.. autoclass:: skmultilearn.cluster.RandomLabelSpaceClusterer
     :members:
     :show-inheritance:
