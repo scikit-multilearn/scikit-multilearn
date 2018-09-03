@@ -1,7 +1,7 @@
 scikit-multilearn Changelog
 ===========================
 
-0.1.0 (release planned 2018-06-14)
+0.1.0 (released 2018-09-04)
 ---------------------------
 
 Fix a lot of bugs and generally improve stability, cross-platform functionality standard
@@ -16,10 +16,14 @@ Also, new features:
 - meka wrapper works fully cross-platform now, including windows 10
 - multi-label data set downloading and load/save functionality brought in, like sklearn's dataset
 - kNN models support sparse input
-- neuro fuzzy models support sparse input
+- MLARAM models support sparse input
 - BSD-compatible label space partitioning via NetworkX
 - dependence on GPL libraries made optional
 - working predict_proba added for label space partitioning methods
+- MLARAM moved to from neurofuzzy to adapt
+- test coverage increased to 94%
+- Classifier Chains allow specifying the chain order
+- lots of documentation updates
 
 
 0.0.5 (released 2017-02-25)

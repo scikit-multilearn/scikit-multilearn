@@ -33,7 +33,7 @@
           <div class="card  blue-grey darken-3">
             <div class="card-content white-text">
               <span class="card-title"><i class="fas fa-brain"></i> Lots of classifiers</span>
-              <p>Scikit-multilearn provides X native python classifiers and 50+ MEKA/MULAN classifiers.</p>
+              <p>Scikit-multilearn provides many native Python multi-label classifiers classifiers.</p>
             </div>
             <div class="card-action right-align">
               <a href="modelselection.html" class="waves-effect waves-light btn">Classifier selection</a>
@@ -187,7 +187,37 @@
         </div>
       </div>
     </div>
+    <div class="section">
+      <div class="row">
+        <div class="col s10 offset-s1">
+            <h3>News</h3>
+            <h5>0.1.0 [stable] (released 2018-09-04)</h5>
 
+            <p>Fix a lot of bugs and generally improve stability, cross-platform functionality standard
+            and unit test coverage. This release has been tested with a large set of unit tests that
+            work across Windows.
+
+            Also, new features:</p>
+            <ul class="browser-default">
+            <li>multi-label stratification algorithm and stratification quality measures</li>
+            <li>a robust reorganization of label space division, alongside with a working stochastic blockmodel approach and new
+              underlying layer - graph builders that allow using graph models for dividing the label space based not just on
+              label co-occurence but on any kind of network relationships between labels you can come up with</li>
+            <li>meka wrapper works fully cross-platform now, including windows 10</li>
+            <li>multi-label data set downloading and load/save functionality brought in, like sklearn's dataset</li>
+            <li>kNN models support sparse input</li>
+            <li>MLARAM models support sparse input</li>
+            <li>BSD-compatible label space partitioning via NetworkX</li>
+            <li>dependence on GPL libraries made optional</li>
+            <li>working predict_proba added for label space partitioning methods</li>
+            <li>MLARAM moved to from neurofuzzy to adapt</li>
+            <li>test coverage increased to 94%</li>
+            <li>Classifier Chains allow specifying the chain order</li>
+            <li>lots of documentation updates</li>
+            </ul>
+        </div>
+      </div>
+    </div>
 
 .. toctree::
     :hidden:
