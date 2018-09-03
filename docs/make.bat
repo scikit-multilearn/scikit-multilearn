@@ -36,11 +36,11 @@ if "%1" == "help" (
 	echo.  xml        to make Docutils-native XML files
 	echo.  pseudoxml  to make pseudoxml-XML files for display purposes
 	echo.  linkcheck  to check all external links for integrity
-	echo.  doctest    to run all doctests embedded in the documentation if enabled
+	echo.  doctest    to _run all doctests embedded in the documentation if enabled
 	goto end
 )
 
-if "%1" == "clean" (
+if "%1" == "_clean" (
 	for /d %%i in (%BUILDDIR%\*) do rmdir /q /s %%i
 	del /q /s %BUILDDIR%\*
 	goto end
@@ -104,7 +104,7 @@ if "%1" == "htmlhelp" (
 	%SPHINXBUILD% -b htmlhelp %ALLSPHINXOPTS% %BUILDDIR%/htmlhelp
 	if errorlevel 1 exit /b 1
 	echo.
-	echo.Build finished; now you can run HTML Help Workshop with the ^
+	echo.Build finished; now you can _run HTML Help Workshop with the ^
 .hhp project file in %BUILDDIR%/htmlhelp.
 	goto end
 )
@@ -113,7 +113,7 @@ if "%1" == "qthelp" (
 	%SPHINXBUILD% -b qthelp %ALLSPHINXOPTS% %BUILDDIR%/qthelp
 	if errorlevel 1 exit /b 1
 	echo.
-	echo.Build finished; now you can run "qcollectiongenerator" with the ^
+	echo.Build finished; now you can _run "qcollectiongenerator" with the ^
 .qhcp project file in %BUILDDIR%/qthelp, like this:
 	echo.^> qcollectiongenerator %BUILDDIR%\qthelp\scikit-multilearn.qhcp
 	echo.To view the help file:

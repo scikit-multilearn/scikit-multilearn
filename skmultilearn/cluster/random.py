@@ -91,24 +91,39 @@ class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
             label space division, each sublist represents labels that are in that community
         """
 
-        label_sets = []
-        free_labels = range(y.shape[1])
+        if (self.cluster_count+1) * self.cluster_size < y.shape[1]:
+            raise ValueError("Cannot include all of {} labels in {} clusters of {} labels".format(
+                y.shape[1],
+                self.cluster_count,
+                self.cluster_size
+            ))
 
-        while len(label_sets) <= self.cluster_count:
-            if not self.allow_overlap:
-                if len(free_labels) == 0:
-                    break
+        all_labels_assigned_to_division = False
+        # make sure the final label set division includes all labels
+        while not all_labels_assigned_to_division:
+            label_sets = []
+            free_labels = range(y.shape[1])
 
-                # in this case, we are unable to draw new labels, add all that remain
-                if len(free_labels) < self.cluster_size:
-                    label_sets.append(free_labels)
-                    break
+            while len(label_sets) <= self.cluster_count:
+                if not self.allow_overlap:
+                    if len(free_labels) == 0:
+                        break
 
-            label_set = random.sample(free_labels, self.cluster_size)
-            if not self.allow_overlap:
-                free_labels = list(set(free_labels).difference(set(label_set)))
+                    # in this case, we are unable to draw new labels, add all that remain
+                    if len(free_labels) < self.cluster_size:
+                        label_sets.append(free_labels)
+                        break
 
-            if label_set not in label_sets:
-                label_sets.append(label_set)
+                label_set = random.sample(free_labels, self.cluster_size)
+                if not self.allow_overlap:
+                    free_labels = list(set(free_labels).difference(set(label_set)))
+
+                if label_set not in label_sets:
+                    label_sets.append(label_set)
+
+            all_labels_assigned_to_division = all(
+                any(label in subset for subset in label_sets)
+                for label in range(y.shape[1])
+            )
 
         return np.array(label_sets)

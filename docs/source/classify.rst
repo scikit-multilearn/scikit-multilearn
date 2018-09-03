@@ -18,7 +18,7 @@ As we noted in :ref:`concepts` multi-label classification can be performed under
 
 - algorithm adaption approach 
 - problem transformation approach
-- ensemble of multi-label classifiers approach
+- an ensemble of multi-label classifiers approach
 
 
 Adapted algorithms
@@ -29,9 +29,9 @@ The algorithm adaptation approach is based on a single-label classification meth
 - k-NearestNeighbours classifiers adapted to multi-label purposes by `Zhang et, al. <http://www.sciencedirect.com/science/article/pii/S0031320307000027>`_: ``BrkNN``, ``MLkNN`` available from :mod:`skmultilearn.adapt`
 - a hierarchical neurofuzzy classifier HARAM adapted to multi-label purposes by `Benites et. al. <https://kops.uni-konstanz.de/handle/123456789/33471>`_ ``ML-ARAM`` available in :mod:`skmultilearn.neurofuzzy`.
 
-Algorithm adaption methods methods usually require parameter estimation.  Selecting best parameters of algorithm adaptation classifiers is discussed in :ref:`model_estimation`.
+Algorithm adaption methods usually require parameter estimation.  Selecting best parameters of algorithm adaptation classifiers is discussed in :ref:`model_estimation`.
 
-An example code for using :class:`skmultilearn.adapt.MLkNN` looks like this:
+Example code for using :class:`skmultilearn.adapt.MLkNN` looks like this:
 
 .. code-block:: python
 
@@ -49,7 +49,7 @@ An example code for using :class:`skmultilearn.adapt.MLkNN` looks like this:
 Problem transformation
 ----------------------
 
-Problem transformation approaches are provided in the :mod:`skmultilearn.problem_transform` module and they require a selection of a scikit-learn compatible single-label base classificatier that will be cloned one or more times during the problem transformation. Scikit-learn provides a variety of base classifiers such as:
+Problem transformation approaches are provided in the :mod:`skmultilearn.problem_transform` module and they require a selection of a scikit-learn compatible single-label base classifier that will be cloned one or more times during the problem transformation. Scikit-learn provides a variety of base classifiers such as:
 
 - `decision trees <http://scikit-learn.org/stable/modules/tree.html>`_
 - `Support Vector Machines <http://scikit-learn.org/stable/modules/svm.html>`_
@@ -86,7 +86,7 @@ An example of a Label Powerset transformation from multi-label classification to
     # predict
     predictions = classifier.predict(X_test)
 
-By default the base classifier will be provided with a dense representation, but some scikit-learn classifiers also support sparse representations. This is an example use of a Binary Relevance classifier with a single-class SVM classifier that does can handle sparse input matrix:
+By default, the base classifier will be provided with a dense representation, but some scikit-learn classifiers also support sparse representations. This is an example use of a Binary Relevance classifier with a single-class SVM classifier that does can handle sparse input matrix:
 
 .. code-block:: python
 
@@ -110,7 +110,7 @@ By default the base classifier will be provided with a dense representation, but
 Ensemble approaches
 -------------------
 
-It is often useful to train more than one model for a subset of labels in multi-label classification, especially for large label spaces - a well-selected smaller label subspace `can allow more efficient classification <http://www.mdpi.com/1099-4300/18/8/282>`_. For this purpose the module implements ensemble classification schemes that construct an ensemble of base multi-label classifiers.
+It is often useful to train more than one model for a subset of labels in multi-label classification, especially for large label spaces - a well-selected smaller label subspace `can allow more efficient classification <http://www.mdpi.com/1099-4300/18/8/282>`_. For this purpose, the module implements ensemble classification schemes that construct an ensemble of base multi-label classifiers.
 
 Currently the following ensemble classification schemes are available in scikit-multilearn:
 
@@ -119,13 +119,13 @@ Currently the following ensemble classification schemes are available in scikit-
 - :class:`skmultilearn.ensemble.LabelSpacePartitioningClassifier` - a label space partitioning classifier that trains a classifier per label subspace as clustered using methods from :mod:`skmultilearn.cluster`.
 - :class:`skmultilearn.ensemble.FixedLabelPartitionClassifier` - a classifier that trains a classifier per label subspace for a given fixed partition
 
-An example code for an ensemble of RandomForests under a Label Powerset multi-label classifiers trained for each label subspace - partitioned using fast greedy community detection methods on a label co-occurrence graph looks like this:
+Example code for an ensemble of RandomForests under a Label Powerset multi-label classifiers trained for each label subspace - partitioned using fast greedy community detection methods on a label co-occurrence graph looks like this:
 
 .. code-block:: python
 
     from sklearn.ensemble import RandomForestClassifier
     from skmultilearn.problem_transform import LabelPowerset
-    from skmultilearn.cluster import IGraphLabelCooccurenceClusterer
+    from skmultilearn.cluster import IGraphLabelGraphClusterer
     from skmultilearn.ensemble import LabelSpacePartitioningClassifier
 
     # construct base forest classifier
@@ -137,7 +137,7 @@ An example code for an ensemble of RandomForests under a Label Powerset multi-la
 
     # partition the label space using fastgreedy community detection
     # on a weighted label co-occurrence graph with self-loops allowed
-    clusterer = IGraphLabelCooccurenceClusterer('fastgreedy', weighted=True, 
+    clusterer = IGraphLabelGraphClusterer('fastgreedy', weighted=True,
         include_self_edges=True)
 
     # setup the ensemble metaclassifier
@@ -153,4 +153,4 @@ An example code for an ensemble of RandomForests under a Label Powerset multi-la
 MEKA classifiers
 ----------------
 
-In a situation when one needs a method not yet implemented in scikit-multilearn - a MEKA/MULAN wrapper is provided and described in section :ref:`mekawrapper`.
+In a situation when one needs a method not yet implemented in scikit-multilearn - a MEKA/MULAN wrapper is provided and described in the section :ref:`mekawrapper`.

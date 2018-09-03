@@ -41,8 +41,8 @@ A feature present currently only in ``scikit-multilearn`` is the possibility to 
 
 The `edge_map` is both returned and stored in the class as ``self.edge_map``.  This is a base class for building label co-occurence graphs. Subclass ``LabelCooccurenceClustererBase`` and use  ``generate_coocurence_adjacency_matrix`` at the beginning of your ``fit_predict`` as shown below, than build a graph using the `edge_map` property, and infer the communities from the graph. Interfaces for two popular Python graph libraries already exist: 
 
-- :class:`skmultilearn.ensemble.GraphToolCooccurenceClusterer` that constructs the graph-tool graph object and uses stochastic block modelling for clustering
-- :class:`skmultilearn.ensemble.IGraphLabelCooccurenceClusterer` that constructs an igraph graph object and allows the use of a variety of igraph's community detection methods for clustering
+- :class:`skmultilearn.ensemble.GraphToolLabelGraphClusterer` that constructs the graph-tool graph object and uses stochastic block modelling for clustering
+- :class:`skmultilearn.ensemble.IGraphLabelGraphClusterer` that constructs an igraph graph object and allows the use of a variety of igraph's community detection methods for clustering
 
 to use them, just subclass the class and start your fit_predict method like this:
 

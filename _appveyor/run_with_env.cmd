@@ -9,7 +9,7 @@
 :: 32 bit builds, and 64-bit builds for 3.5 and beyond, do not require specific
 :: environment configurations.
 ::
-:: Note: this script needs to be run with the /E:ON and /V:ON flags for the
+:: Note: this script needs to be _run with the /E:ON and /V:ON flags for the
 :: cmd interpreter, at least for (SDK v7.0)
 ::
 :: More details at:
@@ -27,7 +27,7 @@
 :: If you don't want quotes, don't include them on the right-hand side.
 ::
 :: The CALL lines at the end of this file look redundant, but if you move them
-:: outside of the IF clauses, they do not run properly in the SET_SDK_64==Y
+:: outside of the IF clauses, they do not _run properly in the SET_SDK_64==Y
 :: case, I don't know why.
 @ECHO OFF
 

@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans|IBM+Plex+Sans+Condensed|IBM+Plex+Serif');
+
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', Arial, sans-serif;
+}
+
+body, p {
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+
+}
+
+.rst-content pre.literal-block, .rst-content div[class^='highlight'] pre, .rst-content .linenodiv pre, pre {
+    font-family: 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;
+    font-size: 14px;
+
+}
+
 .wy-menu-vertical header, .wy-menu-vertical p.caption {
 	color: gold;
 }
