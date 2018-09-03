@@ -98,29 +98,6 @@ def iterative_train_test_split(X, y, test_size):
     return X_train, y_train, X_test, y_test
 
 
-def iterative_train_test_split(X, y, test_size):
-    """Iteratively stratified train/test split
-
-    Parameters
-    ----------
-    test_size : float, [0,1]
-        the proportion of the dataset to include in the test split, the rest will be put in the train set
-
-    Returns
-    -------
-    X_train, y_train, X_test, y_test
-        stratified division into train/test split
-    """
-
-    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
-    test_indexes, train_indexes = next(stratifier.split(X, y))
-
-    X_train, y_train = X[train_indexes, :], y[train_indexes, :]
-    X_test, y_test = X[test_indexes, :], y[test_indexes, :]
-
-    return X_train, y_train, X_test, y_test
-
-
 
 def _fold_tie_break(desired_samples_per_fold, M):
     """Helper function to split a tie between folds with same desirability of a given sample
