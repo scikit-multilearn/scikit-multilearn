@@ -249,6 +249,7 @@ def load_from_arff(filename, label_count, label_location="end",
 
 def save_to_arff(X, y, label_location="end", save_sparse=True, filename=None):
     """Method for dumping data to ARFF files
+    
     Parameters
     ----------
     X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
