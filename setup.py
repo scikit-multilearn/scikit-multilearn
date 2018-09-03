@@ -8,14 +8,14 @@ with codecs.open('README.md', 'r', 'utf-8') as f:
 
 setup(
     name='scikit-multilearn',
-    version='0.1.0rc3',
+    version='0.1.0',
     packages=find_packages(exclude=['docs', 'tests', '*.tests']),
     author=u'Piotr Szymański',
     author_email=u'niedakh@gmail.com',
     license=u'BSD',
     long_description=readme,
-    url=u'http://scikit-multilearn.github.io/',
-    description=u'A set of python modules for multi-label classification',
+    url=u'http://scikit.ml/',
+    description=u'Scikit-multilearn is a BSD-licensed library for multi-label classification that is built on top of the well-known scikit-learn ecosystem.',
     classifiers=[
         u'Development Status :: 5 - Production/Stable',
         u'Environment :: Console',
