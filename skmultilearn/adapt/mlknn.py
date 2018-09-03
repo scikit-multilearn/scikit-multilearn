@@ -26,7 +26,7 @@ class MLkNN(MLClassifierBase):
     Attributes
     ----------
     knn_ : an instance of sklearn.NearestNeighbors
-        the nearest neighbors_ single-label classifier used underneath
+        the nearest neighbors single-label classifier used underneath
 
 
 
@@ -58,7 +58,7 @@ class MLkNN(MLClassifierBase):
     Examples
     --------
 
-    Here's a very simple example of using MLkNN with a fixed number of neighbors_:
+    Here's a very simple example of using MLkNN with a fixed number of neighbors:
 
     .. code :: python
 
@@ -110,7 +110,7 @@ class MLkNN(MLClassifierBase):
         Attributes
         ----------
         knn_ : an instance of sklearn.NearestNeighbors
-            the nearest neighbors_ single-label classifier used underneath
+            the nearest neighbors single-label classifier used underneath
 
         .. note:: If you don't know what :code:`ignore_first_neighbours`
                   does, the default is safe. Please see this `issue`_.

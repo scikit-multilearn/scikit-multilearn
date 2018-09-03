@@ -52,9 +52,9 @@ class IGraphLabelGraphClusterer(LabelGraphClustererBase):
     Attributes
     ----------
     graph_ : igraph.Graph
-        the igraph Graph object containing the graph representation of graph builder's adjacency matrix and weights_
+        the igraph Graph object containing the graph representation of graph builder's adjacency matrix and weights
     weights_ : { 'weight' : list of values in edge order of graph edges }
-        edge weights_ stored in a format recognizable by the igraph module
+        edge weights stored in a format recognizable by the igraph module
 
 
     .. note ::

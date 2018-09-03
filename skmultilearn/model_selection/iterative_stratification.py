@@ -1,71 +1,72 @@
 # -*- coding: utf-8 -*-
-"""Iteratively stratify a multi-label data set
+"""Iterative stratification for multi-label data
 
-    The classifier follows methods outlined in Sechidis11 and Szymanski17 papers related to stratyfing
-    multi-label data. 
+The classifier follows methods outlined in Sechidis11 and Szymanski17 papers related to stratyfing
+multi-label data.
 
-    In general what we expect from a given stratification output is that a strata, or a fold, is close to a given, demanded size,
-    usually equal to 1/k in k-fold approach, or a x% train to test set division in 2-fold splits. 
+In general what we expect from a given stratification output is that a strata, or a fold, is close to a given, demanded size,
+usually equal to 1/k in k-fold approach, or a x% train to test set division in 2-fold splits.
 
-    The idea behind this stratification method is to assign label combinations to folds based on how much a given combination is desired
-    by a given fold, as more and more assignments are made, some folds are filled and positive evidence is directed into other folds,
-    in the end negative evidence is distributed based on a folds desirability of size.
+The idea behind this stratification method is to assign label combinations to folds based on how much a given combination is desired
+by a given fold, as more and more assignments are made, some folds are filled and positive evidence is directed into other folds,
+in the end negative evidence is distributed based on a folds desirability of size.
 
-    You can also watch a `video presentation <http://videolectures.net/ecmlpkdd2011_tsoumakas_stratification/?q=stratification%20multi%20label>`_ by G. Tsoumakas which explains the algorithm. In 2017 Szymanski & Kajdanowicz extended the algorithm
-    to handle high-order relationships in the data set, if order = 1, the algorithm falls back to the original Sechidis11 setting. 
+You can also watch a `video presentation <http://videolectures.net/ecmlpkdd2011_tsoumakas_stratification/?q=stratification%20multi%20label>`_ by G. Tsoumakas which explains the algorithm. In 2017 Szymanski & Kajdanowicz extended the algorithm
+to handle high-order relationships in the data set, if order = 1, the algorithm falls back to the original Sechidis11 setting.
 
-    If order is larger than 1 this class constructs a list of label combinations with replacement, i.e. allowing combinations of lower
-    order to be take into account. For example for combinations of order 2, the stratifier will consider both
-    label pairs (1, 2) and single labels denoted as (1,1) in the algorithm. In higher order cases the 
-    when two combinations of different size have similar desirablity: the larger, i.e. more specific combination
-    is taken into consideration first, thus if a label pair (1,2) and label 1 represented as (1,1) are of similar
-    desirability, evidence for (1,2) will be assigned to folds first.
+If order is larger than 1 this class constructs a list of label combinations with replacement, i.e. allowing combinations of lower
+order to be take into account. For example for combinations of order 2, the stratifier will consider both
+label pairs (1, 2) and single labels denoted as (1,1) in the algorithm. In higher order cases the
+when two combinations of different size have similar desirablity: the larger, i.e. more specific combination
+is taken into consideration first, thus if a label pair (1,2) and label 1 represented as (1,1) are of similar
+desirability, evidence for (1,2) will be assigned to folds first.
 
-    You can use this class exactly the same way you would use a normal scikit KFold class:
-    .. code-block:: python
+You can use this class exactly the same way you would use a normal scikit KFold class:
 
-        from skmultilearn.model_selection import IterativeStratification
+.. code-block :: python
 
-        k_fold = IterativeStratification(n_splits=2, order=1):
-        for train, test in k_fold.split(X, y):
-            classifier.fit(X[train], y[train])
-            result = classifier.predict(X[test])
-            # do something with the result, comparing it to y[test]
+    from skmultilearn.model_selection import IterativeStratification
 
-    Most of the methods of this class are private, you will not need them unless you are extending the method.
+    k_fold = IterativeStratification(n_splits=2, order=1):
+    for train, test in k_fold.split(X, y):
+        classifier.fit(X[train], y[train])
+        result = classifier.predict(X[test])
+        # do something with the result, comparing it to y[test]
 
-    If you use this method to stratify data please cite both:
-    Sechidis, K., Tsoumakas, G., & Vlahavas, I. (2011). On the stratification of multi-label data. Machine Learning and Knowledge Discovery in Databases, 145-158.
-    http://lpis.csd.auth.gr/publications/sechidis-ecmlpkdd-2011.pdf
+Most of the methods of this class are private, you will not need them unless you are extending the method.
 
-    Piotr Szymański, Tomasz Kajdanowicz ; Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications, PMLR 74:22-35, 2017.
-    http://proceedings.mlr.press/v74/szyma%C5%84ski17a.html
+If you use this method to stratify data please cite both:
+Sechidis, K., Tsoumakas, G., & Vlahavas, I. (2011). On the stratification of multi-label data. Machine Learning and Knowledge Discovery in Databases, 145-158.
+http://lpis.csd.auth.gr/publications/sechidis-ecmlpkdd-2011.pdf
 
-    Bibtex:
+Piotr Szymański, Tomasz Kajdanowicz ; Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications, PMLR 74:22-35, 2017.
+http://proceedings.mlr.press/v74/szyma%C5%84ski17a.html
 
-    .. code-block:: bibtex
+Bibtex:
 
-        @article{sechidis2011stratification,
-          title={On the stratification of multi-label data},
-          author={Sechidis, Konstantinos and Tsoumakas, Grigorios and Vlahavas, Ioannis},
-          journal={Machine Learning and Knowledge Discovery in Databases},
-          pages={145--158},
-          year={2011},
-          publisher={Springer}
-        }
+.. code-block:: bibtex
 
-        @InProceedings{pmlr-v74-szymański17a,
-          title =    {A Network Perspective on Stratification of Multi-Label Data},
-          author =   {Piotr Szymański and Tomasz Kajdanowicz},
-          booktitle =    {Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications},
-          pages =    {22--35},
-          year =     {2017},
-          editor =   {Luís Torgo and Bartosz Krawczyk and Paula Branco and Nuno Moniz},
-          volume =   {74},
-          series =   {Proceedings of Machine Learning Research},
-          address =      {ECML-PKDD, Skopje, Macedonia},
-          publisher =    {PMLR},
-        }
+    @article{sechidis2011stratification,
+      title={On the stratification of multi-label data},
+      author={Sechidis, Konstantinos and Tsoumakas, Grigorios and Vlahavas, Ioannis},
+      journal={Machine Learning and Knowledge Discovery in Databases},
+      pages={145--158},
+      year={2011},
+      publisher={Springer}
+    }
+
+    @InProceedings{pmlr-v74-szymański17a,
+      title =    {A Network Perspective on Stratification of Multi-Label Data},
+      author =   {Piotr Szymański and Tomasz Kajdanowicz},
+      booktitle =    {Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications},
+      pages =    {22--35},
+      year =     {2017},
+      editor =   {Luís Torgo and Bartosz Krawczyk and Paula Branco and Nuno Moniz},
+      volume =   {74},
+      series =   {Proceedings of Machine Learning Research},
+      address =      {ECML-PKDD, Skopje, Macedonia},
+      publisher =    {PMLR},
+    }
 """
 
 from sklearn.model_selection._split import _BaseKFold
@@ -97,12 +98,35 @@ def iterative_train_test_split(X, y, test_size):
     return X_train, y_train, X_test, y_test
 
 
+def iterative_train_test_split(X, y, test_size):
+    """Iteratively stratified train/test split
+
+    Parameters
+    ----------
+    test_size : float, [0,1]
+        the proportion of the dataset to include in the test split, the rest will be put in the train set
+
+    Returns
+    -------
+    X_train, y_train, X_test, y_test
+        stratified division into train/test split
+    """
+
+    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
+    test_indexes, train_indexes = next(stratifier.split(X, y))
+
+    X_train, y_train = X[train_indexes, :], y[train_indexes, :]
+    X_test, y_test = X[test_indexes, :], y[test_indexes, :]
+
+    return X_train, y_train, X_test, y_test
+
+
 
 def _fold_tie_break(desired_samples_per_fold, M):
     """Helper function to split a tie between folds with same desirability of a given sample
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
         number of samples desired per fold
     M : np.array(int)
@@ -153,13 +177,13 @@ def _get_most_desired_combination(samples_with_combination):
 
 
 class IterativeStratification(_BaseKFold):
-    """Iteratively stratify a multi-label data set
+    """Iteratively stratify a multi-label data set into folds
 
     Construct an interative stratifier that splits the data set into folds trying to maintain balanced representation
     with respect to order-th label combinations.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
 
     n_splits : number of splits, int
         the number of folds to stratify into

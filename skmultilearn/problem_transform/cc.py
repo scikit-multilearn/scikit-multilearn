@@ -35,7 +35,7 @@ class ClassifierChain(ProblemTransformationBase):
     Attributes
     ----------
     classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `n_labels`
-        list of classifiers trained per partition_, set in :meth:`fit`
+        list of classifiers trained per partition, set in :meth:`fit`
 
 
 

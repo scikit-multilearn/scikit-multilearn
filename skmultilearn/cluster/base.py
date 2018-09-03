@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator
 class GraphBuilderBase(object):
     """An abstract base class for a graph building class used in Label Space clustering.
 
-    Inherit it in your classifier according to :doc:`../developer.ipynb`.
+    Inherit it in your classifier according to`developer guide <../developer.ipynb>`_.
 
     """
 
@@ -17,7 +17,7 @@ class GraphBuilderBase(object):
     def transform(self, y):
         """ Abstract method for graph edge map builder for a label space clusterer
 
-        Implement it in your classifier according to :doc:`../developer.ipynb`.
+        Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
         Raises
         ------
@@ -30,7 +30,7 @@ class GraphBuilderBase(object):
 class LabelSpaceClustererBase(BaseEstimator):
     """An abstract base class for Label Space clustering
 
-    Inherit it in your classifier according to :doc:`../developer.ipynb`.
+    Inherit it in your classifier according to`developer guide <../developer.ipynb>`_.
 
     """
 
@@ -40,7 +40,7 @@ class LabelSpaceClustererBase(BaseEstimator):
     def fit_predict(self, X, y):
         """ Abstract method for clustering label space
 
-        Implement it in your classifier according to :doc:`../developer.ipynb`.
+        Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
         Raises
         ------
@@ -53,7 +53,7 @@ class LabelSpaceClustererBase(BaseEstimator):
 class LabelGraphClustererBase(object):
     """An abstract base class for Label Graph clustering
 
-    Inherit it in your classifier according to :doc:`../developer.ipynb`.
+    Inherit it in your classifier according to`developer guide <../developer.ipynb>`_.
 
     """
 
@@ -71,7 +71,7 @@ class LabelGraphClustererBase(object):
     def fit_predict(self, X, y):
         """ Abstract method for clustering label space
 
-        Implement it in your classifier according to :doc:`../developer.ipynb`.
+        Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
         Raises
         ------

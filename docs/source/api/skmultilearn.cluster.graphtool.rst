@@ -1,6 +1,10 @@
 skmultilearn\.cluster\.graphtool module
 =======================================
 
-.. automodule:: skmultilearn.cluster.graphtool
+.. autoclass:: skmultilearn.cluster.StochasticBlockModel
+    :members:
+    :show-inheritance:
+
+.. autoclass:: skmultilearn.cluster.GraphToolLabelGraphClusterer
     :members:
     :show-inheritance:

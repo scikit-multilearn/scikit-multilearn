@@ -38,9 +38,9 @@ class NetworkXLabelGraphClusterer(LabelGraphClustererBase):
     Attributes
     ----------
     graph_ : networkx.Graph
-        the networkx Graph object containing the graph representation of graph builder's adjacency matrix and weights_
+        the networkx Graph object containing the graph representation of graph builder's adjacency matrix and weights
     weights_ : { 'weight' : list of values in edge order of graph edges }
-        edge weights_ stored in a format recognizable by the networkx module
+        edge weights stored in a format recognizable by the networkx module
 
     References
     ----------

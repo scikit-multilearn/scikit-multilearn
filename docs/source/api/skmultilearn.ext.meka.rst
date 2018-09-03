@@ -1,6 +1,8 @@
 skmultilearn\.ext\.meka module
 ==============================
 
-.. automodule:: skmultilearn.ext.meka
+.. autoclass:: skmultilearn.ext.Meka
     :members:
     :show-inheritance:
+
+.. autofunction:: skmultilearn.ext.download_meka

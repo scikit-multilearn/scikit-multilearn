@@ -11,7 +11,7 @@ class StochasticBlockModel:
     """A Stochastic Blockmodel fit to Label Graph
 
     This contains a stochastic block model instance constructed for a block model variant specified in parameters.
-    It can be fit to an instance of a graph and set of weights_. More information on how to select parameters can be
+    It can be fit to an instance of a graph and set of weights. More information on how to select parameters can be
     found in `the extensive introduction into Stochastic Block Models
     <https://graph-tool.skewed.de/static/doc/demos/inference/inference.html>`_ in graphtool documentation.
 
@@ -58,7 +58,7 @@ class StochasticBlockModel:
         Returns
         -------
         numpy.ndarray
-            partition_ of labels, each sublist contains label indices
+            partition of labels, each sublist contains label indices
             related to label positions in :code:`y`
         """
         if self.weight_model:
@@ -125,7 +125,7 @@ class GraphToolLabelGraphClusterer(LabelGraphClustererBase):
     graph_ : graphtool.Graph
         object representing a label co-occurence graph
     weights_ : graphtool.EdgeProperty<double>
-        edge weights_ defined by graph builder stored in a graphtool compatible format
+        edge weights defined by graph builder stored in a graphtool compatible format
 
 
     .. note ::

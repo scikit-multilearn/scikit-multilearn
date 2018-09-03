@@ -1,6 +1,6 @@
 skmultilearn\.cluster\.matrix module
 ====================================
 
-.. automodule:: skmultilearn.cluster.matrix
+.. autoclass:: skmultilearn.cluster.MatrixLabelSpaceClusterer
     :members:
     :show-inheritance:

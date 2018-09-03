@@ -1,6 +1,6 @@
 skmultilearn\.cluster\.networkx module
 ======================================
 
-.. automodule:: skmultilearn.cluster.networkx
+.. autoclass:: skmultilearn.cluster.NetworkXLabelGraphClusterer
     :members:
     :show-inheritance:
