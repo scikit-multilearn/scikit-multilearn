@@ -1,0 +1,175 @@
+{#
+    Based on Jaques Grobler's nilearn theme
+    ~~~~~~~~~~~~~~~~~
+
+    :author: Piotr Szymański
+    :license: BSD
+#}
+{% extends "sphinxdoc/layout.html" %}
+
+{%- block doctype -%}
+<!DOCTYPE html>
+{%- endblock %}
+
+{% set title = 'scikit-multilearn: Multi-Label Classification in Python' %}
+
+{%- block relbar1 %}
+<!-- this is a replacement -->
+{% endblock %}
+
+{% block extrahead %}
+<meta content="True" name="HandheldFriendly">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@scikitml">
+<meta name="twitter:title" content="scikit-multilearn">
+<meta name="twitter:description" content="A native Python implementation of a variety of multi-label classification algorithms. Includes a Meka, MULAN, Weka wrapper. BSD licensed.">
+<meta name="keywords" content="scikit-multilearn, multi-label classification, clustering, python, machinelearning">
+<meta property="og:title" content="scikit-multilearn | Multi-label classification package for python" />
+<meta property="og:description" content="A native Python implementation of a variety of multi-label classification algorithms. Includes a Meka, MULAN, Weka wrapper. BSD licensed." />
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+<link rel="stylesheet" href="_static/custom.css">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans|IBM+Plex+Sans+Condensed|IBM+Plex+Serif" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51136636-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-51136636-1');
+</script>
+
+{% endblock %}
+
+{% block header %}
+<div class="navbar-fixed">
+
+  <nav>
+    <div class="nav-wrapper container">
+      <a href="{{pathto('index')}}" class="brand-logo">scikit-multilearn</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{{pathto('userguide')}}">User Guide</a></li>
+        <li><a href="{{pathto('api/skmultilearn')}}">Reference</a></li>
+        <li><a href="https://github.com/scikit-multilearn/scikit-multilearn">Github</a></li>
+        <li><a href="https://pypi.org/project/scikit-multilearn">PyPi</a></li>
+        <li id="navbar-about"><a href="{{pathto('authors')}}">About</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+{% endblock %}
+
+{%- block content %}
+<div class="container">
+{%- if (pagename != 'index') %}
+  <div class="row">
+    <!-- Table of contents -->
+    <div class="col hide-on-small-only m3 xl2">
+      <div class="toc-wrapper">
+        <div style="height: 1px;">
+          <ul class="section table-of-contents">
+            {{ toc }}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="main-text section col s12 m8 offset-m1 xl9 offset-xl3">
+{% endif %}
+      {% block body %} {% endblock %}
+{%- if (pagename != 'index') %}
+    </div>
+  </div>
+{% endif %}
+</div>
+{%- endblock %}
+
+
+
+{# This block gets put at the top of the sidebar #}
+{% block sidebarlogo %}
+{% endblock %}
+
+{# I had to copy the whole search block just to change the rendered text,
+   so it doesn't mention modules or classes #}
+{%- block sidebarsearch %}
+{%- if pagename != "search" %}
+
+<div class="navbar">
+</div> <!-- end navbar -->
+
+<script type="text/javascript">$('#searchbox-ml').show(0);</script>
+<script type="text/javascript">$('#searchbox-site').show(0);</script>
+{%- endif %}
+
+{# The sidebarsearch block is the last one available in the default sidebar()
+   macro, so the only way to add something to the bottom of the sidebar is to
+   put it here, at the end of the sidebarsearch block (before it closes).
+   #}
+
+{%- endblock %}
+
+{%- block footer %}
+<footer class="page-footer blue-grey darken-4">
+  <div class="container">
+    <div class="row  ">
+      <div class="col l6 s12">
+        <h5 class="white-text">Cite US!</h5>
+        <p>If you use scikit-multilearn in your research and publish it, please consider citing us, it will help us get funding for making the library better. The paper is available on <a href="https://arxiv.org/abs/1702.01460">arXiv</a>, to cite it try the Bibtex code on the right.</p>
+      </div>
+      <div class="col l4 s12">
+        <pre><code>
+        {% raw %}
+        @ARTICLE{2017arXiv170201460S,
+          author = {{Szyma{\'n}ski}, P. and {Kajdanowicz}, T.},
+          title = "{A scikit-based Python environment for performing multi-label classification}",
+          journal = {ArXiv e-prints},
+          archivePrefix = "arXiv",
+          eprint = {1702.01460},
+          primaryClass = "cs.LG",
+          keywords = {Computer Science - Learning, Computer Science - Mathematical Software},
+          year = 2017,
+          month = feb,
+        }
+        {% endraw %}
+      </code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright blue-grey darken-4">
+    <div class="container">
+      {%- if show_copyright %}
+        {%- if hasdoc('copyright') %}
+          {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; {{ copyright }}.{% endtrans %}
+        {%- else %}
+          {% trans copyright=copyright|e %}&copy; {{ copyright }}.{% endtrans %}
+        {%- endif %}
+      {%- endif %}
+      {%- if last_updated %}
+        {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+      {%- endif %}
+      {%- if show_sphinx %}
+        {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}{% endtrans %}.
+      {%- endif %}
+      {%- if has_source and sourcename %}
+      <span style="padding-left: 5ex;">
+        <a href="{{ pathto('_sources/' + sourcename, true)|e }}"
+         rel="nofollow">{{ _('Show this page source') }}</a>
+      </span>
+      {%- endif %}
+    </div>
+  </div>
+</footer>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+{%- endblock %}
