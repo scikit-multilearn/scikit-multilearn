@@ -61,8 +61,8 @@ class MLARAM(MLClassifierBase):
     activation of a small fraction of them, leading to a significant
     reduction of the classification time.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     vigilance : float (default is 0.9)
         parameter for adaptive resonance theory networks, controls how
         large a hyperbox can be, 1 it is small (no compression), 0
@@ -84,6 +84,7 @@ class MLARAM(MLClassifierBase):
     .. _here: http://dx.doi.org/10.1109/ICDMW.2015.14
 
     .. code :: bibtex
+
         @INPROCEEDINGS{7395756,
             author={F. Benites and E. Sapozhnikova},
             booktitle={2015 IEEE International Conference on Data Mining Workshop (ICDMW)},

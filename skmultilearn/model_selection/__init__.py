@@ -2,14 +2,12 @@
 The :mod:`skmultilearn.model_selection` module provides implementations multi-label stratification methods
 useful for parameter estimation.
 
-Currently the available classes include:
+Currently the available modules include:
 
 +-------------------------------------------------------------------+-------------------------------------------+
 | Name                                                              | Description                               |
 +===================================================================+===========================================+
-| :class:`~skmultilearn.model_selection.IterativeStratification`    | Iterative stratification                  |
-+-------------------------------------------------------------------+-------------------------------------------+
-| :class:`~skmultilearn.model_selection.iterative_train_test_split` | Iterative train/test splitter             |
+| :class:`~skmultilearn.model_selection.iterative_stratification`   | Iterative stratification                  |
 +-------------------------------------------------------------------+-------------------------------------------+
 | :mod:`~skmultilearn.model_selection.measures`                     | Stratification quality measures package   |
 +-------------------------------------------------------------------+-------------------------------------------+

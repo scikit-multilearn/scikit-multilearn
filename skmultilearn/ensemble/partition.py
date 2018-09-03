@@ -13,7 +13,7 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
     1. partitioning the label space into separate, smaller multi-label sub problems, using the supplied label
     space clusterer
 
-    2. training an instance of the supplied base mult-label classifier for each label space subset in the partition_
+    2. training an instance of the supplied base mult-label classifier for each label space subset in the partition
 
     3. predicting the result with each of subclassifiers and returning the sum of their results
 

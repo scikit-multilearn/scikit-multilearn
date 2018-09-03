@@ -33,5 +33,6 @@ from .mlknn import MLkNN
 from .mlaram import MLARAM
 
 __all__ = ["BRkNNaClassifier", 
-           "BRkNNbClassifier", 
+           "BRkNNbClassifier",
+           "MLkNN",
            "MLARAM"]

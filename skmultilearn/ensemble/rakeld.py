@@ -10,7 +10,7 @@ class RakelD(MLClassifierBase):
     """Distinct RAndom k-labELsets multi-label classifier.
 
     Divides the label space in to equal partitions of size k, trains a Label Powerset
-    classifier per partition_ and predicts by summing the result of all trained classifiers.
+    classifier per partition and predicts by summing the result of all trained classifiers.
 
     Parameters
     ----------

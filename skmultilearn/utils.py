@@ -14,8 +14,8 @@ SPARSE_FORMAT_TO_CONSTRUCTOR = {
 def get_matrix_in_format(original_matrix, matrix_format):
     """Converts matrix to format
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
 
     original_matrix : np.matrix or scipy matrix or np.array of np. arrays
         matrix to convert
