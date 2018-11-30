@@ -11,7 +11,7 @@ learning tasks. It is built on-top of various scientific Python packages
 follows a similar API to that of [scikit-learn](http://scikit-learn.org/).
 
 - __Website:__ [scikit.ml](http://scikit.ml)
-- __Documentation:__ [scikit-multilearn Documentation](http://scikit.ml/api/index.html)
+- __Documentation:__ [scikit-multilearn Documentation](http://scikit.ml/api/skmultilearn.html)
 
 
 ## Features
