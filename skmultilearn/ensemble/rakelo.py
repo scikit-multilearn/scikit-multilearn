@@ -22,9 +22,11 @@ class RakelO(MLClassifierBase):
         set under `self.classifier.require_dense`
     labelset_size : int
         the desired size of each of the partitions, parameter k according to paper.
+        According to paper, the best parameter is 3, so it's set as default
         Will be automatically set under `self.labelset_size`
     model_count : int
         the desired number of classifiers, parameter m according to paper.
+        According to paper, the best value for this parameter is 2M (being M the number of labels)
         Will be automatically set under :code:`self.model_count_`.
 
 
@@ -78,7 +80,7 @@ class RakelO(MLClassifierBase):
 
     """
 
-    def __init__(self, base_classifier=None, model_count=None, labelset_size=None, base_classifier_require_dense=None):
+    def __init__(self, base_classifier=None, model_count=None, labelset_size=3, base_classifier_require_dense=None):
         super(RakelO, self).__init__()
 
         self.model_count = model_count
