@@ -30,7 +30,6 @@ before_install:
 
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip2 uninstall -y numpy                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then pip2 uninstall -y scipy                               ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew cask uninstall oclint                            ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew update                                           ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/science                              ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/bio                                  ; fi
