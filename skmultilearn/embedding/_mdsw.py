@@ -156,9 +156,9 @@ def _smacof_single_w(similarities, n_uq, uq_weight, metric=True, n_components=2,
     return X, _stress, it + 1
 
 
-def smacof_w(similarities, n_uq, uq_weight, metric=True, n_components=2, init=None, n_init=8,
-             n_jobs=1, max_iter=300, verbose=0, eps=1e-3, random_state=None,
-             return_n_iter=False):
+def _smacof_w(similarities, n_uq, uq_weight, metric=True, n_components=2, init=None, n_init=8,
+              n_jobs=1, max_iter=300, verbose=0, eps=1e-3, random_state=None,
+              return_n_iter=False):
     """
     Computes multidimensional scaling using SMACOF (Scaling by Majorizing a
     Complicated Function) algorithm
@@ -298,7 +298,7 @@ def smacof_w(similarities, n_uq, uq_weight, metric=True, n_components=2, init=No
         return best_pos, best_stress
 
 
-class MDSW(BaseEstimator):
+class _MDSW(BaseEstimator):
     """Multidimensional scaling
 
     Parameters
@@ -434,7 +434,7 @@ class MDSW(BaseEstimator):
             raise ValueError("Proximity must be 'precomputed' or 'euclidean'."
                              " Got %s instead" % str(self.dissimilarity))
 
-        self.embedding_, self.stress_, self.n_iter_ = smacof_w(
+        self.embedding_, self.stress_, self.n_iter_ = _smacof_w(
             self.dissimilarity_matrix_, self.n_uq, self.uq_weight, metric=self.metric,
             n_components=self.n_components, init=init, n_init=self.n_init,
             n_jobs=self.n_jobs, max_iter=self.max_iter, verbose=self.verbose,
