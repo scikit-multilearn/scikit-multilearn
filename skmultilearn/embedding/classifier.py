@@ -4,21 +4,39 @@ import scipy.sparse as sp
 
 
 class EmbeddingClassifier(ProblemTransformationBase):
-    """Assigns k most frequent labels
+    """Embedding-based classifier
+
+    The classifier embeds the label space with the embedder, trains a set of single-variate or a multi-variate regressor
+    for embedding unseen cases and a base classifier to predict labels based on input features and the embeddings.
 
     Parameters
     ----------
-    embedder : int
-        number of most frequent labels to assign
+    embedder : :class:`~sklearn.base.BaseEstimator`
+        the class to embed the label space
 
-    regressor : int
-        number of most frequent labels to assign
+    regressor : :class:`~sklearn.base.BaseEstimator`
+        the base regressor to predict embeddings from input features
 
-    classifier : int
-        number of most frequent labels to assign
+    classifier : :class:`~sklearn.base.BaseEstimator`
+        the base classifier to predict labels from input features and embeddings
 
-    regressor_per_dimension : int
-        number of most frequent labels to assign
+    regressor_per_dimension : bool
+        whether to train one joint multi-variate regressor (False) or per dimension single-variate regressor (True)
+
+    require_dense : [bool, bool], optional
+        whether the base classifier requires dense representations for input features and classes/labels
+        matrices in fit/predict.
+
+
+    Attributes
+    ----------
+    n_regressors_ : int
+        number of trained regressors
+    partition_ : List[List[int]], shape=(`model_count_`,)
+        list of lists of label indexes, used to index the output space matrix, set in :meth:`_generate_partition`
+        via :meth:`fit`
+    classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
+        list of classifiers trained per partition, set in :meth:`fit`
 
 
     Example
@@ -27,18 +45,21 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
     .. code-block:: python
 
-        from skmultilearn.<YOUR_CLASSIFIER_MODULE> import AssignKBestLabels
+        from skmultilearn.embedding import SKLearnEmbedder, EmbeddingClassifier
+        from sklearn.manifold import SpectralEmbedding
+        from sklearn.ensemble import RandomForestRegressor
+        from skmultilearn.adapt import MLkNN
 
-        # initialize LabelPowerset multi-label classifier with a RandomForest
-        classifier = AssignKBestLabels(
-            k = 3
+        clf = EmbeddingClassifier(
+            SKLearnEmbedder(SpectralEmbedding(n_components = 10)),
+            RandomForestRegressor(n_estimators=10),
+            MLkNN(k=5)
         )
 
-        # train
-        classifier.fit(X_train, y_train)
+        clf.fit(X_train, y_train)
 
-        # predict
-        predictions = classifier.predict(X_test)
+        predictions = clf.predict(X_test)
+
     """
 
     def __init__(self, embedder, regressor, classifier, regressor_per_dimension=False, require_dense=None):
@@ -104,6 +125,8 @@ class EmbeddingClassifier(ProblemTransformationBase):
         :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
             binary indicator matrix with label assignments
         """
+
+        X = self._ensure_input_format(X)
 
         X_y_embedded = self._predict_embedding(X)
         return self.classifier.predict(X_y_embedded)

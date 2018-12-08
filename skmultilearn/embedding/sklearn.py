@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 
-import numpy as np
-
 from sklearn.base import BaseEstimator
 
+
 class SKLearnEmbedder(BaseEstimator):
-    """Cluster the label space using a scikit-compatible matrix-based clusterer
+    """Embed the label space using a scikit-compatible matrix-based embedder
 
     Parameters
     ----------
@@ -19,34 +18,24 @@ class SKLearnEmbedder(BaseEstimator):
         put under :code:`self.pass_input_space`.
 
 
-    Example code for using this clusterer looks like this:
+    Example code for using this embedder looks like this:
 
     .. code-block:: python
 
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.cluster import KMeans
-        from skmultilearn.problem_transform import LabelPowerset
-        from skmultilearn.cluster import MatrixLabelSpaceClusterer
-        from skmultilearn.ensemble import LabelSpacePartitioningClassifier
+        from skmultilearn.embedding import SKLearnEmbedder, EmbeddingClassifier
+        from sklearn.manifold import SpectralEmbedding
+        from sklearn.ensemble import RandomForestRegressor
+        from skmultilearn.adapt import MLkNN
 
-        # construct base forest classifier
-        base_classifier = RandomForestClassifier(n_estimators=1030)
+        clf = EmbeddingClassifier(
+            SKLearnEmbedder(SpectralEmbedding(n_components = 10)),
+            RandomForestRegressor(n_estimators=10),
+            MLkNN(k=5)
+        )
 
-        # setup problem transformation approach with sparse matrices for random forest
-        problem_transform_classifier = LabelPowerset(classifier=base_classifier,
-            require_dense=[False, False])
+        clf.fit(X_train, y_train)
 
-        # setup the clusterer
-        clusterer = MatrixLabelSpaceClusterer(clusterer=KMeans(n_clusters=3))
-
-        # setup the ensemble metaclassifier
-        classifier = LabelSpacePartitioningClassifier(problem_transform_classifier, clusterer)
-
-        # train
-        classifier.fit(X_train, y_train)
-
-        # predict
-        predictions = classifier.predict(X_test)
+        predictions = clf.predict(X_test)
     """
 
     def __init__(self, embedder=None, pass_input_space=False):
@@ -55,24 +44,38 @@ class SKLearnEmbedder(BaseEstimator):
         self.embedder = embedder
         self.pass_input_space = pass_input_space
 
-    def fit(self, X,y):
-        self.embedder.fit(X, y)
+    def fit(self, X, y):
+        """Fits the embedder to data
 
-    def fit_transform(self, X, y):
-        """Clusters the output space
-
-        The clusterer's :code:`fit_predict` method is executed
-        on either X and y.T vectors (if :code:`self.pass_input_space` is true)
-        or just y.T to detect clusters of labels.
-
-        The transposition of label space is used to align with
-        the format expected by scikit-learn classifiers, i.e. we cluster
-        labels with label assignment vectors as samples.
+        Parameters
+        ----------
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
 
         Returns
         -------
-        arrray of arrays of label indexes (numpy.ndarray)
-            label space division, each sublist represents labels that are in that community
+        self
+            fitted instance of self
+        """
+
+        self.embedder.fit(X, y)
+
+    def fit_transform(self, X, y):
+        """Fit the embedder and transform the output space
+
+        Parameters
+        ----------
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
+
+        Returns
+        -------
+        X, y_embedded
+            results of the embedding, input and output space
         """
 
         if self.pass_input_space:
