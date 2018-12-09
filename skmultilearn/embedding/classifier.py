@@ -1,7 +1,7 @@
 from skmultilearn.base import ProblemTransformationBase
 import numpy as np
 import scipy.sparse as sp
-
+from copy import copy
 
 class EmbeddingClassifier(ProblemTransformationBase):
     """Embedding-based classifier
@@ -117,9 +117,9 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
         if self.regressor_per_dimension:
             self.n_regressors_ = y_embedded.shape[1]
-            self.regressors_ = [None for _ in range(self.n_dim_)]
-            for i in range(self.n_dim_):
-                self.regressors_[i] = self.regressor
+            self.regressors_ = [None for _ in range(self.n_regressors_)]
+            for i in range(self.n_regressors_):
+                self.regressors_[i] = copy(self.regressor)
                 self.regressors_[i].fit(X, y_embedded[:, i])
         else:
             self.n_regressors_ = 1
@@ -178,9 +178,11 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
     def _predict_embedding(self, X):
         if self.regressor_per_dimension:
-            y_embedded = sp.dok_matrix((X.shape[0], self.n_dim_))
-            for i in range(self.n_dim_):
-                y_embedded[:, i] = self.regressors_[i].predict(X)
+            y_embedded = [self.regressors_[i].predict(X) for i in range(self.n_regressors_)]
+            if sp.issparse(X):
+                y_embedded=sp.csr_matrix(y_embedded).T
+            else:
+                y_embedded=np.matrix(y_embedded).T
         else:
             y_embedded = self.regressor.predict(X)
 

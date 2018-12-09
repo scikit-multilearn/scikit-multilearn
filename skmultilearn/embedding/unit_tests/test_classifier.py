@@ -7,6 +7,7 @@ from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from sklearn.linear_model import LinearRegression
 from sklearn.manifold import SpectralEmbedding
 from copy import copy
+import sklearn.metrics as metrics
 
 class EmbeddingTest(ClassifierBaseTest):
     TEST_NEIGHBORS = 3
@@ -40,6 +41,13 @@ class EmbeddingTest(ClassifierBaseTest):
             SKLearnEmbedder(SpectralEmbedding(n_components=2)),
             LinearRegression(),
             MLkNN(k=2)
+        )
+
+        EmbeddingClassifier(
+            CLEMS(metrics.accuracy_score, True),
+            LinearRegression(),
+            MLkNN(k=2),
+            True
         )
 
     def test_if_embedding_classification_works_on_sparse_input(self):

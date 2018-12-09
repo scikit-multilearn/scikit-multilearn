@@ -1,8 +1,8 @@
 import numpy as np
 import scipy.sparse as sp
 from sklearn.neighbors import NearestNeighbors
-from ._mdsw import _MDSW
 from copy import copy
+
 
 class CLEMS:
     """Embed the label space using a label network embedder from OpenNE
@@ -31,20 +31,19 @@ class CLEMS:
         clf = EmbeddingClassifier(
             CLEMS(accuracy_score, 4, True),
             RandomForestRegressor(n_estimators=10),
-            MLkNN(k=5),
-            True
+            MLkNN(k=5)
         )
 
         clf.fit(X_train, y_train)
 
         predictions = clf.predict(X_test)
     """
-    def __init__(self, measure, dimension, is_score=False, params=None):
+
+    def __init__(self, measure, is_score=False, params=None):
         self.measure = measure
         if is_score:
-            self.measure = lambda x,y : 1 - measure(x,y)
+            self.measure = lambda x, y: 1 - measure(x, y)
 
-        self.dimension = dimension
         if params is None:
             params = {}
 
@@ -66,38 +65,11 @@ class CLEMS:
             fitted instance of self
         """
 
-        self.n_labels_ = y.shape[1]
-
         # get unique label combinations
-        if sp.issparse(y):
-            _, idx = np.unique(y.rows, return_index=True)
-        else:
-            _, idx = np.unique(y, return_index=True)
 
-        y_unique = y[:, idx]
+        self.fit_transform(X, y)
 
-        self.knn_ = NearestNeighbors(n_neighbors=1)
-        self.knn_.fit(y_unique)
-
-        nearest_points = self.knn_.kneighbors(y)[1][:, 0]
-        nearest_points_counts = np.unique(nearest_points, return_counts=True)[1]
-
-        # calculate delta matrix
-        delta = np.zeros((2 * y_unique.shape[0], 2 * y_unique.shape[0]))
-        for i in range(y_unique.shape[0]):
-            for j in range(y_unique.shape[0]):
-                delta[i, y_unique.shape[0] + j] = np.sqrt(self.measure(y_unique[None, i], y_unique[None, j]))
-                delta[y_unique.shape[0] + j, i] = delta[i, y_unique.shape[0] + j]
-
-        # calculate MDS embedding
-        params = copy(self.params)
-        params['n_components'] = self.dimension
-        params['n_uq'] = y_unique.shape[0]
-        params['uq_weight'] = nearest_points_counts
-        self.embedder_ = _MDSW(**params)
-        self.embedder_.fit(delta)
-
-    def fit_transform(self,X, y):
+    def fit_transform(self, X, y):
         """Fit the embedder and transform the output space
 
         Parameters
@@ -112,5 +84,41 @@ class CLEMS:
         X, y_embedded
             results of the embedding, input and output space
         """
-        self.fit(X,y)
-        return self.embedder_.embedding_
+
+        if sp.issparse(y):
+            idx = np.unique(y.tolil().rows, return_index=True)[1]
+        else:
+            idx = np.unique(y, axis=0, return_index=True)[1]
+
+        y_unique = y[idx]
+        n_unique = y_unique.shape[0]
+
+        self.knn_ = NearestNeighbors(n_neighbors=1)
+        self.knn_.fit(y_unique)
+
+        nearest_points = self.knn_.kneighbors(y)[1][:, 0]
+        nearest_points_counts = np.unique(nearest_points, return_counts=True)[1]
+
+        # calculate delta matrix
+        delta = np.zeros((2 * n_unique, 2 * n_unique))
+        for i in range(n_unique):
+            for j in range(n_unique):
+                delta[i, n_unique + j] = np.sqrt(self.measure(y_unique[None, i], y_unique[None, j]))
+                delta[n_unique + j, i] = delta[i, n_unique + j]
+
+        # calculate MDS embedding
+        params = copy(self.params)
+        params['n_components'] = y.shape[1]
+        params['n_uq'] = n_unique
+        params['uq_weight'] = nearest_points_counts
+        params['dissimilarity'] = "precomputed"
+        self.embedder_ = _MDSW(**params)
+
+        y_unique_embedded = self.embedder_.fit(delta).embedding_
+        y_unique_limited_to_before_trick = y_unique_embedded[n_unique:]
+
+        knn_to_extend_embeddings_to_other_combinations = NearestNeighbors(n_neighbors=1)
+        knn_to_extend_embeddings_to_other_combinations.fit(y_unique_limited_to_before_trick)
+        neighboring_embeddings_indices = knn_to_extend_embeddings_to_other_combinations.kneighbors(y)[1][:, 0]
+
+        return X, y_unique_embedded[neighboring_embeddings_indices]
