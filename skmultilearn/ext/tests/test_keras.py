@@ -1,8 +1,8 @@
 import unittest
 import platform, sys
 
-# no keras 32bit systems or win32 with python 2.7
-if not ((sys.platform == 'win32' and sys.version_info[0] == 2) or platform.architecture()[0]=='32bit'):
+# no keras 32bit systems or python 2.7
+if not (sys.version_info[0] == 2 or platform.architecture()[0]=='32bit'):
 
     from keras.models import Sequential
     from keras.layers import Dense

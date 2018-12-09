@@ -28,10 +28,12 @@ environment:
     - PYTHON: "C:\\Python27.10"
       PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "32"
+      HAS_KERAS: "0"
 
     - PYTHON: "C:\\Python27.10-x64"
       PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "64"
+      HAS_KERAS: "0"
 
     # Pre-installed Python versions, which Appveyor may upgrade to
     # a later point release.
@@ -40,10 +42,12 @@ environment:
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.6.x" # currently 3.4.3
       PYTHON_ARCH: "32"
+      HAS_KERAS: "0"
 
     - PYTHON: "C:\\Python36-x64"
       PYTHON_VERSION: "3.6.x" # currently 3.4.3
       PYTHON_ARCH: "64"
+      HAS_KERAS: "1"
 
 
 install:
@@ -90,7 +94,7 @@ install:
   # target Python version and architecture
   - "pip install -r requirements\\base.txt"
   - "pip install -r requirements\\meka.txt"
-  - "pip install -r requirements\\keras.txt"
+  - ps: If ($env:HAS_KERAS -eq "1")  { & pip install -r requirements\\keras.txt }
   # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
 
