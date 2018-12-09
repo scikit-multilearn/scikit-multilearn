@@ -9,7 +9,7 @@ from openne.lle import LLE
 import networkx as nx
 import numpy as np
 import tensorflow as tf
-
+import scipy.sparse as sp
 
 class OpenNetworkEmbedder:
     """Embed the label space using a label network embedder from OpenNE
