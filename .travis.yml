@@ -33,9 +33,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew update                                           ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/science                              ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew tap brewsci/bio                                  ; fi
-# - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew upgrade python                                   ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f2a764ef944b1080be64bd88dca9a1d80130c558/Formula/python.rb ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew switch python  3.6.5_1 ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew upgrade python                                   ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install graph-tool                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then mkdir ~/MEKA && wget https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip -O ~/MEKA/meka.zip; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd ~/MEKA/ && unzip -a meka.zip && mv meka-* meka; fi
@@ -51,7 +49,9 @@ install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip install -r requirements-all.txt ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip install -r requirements/keras.txt; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip3 install -r requirements-all.txt; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip3 install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd $TRAVIS_BUILD_DIR && pip3 install -r requirements/keras.txt; fi
+
 notifications:
   slack:
     secure: aTCuexl+J0s+ll8sS+p65Atmr9hgOYg0Qkv1nOwb+2oVlJtIYpwLymYZdMymeMtcbK8nlCKGuZRj9jpowzLvSU5kmmmbUdCskEzLf8guE/TUN5iMcIdvKnlAxfJ/MBXw59bjIuF3saYmzpkYbaBvj150M/tXMkYMLSgqwFMQq6U=
