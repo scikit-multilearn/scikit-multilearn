@@ -24,6 +24,7 @@ class RakelD(MLClassifierBase):
         put under :code:`self.require_dense`
     labelset_size : int
         the desired size of each of the partitions, parameter k according to paper
+        Default is 3, according to paper it has the best results
 
 
     Attributes
@@ -81,7 +82,7 @@ class RakelD(MLClassifierBase):
 
     """
 
-    def __init__(self, base_classifier=None, labelset_size=None, base_classifier_require_dense=None):
+    def __init__(self, base_classifier=None, labelset_size=3, base_classifier_require_dense=None):
         super(RakelD, self).__init__()
 
         self.labelset_size = labelset_size

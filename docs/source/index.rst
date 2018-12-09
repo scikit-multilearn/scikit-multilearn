@@ -29,7 +29,7 @@
 
     <div class="section">
       <div class="row">
-        <div class="col feature s12 m12 l6">
+        <div class="col feature s12 m6 l4">
           <div class="card  blue-grey darken-3">
             <div class="card-content white-text">
               <span class="card-title"><i class="fas fa-brain"></i> Lots of classifiers</span>
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="col feature s12 m6 l6">
+        <div class="col feature s12 m6 l4">
           <div class="card  blue-grey lighten-5">
             <div class="card-content black-text">
               <span class="card-title"><i class="fab fa-connectdevelop"></i> Label Relations</span>
@@ -107,10 +107,24 @@
             <div class="card-content white-text">
               <span class="card-title"><i class="fas fa-box-open"></i> MEKA wrapper</span>
               <p>Missing a particular classifier which exists in the Java MEKA and WEKA stack?
-              Now you can use it like a native scikit classifier!.</p>
+              Now you can use it like a native scikit classifier!</p>
             </div>
             <div class="card-action right-align">
               <a href="meka.html" class="waves-effect waves-light btn">Using MEKA</a>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><b>K</b> Keras support</span>
+              <p>Need a particular deep learning single/multi class classifier? You can now use it for multi-label
+              problems with scikit-multilearn!</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="keras.html" class="waves-effect waves-light btn">Using Keras</a>
             </div>
           </div>
         </div>

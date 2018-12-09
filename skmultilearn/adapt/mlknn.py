@@ -81,12 +81,12 @@ class MLkNN(MLClassifierBase):
         from sklearn.model_selection import GridSearchCV
 
         parameters = {'k': range(1,3), 's': [0.5, 0.7, 1.0]}
-        score = 'f1-macro
+        score = 'f1_macro'
 
         clf = GridSearchCV(MLkNN(), parameters, scoring=score)
         clf.fit(X, y)
 
-        print clf.best_params_, clf.best_score_
+        print (clf.best_params_, clf.best_score_)
 
         # output
         ({'k': 1, 's': 0.5}, 0.78988303374297597)
