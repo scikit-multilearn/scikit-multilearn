@@ -161,15 +161,18 @@ class OpenNetworkEmbedder:
             return np.array([
                 self.aggregation_function([self.embeddings_.vectors[node] for node in row])
                 if len(row) > 0 else empty_vector
-                for row in y.rows
+                for row in _iterate_over_sparse_matrix(y)
             ]).astype('float64')
 
-        if len(y.shape) > 1:
-            y = y.A
 
         return np.array([
             self.aggregation_function([self.embeddings_.vectors[node] for node, v in enumerate(row) if v > 0])
-            if len(np.nonzero(row)[0]) > 0 else empty_vector
-            for row in y
+            if len(row) > 0 else empty_vector
+            for row in (y.A if isinstance(y, np.matrix) else y)
         ]).astype('float64')
+
+
+def _iterate_over_sparse_matrix(y):
+    for r in range(y.shape[0]):
+        yield y[r,:].indices
 
