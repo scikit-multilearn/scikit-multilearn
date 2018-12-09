@@ -90,6 +90,7 @@ install:
   # target Python version and architecture
   - "pip install -r requirements\\base.txt"
   - "pip install -r requirements\\meka.txt"
+  - "pip install -r requirements\\keras.txt"
   # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
 
