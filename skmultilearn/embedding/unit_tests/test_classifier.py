@@ -1,13 +1,18 @@
 import unittest
+import sys, platform
 
 from skmultilearn.adapt import MLkNN
 from skmultilearn.cluster import LabelCooccurrenceGraphBuilder
-from skmultilearn.embedding import CLEMS, SKLearnEmbedder, OpenNetworkEmbedder, EmbeddingClassifier
+from skmultilearn.embedding import CLEMS, SKLearnEmbedder, EmbeddingClassifier
 from skmultilearn.tests.classifier_basetest import ClassifierBaseTest
 from sklearn.linear_model import LinearRegression
 from sklearn.manifold import SpectralEmbedding
 from copy import copy
 import sklearn.metrics as metrics
+
+if not (sys.version_info[0] == 2 or platform.architecture()[0]=='32bit'):
+    from skmultilearn.embedding import OpenNetworkEmbedder
+
 
 class EmbeddingTest(ClassifierBaseTest):
     TEST_NEIGHBORS = 3
@@ -24,18 +29,19 @@ class EmbeddingTest(ClassifierBaseTest):
             'LLE': dict(),
         }
 
-        for embedding in OpenNetworkEmbedder._EMBEDDINGS:
-            if embedding == 'LLE':
-                dimension = 3
-            else:
-                dimension = 4
+        if not (sys.version_info[0] == 2 or platform.architecture()[0] == '32bit'):
+            for embedding in OpenNetworkEmbedder._EMBEDDINGS:
+                if embedding == 'LLE':
+                    dimension = 3
+                else:
+                    dimension = 4
 
-            yield EmbeddingClassifier(
-                    OpenNetworkEmbedder(copy(graph_builder), embedding, dimension,
-                                    'add', True, param_dicts[embedding]),
-                    LinearRegression(),
-                    MLkNN(k=2)
-                )
+                yield EmbeddingClassifier(
+                        OpenNetworkEmbedder(copy(graph_builder), embedding, dimension,
+                                        'add', True, param_dicts[embedding]),
+                        LinearRegression(),
+                        MLkNN(k=2)
+                    )
 
         yield EmbeddingClassifier(
             SKLearnEmbedder(SpectralEmbedding(n_components=2)),
