@@ -25,14 +25,18 @@ Currently the following algorithm adaptation classification schemes are availabl
 +-----------------------------------------------+-----------------------------------------------------------+
 | :class:`~skmultilearn.adapt.MLARAM`           | a multi-Label Hierarchical ARAM Neural Network            |
 +-----------------------------------------------+-----------------------------------------------------------+
+| :class:`~skmultilearn.adapt.MLTSVM`           | twin multi-Label Support Vector Machines                  |
++-----------------------------------------------+-----------------------------------------------------------+
 
 """
 
 from .brknn import BRkNNaClassifier, BRkNNbClassifier
 from .mlknn import MLkNN
 from .mlaram import MLARAM
+from .mltsvm import MLTSVM
 
 __all__ = ["BRkNNaClassifier", 
            "BRkNNbClassifier",
            "MLkNN",
-           "MLARAM"]
+           "MLARAM",
+           "MLTSVM"]

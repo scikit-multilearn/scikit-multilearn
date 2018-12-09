@@ -122,7 +122,7 @@ class BRkNNaClassifier(_BinaryRelevanceKNN):
         from sklearn.model_selection import GridSearchCV
 
         parameters = {'k': range(1,3)}
-        score = 'f1-macro
+        score = 'f1_macro'
 
         clf = GridSearchCV(BRkNNaClassifier(), parameters, scoring=score)
         clf.fit(X, y)
