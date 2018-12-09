@@ -5,47 +5,47 @@ from openne.grarep import GraRep
 from openne.hope import HOPE
 from openne.lap import LaplacianEigenmaps
 from openne.line import LINE
-from openne.node2vec import Node2vec
-from openne.tadw import TADW
+from openne.lle import LLE
 import networkx as nx
 import numpy as np
+import tensorflow as tf
 
 
 class OpenNetworkEmbedder:
     """Embed the label space using a label network embedder from OpenNE
 
+    Implements an OpenNE based LNEMLC: label network embeddings for multi-label classification.
+
     Parameters
     ----------
     graph_builder: a GraphBuilderBase inherited transformer
         the graph builder to provide the adjacency matrix and weight map for the underlying graph
-    embedding : string
-        which of the OpenNE
+    embedding : string, one of {'GraphFactorization', 'GraRep', 'HOPE', 'LaplacianEigenmaps', 'LINE', 'LLE'}
+        the selected OpenNE_ embedding
 
         +----------------------+--------------------------------------------------------------------------------+
         | Method name string   |                             Description                                        |
         +----------------------+--------------------------------------------------------------------------------+
-        | GraRep_               | Detecting communities with largest modularity using incremental greedy search  |
+        | GraphFactorization_  | Graph factorization embeddings                                                 |
         +----------------------+--------------------------------------------------------------------------------+
-        | HOPE_                 | Detecting communities from multiple async label propagation on the graph       |
+        | GraRep_              | Graph representations with global structural information                       |
         +----------------------+--------------------------------------------------------------------------------+
-        | LaplacianEigenmaps_   | Detecting communities from multiple async label propagation on the graph       |
+        | HOPE_                | High-order Proximity Preserved Embedding                                       |
         +----------------------+--------------------------------------------------------------------------------+
-        | LINE_   | LINE: Large-scale information network embedding       |
+        | LaplacianEigenmaps_  | Detecting communities from multiple async label propagation on the graph       |
         +----------------------+--------------------------------------------------------------------------------+
-        | LLE_ | Detecting communities from multiple async label propagation on the graph       |
+        | LINE_                | Large-scale information network embedding                                      |
         +----------------------+--------------------------------------------------------------------------------+
-        | node2vec_   | Detecting communities from multiple async label propagation on the graph       |
-        +----------------------+--------------------------------------------------------------------------------+
-        | TADW_   | Detecting communities from multiple async label propagation on the graph       |
+        | LLE_                 | Locally Linear Embedding                                                       |
         +----------------------+--------------------------------------------------------------------------------+
 
+        .. _OpenNE: https://github.com/thunlp/OpenNE/
+        .. _GraphFactorization: https://github.com/thunlp/OpenNE/blob/master/src/openne/gf.py
         .. _GraRep: https://github.com/thunlp/OpenNE/blob/master/src/openne/grarep.py
         .. _HOPE: https://github.com/thunlp/OpenNE/blob/master/src/openne/hope.py
         .. _LaplacianEigenmaps: https://github.com/thunlp/OpenNE/blob/master/src/openne/lap.py
         .. _LINE: https://github.com/thunlp/OpenNE/blob/master/src/openne/line.py
         .. _LLE: https://github.com/thunlp/OpenNE/blob/master/src/openne/lle.py
-        .. _node2vec: https://github.com/thunlp/OpenNE/blob/master/src/openne/node2vec.py
-        .. _TADW: https://github.com/thunlp/OpenNE/blob/master/src/openne/tadw.py
 
 
     dimension: int
@@ -56,6 +56,22 @@ class OpenNetworkEmbedder:
         whether to normalize weights in the label graph by the number of samples or not
     param_dict
         parameters passed to the embedder, don't use the dimension and graph parameters, this class will set them at fit
+
+    If you use this classifier please cite the relevant embedding method paper
+    and the label network embedding for multi-label classification paper:
+
+    .. code :: bibtex
+
+        @article{zhang2007ml,
+          title={ML-KNN: A lazy learning approach to multi-label learning},
+          author={Zhang, Min-Ling and Zhou, Zhi-Hua},
+          journal={Pattern recognition},
+          volume={40},
+          number={7},
+          pages={2038--2048},
+          year={2007},
+          publisher={Elsevier}
+        }
 
     Example code for using this embedder looks like this:
 
@@ -81,13 +97,12 @@ class OpenNetworkEmbedder:
     """
 
     _EMBEDDINGS = {
-        'GraphFactorization': (GraphFactorization, 'dim'),
+        'GraphFactorization': (GraphFactorization, 'rep_size'),
         'GraRep': (GraRep, 'dim'),
         'HOPE': (HOPE, 'd'),
         'LaplacianEigenmaps': (LaplacianEigenmaps, 'rep_size'),
         'LINE': (LINE, 'rep_size'),
-        'node2vec': (Node2vec, 'dim'),
-        'TADW': (TADW, 'dim')
+        'LLE': (LLE, 'd'),
     }
 
     _AGGREGATION_FUNCTIONS = {
@@ -96,7 +111,7 @@ class OpenNetworkEmbedder:
         'average': lambda x: np.average(x, axis=0),
     }
 
-    def __init__(self, graph_builder, embedding, dimension, aggregation_function, normalize_weights, param_dict):
+    def __init__(self, graph_builder, embedding, dimension, aggregation_function, normalize_weights, param_dict=None):
         if embedding not in self._EMBEDDINGS:
             raise ValueError('Embedding must be one of {}'.format(', '.join(self._EMBEDDINGS.keys())))
 
@@ -109,52 +124,24 @@ class OpenNetworkEmbedder:
                 ', '.join(self._AGGREGATION_FUNCTIONS.keys()))
             )
 
-        self.embedding = self._EMBEDDINGS[embedding]
-        self.param_dict = param_dict
+        self.embedding = embedding
+        self.param_dict = param_dict if param_dict is not None else {}
         self.dimension = dimension
         self.graph_builder = graph_builder
         self.normalize_weights = normalize_weights
 
     def fit(self, X, y):
-        """Fits the embedder to data
-
-        Parameters
-        ----------
-        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
-            input feature matrix
-        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
-            binary indicator matrix with label assignments
-
-        Returns
-        -------
-        self
-            fitted instance of self
-        """
         self.fit_transform(X, y)
 
     def fit_transform(self, X, y):
-        """Fit the embedder and transform the output space
-
-        Parameters
-        ----------
-        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
-            input feature matrix
-        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
-            binary indicator matrix with label assignments
-
-        Returns
-        -------
-        X, y_embedded
-            results of the embedding, input and output space
-        """
-
+        tf.reset_default_graph()
         self._init_openne_graph(y)
-        embedding_class, dimension_key = self._EMBEDDINGS['LINE']
+        embedding_class, dimension_key = self._EMBEDDINGS[self.embedding]
         param_dict = copy(self.param_dict)
         param_dict['graph'] = self.graph_
         param_dict[dimension_key] = self.dimension
         self.embeddings_ = embedding_class(**param_dict)
-        return self.embeddings_
+        return X, self._embedd_y(y)
 
     def _init_openne_graph(self, y):
         self.graph_ = Graph()
@@ -167,3 +154,22 @@ class OpenNetworkEmbedder:
             self.graph_.G[src][dst]['weight'] = w
             self.graph_.G[dst][src]['weight'] = w
         self.graph_.encode_node()
+
+    def _embedd_y(self, y):
+        empty_vector = np.zeros(shape=self.dimension)
+        if sp.issparse(y):
+            return np.array([
+                self.aggregation_function([self.embeddings_.vectors[node] for node in row])
+                if len(row) > 0 else empty_vector
+                for row in y.rows
+            ]).astype('float64')
+
+        if len(y.shape) > 1:
+            y = y.A
+
+        return np.array([
+            self.aggregation_function([self.embeddings_.vectors[node] for node, v in enumerate(row) if v > 0])
+            if len(np.nonzero(row)[0]) > 0 else empty_vector
+            for row in y
+        ]).astype('float64')
+

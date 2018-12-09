@@ -6,7 +6,8 @@ import scipy.sparse as sp
 class EmbeddingClassifier(ProblemTransformationBase):
     """Embedding-based classifier
 
-    The classifier embeds the label space with the embedder, trains a set of single-variate or a multi-variate regressor
+    Implements a general scheme presented in LNEMLC: label network embeddings for multi-label classification. The
+    classifier embeds the label space with the embedder, trains a set of single-variate or a multi-variate regressor
     for embedding unseen cases and a base classifier to predict labels based on input features and the embeddings.
 
     Parameters
@@ -38,6 +39,22 @@ class EmbeddingClassifier(ProblemTransformationBase):
     classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
         list of classifiers trained per partition, set in :meth:`fit`
 
+
+    If you use this classifier please cite the relevant embedding method paper
+    and the label network embedding for multi-label classification paper:
+
+    .. code :: bibtex
+
+        @article{zhang2007ml,
+          title={ML-KNN: A lazy learning approach to multi-label learning},
+          author={Zhang, Min-Ling and Zhou, Zhi-Hua},
+          journal={Pattern recognition},
+          volume={40},
+          number={7},
+          pages={2038--2048},
+          year={2007},
+          publisher={Elsevier}
+        }
 
     Example
     -------
@@ -150,7 +167,7 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
     def _concatenate_matrices(self, X, y_embedded):
         X = self._ensure_input_format(X)
-        y = self._ensure_input_format(y_embedded)
+        y_embedded = self._ensure_input_format(y_embedded)
 
         if sp.issparse(X):
             X_y_embedded = sp.hstack([X, y_embedded])

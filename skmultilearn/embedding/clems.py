@@ -25,25 +25,30 @@ class CLEMS:
         from skmultilearn.embedding import CLEMS, EmbeddingClassifier
         from sklearn.ensemble import RandomForestRegressor
         from skmultilearn.adapt import MLkNN
-        from skmultilearn.cluster import LabelCooccurrenceGraphBuilder
+        from sklearn.metrics import accuracy_score
 
 
         clf = EmbeddingClassifier(
-            CLEMS(graph_builder, 'LINE', 4, 'add', True, openne_line_params),
+            CLEMS(accuracy_score, 4, True),
             RandomForestRegressor(n_estimators=10),
-            MLkNN(k=5)
+            MLkNN(k=5),
+            True
         )
 
         clf.fit(X_train, y_train)
 
         predictions = clf.predict(X_test)
     """
-    def __init__(self, measure, dimension, is_score=False, params={}):
+    def __init__(self, measure, dimension, is_score=False, params=None):
         self.measure = measure
         if is_score:
             self.measure = lambda x,y : 1 - measure(x,y)
 
         self.dimension = dimension
+        if params is None:
+            params = {}
+
+        self.params = params
 
     def fit(self, X, y):
         """Fits the embedder to data
