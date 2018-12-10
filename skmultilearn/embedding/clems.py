@@ -1,12 +1,16 @@
+from sklearn.neighbors import NearestNeighbors
+from sklearn.base import BaseEstimator
+from copy import copy
+from ._mdsw import _MDSW
+
 import numpy as np
 import scipy.sparse as sp
-from sklearn.neighbors import NearestNeighbors
-from copy import copy
+
 
 # inspired by implementation by Kuan-Hao Huang
 # https://github.com/ej0cl6/csmlc
 
-class CLEMS:
+class CLEMS(BaseEstimator):
     """Embed the label space using a label network embedder from OpenNE
 
     Parameters
