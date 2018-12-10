@@ -1,9 +1,11 @@
+# !/usr/bin/env python
+# encoding: utf-8
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 # import sphinx_pypi_upload
-import codecs
+import io
 
-with codecs.open('README.md', 'r', 'utf-8') as f:
+with io.open('README.md', 'r', 'utf-8') as f:
     readme = f.read()
 
 setup(
