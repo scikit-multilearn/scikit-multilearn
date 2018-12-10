@@ -112,9 +112,8 @@ test_script:
 
 after_test:
   # If tests are successful, create binary packages for the project.
-  - "%PYTHON%\\python.exe setup.py bdist_wheel"
+  - "%PYTHON%\\python.exe setup.py bdist"
   - "%PYTHON%\\python.exe setup.py bdist_wininst"
-  - "%PYTHON%\\python.exesetup.py bdist_msi"
   - ps: "ls dist"
 
 artifacts:
