@@ -95,8 +95,8 @@ install:
   - "pip install -r requirements\\base.txt"
   - "pip install -r requirements\\meka.txt"
   - ps: If ($env:HAS_KERAS -eq "1")  { & pip install -r requirements\\keras.txt }
-  - ps: If ($env:HAS_KERAS -eq "1")  { & git clone https://github.com/thunlp/OpenNE }
-  - ps: If ($env:HAS_KERAS -eq "1")  { & pip install -e OpenNE/src }
+  - git clone https://github.com/thunlp/OpenNE C:\projects\OpenNE
+  - ps: If ($env:HAS_KERAS -eq "1")  { & pip install -e C:/projects/OpenNE/src }
   - "pip install --upgrade scikit-learn numpy scipy"
   # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
