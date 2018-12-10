@@ -147,20 +147,6 @@
           </div>
         </div>
 
-
-        <div class="col feature s12 m6 l4">
-          <div class="card  blue-grey lighten-5">
-            <div class="card-content black-text">
-              <span class="card-title"><b>K</b> Keras support</span>
-              <p>Need a particular deep learning single/multi class classifier? You can now use it for multi-label
-              problems with scikit-multilearn!</p>
-            </div>
-            <div class="card-action right-align">
-              <a href="keras.html" class="waves-effect waves-light btn">Using Keras</a>
-            </div>
-          </div>
-        </div>
-
         <div class="col feature s12 m6 l4">
           <div class="card  blue-grey lighten-5">
             <div class="card-content black-text">
