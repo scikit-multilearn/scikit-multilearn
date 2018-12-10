@@ -25,13 +25,13 @@ environment:
 
     # Python 2.7.10 is the latest version and is not pre-installed.
 
-    - PYTHON: "C:\\Python27.10"
-      PYTHON_VERSION: "2.7.10"
+    - PYTHON: "C:\\Python27.14"
+      PYTHON_VERSION: "2.7.14"
       PYTHON_ARCH: "32"
       HAS_KERAS: "0"
 
-    - PYTHON: "C:\\Python27.10-x64"
-      PYTHON_VERSION: "2.7.10"
+    - PYTHON: "C:\\Python27.14-x64"
+      PYTHON_VERSION: "2.7.14"
       PYTHON_ARCH: "64"
       HAS_KERAS: "0"
 
@@ -100,7 +100,7 @@ install:
   - "pip install --upgrade scikit-learn numpy scipy"
   # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
-  - "pip show scikit-learn"
+  - "pip install --upgrade --force-reinstall numpy scipy scikit-learn"
 
 #build_script:
   # Build the compiled extension
