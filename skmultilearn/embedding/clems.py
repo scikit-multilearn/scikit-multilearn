@@ -3,6 +3,8 @@ import scipy.sparse as sp
 from sklearn.neighbors import NearestNeighbors
 from copy import copy
 
+# inspired by implementation by Kuan-Hao Huang
+# https://github.com/ej0cl6/csmlc
 
 class CLEMS:
     """Embed the label space using a label network embedder from OpenNE
