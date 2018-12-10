@@ -20,6 +20,12 @@ Problem Transformation approaches
 .. automodule:: skmultilearn.problem_transform
 
 
+Multi-label embeddings
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: skmultilearn.embedding
+
+
 Ensembles of classifiers
 ^^^^^^^^^^^^^^^^^^^^^^^^
 

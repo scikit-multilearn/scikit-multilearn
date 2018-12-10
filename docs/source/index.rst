@@ -13,10 +13,16 @@
       <pre class="s10"><code class="blue-grey lighten-4 pip">pip install scikit-multilearn</code></pre>
     </div>
     <div class="row center">
-      <a class="current-version-number" href="https://github.com/scikit-multilearn/scikit-multilearn/archive/0.1.0.tar.gz">Release: 0.1.0</a>
+      <a class="current-version-number" href="https://github.com/scikit-multilearn/scikit-multilearn/archive/0.2.0.tar.gz">Release: 0.2.0</a>
         | Supported Python versions: 2.7 / 3.x
         | <a href="https://github.com/scikit-multilearn/scikit-multilearn">Github</a>
         | <a href="https://pypi.org/project/scikit-multilearn">PyPi</a>
+        | <a href="http://scikit.ml/api/">Documentation</a>
+    </div>
+    <div class="row center">
+      <a class="current-version-number" href="https://github.com/scikit-multilearn/scikit-multilearn/archive/0.1.0.tar.gz">Stable Release: 0.1.0</a>
+        | Supported Python versions: 2.7 / 3.x
+        | <a href="http://scikit.ml/0.1.0/">Documentation</a>
     </div>
     <div class="row center">
       <a href="tutorial.html" class="waves-effect waves-light btn-large">Get started</a>
@@ -32,7 +38,7 @@
         <div class="col feature s12 m6 l4">
           <div class="card  blue-grey darken-3">
             <div class="card-content white-text">
-              <span class="card-title"><i class="fas fa-brain"></i> Lots of classifiers</span>
+              <span class="card-title"><i class="fas fa-clipboard-list"></i> Lots of classifiers</span>
               <p>Scikit-multilearn provides many native Python multi-label classifiers classifiers.</p>
             </div>
             <div class="card-action right-align">
@@ -53,6 +59,32 @@
             </div>
           </div>
         </div>
+
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey darken-3">
+            <div class="card-content white-text">
+              <span class="card-title"><i class="fas fa-braille"></i> Multi-label Embeddings</span>
+              <p>Embedd the label space to improve discriminative ability of your classifier.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="multilabelembeddings.html" class="waves-effect waves-light btn">Learn more</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col feature s12 m6 l4">
+          <div class="card  blue-grey lighten-5">
+            <div class="card-content black-text">
+              <span class="card-title"><i class="fas fa-brain"></i> Multi-label Deep Learning</span>
+              <p>Extend your Keras or pytorch neural networks to solve multi-label classification problems.</p>
+            </div>
+            <div class="card-action right-align">
+              <a href="multilabeldnn.html" class="waves-effect waves-light btn">Learn more</a>
+            </div>
+          </div>
+        </div>
+
+
         <div class="col feature s12 m6 l4">
           <div class="card  blue-grey darken-3">
             <div class="card-content white-text">
@@ -205,6 +237,20 @@
       <div class="row">
         <div class="col s10 offset-s1">
             <h3>News</h3>
+
+            <h5>0.2.0 (released 2018-12-10)</h5>
+
+            <p>A new feature release:</p>
+            <ul class="browser-default">
+            <li>first python implementation of multi-label SVM (MLTSVM)</li>
+            <li>a general multi-label embedding framework with several embedders supported (LNEMLC, CLEMS)</li>
+            <li>balanced k-means clusterer from HOMER implemented</li>
+            <li>wrapper for Keras model use in scikit-multilearn</li>
+            </ul>
+
+            <hr />
+
+
             <h5>0.1.0 [stable] (released 2018-09-04)</h5>
 
             <p>Fix a lot of bugs and generally improve stability, cross-platform functionality standard
