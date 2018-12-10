@@ -100,6 +100,7 @@ install:
   - "pip install --upgrade scikit-learn numpy scipy"
   # - "pip install -r requirements\\gpl.txt"
   - "pip install -r requirements\\test.txt"
+  - "pip show scikit-learn"
 
 #build_script:
   # Build the compiled extension
@@ -107,7 +108,7 @@ install:
 
 test_script:
   # Run the project tests
-  - "py.test skmultilearn"
+  - "%CMD_IN_ENV% python -m pytest skmultilearn"
 
 #after_test:
   # If tests are successful, create binary packages for the project.
