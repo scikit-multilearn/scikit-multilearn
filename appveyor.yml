@@ -94,9 +94,9 @@ install:
   # target Python version and architecture
   - "%PYTHON%\\Scripts\\pip.exe install -r requirements\\base.txt"
   - "%PYTHON%\\Scripts\\pip.exe install -r requirements\\meka.txt"
-  - ps: If ($env:HAS_KERAS -eq "1")  { & %PYTHON%\\Scripts\\pip.exe install -r requirements\\keras.txt }
+  - ps: If ($env:HAS_KERAS -eq "1")  { &  $env:PYTHON\Scripts\pip.exe install -r requirements\keras.txt }
   - git clone https://github.com/thunlp/OpenNE C:\projects\OpenNE
-  - ps: If ($env:HAS_KERAS -eq "1")  { & %PYTHON%\\Scripts\\pip.exe install -e C:/projects/OpenNE/src }
+  - ps: If ($env:HAS_KERAS -eq "1")  { &  $env:PYTHON\Scripts\pip.exe install -e C:/projects/OpenNE/src }
   - "%PYTHON%\\Scripts\\pip.exe install --upgrade scikit-learn numpy scipy"
   # - "pip install -r requirements\\gpl.txt"
   - "%PYTHON%\\Scripts\\pip.exe install -r requirements\\test.txt"
