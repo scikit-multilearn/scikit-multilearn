@@ -1,12 +1,19 @@
-# !/usr/bin/env python
-# encoding: utf-8
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 # import sphinx_pypi_upload
-import io
+import sys
 
-with io.open('README.md', 'r', 'utf-8') as f:
-    readme = f.read()
+if sys.version_info[0] < 3:
+    import codecs
+
+    with codecs.open('README.md', 'r', 'utf-8') as f:
+        readme = f.read()
+
+else:
+    import io
+
+    with io.open('README.md', 'r', 'utf-8') as f:
+        readme = f.read()
 
 setup(
     name='scikit-multilearn',
