@@ -20,6 +20,8 @@ User Guide
 
     labelrelations.ipynb
     meka.ipynb
+    multilabeldnn.ipynb
+    multilabelembeddings.ipynb
     stratification.ipynb
 
 

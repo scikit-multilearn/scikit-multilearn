@@ -35,7 +35,7 @@ class CLEMS(BaseEstimator):
 
 
         clf = EmbeddingClassifier(
-            CLEMS(accuracy_score, 4, True),
+            CLEMS(accuracy_score, True),
             RandomForestRegressor(n_estimators=10),
             MLkNN(k=5)
         )
