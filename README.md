@@ -36,6 +36,7 @@ liac-arff # for loading ARFF files
 requests # for dataset module
 networkx # for networkX base community detection clusterers
 python-louvain # for networkX base community detection clusterers
+keras
 ```
 
 ### GPL-incurring dependencies for two clusterers

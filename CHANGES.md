@@ -1,6 +1,14 @@
 scikit-multilearn Changelog
 ===========================
 
+0.2.0 (released 2018-12-10)
+---------------------------
+A new feature release:
+- first python implementation of multi-label SVM (MLTSVM)
+- a general multi-label embedding framework with several embedders supported (LNEMLC, CLEMS)
+- balanced k-means clusterer from HOMER implemented
+- wrapper for Keras model use in scikit-multilearn
+
 0.1.0 (released 2018-09-04)
 ---------------------------
 
