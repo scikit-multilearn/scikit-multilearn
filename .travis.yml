@@ -38,7 +38,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then brew install graph-tool                               ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then mkdir ~/MEKA && wget https://adams.cms.waikato.ac.nz/snapshots/meka/meka-snapshot.zip -O ~/MEKA/meka.zip; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then cd ~/MEKA/ && unzip -a meka.zip && mv meka-* meka; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   git clone https://github.com/thunlp/OpenNE.git ~/OpenNE && pip3 install -e ~/OpenNE/src; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then git clone https://github.com/thunlp/OpenNE.git ~/OpenNE && pip3 install -e ~/OpenNE/src; fi
 
 install:
 - if [[ "$TRAVIS_OS_NAME" != "osx" ]];   then docker run -e "MEKA_CLASSPATH=/opt/meka/lib/" -v "$TRAVIS_BUILD_DIR:/home/python-dev/repo" --name scikit_multilearn_dev_test_docker -d niedakh/scikit-multilearn-dev:latest; fi
