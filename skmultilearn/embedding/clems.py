@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.sparse as sp
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors.unsupervised import NearestNeighbors
 from copy import copy
 
 # inspired by implementation by Kuan-Hao Huang
