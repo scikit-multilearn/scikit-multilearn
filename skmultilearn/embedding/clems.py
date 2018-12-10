@@ -21,8 +21,9 @@ class CLEMS(BaseEstimator):
         the dimension of the label embedding vectors
     is_score: boolean
         set to True if measures is a score function (higher value is better), False if loss function (lower is better)
-    param_dict
+    param_dict: dict or None
         parameters passed to the embedder, don't use the dimension and graph parameters, this class will set them at fit
+
 
     Example code for using this embedder looks like this:
 
