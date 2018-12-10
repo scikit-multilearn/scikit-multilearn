@@ -19,8 +19,8 @@ matrix:
           env: MEKA_CLASSPATH=/Users/travis/MEKA/meka/lib/
 
 script:
-- if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker python -m pytest /home/python-dev/repo; fi
-- if [[ "$TOXENV" == "linux_py3" ]]; then docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest /home/python-dev/repo; fi
+- if [[ "$TOXENV" == "linux_py2" ]]; then docker exec -it scikit_multilearn_dev_test_docker python2 -m pytest -p no:warnings  /home/python-dev/repo; fi
+- if [[ "$TOXENV" == "linux_py3" ]]; then docker exec -it scikit_multilearn_dev_test_docker python3 -m pytest -p no:warnings  /home/python-dev/repo; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then python3 -m pytest -p no:warnings  $TRAVIS_BUILD_DIR; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then python -m pytest -p no:warnings  $TRAVIS_BUILD_DIR; fi
 
