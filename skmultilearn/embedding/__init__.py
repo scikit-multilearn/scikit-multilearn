@@ -18,7 +18,7 @@ embedding based classifier.
 """
 
 from .clems import CLEMS
-from .skembedings import SKLearnEmbedder
+from .skembeddings import SKLearnEmbedder
 from .classifier import EmbeddingClassifier
 import sys, platform
 
