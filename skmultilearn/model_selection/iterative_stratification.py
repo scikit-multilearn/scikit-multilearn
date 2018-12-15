@@ -75,21 +75,25 @@ import scipy.sparse as sp
 import itertools
 from sklearn.utils import check_random_state
 
-def iterative_train_test_split(X, y, test_size):
+def iterative_train_test_split(X, y, test_size, random_state=None):
     """Iteratively stratified train/test split
 
     Parameters
     ----------
     test_size : float, [0,1]
         the proportion of the dataset to include in the test split, the rest will be put in the train set
-
+    
+    random_state : int
+        the random state seed (optional)
+    
     Returns
     -------
     X_train, y_train, X_test, y_test
         stratified division into train/test split
     """
 
-    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
+    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size],
+                                            random_state=random_state)
     train_indexes, test_indexes = next(stratifier.split(X, y))
 
     X_train, y_train = X[train_indexes, :], y[train_indexes, :]
@@ -99,7 +103,7 @@ def iterative_train_test_split(X, y, test_size):
 
 
 
-def _fold_tie_break(desired_samples_per_fold, M):
+def _fold_tie_break(desired_samples_per_fold, M, random_state=None):
     """Helper function to split a tie between folds with same desirability of a given sample
 
     Parameters
@@ -121,6 +125,8 @@ def _fold_tie_break(desired_samples_per_fold, M):
         M_prim = np.where(
             np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
+        if random_state:
+            np.random.seed(random_state)
         return np.random.choice(M_prim, 1)[0]
 
 
@@ -283,7 +289,8 @@ class IterativeStratification(_BaseKFold):
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M)
+                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, 
+                                        random_state = self.random_state)
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
