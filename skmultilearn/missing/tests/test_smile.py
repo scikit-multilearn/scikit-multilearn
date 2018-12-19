@@ -4,14 +4,12 @@ import unittest
 from sklearn.datasets import load_iris, make_multilabel_classification
 import sys
 from skmultilearn.missing.smile import SMiLE
-from skmultilearn.missing.functions import *
+from skmultilearn.missing.functions import label_correlation, estimate_mising_labels, weight_adjacent_matrix, diagonal_matrix_H, diagonal_matrix_Hc, diagonal_matrix_lambda, graph_laplacian_matrix, predictive_matrix, label_bias
 
 
 class SmileTest(unittest.TestCase):
     def test_weight(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k=5)
 
         self.assertTrue(np.sum(W) != 0)
@@ -21,8 +19,6 @@ class SmileTest(unittest.TestCase):
     def test_label_correlation(self):
     
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         correlation = np.zeros(shape=[y.shape[0], y.shape[0]])
         correlation = label_correlation(y, s=0.5)
 
@@ -34,8 +30,6 @@ class SmileTest(unittest.TestCase):
     def test_estimate_missing_labels(self):
 
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         correlation = label_correlation(y, s=0.5)
         estimate_matrix = np.zeros(shape=[y.shape[0], y.shape[1]])
         estimate_matrix = estimate_mising_labels(y, correlation)
@@ -46,8 +40,6 @@ class SmileTest(unittest.TestCase):
     
     def test_diagonal_matrix_H(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         H = np.zeros(shape=[X.shape[1], X.shape[1]])
         H = diagonal_matrix_H(X, y)
 
@@ -57,8 +49,6 @@ class SmileTest(unittest.TestCase):
     
     def test_diagonal_matrix_lambda(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k=5)
         diagonal_lambda = np.zeros(shape=[W.shape[0], W.shape[1]])
         diagonal_lambda = diagonal_matrix_lambda(W)
@@ -69,8 +59,6 @@ class SmileTest(unittest.TestCase):
 
     def test_laplacian_matrix(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k= 5)
         diagonal_lambda = diagonal_matrix_lambda(W)
         M = np.zeros(shape=[X.shape[0], X.shape[0]])
@@ -81,8 +69,6 @@ class SmileTest(unittest.TestCase):
 
     def test_diagonal_matrix_Hc(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         H = diagonal_matrix_H(X, y)
         Hc = np.zeros(shape = [H.shape[0], H.shape[1]])
         Hc = diagonal_matrix_Hc(H)
@@ -90,8 +76,6 @@ class SmileTest(unittest.TestCase):
 
     def test_predictive_matrix(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         L = label_correlation(y, s=0.5)
         estimate_matrix = estimate_mising_labels(y, L)
         H = diagonal_matrix_H(X, y)
@@ -105,8 +89,6 @@ class SmileTest(unittest.TestCase):
 
     def test_label_bias(self):
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         L = label_correlation(y, s=0.5)
         estimate_matrix = estimate_mising_labels(y, L)
         H = diagonal_matrix_H(X, y)
@@ -123,8 +105,6 @@ class SmileTest(unittest.TestCase):
     def test_fit(self):
         smile = SMiLE()
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         smile.fit(X, y)
         self.assertTrue(np.sum(smile.P) != 0)
         self.assertTrue(np.sum(smile.b) != 0)
@@ -133,13 +113,10 @@ class SmileTest(unittest.TestCase):
     def test_predict(self):
         smile = SMiLE()
         X, y = make_multilabel_classification()
-        X = np.transpose(X)
-        y = np.transpose(y)
         smile.fit(X,y)
         predictions = np.zeros(shape=[X.shape[0], y.shape[1]])
-        predictions1, predictions2 = smile.predict(X)
-        self.assertTrue(np.sum(predictions1) != 0)
-        self.assertTrue(np.sum(predictions2) != 0)
+        predictions = smile.predict(X)
+        self.assertTrue(np.sum(predictions) != 0)
 
     def test_getParams(self):
         smile = SMiLE()

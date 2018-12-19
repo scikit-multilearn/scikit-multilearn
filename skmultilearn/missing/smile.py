@@ -3,7 +3,7 @@ import numpy as np
 
 class SMiLE:
     """SMiLE algorithm for multi label with missing labels
-    (Semi-supervised multi-label classification using imcomplete label information)
+    (Semi-supervised multi-label classification using incomplete label information)
     
 
     Parameters
@@ -94,12 +94,14 @@ class SMiLE:
 
         Parameters
         ----------
-        X : array-like or sparse matrix, shape=(n_features, n_samples)
+        X : array-like or sparse matrix, shape=(n_samples, n_features)
             Training instances.
-        y : array-like, shape=(n_labels, n_samples)
+        y : array-like, shape=(n_samples, n_labels)
             Training labels.
         """
-        #TODO Ensure the input format
+        X = np.transpose(X)
+        y = np.transpose(y)
+
         self.L = label_correlation(y, self.s)
         self.estimate_matrix = estimate_mising_labels(y, self.L)
         self.H = diagonal_matrix_H(X, y)
@@ -117,7 +119,7 @@ class SMiLE:
 
         Parameters
         ----------
-        X : array-like or sparse matrix, shape=(n_features, n_samples)
+        X : array-like or sparse matrix, shape=(n_samples, n_features)
             Test instances.
         
         Returns:
@@ -128,7 +130,7 @@ class SMiLE:
         predictionsNormalized : array-like, shape=(n_labels, n_samples)
             Label predictions
         """
-        #TODO Ensure the input and output format
+        X = np.transpose(X)
         predictions = np.zeros(shape=[self.b.shape[0], X.shape[1]])
         for i in range(0, X.shape[1]):
             numerator1 = np.zeros(shape=[self.b.shape[0],1])
@@ -138,15 +140,15 @@ class SMiLE:
             prediction = np.add(numerator1, self.b)
             for k in range(prediction.shape[0]):
                 predictions[k,i] = prediction[k]
-        predictionsNormalized = np.copy(predictions)
-        for i in range(predictionsNormalized.shape[0]):
-            for j in range(predictionsNormalized.shape[1]):
-                if predictionsNormalized[i,j] > 0.5:
-                    predictionsNormalized[i,j] = 1
+        for i in range(predictions.shape[0]):
+            for j in range(predictions.shape[1]):
+                if predictions[i,j] > 0.5:
+                    predictions[i,j] = 1
                 else:
-                    predictionsNormalized[i,j] = 0
+                    predictions[i,j] = 0
 
-        return predictions, predictionsNormalized
+        predictions = np.transpose(predictions)
+        return predictions
     
     def getParams(self):
         """Returns the parameters of this model
