@@ -1,4 +1,4 @@
-from functions import label_correlation, estimate_mising_labels, weight_adjacent_matrix, diagonal_matrix_H, diagonal_matrix_Hc, diagonal_matrix_lambda, graph_laplacian_matrix, predictive_matrix, label_bias
+from .functions import label_correlation, estimate_mising_labels, weight_adjacent_matrix, diagonal_matrix_H, diagonal_matrix_Hc, diagonal_matrix_lambda, graph_laplacian_matrix, predictive_matrix, label_bias
 import numpy as np
 
 class SMiLE:
