@@ -10,6 +10,8 @@ from skmultilearn.missing.functions import label_correlation, estimate_mising_la
 class SmileTest(unittest.TestCase):
     def test_weight(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k=5)
 
         self.assertTrue(np.sum(W) != 0)
@@ -19,6 +21,8 @@ class SmileTest(unittest.TestCase):
     def test_label_correlation(self):
     
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         correlation = np.zeros(shape=[y.shape[0], y.shape[0]])
         correlation = label_correlation(y, s=0.5)
 
@@ -30,6 +34,8 @@ class SmileTest(unittest.TestCase):
     def test_estimate_missing_labels(self):
 
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         correlation = label_correlation(y, s=0.5)
         estimate_matrix = np.zeros(shape=[y.shape[0], y.shape[1]])
         estimate_matrix = estimate_mising_labels(y, correlation)
@@ -40,6 +46,8 @@ class SmileTest(unittest.TestCase):
     
     def test_diagonal_matrix_H(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         H = np.zeros(shape=[X.shape[1], X.shape[1]])
         H = diagonal_matrix_H(X, y)
 
@@ -49,6 +57,8 @@ class SmileTest(unittest.TestCase):
     
     def test_diagonal_matrix_lambda(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k=5)
         diagonal_lambda = np.zeros(shape=[W.shape[0], W.shape[1]])
         diagonal_lambda = diagonal_matrix_lambda(W)
@@ -59,6 +69,8 @@ class SmileTest(unittest.TestCase):
 
     def test_laplacian_matrix(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         W = weight_adjacent_matrix(X=X, k= 5)
         diagonal_lambda = diagonal_matrix_lambda(W)
         M = np.zeros(shape=[X.shape[0], X.shape[0]])
@@ -69,6 +81,8 @@ class SmileTest(unittest.TestCase):
 
     def test_diagonal_matrix_Hc(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         H = diagonal_matrix_H(X, y)
         Hc = np.zeros(shape = [H.shape[0], H.shape[1]])
         Hc = diagonal_matrix_Hc(H)
@@ -76,6 +90,8 @@ class SmileTest(unittest.TestCase):
 
     def test_predictive_matrix(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         L = label_correlation(y, s=0.5)
         estimate_matrix = estimate_mising_labels(y, L)
         H = diagonal_matrix_H(X, y)
@@ -89,6 +105,8 @@ class SmileTest(unittest.TestCase):
 
     def test_label_bias(self):
         X, y = make_multilabel_classification()
+        X = np.transpose(X)
+        y = np.transpose(y)
         L = label_correlation(y, s=0.5)
         estimate_matrix = estimate_mising_labels(y, L)
         H = diagonal_matrix_H(X, y)
