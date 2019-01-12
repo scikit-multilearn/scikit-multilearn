@@ -83,7 +83,7 @@ def iterative_train_test_split(X, y, test_size, random_state=None):
     test_size : float, [0,1]
         the proportion of the dataset to include in the test split, the rest will be put in the train set
     
-    random_state : int
+    random_state : None | int | np.random.RandomState
         the random state seed (optional)
     
     Returns
@@ -113,6 +113,9 @@ def _fold_tie_break(desired_samples_per_fold, M, random_state=None):
     M : np.array(int)
         List of folds between which to break the tie
 
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
+        
     Returns
     -------
     fold_number : int
@@ -126,7 +129,10 @@ def _fold_tie_break(desired_samples_per_fold, M, random_state=None):
             np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
         if random_state:
-            np.random.seed(random_state)
+            if isinstance(random_state, np.random.RandomState):
+                return random_state.choice(M_prim, 1)[0]
+            else:
+                np.random.seed(random_state)
         return np.random.choice(M_prim, 1)[0]
 
 
@@ -178,7 +184,7 @@ class IterativeStratification(_BaseKFold):
         desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
         is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
 
-    random_state : int
+    random_state : None | int | np.random.RandomState
         the random state seed (optional)
     """
 
