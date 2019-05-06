@@ -286,7 +286,7 @@ class IterativeStratification(_BaseKFold):
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M)
+                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, self.random_state)
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
