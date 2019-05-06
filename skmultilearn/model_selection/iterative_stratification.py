@@ -99,7 +99,7 @@ def iterative_train_test_split(X, y, test_size):
 
 
 
-def _fold_tie_break(desired_samples_per_fold, M):
+def _fold_tie_break(desired_samples_per_fold, M, random_state):
     """Helper function to split a tie between folds with same desirability of a given sample
 
     Parameters
@@ -121,7 +121,10 @@ def _fold_tie_break(desired_samples_per_fold, M):
         M_prim = np.where(
             np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
-        return np.random.choice(M_prim, 1)[0]
+        if random_state is not None:
+            return check_random_state(random_state).choice(M_prim, 1)[0]
+        else:
+            return np.random.choice(M_prim, 1)[0]
 
 
 def _get_most_desired_combination(samples_with_combination):
@@ -308,7 +311,10 @@ class IterativeStratification(_BaseKFold):
             row = available_samples.pop()
             rows_used[row] = True
             samples_left -= 1
-            fold_selected = np.random.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
+            if self.random_state is not None:
+                fold_selected = check_random_state(self.random_state).choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
+            else:
+                fold_selected = np.random.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
@@ -334,9 +340,6 @@ class IterativeStratification(_BaseKFold):
         fold : List[int]
             indexes of test samples for a given fold, yielded for each of the folds
         """
-        if self.random_state:
-            check_random_state(self.random_state)
-
         rows, rows_used, all_combinations, per_row_combinations, samples_with_combination, folds = \
             self._prepare_stratification(y)
 
