@@ -105,7 +105,7 @@ class MLARAM(MLClassifierBase):
 
     .. code :: python
 
-        from skmultilearn.neurofuzzy import MLARAM
+        from skmultilearn.adapt import MLARAM
 
         classifier = MLARAM(threshold=0.05, vigilance=0.95)
         classifier.fit(X_train, y_train)
