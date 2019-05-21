@@ -78,7 +78,7 @@ class RakelD(MLClassifierBase):
         )
 
         classifier.fit(X_train, y_train)
-        prediction = classifier.predict(X_train, y_train)
+        prediction = classifier.predict(X_test)
 
     """
 
