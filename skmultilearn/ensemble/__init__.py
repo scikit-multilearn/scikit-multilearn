@@ -11,6 +11,8 @@ Currently the following ensemble classification schemes are available in scikit-
 +--------------------------------------------------------------------+----------------------------------------------------------------+
 | :class:`~skmultilearn.ensemble.RakelO`                             | Overlapping RAndom k-labELsets multi-label classifier.         |
 +--------------------------------------------------------------------+----------------------------------------------------------------+
+| :class:`~skmultilearn.ensemble.GakelD`                             | Distinct Greedy k-labELsets multi-label classifier.            |
++--------------------------------------------------------------------+----------------------------------------------------------------+
 | :class:`~skmultilearn.ensemble.LabelSpacePartitioningClassifier`   | a label space partitioning classifier that trains a            |
 |                                                                    | classifier per label subspace as clustered using methods       |
 |                                                                    | from :mod:`skmultilearn.cluster`.                              |
@@ -25,6 +27,7 @@ Currently the following ensemble classification schemes are available in scikit-
 from __future__ import absolute_import
 from .rakeld import RakelD
 from .rakelo import RakelO
+from .gakeld import GakelD
 from .partition import LabelSpacePartitioningClassifier
 from .voting import MajorityVotingClassifier
 
