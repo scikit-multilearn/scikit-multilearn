@@ -31,5 +31,5 @@ from .gakeld import GakelD
 from .partition import LabelSpacePartitioningClassifier
 from .voting import MajorityVotingClassifier
 
-__all__ = ["RakelD", "RakelO", "LabelSpacePartitioningClassifier",
+__all__ = ["RakelD", "RakelO", "GakelD", "LabelSpacePartitioningClassifier",
            "LabelSpacePartitioningClassifier", "MajorityVotingClassifier"]
