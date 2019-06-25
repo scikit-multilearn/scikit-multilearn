@@ -30,7 +30,7 @@ def label_correlation(y, s=0.35):
                     coincidence += 1
             L[i,j] = (coincidence + s)/(yi + 2*s)
 
-return L
+    return L
 
 class GreedyLabelSpaceClusterer(LabelSpaceClustererBase):
     """Greedy divides the label space into equally-sized clusters
@@ -152,7 +152,7 @@ class GreedyLabelSpaceClusterer(LabelSpaceClustererBase):
                 for i in range(1, len(label_set)):
                     pass_next = False
                     while not pass_next:
-                        next_label = np.argmax(L[label_set[,i-1])
+                        next_label = np.argmax(L[:,label_set[i-1]])
                         if next_label not in free_labels and next_label not in label_set:
                             pass_next = True
                     label_set[i] = next_label

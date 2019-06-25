@@ -29,12 +29,13 @@ from .base import LabelCooccurrenceGraphBuilder
 from .fixed import FixedLabelSpaceClusterer
 from .matrix import MatrixLabelSpaceClusterer
 from .random import RandomLabelSpaceClusterer
-
+from .greedy import GreedyLabelSpaceClusterer
 __all__ = [
     'FixedLabelSpaceClusterer',
     'LabelCooccurrenceGraphBuilder',
     'MatrixLabelSpaceClusterer',
-    'RandomLabelSpaceClusterer'
+    'RandomLabelSpaceClusterer',
+    'GreedyLabelSpaceClusterer'
 ]
 
 # graphtool import optional (is GPL-ed, does not work on windows)
