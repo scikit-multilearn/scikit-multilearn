@@ -145,17 +145,19 @@ class GreedyLabelSpaceClusterer(LabelSpaceClustererBase):
                     #Creates the label_subset and then continues
                 L = label_correlation(np.transpose(y))
                 L = np.transpose(L)
+                print L
                 #Get a random label
                 first_label = random.sample(free_labels, 1)
-                label_set = np.zeros(self.cluster_size)
-                label_set[0] = first_label
-                for i in range(1, len(label_set)):
+                label_set = []
+                label_set.append(first_label[0])
+                for i in range(1, self.cluster_size):
                     pass_next = False
                     while not pass_next:
-                        next_label = np.argmax(L[:,label_set[i-1]])
-                        if next_label not in free_labels and next_label not in label_set:
+                        next_label = np.argmax(L[int(label_set[i-1]),:])
+                        L[int(label_set[i-1]),next_label] = 0.0
+                        if next_label in free_labels and next_label not in label_set:
                             pass_next = True
-                    label_set[i] = next_label
+                    label_set.append(next_label)
 
                 if not self.allow_overlap:
                     free_labels = list(set(free_labels).difference(set(label_set)))
