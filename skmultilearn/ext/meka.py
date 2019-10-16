@@ -422,8 +422,9 @@ class Meka(MLClassifierBase):
             self.java_command,
             '-cp', '"{}*"'.format(self.meka_classpath),
             self.meka_classifier,
-            *args
         ]
+        
+        command_args+=args
 
         if self.weka_classifier is not None:
             command_args += ['-W', self.weka_classifier]
