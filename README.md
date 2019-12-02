@@ -62,7 +62,7 @@ run `setup.py`:
 ```bash
 $ git clone https://github.com/scikit-multilearn/scikit-multilearn.git
 $ cd scikit-multilearn
-$ python setup.py
+$ python setup.py install
 ```
 
 ## Basic Usage
