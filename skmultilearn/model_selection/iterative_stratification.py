@@ -75,7 +75,7 @@ import scipy.sparse as sp
 import itertools
 from sklearn.utils import check_random_state
 
-def iterative_train_test_split(X, y, test_size):
+def iterative_train_test_split(X, y, test_size, random_state=None):
     """Iteratively stratified train/test split
 
     Parameters
@@ -89,7 +89,9 @@ def iterative_train_test_split(X, y, test_size):
         stratified division into train/test split
     """
 
-    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
+    stratifier = IterativeStratification(n_splits=2, order=2, 
+                                         sample_distribution_per_fold=[test_size, 1.0-test_size], 
+                                         random_state=random_state)
     train_indexes, test_indexes = next(stratifier.split(X, y))
 
     X_train, y_train = X[train_indexes, :], y[train_indexes, :]
