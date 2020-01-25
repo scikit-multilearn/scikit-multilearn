@@ -20,8 +20,10 @@ class MLkNN(MLClassifierBase):
     s: float (default is 1.0)
         the smoothing parameter
     ignore_first_neighbours : int (default is 0)
-            ability to ignore first N neighbours, useful for comparing
-            with other classification software.
+        ability to ignore first N neighbours, useful for comparing
+        with other classification software.
+    n_jobs: int or None, optional (default=None)
+        The number of parallel jobs to run for neighbors search. None means 1 unless in a joblib.parallel_backend context. -1 means using all processors.
 
     Attributes
     ----------
@@ -93,7 +95,7 @@ class MLkNN(MLClassifierBase):
 
     """
 
-    def __init__(self, k=10, s=1.0, ignore_first_neighbours=0):
+    def __init__(self, k=10, s=1.0, ignore_first_neighbours=0, n_jobs = None):
         """Initializes the classifier
 
         Parameters
@@ -103,8 +105,10 @@ class MLkNN(MLClassifierBase):
         s: float (default is 1.0)
             the smoothing parameter
         ignore_first_neighbours : int (default is 0)
-                ability to ignore first N neighbours, useful for comparing
-                with other classification software.
+            ability to ignore first N neighbours, useful for comparing
+            with other classification software.
+        n_jobs: int or None, optional (default=None)
+            The number of parallel jobs to run for neighbors search. None means 1 unless in a joblib.parallel_backend context. -1 means using all processors.   
 
 
         Attributes
@@ -121,7 +125,9 @@ class MLkNN(MLClassifierBase):
         self.k = k  # Number of neighbours
         self.s = s  # Smooth parameter
         self.ignore_first_neighbours = ignore_first_neighbours
-        self.copyable_attrs = ['k', 's', 'ignore_first_neighbours']
+        self.n_jobs = n_jobs
+        self.knn_ = NearestNeighbors(self.k, n_jobs = self.n_jobs)
+        self.copyable_attrs = ['k', 's', 'ignore_first_neighbours', 'n_jobs']
 
     def _compute_prior(self, y):
         """Helper function to compute for the prior probabilities
@@ -162,7 +168,7 @@ class MLkNN(MLClassifierBase):
             the posterior probability given false
         """
 
-        self.knn_ = NearestNeighbors(self.k).fit(X)
+        self.knn_.fit(X)
         c = sparse.lil_matrix((self._num_labels, self.k + 1), dtype='i8')
         cn = sparse.lil_matrix((self._num_labels, self.k + 1), dtype='i8')
 
