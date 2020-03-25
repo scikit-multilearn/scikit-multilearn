@@ -11,7 +11,11 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
     def __init__(self, classifier=None, require_dense=None):
         """Classification with heterogeneous features
 
-        There are two layers which composed of base classifiers in the model.
+        This model is to augment the feature set with extra features which are
+        from one for each label in the dataset. The cyclic dependency between
+        features and labels is resolved iteratively.
+
+        There are two BR layers which composed of base classifiers in the model.
         The first layer proposed to augment the feature set with heterogeneous features.
         Heterogeneous features composed of predict probabilities which is provided
         by base classifier per each label. The second layer proceed train/test
