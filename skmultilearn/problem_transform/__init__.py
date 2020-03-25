@@ -29,7 +29,6 @@ from .lp import LabelPowerset
 from .iblr import InstanceBasedLogisticRegression
 from .chf import ClassificationHeterogeneousFeature
 from .ptgsc import PTGridSearchCV
-from .lpgsc import LPGridSearchCV
 
 __all__ = ["BinaryRelevance",
            "ClassifierChain",
@@ -37,5 +36,4 @@ __all__ = ["BinaryRelevance",
            "ClassificationHeterogeneousFeature"
            "InstanceBasedLogisticRegression",
            "PTGridSearchCV",
-           "LPGridSearchCV",
            ]
