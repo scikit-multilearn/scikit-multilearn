@@ -43,6 +43,10 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
         first_layer_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
             list of classifiers trained per partition for obtaining heterogeneous feature, set in :meth:`fit`
 
+        References
+        ----------
+        [Godbole and Sarawagi, 2004] Godbole, S. and Sarawagi, S. (2004). Discriminative methods
+        for multi-labeled classification. In PAKDD’04, pages 22–30.
 
         """
         super(ClassificationHeterogeneousFeature, self).__init__(classifier, require_dense)
