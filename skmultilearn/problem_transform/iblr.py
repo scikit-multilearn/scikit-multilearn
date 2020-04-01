@@ -3,14 +3,13 @@ import numpy as np
 
 from scipy.sparse import hstack, issparse, lil_matrix
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import LogisticRegression
 
 from ..base.problem_transformation import ProblemTransformationBase
 from ..base.base import MLClassifierBase
 
 
 class InstanceBasedLogisticRegression(ProblemTransformationBase):
-    def __init__(self, require_dense=None):
+    def __init__(self, classifier=None, require_dense=None):
         """Combining Instance-Based Learning and Logistic Regression
 
         The basic idea of this model is to consider the information that
@@ -23,6 +22,9 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
 
         Parameters
         ----------
+        classifier : :class:`~sklearn.base.BaseEstimator`
+            scikit-learn compatible base classifier
+
         require_dense : [bool, bool], optional
             whether the base classifier requires dense representations
             for input features and classes/labels matrices in fit/predict.
@@ -54,8 +56,8 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
             }
 
         """
-        super(InstanceBasedLogisticRegression, self).__init__(require_dense)
-        self.classifier = KNeighborsClassifier(n_neighbors=30, n_jobs=-1)
+        super(InstanceBasedLogisticRegression, self).__init__(classifier, require_dense)
+        self.knn_classifier = KNeighborsClassifier(n_neighbors=30, n_jobs=-1)
         self.knn_layer = []
 
     def _generate_partition(self, X, y):
@@ -120,7 +122,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         self._label_count = y.shape[1]
 
         for i in range(self.model_count_):
-            classifier = copy.deepcopy(self.classifier)
+            classifier = copy.deepcopy(self.knn_classifier)
             y_subset = self._generate_data_subset(y, self.partition_[i], axis=1)
             if issparse(y_subset) and y_subset.ndim > 1 and y_subset.shape[1] == 1:
                 y_subset = np.ravel(y_subset.toarray())
@@ -135,7 +137,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         X_concat_class_membership = self.concatenate_class_membership(X, class_membership)
 
         for i in range(self.model_count_):
-            classifier = LogisticRegression(max_iter=5000)
+            classifier = copy.deepcopy(self.classifier)
             y_subset = self._generate_data_subset(y, self.partition_[i], axis=1)
             if issparse(y_subset) and y_subset.ndim > 1 and y_subset.shape[1] == 1:
                 y_subset = np.ravel(y_subset.toarray())
