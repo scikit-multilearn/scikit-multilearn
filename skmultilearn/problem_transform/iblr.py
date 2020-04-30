@@ -22,9 +22,6 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
 
         Parameters
         ----------
-        classifier : :class:`~sklearn.base.BaseEstimator`
-            scikit-learn compatible base classifier
-
         require_dense : [bool, bool], optional
             whether the base classifier requires dense representations
             for input features and classes/labels matrices in fit/predict.

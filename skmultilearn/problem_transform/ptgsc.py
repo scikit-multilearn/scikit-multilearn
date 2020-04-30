@@ -2,6 +2,7 @@ from ..base.problem_transformation import ProblemTransformationBase
 
 from sklearn.exceptions import NotFittedError
 from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import make_scorer
 import skmultilearn.tools as tools
 from ..base.base import MLClassifierBase
@@ -21,24 +22,27 @@ class PTGridSearchCV(ProblemTransformationBase):
         self.classifiers_ = []
         self.estimator = estimator
 
-        if type(self.estimator).__name__ == 'InstanceBasedLogisticRegression':
-            knn_param_grid = param_grid['knn']
-            lr_param_grid = param_grid['lr']
-            param_grid = knn_param_grid
-            self.param_grid = lr_param_grid
-
-        else :
-            self.estimator.classifier = param_grid['classifier'][0]
-            del param_grid['classifier']
+        self.estimator.classifier = param_grid['classifier']
+        del param_grid['classifier']
 
         if scoring == 'cll_loss' :
             scoring = make_scorer(tools.log_likelihood_loss, greater_is_better=False, needs_proba=True)
 
-        self.gsc = GridSearchCV(estimator=estimator.classifier, param_grid = param_grid,
-                                scoring=scoring, n_jobs=n_jobs, iid=iid,
-                                refit=refit, cv=cv, verbose=verbose,
-                                pre_dispatch=pre_dispatch, error_score=error_score,
-                                return_train_score=return_train_score)
+        if type(self.estimator).__name__ == 'InstanceBasedLogisticRegression':
+            self.param_grid = param_grid
+            param_grid = {'n_neighbors': [30]}
+            self.gsc = GridSearchCV(estimator=KNeighborsClassifier(), param_grid=param_grid,
+                                    scoring=scoring, n_jobs=n_jobs, iid=iid,
+                                    refit=refit, cv=cv, verbose=verbose,
+                                    pre_dispatch=pre_dispatch, error_score=error_score,
+                                    return_train_score=return_train_score)
+
+        else :
+            self.gsc = GridSearchCV(estimator=estimator.classifier, param_grid = param_grid,
+                                    scoring=scoring, n_jobs=n_jobs, iid=iid,
+                                    refit=refit, cv=cv, verbose=verbose,
+                                    pre_dispatch=pre_dispatch, error_score=error_score,
+                                    return_train_score=return_train_score)
 
 
     def fit(self, X, y):
@@ -55,7 +59,7 @@ class PTGridSearchCV(ProblemTransformationBase):
             self.estimator.knn_layer = self.find_optm_classifiers(X, y)
 
             class_membership = self.estimator.get_class_membership(self.estimator.knn_layer, X)
-            X_concat_clm = self.estimator.concatenate_clm(X, class_membership)
+            X_concat_clm = self.estimator.concatenate_class_membership(X, class_membership)
             self.gsc = GridSearchCV(estimator=self.estimator.classifier, param_grid = self.param_grid)
             self.classifiers_ = self.find_optm_classifiers(X_concat_clm, y)
 
