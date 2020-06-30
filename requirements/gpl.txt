@@ -1,3 +1,0 @@
-# python-graphtool is also a useful requirement but is not pip-installable,
-# see https://git.skewed.de/count0/graph-tool/wikis/installation-instructions
-python-igraph==0.7.1.post6

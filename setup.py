@@ -19,6 +19,34 @@ setup(
     name='scikit-multilearn',
     version='0.2.0',
     packages=find_packages(exclude=['docs', 'tests', '*.tests']),
+    install_requires=[
+        "scipy>=1.1.0",
+        "numpy>=1.15.1",
+        "liac-arff>=2.2.1",
+        "networkx>=2.1",
+        "python-louvain>=0.11",
+        "future>=0.16.0",
+        "scikit_learn>=0.19.2",
+        "requests>=2.18.4",
+    ],
+    extras_require={
+        "gpl":  [
+            "python-igraph>=0.7.1.post6",
+        ],
+        "dev":  [
+            "pytest>=3.3.1",
+            "PyHamcrest>=1.9.0",
+            "ipython",
+            "ipython-genutils",
+        ],
+        "keras": [
+            "keras",
+            "tensorflow",
+        ],
+        "meka": [
+            "whichcraft>=0.4.1",
+        ]
+    },
     author=u'Piotr Szymański',
     author_email=u'niedakh@gmail.com',
     license=u'BSD',

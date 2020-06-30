@@ -22,32 +22,7 @@ follows a similar API to that of [scikit-learn](http://scikit-learn.org/).
 
 - __Builds upon giants!__ Team-up with the power of numpy and scikit. You can use scikit-learn's base classifiers as scikit-multilearn's classifiers. In addition, the two packages follow a similar API.
 
-## Dependencies
-
-In most cases you will want to follow the requirements defined in the requirements/*.txt files in the package. 
-
-### Base dependencies
-```
-scipy
-numpy
-future
-scikit-learn
-liac-arff # for loading ARFF files
-requests # for dataset module
-networkx # for networkX base community detection clusterers
-python-louvain # for networkX base community detection clusterers
-keras
-```
-
-### GPL-incurring dependencies for two clusterers
-```
-python-igraph # for igraph library based clusterers
-python-graphtool # for graphtool base clusterers
-```
-
-Note: Installing graphtool is complicated, please see: [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
-
-## Installation
+## Installation & Dependencies
 
 To install scikit-multilearn, simply type the following command:
 
@@ -64,6 +39,10 @@ $ git clone https://github.com/scikit-multilearn/scikit-multilearn.git
 $ cd scikit-multilearn
 $ python setup.py
 ```
+
+In most cases requirements are installed when you install using `pip install scikit-multilearn` or run `python setup.py install`. There are also optional dependencies `pip install scikit-multilearn[gpl,keras,meka]` installs the GPL-incurring igraph for for igraph library based clusterers, keras for the keras classifiers and requirements for the meka bridge respectively.
+
+Note that installing the GPL licensed graphtool, for graphtool based clusters, is complicated, and must be done manually, please see: [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
 
 ## Basic Usage
 
