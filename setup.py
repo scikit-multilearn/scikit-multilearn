@@ -12,7 +12,7 @@ if sys.version_info[0] < 3:
 else:
     import io
 
-    with io.open('README.md', 'r', 'utf-8') as f:
+    with io.open('README.md', 'r', encoding='utf-8') as f:
         readme = f.read()
 
 setup(
