@@ -28,12 +28,12 @@ from .cc import ClassifierChain
 from .lp import LabelPowerset
 from .iblr import InstanceBasedLogisticRegression
 from .chf import ClassificationHeterogeneousFeature
-from .ptgsc import PTGridSearchCV
+from .gsc import StructuredGridSearchCV
 
 __all__ = ["BinaryRelevance",
            "ClassifierChain",
            "LabelPowerset",
            "ClassificationHeterogeneousFeature"
            "InstanceBasedLogisticRegression",
-           "PTGridSearchCV",
+           "StructuredGridSearchCV",
            ]
