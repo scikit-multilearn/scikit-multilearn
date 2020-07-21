@@ -3,22 +3,24 @@ import numpy as np
 
 from scipy.sparse import hstack, issparse, lil_matrix
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
 
 from ..base.problem_transformation import ProblemTransformationBase
 from ..base.base import MLClassifierBase
 
 
 class InstanceBasedLogisticRegression(ProblemTransformationBase):
-    def __init__(self, classifier=None, require_dense=None):
+    def __init__(self, classifier=LogisticRegression(), require_dense=None):
         """Combining Instance-Based Learning and Logistic Regression
 
-        The basic idea of this model is to consider the information that
-        derives from examples as a feature of that instance, thereby
-        blurring the distinction between instance-based and model-based
-        learning to some extent.
-
         This idea is put into practice by means of a learning algorithm
-        that realizes instance-based classification as logistic regression.
+        that realizes instance-based classification as
+        logistic regression, using the information coming from the neighbors
+        of an instance x as a “feature”.
+
+        The first classifier layer is filled with K-Nearest Neighbor models,
+        while the second classifier layer is filled with Logistic Regression as
+        default classifier. It can be filled with other classifiers.
 
         Parameters
         ----------
@@ -37,7 +39,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
             via :meth:`fit`
         classifiers_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
             list of classifiers trained per partition, set in :meth:`fit`
-        knn_layer : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
+        knn_layer_ : List[:class:`~sklearn.base.BaseEstimator`] of shape `model_count`
             list of classifiers trained per partition in first layer, set in :meth:`fit`
 
         References
@@ -46,16 +48,21 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
 
         .. code-block:: bibtex
 
-            @inproceedings{
-              title={Combining Instance-Based Learning and Logistic Regression for Multilabel Classification},
-              author={Weiwei Cheng and Eyke H ̈ullermeier},
-              year={2009}
-            }
+        @article{cheng2009combining,
+            title={Combining instance-based learning and logistic regression for multilabel classification},
+            author={Cheng, Weiwei and H{\"u}llermeier, Eyke},
+            journal={Machine Learning},
+            volume={76},
+            number={2-3},
+            pages={211--225},
+            year={2009},
+            publisher={Springer}
+        }
 
         """
         super(InstanceBasedLogisticRegression, self).__init__(classifier, require_dense)
         self.knn_classifier = KNeighborsClassifier(n_neighbors=10, n_jobs=-1)
-        self.knn_layer = []
+        self.knn_layer_ = []
 
     def _generate_partition(self, X, y):
         """Partitions the label space into singletons
@@ -109,6 +116,24 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return result
 
     def fit(self, X, y):
+        """Fits classifier to training data
+
+        Parameters
+        ----------
+        X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
+            input feature matrix
+        y : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
+            binary indicator matrix with label assignments
+
+        Returns
+        -------
+        self
+            fitted instance of self
+
+        Notes
+        -----
+        .. note :: Input matrices are converted to sparse format internally if a numpy representation is passed
+        """
         X = self._ensure_input_format(
             X, sparse_format='csr', enforce_sparse=True)
         y = self._ensure_output_format(
@@ -127,10 +152,10 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
                 X), self._ensure_output_format(y_subset))
             self.classifiers_.append(classifier)
 
-        self.knn_layer = copy.deepcopy(self.classifiers_)
+        self.knn_layer_ = copy.deepcopy(self.classifiers_)
         self.classifiers_ = []
 
-        class_membership = self.get_class_membership(self.knn_layer, X)
+        class_membership = self.get_class_membership(self.knn_layer_, X)
         X_concat_class_membership = self.concatenate_class_membership(X, class_membership)
 
         for i in range(self.model_count_):
@@ -155,7 +180,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
             binary indicator matrix with label assignments
         """
-        class_membership = self.get_class_membership(self.knn_layer, X)
+        class_membership = self.get_class_membership(self.knn_layer_, X)
         X_test_concat_membership = self.concatenate_class_membership(X, class_membership)
 
         predictions = [self._ensure_multi_label_from_single_class(
@@ -175,7 +200,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         :mod:`scipy.sparse` matrix of `float in [0.0, 1.0]`, shape=(n_samples, n_labels)
             matrix with label assignment probabilities
         """
-        class_membership = self.get_class_membership(self.knn_layer, X)
+        class_membership = self.get_class_membership(self.knn_layer_, X)
         X_test_concat_class_membership = self.concatenate_class_membership(X, class_membership)
 
         result = lil_matrix((X.shape[0], self._label_count), dtype='float')
