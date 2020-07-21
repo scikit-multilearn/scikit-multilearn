@@ -15,10 +15,10 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
         from one for each label in the dataset. The cyclic dependency between
         features and labels is resolved iteratively.
 
-        There are two BR layers which composed of base classifiers in the model.
-        The first layer proposed to augment the feature set with heterogeneous features.
-        Heterogeneous features are predict probabilities provided by base classifier
-        per each label. The second layer proceed train/test process based on new feature set.
+        There are two BR layers, composed of given base classifiers for each layer.
+        The first layer is proposed to reproduce heterogeneous features, which will be augment to the original feature set.
+        Heterogeneous features are predict probabilities produced by base classifier
+        per each label. The second layer is to predict each labels with features from first layer.
 
         Parameters
         ----------
@@ -71,7 +71,7 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
         self.model_count_ = y.shape[1]
 
     def concatenate_clm(self, X, class_membership):
-        """Concatenate origin features and heterogeneous features
+        """Concatenate origin features and heterogeneous features into one vector.
         Parameters
         ----------
         X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
@@ -87,7 +87,7 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
         return concatenated
 
     def get_class_membership(self, classifiers, X):
-        """ Get heterogenous features from trained classifiers based on X
+        """ Get heterogenous features from X based on trained classifiers
         Parameters
         ----------
 
