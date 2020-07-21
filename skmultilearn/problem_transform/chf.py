@@ -17,9 +17,8 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
 
         There are two BR layers which composed of base classifiers in the model.
         The first layer proposed to augment the feature set with heterogeneous features.
-        Heterogeneous features composed of predict probabilities which is provided
-        by base classifier per each label. The second layer proceed train/test
-        process based on new feature set.
+        Heterogeneous features are predict probabilities provided by base classifier
+        per each label. The second layer proceed train/test process based on new feature set.
 
         Parameters
         ----------
@@ -45,8 +44,14 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
 
         References
         ----------
-        [Godbole and Sarawagi, 2004] Godbole, S. and Sarawagi, S. (2004). Discriminative methods
-        for multi-labeled classification. In PAKDD’04, pages 22–30.
+        @inproceedings{godbole2004discriminative,
+            title={Discriminative methods for multi-labeled classification},
+            author={Godbole, Shantanu and Sarawagi, Sunita},
+            booktitle={Pacific-Asia conference on knowledge discovery and data mining},
+            pages={22--30},
+            year={2004},
+            organization={Springer}
+        }
 
         """
         super(ClassificationHeterogeneousFeature, self).__init__(classifier, require_dense)
@@ -110,7 +115,7 @@ class ClassificationHeterogeneousFeature(ProblemTransformationBase):
         return result
 
     def fit(self, X, y):
-        """Fits classifier to training data
+        """ Fits classifier to training data
 
         Parameters
         ----------
