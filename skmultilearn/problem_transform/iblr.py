@@ -54,7 +54,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
 
         """
         super(InstanceBasedLogisticRegression, self).__init__(classifier, require_dense)
-        self.knn_classifier = KNeighborsClassifier(n_neighbors=30, n_jobs=-1)
+        self.knn_classifier = KNeighborsClassifier(n_neighbors=10, n_jobs=-1)
         self.knn_layer = []
 
     def _generate_partition(self, X, y):
