@@ -15,22 +15,24 @@ import numpy as np
 class StructuredGridSearchCV(ProblemTransformationBase):
     """Hyperparameter tuning per each label classifier
 
-    GridSearchCV which is provided by scikit-learn doesn't consider
-    BR&CC structual property. It cannot search best parameter and classifier
-    per each label. However, Structured GridSearchCV implements Fine tuning
-    each classifier and find optimal classifiers per each label.
+    As original GridSearchCV provided by scikit-learn ignores
+    BR&CC structural property, it cannot search best parameter and classifier
+    for each label. Therefore, StructuredGridSearchCV was implemented for fine tuning
+    with considering structural property. StructuredGridSearchCV searches best classifier
+    with optimal hyper-parameters for each labels.
 
-    Structured GridSearchCV implements "fit", "predict", "predict_proba".
-    It can provide optimal classifier list using find_optm_classifier function.
+    StructuredGridSearchCV provides "fit", "predict", "predict_proba" as its methods.
+    It provides list of optimal classifiers with fine-tuned hyper-parameters
+    via find_optm_classifier function.
     If print_best_param is True, find_optm_classifier function prints
-    best parameter per each label.
+    best parameter for each label.
 
     Parameters
     ----------
     Same as GridsearchCV in scikit-learn
 
     print_best_param : bool, default = False
-        whether print best paramter each label classifier or not
+        whether print best parameter each label classifier or not
 
     Attributes
     ----------
@@ -38,7 +40,7 @@ class StructuredGridSearchCV(ProblemTransformationBase):
         list of classifiers trained per partition, set in :meth:`fit`
 
     print_best_param : bool, default = False
-        whether print best paramter each label classifier or not
+        whether print best parameter each label classifier or not
 
     estimator : estimator object.
         This is assumed to implement the scikit-learn estimator interface.
