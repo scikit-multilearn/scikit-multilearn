@@ -19,8 +19,8 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         of an instance x as a “feature”.
 
         The first classifier layer is filled with K-Nearest Neighbor models,
-        while the second classifier layer is filled with Logistic Regression as
-        default classifier. It can be filled with other classifiers.
+        while the second classifier layer is filled with another classifiers, Logistic Regression as
+        default.
 
         Parameters
         ----------
@@ -78,7 +78,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         self.model_count_ = y.shape[1]
 
     def concatenate_class_membership(self, X, class_membership):
-        """Concatenate original features and new features that come from instance-based model
+        """Concatenate original features and instance-based information from first layer
         Parameters
         ----------
         X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
@@ -93,7 +93,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return concatenated
 
     def get_class_membership(self, classifiers, X):
-        """ Extract instance-based information from orignal data X
+        """ Extract instance-based information from original data X
         Parameters
         ----------
 
@@ -116,7 +116,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return result
 
     def fit(self, X, y):
-        """Fits classifier to training data
+        """Fits classifiers for training with given data
 
         Parameters
         ----------
@@ -170,7 +170,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return self
 
     def predict(self, X):
-        """Predict labels for X
+        """Predict labels from X
         Parameters
         ----------
         X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
@@ -190,7 +190,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return hstack(predictions)
 
     def predict_proba(self, X):
-        """Predict probabilities of label assignments for X
+        """Predict probabilities of each labels from given X
         Parameters
         ----------
         X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
