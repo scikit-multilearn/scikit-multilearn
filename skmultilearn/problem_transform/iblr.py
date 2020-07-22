@@ -93,7 +93,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return concatenated
 
     def get_class_membership(self, classifiers, X):
-        """ Extract instance-based information from original data X
+        """Extract instance-based information from original data X
         Parameters
         ----------
 
@@ -116,12 +116,7 @@ class InstanceBasedLogisticRegression(ProblemTransformationBase):
         return result
 
     def fit(self, X, y):
-<<<<<<< HEAD
         """Fits classifier to training data
-=======
-        """Fits classifiers for training with given data
->>>>>>> 1ab595dfb70facd9e48587ac8faa6d1cc196f8ee
-
         Parameters
         ----------
         X : `array_like`, :class:`numpy.matrix` or :mod:`scipy.sparse` matrix, shape=(n_samples, n_features)
