@@ -162,7 +162,7 @@ class MLkNN(MLClassifierBase):
             the posterior probability given false
         """
 
-        self.knn_ = NearestNeighbors(self.k).fit(X)
+        self.knn_ = NearestNeighbors(n_neighbors=self.k).fit(X)
         c = sparse.lil_matrix((self._num_labels, self.k + 1), dtype='i8')
         cn = sparse.lil_matrix((self._num_labels, self.k + 1), dtype='i8')
 
