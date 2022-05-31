@@ -1,16 +1,13 @@
 import numpy as np
-from ..utils import get_matrix_in_format, matrix_creation_function_for_format
+from ..utils import get_matrix_in_format, matrix_creation_function_for_format,  measure_per_label
 from scipy.sparse import issparse
 from sklearn.base import BaseEstimator, ClassifierMixin
-
 
 class MLClassifierBase(BaseEstimator, ClassifierMixin):
     """Base class providing API and common functions for all multi-label
     classifiers.
-
     Implements base functionality for ML classifiers, especially the get/set params for
     scikit-learn compatibility.
-
     Attributes
     ----------
     copyable_attrs : List[str]
@@ -24,10 +21,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def _generate_data_subset(self, y, subset, axis):
         """Subset rows or columns from matrix
-
         This function subsets the array of binary label vectors to 
         include only certain labels. 
-
         Parameters
         ----------
         y : array-like of array-likes
@@ -38,7 +33,6 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         axis: integer 0 for 'rows', 1 for 'labels', 
             control variable for whether to return rows or labels as
             indexed by subset
-
         Returns
         -------
         multi-label binary label vector : array-like of array-likes of {0,1}
@@ -55,10 +49,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def _ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired input format
-
         This function ensures that input format follows the
         density/sparsity requirements of base classifier. 
-
         Parameters
         ----------
         X : array-like or sparse matrix
@@ -67,7 +59,6 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             Requested format of returned scipy.sparse matrix, if sparse is returned
         enforce_sparse : bool
             Ignore require_dense and enforce sparsity, useful internally
-
         Returns
         -------
         array-like or sparse matrix
@@ -98,26 +89,20 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def _ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
         """Ensure the desired output format
-
         This function ensures that output format follows the
         density/sparsity requirements of base classifier. 
-
         Parameters
         ----------
-
         matrix : array-like matrix
             An input feature matrix of shape :code:`(n_samples)` or
             :code:`(n_samples, n_outputs)` or a sparse matrix of shape
             :code:`(n_samples, n_outputs)`
-
         sparse_format: str (default is csr)
             Requested format of returned :code:`scipy.sparse` matrix,
             if sparse is returned
-
         enforce_sparse : bool (default is False)
             Ignore :code:`require_dense` and enforce sparsity, useful
             internally
-
         Returns
         -------
         array-like or sparse matrix
@@ -158,9 +143,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, y):
         """Abstract method to fit classifier with training data
-
         It must return a fitted instance of :code:`self`.
-
         Parameters
         ----------
         X : numpy.ndarray or scipy.sparse
@@ -168,12 +151,10 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             :code:`(n_samples, n_features)`
         y : numpy.ndaarray or scipy.sparse {0,1}
             binary indicator matrix with label assignments.
-
         Returns
         -------
         object
             fitted instance of self
-
         Raises
         ------
         NotImplementedError
@@ -184,18 +165,15 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def predict(self, X):
         """Abstract method to predict labels
-
         Parameters
         ----------
         X : numpy.ndarray or scipy.sparse.csc_matrix
             input features of shape :code:`(n_samples, n_features)`
-
         Returns
         -------
         scipy.sparse of int
             binary indicator matrix with label assignments with shape
             :code:`(n_samples, n_labels)`
-
         Raises
         ------
         NotImplementedError
@@ -205,16 +183,13 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def get_params(self, deep=True):
         """Get parameters to sub-objects
-
         Introspection of classifier for search models like
         cross-validation and grid search.
-
         Parameters
         ----------
         deep : bool
             if :code:`True` all params will be introspected also and
             appended to the output dictionary.
-
         Returns
         -------
         out : dict
@@ -235,10 +210,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
     def set_params(self, **parameters):
         """Propagate parameters to sub-objects
-
         Set parameters as returned by :code:`get_params`. Please 
         see this `link`_.
-
         .. _link: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
         """
 
@@ -283,3 +256,4 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
                 sub_object.set_params(**sub_params)
 
         return self
+

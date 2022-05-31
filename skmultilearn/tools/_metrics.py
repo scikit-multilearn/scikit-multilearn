@@ -1,5 +1,6 @@
 import math
 
+
 def log_likelihood_loss(y, y_pred):
     log_likelihood_loss = 0
     for row in range(y.shape[0]):
