@@ -179,7 +179,8 @@ class ClassifierChain(ProblemTransformationBase):
                 self._ensure_input_format(X_extended))
             prediction = self._ensure_multi_label_from_single_class(prediction)
             X_extended = hstack([X_extended, prediction])
-        return X_extended[:, -self._label_count:]
+        y_pred = X_extended[:, -self._label_count :]
+        return self._revert_order(y_pred)
 
     def predict_proba(self, X):
         """Predict probabilities of label assignments for X
@@ -213,8 +214,8 @@ class ClassifierChain(ProblemTransformationBase):
 
             X_extended = hstack([X_extended, prediction]).tocsc()
             results.append(prediction_proba)
-
-        return hstack(results)
+        y_proba = hstack(results)
+        return self._revert_order(y_proba)
 
     def _order(self):
         if self.order is not None:
@@ -224,3 +225,9 @@ class ClassifierChain(ProblemTransformationBase):
             return list(range(self._label_count))
         except AttributeError:
             raise NotFittedError("This Classifier Chain has not been fit yet")
+
+    def _revert_order(self, y):
+        original_col_order = [
+            self._order().index(x) for x in range(self._label_count)
+        ]
+        return y[:, original_col_order]
