@@ -184,8 +184,13 @@ class IterativeStratification(_BaseKFold):
         desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
         is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
 
-    random_state : None | int | np.random.RandomState
-        the random state seed (optional)
+    shuffle : bool
+        Whether to shuffle the data before splitting into batches. Note that the samples within each split 
+        will not be shuffled.
+
+    random_state : int, RandomState instance or None
+        integer to seed the RNG, or the RNG state to use; if None (the default), will use the global
+        state of numpy RNG
     """
 
     def __init__(self, n_splits=3, order=1, sample_distribution_per_fold = None, shuffle=False, random_state=None):
