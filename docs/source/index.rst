@@ -177,7 +177,7 @@
           <div class="card   blue-grey lighten-5">
             <div class="card-content black-text">
               <span class="card-title"><i class="fab fa-github"></i> Widely used</span>
-              <p>With over 160 stars and 60 forks scikit-multilearn is the second most popular multi-label library on github.</p>
+              <p>With over 800 stars and 150 forks scikit-multilearn is the second most popular multi-label library on github.</p>
             </div>
             <div class="card-action right-align">
             <!-- Place this tag where you want the button to render. -->
