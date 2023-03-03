@@ -75,21 +75,25 @@ import scipy.sparse as sp
 import itertools
 from sklearn.utils import check_random_state
 
-def iterative_train_test_split(X, y, test_size):
+def iterative_train_test_split(X, y, test_size, random_state=None):
     """Iteratively stratified train/test split
 
     Parameters
     ----------
     test_size : float, [0,1]
         the proportion of the dataset to include in the test split, the rest will be put in the train set
-
+    
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
+    
     Returns
     -------
     X_train, y_train, X_test, y_test
         stratified division into train/test split
     """
 
-    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
+    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size],
+                                            random_state=random_state)
     train_indexes, test_indexes = next(stratifier.split(X, y))
 
     X_train, y_train = X[train_indexes, :], y[train_indexes, :]
@@ -109,6 +113,9 @@ def _fold_tie_break(desired_samples_per_fold, M, rng_state=check_random_state(No
     M : np.array(int)
         List of folds between which to break the tie
 
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
+        
     Returns
     -------
     fold_number : int
@@ -121,7 +128,12 @@ def _fold_tie_break(desired_samples_per_fold, M, rng_state=check_random_state(No
         M_prim = np.where(
             np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
-        return rng_state.choice(M_prim, 1)[0]
+        if random_state:
+            if isinstance(random_state, np.random.RandomState):
+                return random_state.choice(M_prim, 1)[0]
+            else:
+                np.random.seed(random_state)
+        return np.random.choice(M_prim, 1)[0]
 
 
 def _get_most_desired_combination(samples_with_combination):
@@ -176,9 +188,8 @@ class IterativeStratification(_BaseKFold):
         Whether to shuffle the data before splitting into batches. Note that the samples within each split 
         will not be shuffled.
 
-    random_state : int, RandomState instance or None
-        integer to seed the RNG, or the RNG state to use; if None (the default), will use the global
-        state of numpy RNG
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
     """
 
     def __init__(self, n_splits=3, order=1, sample_distribution_per_fold = None, shuffle=False, random_state=None):
@@ -290,7 +301,8 @@ class IterativeStratification(_BaseKFold):
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, self._rng_state)
+                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, 
+                                        random_state = self.random_state)
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
@@ -315,7 +327,11 @@ class IterativeStratification(_BaseKFold):
             row = available_samples.pop()
             rows_used[row] = True
             samples_left -= 1
-            fold_selected = self._rng_state.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
+            fold_selected = self._
+            
+            
+            
+            state.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
