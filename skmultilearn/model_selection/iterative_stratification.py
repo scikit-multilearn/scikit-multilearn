@@ -103,7 +103,7 @@ def iterative_train_test_split(X, y, test_size, random_state=None):
 
 
 
-def _fold_tie_break(desired_samples_per_fold, M, rng_state=check_random_state(None)):
+def _fold_tie_break(desired_samples_per_fold, M, random_state=check_random_state(None)):
     """Helper function to split a tie between folds with same desirability of a given sample
 
     Parameters
