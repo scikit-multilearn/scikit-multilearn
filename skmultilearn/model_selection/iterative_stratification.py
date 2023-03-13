@@ -327,11 +327,7 @@ class IterativeStratification(_BaseKFold):
             row = available_samples.pop()
             rows_used[row] = True
             samples_left -= 1
-            fold_selected = self._
-            
-            
-            
-            state.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
+            fold_selected = self._rng_state.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
