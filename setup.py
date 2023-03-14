@@ -45,6 +45,10 @@ setup(
         ],
         "meka": [
             "whichcraft>=0.4.1",
+        ],
+        "test": [
+            "pytest",
+            "pyhamcrest",
         ]
     },
     author=u'Piotr Szymański',
