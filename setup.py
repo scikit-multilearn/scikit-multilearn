@@ -32,7 +32,7 @@ setup(
     ],
     extras_require={
         "gpl":  [
-            "python-igraph>=0.7.1.post6",
+            "igraph",
         ],
         "dev":  [
             "pytest>=3.3.1",
