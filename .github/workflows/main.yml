@@ -18,7 +18,7 @@ jobs:
       - name: Install graph-tool
         run:
           | # https://git.skewed.de/count0/graph-tool/-/wikis/installation-instructions#debian-ubuntu
-          echo "deb [ arch=amd64 ] https://downloads.skewed.de/apt DISTRIBUTION main" >> /etc/apt/sources.list
+          sudo add-apt-repository  "deb https://downloads.skewed.de/apt  debian-$(lsb_release -cs)  main"
           apt-key adv --keyserver keyserver.ubuntu.com --recv-key 612DEFB798507F25
           sudo apt-get update
           sudo apt-get install python3-graph-tool
