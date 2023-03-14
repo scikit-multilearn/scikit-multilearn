@@ -1,7 +1,13 @@
 from ..base.problem_transformation import ProblemTransformationBase
-from scipy.sparse import hstack
+from scipy.sparse import hstack, vstack
 from sklearn.exceptions import NotFittedError
+import sklearn.metrics as metrics
+from skmultilearn.tools import log_likelihood_loss
+from itertools import permutations
+from bitstring import BitArray
 import copy
+import math
+import numpy as np
 
 
 class ClassifierChain(ProblemTransformationBase):
@@ -224,3 +230,143 @@ class ClassifierChain(ProblemTransformationBase):
             return list(range(self._label_count))
         except AttributeError:
             raise NotFittedError("This Classifier Chain has not been fit yet")
+
+class ProbabilisticClassifierChain(ClassifierChain):
+    def __init__(self,classifier=None, require_dense=None, label_set=None):
+        super(ProbabilisticClassifierChain, self).__init__(classifier, require_dense)
+        self.label_set = label_set
+        self.order = label_set
+        self.copyable_attrs = ['classifier', 'require_dense', 'label_set']
+
+    def fit(self, X_tr, X_ts, y_tr, y_ts, order=None, scoring = 'LL', vervose = 1):
+        y = self._ensure_output_format(y_tr, sparse_format='csc', enforce_sparse=True)
+
+        if(self.label_set == None):
+            self.label_set = list(range(y.shape[1]))
+        self.label_count = len(self.label_set)
+        self.label_set_all = list(permutations(self.label_set, y.shape[1]))
+
+        best_score = 0.0; best_label_set = None;
+        for _label_set in self.label_set_all:
+            temp = ClassifierChain(self.classifier, self.require_dense, _label_set)
+            temp.fit(X_tr,y_tr,_label_set)
+            y_pred = temp.predict(X_ts)
+            if(scoring == 'EMA'):
+                score = metrics.accuracy_score(y_ts, y_pred)
+                if (score > best_score):
+                    best_score = score
+                    best_label_set = _label_set
+            if(scoring == 'LL'):
+                y_pred_prob = temp.predict_proba(X_ts)
+                score = log_likelihood_loss(y_ts, y_pred_prob)
+                if ((-1)*score > best_score or best_score == 0.0):
+                    best_score = (-1)*score
+                    best_label_set = _label_set
+            if(vervose !=0):
+                print("Label set : {} | {}: {}".format(_label_set, scoring, score))
+
+            del(temp)
+
+        if(scoring == 'LL'): best_score = (-1)*best_score;
+
+        print("Best_label_set : {} | {} : {}".format(best_label_set, scoring, best_score))
+        self.order = best_label_set
+        X_tr = vstack((X_tr, X_ts))
+        y_tr = vstack((y_tr, y_ts))
+        super().fit(X_tr,y_tr, best_label_set)
+
+    def predict(self, X):
+        X_extended = self._ensure_input_format(
+            X, sparse_format='csc', enforce_sparse=True)
+
+        count_label = 0
+        for label in self._order():
+            if count_label == 0 :
+                prediction_proba = self.classifiers_[label].predict_proba(
+                    self._ensure_input_format(X_extended))
+                cond_distribution = prediction_proba.copy()
+                count_label+=1
+                continue
+
+            joint_probability = np.tile(np.zeros(1), (X.shape[0], 1))
+
+            for value in range(2 ** count_label) :
+                binary_array = np.array(list(BitArray(uint=value, length=count_label).bin), dtype=int)
+                case_y = np.tile(binary_array, (X.shape[0], 1))
+                X_extended = hstack([X, case_y])
+                prediction_proba = self.classifiers_[label].predict_proba(
+                    self._ensure_input_format(X_extended))
+                joint_probability = np.hstack([joint_probability, prediction_proba])
+
+            joint_probability = np.delete(joint_probability, 0, 1)
+
+            for k in range(cond_distribution.shape[1]):
+                joint_probability[:, 2*k] = \
+                    cond_distribution[:,k] * joint_probability[:, 2*k]
+                joint_probability[:, 2*k+1] = \
+                    cond_distribution[:,k] * joint_probability[:, 2*k+1]
+
+            cond_distribution = joint_probability.copy()
+            count_label+=1
+
+        predicted_indices = np.argmax(cond_distribution, axis=1)
+        prediction = np.zeros(count_label)
+
+        for index in predicted_indices :
+            binary_array = np.array(list(BitArray(uint=index, length=count_label).bin), dtype=int)
+
+            prediction = np.vstack([prediction, binary_array])
+
+        return prediction[1:,:]
+
+"""
+class ProbabilisticClassifierChain(ClassifierChain):
+    def __init__(self, classifier=None, require_dense=None, order=None):
+        super(ProbabilisticClassifierChain, self).__init__(classifier, require_dense)
+        self.order = order
+        self.copyable_attrs = ['classifier', 'require_dense', 'order']
+
+    def predict(self, X):
+        X_extended = self._ensure_input_format(
+            X, sparse_format='csc', enforce_sparse=True)
+
+        count_label = 0
+        for label in self._order():
+            if count_label == 0 :
+                prediction_proba = self.classifiers_[label].predict_proba(
+                    self._ensure_input_format(X_extended))
+                cond_distribution = prediction_proba.copy()
+                count_label+=1
+                continue
+
+            joint_probability = np.tile(np.zeros(1), (X.shape[0], 1))
+
+            for value in range(2 ** count_label) :
+                binary_array = np.array(list(BitArray(uint=value, length=count_label).bin), dtype=int)
+                case_y = np.tile(binary_array, (X.shape[0], 1))
+                X_extended = hstack([X, case_y])
+                prediction_proba = self.classifiers_[label].predict_proba(
+                    self._ensure_input_format(X_extended))
+                joint_probability = np.hstack([joint_probability, prediction_proba])
+
+            joint_probability = np.delete(joint_probability, 0, 1)
+
+            for k in range(cond_distribution.shape[1]):
+                joint_probability[:, 2*k] = \
+                    cond_distribution[:,k] * joint_probability[:, 2*k]
+                joint_probability[:, 2*k+1] = \
+                    cond_distribution[:,k] * joint_probability[:, 2*k+1]
+
+            cond_distribution = joint_probability.copy()
+            count_label+=1
+
+        predicted_indices = np.argmax(cond_distribution, axis=1)
+        prediction = np.zeros(count_label)
+
+        for index in predicted_indices :
+            binary_array = np.array(list(BitArray(uint=index, length=count_label).bin), dtype=int)
+
+            prediction = np.vstack([prediction, binary_array])
+
+        return prediction[1:,:]
+"""

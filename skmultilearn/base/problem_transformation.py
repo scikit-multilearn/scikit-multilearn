@@ -1,24 +1,24 @@
 import numpy as np
+import import_ipynb
 from .base import MLClassifierBase
 from ..utils import matrix_creation_function_for_format
 from scipy.sparse import issparse, csr_matrix
 
 
+# In[20]:
+
+
 class ProblemTransformationBase(MLClassifierBase):
     """Base class providing common functions for multi-label classifiers
     that follow the problem transformation approach.
-
     Problem transformation is the approach in which the
     original multi-label classification problem is transformed into one
     or more single-label problems, which are then solved by single-class
     or multi-class classifiers.
-
     Scikit-multilearn provides a number of such methods:
-
     - :class:`BinaryRelevance` - performs a single-label single-class classification for each label and sums the results :class:`BinaryRelevance`
     - :class:`ClassifierChains` - performs a single-label single-class classification for each label and sums the results :class:`ClassifierChain`
     - :class:`LabelPowerset` - performs a single-label single-class classification for each label and sums the results :class:`LabelPowerset`
-
     Parameters
     ----------
     classifier : scikit classifier type
@@ -57,7 +57,6 @@ class ProblemTransformationBase(MLClassifierBase):
             input matrix to be checked
         matrix_format : str (default is csr)
             the matrix format to validate with
-
         Returns
         -------
         scipy.sparse
@@ -101,3 +100,4 @@ class ProblemTransformationBase(MLClassifierBase):
 
         assert new_matrix.shape == (dim_1, dim_2)
         return new_matrix
+
