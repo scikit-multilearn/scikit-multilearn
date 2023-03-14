@@ -27,11 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-          pip install -r requirements/base.txt
-          pip install -r requirements/meka.txt
-          pip install -r requirements/keras.txt
-          pip install -r requirements/gpl.txt
-          pip install -r requirements/test.txt
+          pip install .[meka,keras,gpl,test]
           pip install 'openne @ git+https://github.com/thunlp/OpenNE.git@master#subdirectory=src'
       - name: Lint with flake8
         run: |

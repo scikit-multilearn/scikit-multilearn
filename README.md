@@ -42,6 +42,12 @@ $ python setup.py
 
 In most cases requirements are installed when you install using `pip install scikit-multilearn` or run `python setup.py install`. There are also optional dependencies `pip install scikit-multilearn[gpl,keras,meka]` installs the GPL-incurring igraph for for igraph library based clusterers, keras for the keras classifiers and requirements for the meka bridge respectively.
 
+To install `openNE`, run:
+
+```bash
+pip install 'openne @ git+https://github.com/thunlp/OpenNE.git@master#subdirectory=src'
+```
+
 Note that installing the GPL licensed graphtool, for graphtool based clusters, is complicated, and must be done manually, please see: [graphtool install instructions](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions)
 
 ## Basic Usage
