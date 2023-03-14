@@ -91,12 +91,12 @@ class RandomLabelSpaceClusterer(LabelSpaceClustererBase):
             label space division, each sublist represents labels that are in that community
         """
 
-        if (self.cluster_count+1) * self.cluster_size < y.shape[1]:
-            raise ValueError("Cannot include all of {} labels in {} clusters of {} labels".format(
-                y.shape[1],
-                self.cluster_count,
-                self.cluster_size
-            ))
+        if (self.cluster_count + 1) * self.cluster_size < y.shape[1]:
+            raise ValueError(
+                "Cannot include all of {} labels in {} clusters of {} labels".format(
+                    y.shape[1], self.cluster_count, self.cluster_size
+                )
+            )
 
         all_labels_assigned_to_division = False
         # make sure the final label set division includes all labels

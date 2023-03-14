@@ -28,7 +28,6 @@ class ProblemTransformationBase(MLClassifierBase):
     """
 
     def __init__(self, classifier=None, require_dense=None):
-
         super(ProblemTransformationBase, self).__init__()
 
         self.copyable_attrs = ["classifier", "require_dense"]
@@ -38,8 +37,11 @@ class ProblemTransformationBase(MLClassifierBase):
             if isinstance(require_dense, bool):
                 self.require_dense = [require_dense, require_dense]
             else:
-                assert len(require_dense) == 2 and isinstance(
-                    require_dense[0], bool) and isinstance(require_dense[1], bool)
+                assert (
+                    len(require_dense) == 2
+                    and isinstance(require_dense[0], bool)
+                    and isinstance(require_dense[1], bool)
+                )
                 self.require_dense = require_dense
 
         else:
@@ -48,9 +50,9 @@ class ProblemTransformationBase(MLClassifierBase):
             else:
                 self.require_dense = [True, True]
 
-    def _ensure_multi_label_from_single_class(self, matrix, matrix_format='csr'):
+    def _ensure_multi_label_from_single_class(self, matrix, matrix_format="csr"):
         """Transform single class outputs to a 2D sparse matrix
-        
+
         Parameters
         ----------
         matrix : array-like
@@ -86,7 +88,7 @@ class ProblemTransformationBase(MLClassifierBase):
             dim_1 = matrix.shape[0]
             dim_2 = matrix.shape[1]
 
-        # what is it? 
+        # what is it?
         else:
             raise ValueError("Matrix dimensions too large (>2) or other value error")
 
@@ -95,7 +97,9 @@ class ProblemTransformationBase(MLClassifierBase):
             if issparse(matrix):
                 new_matrix = matrix
             else:
-                new_matrix = matrix_creation_function_for_format(matrix_format)(matrix, shape=(dim_1, dim_2))
+                new_matrix = matrix_creation_function_for_format(matrix_format)(
+                    matrix, shape=(dim_1, dim_2)
+                )
         else:
             new_matrix = matrix_creation_function_for_format(matrix_format)(matrix).T
 

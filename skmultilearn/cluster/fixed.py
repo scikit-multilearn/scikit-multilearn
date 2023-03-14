@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from .base import LabelSpaceClustererBase
 
+
 class FixedLabelSpaceClusterer(LabelSpaceClustererBase):
     """Return a fixed label space partition
 

@@ -75,7 +75,8 @@ import scipy.sparse as sp
 import itertools
 from sklearn.utils import check_random_state
 
-def iterative_train_test_split(X, y, test_size):
+
+def iterative_train_test_split(X, y, test_size, random_state=None):
     """Iteratively stratified train/test split
 
     Parameters
@@ -83,13 +84,21 @@ def iterative_train_test_split(X, y, test_size):
     test_size : float, [0,1]
         the proportion of the dataset to include in the test split, the rest will be put in the train set
 
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
+
     Returns
     -------
     X_train, y_train, X_test, y_test
         stratified division into train/test split
     """
 
-    stratifier = IterativeStratification(n_splits=2, order=2, sample_distribution_per_fold=[test_size, 1.0-test_size])
+    stratifier = IterativeStratification(
+        n_splits=2,
+        order=2,
+        sample_distribution_per_fold=[test_size, 1.0 - test_size],
+        random_state=random_state,
+    )
     train_indexes, test_indexes = next(stratifier.split(X, y))
 
     X_train, y_train = X[train_indexes, :], y[train_indexes, :]
@@ -98,8 +107,7 @@ def iterative_train_test_split(X, y, test_size):
     return X_train, X_test, y_train, y_test
 
 
-
-def _fold_tie_break(desired_samples_per_fold, M):
+def _fold_tie_break(desired_samples_per_fold, M, random_state=check_random_state(None)):
     """Helper function to split a tie between folds with same desirability of a given sample
 
     Parameters
@@ -108,6 +116,9 @@ def _fold_tie_break(desired_samples_per_fold, M):
         number of samples desired per fold
     M : np.array(int)
         List of folds between which to break the tie
+
+    random_state : None | int | np.random.RandomState
+        the random state seed (optional)
 
     Returns
     -------
@@ -118,9 +129,13 @@ def _fold_tie_break(desired_samples_per_fold, M):
         return M[0]
     else:
         max_val = max(desired_samples_per_fold[M])
-        M_prim = np.where(
-            np.array(desired_samples_per_fold) == max_val)[0]
+        M_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
+        if random_state:
+            if isinstance(random_state, np.random.RandomState):
+                return random_state.choice(M_prim, 1)[0]
+            else:
+                np.random.seed(random_state)
         return np.random.choice(M_prim, 1)[0]
 
 
@@ -145,10 +160,14 @@ def _get_most_desired_combination(samples_with_combination):
         if support_size == 0:
             continue
         if currently_chosen is None or (
-                best_number_of_combinations < number_of_combinations and best_support_size > support_size
+            best_number_of_combinations < number_of_combinations
+            and best_support_size > support_size
         ):
             currently_chosen = combination
-            best_number_of_combinations, best_support_size = number_of_combinations, support_size
+            best_number_of_combinations, best_support_size = (
+                number_of_combinations,
+                support_size,
+            )
 
     return currently_chosen
 
@@ -172,22 +191,38 @@ class IterativeStratification(_BaseKFold):
         desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
         is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
 
-    random_state : int
-        the random state seed (optional)
+    shuffle : bool
+        Whether to shuffle the data before splitting into batches. Note that the samples within each split
+        will not be shuffled.
+
+    random_state : int, RandomState instance or None
+        integer to seed the RNG, or the RNG state to use; if None (the default), will use the global
+        state of numpy RNG
     """
 
-    def __init__(self, n_splits=3, order=1, sample_distribution_per_fold = None, random_state=None):
+    def __init__(
+        self,
+        n_splits=3,
+        order=1,
+        sample_distribution_per_fold=None,
+        shuffle=False,
+        random_state=None,
+    ):
+        self._rng_state = check_random_state(random_state)
+        need_shuffle = shuffle or random_state is not None
         self.order = order
-        super(
-            IterativeStratification,
-            self).__init__(n_splits,
-                           shuffle=False,
-                           random_state=random_state)
+        super(IterativeStratification, self).__init__(
+            n_splits,
+            shuffle=need_shuffle,
+            random_state=self._rng_state if need_shuffle else None,
+        )
 
         if sample_distribution_per_fold:
             self.percentage_per_fold = sample_distribution_per_fold
         else:
-            self.percentage_per_fold = [1 / float(self.n_splits) for _ in range(self.n_splits)]
+            self.percentage_per_fold = [
+                1 / float(self.n_splits) for _ in range(self.n_splits)
+            ]
 
     def _prepare_stratification(self, y):
         """Prepares variables for performing stratification
@@ -236,8 +271,9 @@ class IterativeStratification(_BaseKFold):
 
         """
         self.n_samples, self.n_labels = y.shape
-        self.desired_samples_per_fold = np.array([self.percentage_per_fold[i] * self.n_samples
-                                                  for i in range(self.n_splits)])
+        self.desired_samples_per_fold = np.array(
+            [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]
+        )
         rows = sp.lil_matrix(y).rows
         rows_used = {i: False for i in range(self.n_samples)}
         all_combinations = []
@@ -249,7 +285,9 @@ class IterativeStratification(_BaseKFold):
         for sample_index, label_assignment in enumerate(rows):
             # for every n-th order label combination
             # register combination in maps and lists used later
-            for combination in itertools.combinations_with_replacement(label_assignment, self.order):
+            for combination in itertools.combinations_with_replacement(
+                label_assignment, self.order
+            ):
                 if combination not in samples_with_combination:
                     samples_with_combination[combination] = []
 
@@ -260,14 +298,26 @@ class IterativeStratification(_BaseKFold):
         all_combinations = [list(x) for x in set(all_combinations)]
 
         self.desired_samples_per_combination_per_fold = {
-            combination:
-                np.array([len(evidence_for_combination) * self.percentage_per_fold[j]
-                          for j in range(self.n_splits)])
+            combination: np.array(
+                [
+                    len(evidence_for_combination) * self.percentage_per_fold[j]
+                    for j in range(self.n_splits)
+                ]
+            )
             for combination, evidence_for_combination in samples_with_combination.items()
         }
-        return rows, rows_used, all_combinations, per_row_combinations, samples_with_combination, folds
+        return (
+            rows,
+            rows_used,
+            all_combinations,
+            per_row_combinations,
+            samples_with_combination,
+            folds,
+        )
 
-    def _distribute_positive_evidence(self, rows_used, folds, samples_with_combination, per_row_combinations):
+    def _distribute_positive_evidence(
+        self, rows_used, folds, samples_with_combination, per_row_combinations
+    ):
         """Internal method to distribute evidence for labeled samples across folds
 
         For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
@@ -282,8 +332,12 @@ class IterativeStratification(_BaseKFold):
 
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
-                    np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M)
+                    np.array(self.desired_samples_per_combination_per_fold[l])
+                    == max_val
+                )[0]
+                m = _fold_tie_break(
+                    self.desired_samples_per_combination_per_fold[l], M, self._rng_state
+                )
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
@@ -300,15 +354,16 @@ class IterativeStratification(_BaseKFold):
         For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
         modifies params.
         """
-        available_samples = [
-            i for i, v in rows_used.items() if not v]
+        available_samples = [i for i, v in rows_used.items() if not v]
         samples_left = len(available_samples)
 
         while samples_left > 0:
             row = available_samples.pop()
             rows_used[row] = True
             samples_left -= 1
-            fold_selected = np.random.choice(np.where(self.desired_samples_per_fold > 0)[0], 1)[0]
+            fold_selected = self._rng_state.choice(
+                np.where(self.desired_samples_per_fold > 0)[0], 1
+            )[0]
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
@@ -334,13 +389,18 @@ class IterativeStratification(_BaseKFold):
         fold : List[int]
             indexes of test samples for a given fold, yielded for each of the folds
         """
-        if self.random_state:
-            check_random_state(self.random_state)
+        (
+            rows,
+            rows_used,
+            all_combinations,
+            per_row_combinations,
+            samples_with_combination,
+            folds,
+        ) = self._prepare_stratification(y)
 
-        rows, rows_used, all_combinations, per_row_combinations, samples_with_combination, folds = \
-            self._prepare_stratification(y)
-
-        self._distribute_positive_evidence(rows_used, folds, samples_with_combination, per_row_combinations)
+        self._distribute_positive_evidence(
+            rows_used, folds, samples_with_combination, per_row_combinations
+        )
         self._distribute_negative_evidence(rows_used, folds)
 
         for fold in folds:

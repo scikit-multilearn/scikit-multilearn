@@ -1,4 +1,4 @@
-Multilabel k Nearest Neighbours
+Multilabel Twin Support Vector Machines
 =================================
 
 .. autoclass:: skmultilearn.adapt.MLTSVM

@@ -156,15 +156,14 @@ class NetworkXLabelGraphClusterer(LabelGraphClustererBase):
         for e, w in edge_map.items():
             self.graph_.add_edge(e[0], e[1], weight=w)
 
-        if self.method == 'louvain':
+        if self.method == "louvain":
             partition_dict = community.best_partition(self.graph_)
             memberships = [partition_dict[i] for i in range(y.shape[1])]
 
             return np.array(
-                _membership_to_list_of_communities(
-                    memberships,
-                    1 + max(memberships)
-                )
+                _membership_to_list_of_communities(memberships, 1 + max(memberships))
             )
         else:
-            return np.array([list(i) for i in asyn_lpa_communities(self.graph_, 'weight')])
+            return np.array(
+                [list(i) for i in asyn_lpa_communities(self.graph_, "weight")]
+            )

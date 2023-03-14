@@ -151,15 +151,12 @@
           <div class="card  blue-grey lighten-5">
             <div class="card-content black-text">
               <span class="card-title"><i class="fas fa-wrench"></i> Well maintained</span>
-              <p>Scikit-multilearn has over 82% test coverage and undergoes continous integration on Windows 10, OS X and Ubuntu.</p>
+              <p>Scikit-multilearn has over 82% test coverage and undergoes continous integration.</p>
             </div>
             <div class="card-action right-align">
-              <a href="https://travis-ci.org/scikit-multilearn/scikit-multilearn"
-               class="waves-effect waves-light"><img src="https://travis-ci.org/scikit-multilearn/scikit-multilearn.svg?branch=master" />
-               </a>
-               <a href="https://ci.appveyor.com/project/niedakh/scikit-multilearn/branch/master"
-                class="waves-effect waves-light"><img src="https://ci.appveyor.com/api/projects/status/vd4k18u1lp5btaql/branch/master?svg=true" />
-                </a>
+              <a href="https://github.com/scikit-multilearn/scikit-multilearn/actions/workflows/main.yml">
+                <img src="https://github.com/scikit-multilearn/scikit-multilearn/actions/workflows/main.yml/badge.svg" />
+              </a>
             </div>
           </div>
         </div>
@@ -177,7 +174,7 @@
           <div class="card   blue-grey lighten-5">
             <div class="card-content black-text">
               <span class="card-title"><i class="fab fa-github"></i> Widely used</span>
-              <p>With over 160 stars and 60 forks scikit-multilearn is the second most popular multi-label library on github.</p>
+              <p>With over 800 stars and 150 forks scikit-multilearn is the second most popular multi-label library on github.</p>
             </div>
             <div class="card-action right-align">
             <!-- Place this tag where you want the button to render. -->

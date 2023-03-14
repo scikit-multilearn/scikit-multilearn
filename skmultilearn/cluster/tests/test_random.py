@@ -11,17 +11,22 @@ TEST_PARTITION_COUNT = 3
 def get_random_clusterers():
     for overlap in [True, False]:
         if overlap:
-            yield RandomLabelSpaceClusterer(cluster_count=TEST_PARTITION_COUNT * TEST_PARTITION_SIZE,
-                                            cluster_size=TEST_PARTITION_SIZE,
-                                            allow_overlap=overlap)
+            yield RandomLabelSpaceClusterer(
+                cluster_count=TEST_PARTITION_COUNT * TEST_PARTITION_SIZE,
+                cluster_size=TEST_PARTITION_SIZE,
+                allow_overlap=overlap,
+            )
         else:
-            yield RandomLabelSpaceClusterer(cluster_count=TEST_PARTITION_COUNT, cluster_size=TEST_PARTITION_SIZE,
-                                            allow_overlap=overlap)
+            yield RandomLabelSpaceClusterer(
+                cluster_count=TEST_PARTITION_COUNT,
+                cluster_size=TEST_PARTITION_SIZE,
+                allow_overlap=overlap,
+            )
 
 
 class RandomClustererTests(ClassifierBaseTest):
     def test_actually_works_on_proper_params(self):
-        for X, y in self.get_multilabel_data_for_tests('sparse'):
+        for X, y in self.get_multilabel_data_for_tests("sparse"):
             assert sp.issparse(y)
 
             for clusterer in get_random_clusterers():
