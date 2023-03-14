@@ -188,8 +188,9 @@ class IterativeStratification(_BaseKFold):
         Whether to shuffle the data before splitting into batches. Note that the samples within each split 
         will not be shuffled.
 
-    random_state : None | int | np.random.RandomState
-        the random state seed (optional)
+    random_state : int, RandomState instance or None
+        integer to seed the RNG, or the RNG state to use; if None (the default), will use the global
+        state of numpy RNG
     """
 
     def __init__(self, n_splits=3, order=1, sample_distribution_per_fold = None, shuffle=False, random_state=None):
@@ -301,8 +302,7 @@ class IterativeStratification(_BaseKFold):
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
                 M = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l]) == max_val)[0]
-                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, 
-                                        random_state = self.random_state)
+                m = _fold_tie_break(self.desired_samples_per_combination_per_fold[l], M, self._rng_state)
                 folds[m].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
