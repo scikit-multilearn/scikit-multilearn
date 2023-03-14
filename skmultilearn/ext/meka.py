@@ -425,10 +425,18 @@ class Meka(MLClassifierBase):
         ]
 
         if self.weka_classifier is not None:
-            command_args += ['-W', self.weka_classifier]
-
+            weka_classfier_name = self.weka_classifier.split(' ')[0]
+            weka_classfier_param = ' '.join(self.weka_classifier.split(' ')[1:])
+            command_args += ['-W', weka_classfier_name]
+            #command_args += ['-W', self.weka_classifier]
+        else:
+            weka_classfier_param = ''
+        
         command_args += args
-
+        
+        if weka_classfier_param is not '':
+            command_args += ['--', weka_classfier_param]
+            
         meka_command = " ".join(command_args)
 
         if sys.platform != 'win32':
