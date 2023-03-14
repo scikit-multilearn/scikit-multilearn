@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,6 +22,7 @@ jobs:
           pip install -r requirements/base.txt
           pip install -r requirements/meka.txt
           pip install -r requirements/keras.txt
+          apt-get install python3-graph-tool
           pip install -r requirements/gpl.txt
           pip install -r requirements/test.txt
           pip install 'openne @ git+https://github.com/thunlp/OpenNE.git@master#subdirectory=src'
