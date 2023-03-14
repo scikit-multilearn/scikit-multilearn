@@ -41,7 +41,7 @@ keras
 
 ### GPL-incurring dependencies for two clusterers
 ```
-python-igraph # for igraph library based clusterers
+igraph # for igraph library based clusterers
 python-graphtool # for graphtool base clusterers
 ```
 
