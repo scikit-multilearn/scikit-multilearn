@@ -16,12 +16,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install graph-tool
-        run:
-          | # https://git.skewed.de/count0/graph-tool/-/wikis/installation-instructions#debian-ubuntu
-          sudo add-apt-repository  "deb https://downloads.skewed.de/apt  debian-$(lsb_release -cs)  main"
-          apt-key adv --keyserver keyserver.ubuntu.com --recv-key 612DEFB798507F25
-          sudo apt-get update
-          sudo apt-get install python3-graph-tool
+        uses: myci-actions/add-deb-repo@10
+        with:
+          repo: deb https://downloads.skewed.de/apt debian-$(lsb_release -cs) main"
+          repo-name: skewed
+          keys-asc: https://keys.openpgp.org/vks/v1/by-fingerprint/793CEFE14DBC851A2BFB1222612DEFB798507F25
+          update: true
+          install: python3-graph-tool
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
