@@ -268,6 +268,7 @@ class MLkNN(MLClassifierBase):
 
             for label in range(self._num_labels):
                 p_true = self._prior_prob_true[label] * self._cond_prob_true[label, deltas[0, label]]
-                result[instance, label] = p_true
+                p_false = self._prior_prob_false[label] * self._cond_prob_false[label, deltas[0, label]]
+                result[instance, label] = p_true / (p_true + p_false)
 
         return result
