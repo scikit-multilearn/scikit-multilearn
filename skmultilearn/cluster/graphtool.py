@@ -5,7 +5,11 @@ import graph_tool.all as gt
 import numpy as np
 
 from .base import LabelGraphClustererBase
-from .helpers import _membership_to_list_of_communities, _overlapping_membership_to_list_of_communities
+from .helpers import (
+    _membership_to_list_of_communities,
+    _overlapping_membership_to_list_of_communities,
+)
+
 
 class StochasticBlockModel:
     """A Stochastic Blockmodel fit to Label Graph
@@ -35,6 +39,7 @@ class StochasticBlockModel:
     model_: graph_tool.inference.BlockState or its subclass
         an instance of the fitted model obtained from graph-tool
     """
+
     def __init__(self, nested, use_degree_correlation, allow_overlap, weight_model):
         self.nested = nested
         self.use_degree_correlation = use_degree_correlation
@@ -66,14 +71,11 @@ class StochasticBlockModel:
                 graph,
                 deg_corr=self.use_degree_correlation,
                 overlap=self.allow_overlap,
-                state_args=dict(recs=[weights],
-                                rec_types=[self.weight_model])
+                state_args=dict(recs=[weights], rec_types=[self.weight_model]),
             )
         else:
             self.model_ = self._model_fit_function()(
-                graph,
-                deg_corr=self.use_degree_correlation,
-                overlap=self.allow_overlap
+                graph, deg_corr=self.use_degree_correlation, overlap=self.allow_overlap
             )
         return self._detect_communities()
 
@@ -92,9 +94,13 @@ class StochasticBlockModel:
             membership_vector = list(lowest_level.get_blocks())
 
         if self.allow_overlap:
-            return _overlapping_membership_to_list_of_communities(membership_vector, number_of_communities)
+            return _overlapping_membership_to_list_of_communities(
+                membership_vector, number_of_communities
+            )
 
-        return _membership_to_list_of_communities(membership_vector, number_of_communities)
+        return _membership_to_list_of_communities(
+            membership_vector, number_of_communities
+        )
 
     def _model_fit_function(self):
         if self.nested:
@@ -246,7 +252,7 @@ class GraphToolLabelGraphClusterer(LabelGraphClustererBase):
         g = gt.Graph(directed=False)
         g.add_vertex(y.shape[1])
 
-        self.weights_ = g.new_edge_property('double')
+        self.weights_ = g.new_edge_property("double")
 
         for edge, weight in edge_map.items():
             e = g.add_edge(edge[0], edge[1])

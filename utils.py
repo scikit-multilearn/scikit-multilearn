@@ -7,11 +7,12 @@ from utils.files import files
 
 
 class Config:
-    root = '.'
-    meka = 'meka'
-    skmultilearn = 'skmultilearn'
-    tests = 'tests'
-    utils = 'utils'
+    root = "."
+    meka = "meka"
+    skmultilearn = "skmultilearn"
+    tests = "tests"
+    utils = "utils"
+
 
 # #######################################################
 
@@ -21,11 +22,10 @@ def test():
 
 
 def clean():
-    files.removeFilesRecursive(Config.meka, (lambda f: f.endswith('.pyc')))
-    files.removeFilesRecursive(
-        Config.skmultilearn, (lambda f: f.endswith('.pyc')))
-    files.removeFilesRecursive(Config.tests, (lambda f: f.endswith('.pyc')))
-    files.removeFilesRecursive(Config.utils, (lambda f: f.endswith('.pyc')))
+    files.removeFilesRecursive(Config.meka, (lambda f: f.endswith(".pyc")))
+    files.removeFilesRecursive(Config.skmultilearn, (lambda f: f.endswith(".pyc")))
+    files.removeFilesRecursive(Config.tests, (lambda f: f.endswith(".pyc")))
+    files.removeFilesRecursive(Config.utils, (lambda f: f.endswith(".pyc")))
 
 
 def package():
@@ -33,10 +33,10 @@ def package():
     for sourceDir in sourceDirs:
         for root, dirs, files in os.walk(sourceDir):
             for dir in dirs:
-                initFile = os.path.join(root, dir, '__init__.py')
+                initFile = os.path.join(root, dir, "__init__.py")
                 if not os.path.isfile(initFile):
-                    print('creating : %s' % initFile)
-                    open(initFile, 'a').close()
+                    print("creating : %s" % initFile)
+                    open(initFile, "a").close()
 
 
 def lint(full=False):
@@ -44,14 +44,14 @@ def lint(full=False):
 
     sources = [Config.root, Config.meka, Config.skmultilearn]
     if full:
-        fullReport = 'y'
+        fullReport = "y"
     else:
-        fullReport = 'n'
+        fullReport = "n"
 
-    config = "--rcfile ./utils/pylint.config --msg-template=\"{C}:{msg_id}:{line:3d},{column:2d}:{msg}({symbol})\" -r %s %s"
+    config = '--rcfile ./utils/pylint.config --msg-template="{C}:{msg_id}:{line:3d},{column:2d}:{msg}({symbol})" -r %s %s'
     for dir in sources:
-        print('lint %s' % dir)
-        epylint.py_run(config % (fullReport, dir), script='pylint')
+        print("lint %s" % dir)
+        epylint.py_run(config % (fullReport, dir), script="pylint")
 
 
 def lint_full():
@@ -74,16 +74,17 @@ def install():
 
     installer.installRequirements("./build/requirements.txt")
 
+
 ########################################################
 
 
 def step(msg):
-    span = '=' * ((80 - len(msg)) / 2)
-    print(' '.join([span, msg, span]))
+    span = "=" * ((80 - len(msg)) / 2)
+    print(" ".join([span, msg, span]))
 
 
 if __name__ == "__main__":
-    os.environ['PYTHONPATH'] = os.path.dirname(os.path.realpath(__file__))
+    os.environ["PYTHONPATH"] = os.path.dirname(os.path.realpath(__file__))
 
     if len(sys.argv) > 1:
         for task in sys.argv[1:]:

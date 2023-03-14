@@ -144,10 +144,8 @@ class BinaryRelevance(ProblemTransformationBase):
         -----
         .. note :: Input matrices are converted to sparse format internally if a numpy representation is passed
         """
-        X = self._ensure_input_format(
-            X, sparse_format='csr', enforce_sparse=True)
-        y = self._ensure_output_format(
-            y, sparse_format='csc', enforce_sparse=True)
+        X = self._ensure_input_format(X, sparse_format="csr", enforce_sparse=True)
+        y = self._ensure_output_format(y, sparse_format="csc", enforce_sparse=True)
 
         self.classifiers_ = []
         self._generate_partition(X, y)
@@ -158,8 +156,9 @@ class BinaryRelevance(ProblemTransformationBase):
             y_subset = self._generate_data_subset(y, self.partition_[i], axis=1)
             if issparse(y_subset) and y_subset.ndim > 1 and y_subset.shape[1] == 1:
                 y_subset = np.ravel(y_subset.toarray())
-            classifier.fit(self._ensure_input_format(
-                X), self._ensure_output_format(y_subset))
+            classifier.fit(
+                self._ensure_input_format(X), self._ensure_output_format(y_subset)
+            )
             self.classifiers_.append(classifier)
 
         return self
@@ -177,9 +176,12 @@ class BinaryRelevance(ProblemTransformationBase):
         :mod:`scipy.sparse` matrix of `{0, 1}`, shape=(n_samples, n_labels)
             binary indicator matrix with label assignments
         """
-        predictions = [self._ensure_multi_label_from_single_class(
-            self.classifiers_[label].predict(self._ensure_input_format(X)))
-            for label in range(self.model_count_)]
+        predictions = [
+            self._ensure_multi_label_from_single_class(
+                self.classifiers_[label].predict(self._ensure_input_format(X))
+            )
+            for label in range(self.model_count_)
+        ]
 
         return hstack(predictions)
 
@@ -197,7 +199,7 @@ class BinaryRelevance(ProblemTransformationBase):
             matrix with label assignment probabilities
         """
 
-        result = lil_matrix((X.shape[0], self._label_count), dtype='float')
+        result = lil_matrix((X.shape[0], self._label_count), dtype="float")
         for label_assignment, classifier in zip(self.partition_, self.classifiers_):
             if isinstance(self.classifier, MLClassifierBase):
                 # the multilabel classifier should provide a (n_samples, n_labels) matrix
@@ -207,9 +209,12 @@ class BinaryRelevance(ProblemTransformationBase):
                 # a base classifier for binary relevance returns
                 # n_samples x n_classes, where n_classes = [0, 1] - 1 is the probability of
                 # the label being assigned
-                result[:, label_assignment] = self._ensure_multi_label_from_single_class(
-                    classifier.predict_proba(
-                        self._ensure_input_format(X))
-                )[:, 1]  # probability that label is assigned
+                result[
+                    :, label_assignment
+                ] = self._ensure_multi_label_from_single_class(
+                    classifier.predict_proba(self._ensure_input_format(X))
+                )[
+                    :, 1
+                ]  # probability that label is assigned
 
         return result

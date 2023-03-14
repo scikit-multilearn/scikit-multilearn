@@ -11,6 +11,7 @@ import numpy as np
 import tensorflow as tf
 import scipy.sparse as sp
 
+
 class OpenNetworkEmbedder:
     """Embed the label space using a label network embedder from OpenNE
 
@@ -97,31 +98,45 @@ class OpenNetworkEmbedder:
     """
 
     _EMBEDDINGS = {
-        'GraphFactorization': (GraphFactorization, 'rep_size'),
-        'GraRep': (GraRep, 'dim'),
-        'HOPE': (HOPE, 'd'),
-        'LaplacianEigenmaps': (LaplacianEigenmaps, 'rep_size'),
-        'LINE': (LINE, 'rep_size'),
-        'LLE': (LLE, 'd'),
+        "GraphFactorization": (GraphFactorization, "rep_size"),
+        "GraRep": (GraRep, "dim"),
+        "HOPE": (HOPE, "d"),
+        "LaplacianEigenmaps": (LaplacianEigenmaps, "rep_size"),
+        "LINE": (LINE, "rep_size"),
+        "LLE": (LLE, "d"),
     }
 
     _AGGREGATION_FUNCTIONS = {
-        'add': np.add.reduce,
-        'multiply': np.multiply.reduce,
-        'average': lambda x: np.average(x, axis=0),
+        "add": np.add.reduce,
+        "multiply": np.multiply.reduce,
+        "average": lambda x: np.average(x, axis=0),
     }
 
-    def __init__(self, graph_builder, embedding, dimension, aggregation_function, normalize_weights, param_dict=None):
+    def __init__(
+        self,
+        graph_builder,
+        embedding,
+        dimension,
+        aggregation_function,
+        normalize_weights,
+        param_dict=None,
+    ):
         if embedding not in self._EMBEDDINGS:
-            raise ValueError('Embedding must be one of {}'.format(', '.join(self._EMBEDDINGS.keys())))
+            raise ValueError(
+                "Embedding must be one of {}".format(", ".join(self._EMBEDDINGS.keys()))
+            )
 
         if aggregation_function in self._AGGREGATION_FUNCTIONS:
-            self.aggregation_function = self._AGGREGATION_FUNCTIONS[aggregation_function]
+            self.aggregation_function = self._AGGREGATION_FUNCTIONS[
+                aggregation_function
+            ]
         elif callable(aggregation_function):
             self.aggregation_function = aggregation_function
         else:
-            raise ValueError('Aggregation function must be callable or one of {}'.format(
-                ', '.join(self._AGGREGATION_FUNCTIONS.keys()))
+            raise ValueError(
+                "Aggregation function must be callable or one of {}".format(
+                    ", ".join(self._AGGREGATION_FUNCTIONS.keys())
+                )
             )
 
         self.embedding = embedding
@@ -138,7 +153,7 @@ class OpenNetworkEmbedder:
         self._init_openne_graph(y)
         embedding_class, dimension_key = self._EMBEDDINGS[self.embedding]
         param_dict = copy(self.param_dict)
-        param_dict['graph'] = self.graph_
+        param_dict["graph"] = self.graph_
         param_dict[dimension_key] = self.dimension
         self.embeddings_ = embedding_class(**param_dict)
         return X, self._embedd_y(y)
@@ -151,28 +166,40 @@ class OpenNetworkEmbedder:
             self.graph_.G.add_edge(dst, src)
             if self.normalize_weights:
                 w = float(w) / y.shape[0]
-            self.graph_.G[src][dst]['weight'] = w
-            self.graph_.G[dst][src]['weight'] = w
+            self.graph_.G[src][dst]["weight"] = w
+            self.graph_.G[dst][src]["weight"] = w
         self.graph_.encode_node()
 
     def _embedd_y(self, y):
         empty_vector = np.zeros(shape=self.dimension)
         if sp.issparse(y):
-            return np.array([
-                self.aggregation_function([self.embeddings_.vectors[node] for node in row])
-                if len(row) > 0 else empty_vector
-                for row in _iterate_over_sparse_matrix(y)
-            ]).astype('float64')
+            return np.array(
+                [
+                    self.aggregation_function(
+                        [self.embeddings_.vectors[node] for node in row]
+                    )
+                    if len(row) > 0
+                    else empty_vector
+                    for row in _iterate_over_sparse_matrix(y)
+                ]
+            ).astype("float64")
 
-
-        return np.array([
-            self.aggregation_function([self.embeddings_.vectors[node] for node, v in enumerate(row) if v > 0])
-            if len(row) > 0 else empty_vector
-            for row in (y.A if isinstance(y, np.matrix) else y)
-        ]).astype('float64')
+        return np.array(
+            [
+                self.aggregation_function(
+                    [
+                        self.embeddings_.vectors[node]
+                        for node, v in enumerate(row)
+                        if v > 0
+                    ]
+                )
+                if len(row) > 0
+                else empty_vector
+                for row in (y.A if isinstance(y, np.matrix) else y)
+            ]
+        ).astype("float64")
 
 
 def _iterate_over_sparse_matrix(y):
     for r in range(y.shape[0]):
-        yield y[r,:].indices
-
+        yield y[r, :].indices

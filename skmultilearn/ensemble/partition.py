@@ -86,9 +86,11 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
     """
 
     def __init__(self, classifier=None, clusterer=None, require_dense=None):
-        super(LabelSpacePartitioningClassifier, self).__init__(classifier, require_dense)
+        super(LabelSpacePartitioningClassifier, self).__init__(
+            classifier, require_dense
+        )
         self.clusterer = clusterer
-        self.copyable_attrs = ['clusterer', 'classifier', 'require_dense']
+        self.copyable_attrs = ["clusterer", "classifier", "require_dense"]
 
     def predict(self, X):
         """Predict labels for X
@@ -104,13 +106,15 @@ class LabelSpacePartitioningClassifier(BinaryRelevance):
             binary indicator matrix with label assignments with shape
             :code:`(n_samples, n_labels)`
         """
-        X = self._ensure_input_format(
-            X, sparse_format='csr', enforce_sparse=True)
+        X = self._ensure_input_format(X, sparse_format="csr", enforce_sparse=True)
         result = sparse.lil_matrix((X.shape[0], self._label_count), dtype=int)
 
         for model in range(self.model_count_):
-            predictions = self._ensure_output_format(self.classifiers_[model].predict(
-                X), sparse_format=None, enforce_sparse=True).nonzero()
+            predictions = self._ensure_output_format(
+                self.classifiers_[model].predict(X),
+                sparse_format=None,
+                enforce_sparse=True,
+            ).nonzero()
             for row, column in zip(predictions[0], predictions[1]):
                 result[row, self.partition_[model][column]] = 1
 

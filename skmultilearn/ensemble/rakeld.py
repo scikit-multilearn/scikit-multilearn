@@ -82,13 +82,19 @@ class RakelD(MLClassifierBase):
 
     """
 
-    def __init__(self, base_classifier=None, labelset_size=3, base_classifier_require_dense=None):
+    def __init__(
+        self, base_classifier=None, labelset_size=3, base_classifier_require_dense=None
+    ):
         super(RakelD, self).__init__()
 
         self.labelset_size = labelset_size
         self.base_classifier = base_classifier
         self.base_classifier_require_dense = base_classifier_require_dense
-        self.copyable_attrs = ['base_classifier', 'base_classifier_require_dense', 'labelset_size']
+        self.copyable_attrs = [
+            "base_classifier",
+            "base_classifier_require_dense",
+            "labelset_size",
+        ]
 
     def fit(self, X, y):
         """Fit classifier to multi-label data
@@ -111,14 +117,14 @@ class RakelD(MLClassifierBase):
         self.classifier_ = LabelSpacePartitioningClassifier(
             classifier=LabelPowerset(
                 classifier=self.base_classifier,
-                require_dense=self.base_classifier_require_dense
+                require_dense=self.base_classifier_require_dense,
             ),
             clusterer=RandomLabelSpaceClusterer(
                 cluster_size=self.labelset_size,
                 cluster_count=self.model_count_,
-                allow_overlap=False
+                allow_overlap=False,
             ),
-            require_dense=[False, False]
+            require_dense=[False, False],
         )
         return self.classifier_.fit(X, y)
 

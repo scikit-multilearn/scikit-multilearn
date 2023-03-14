@@ -36,6 +36,7 @@ def _get_label_vector(y, i):
         return numpy.squeeze(numpy.asarray(y[i].todense()))
     return y[i]
 
+
 def _concatenate_with_negation(row):
     ones = scipy.ones(row.shape)
     if issparse(row):
@@ -43,6 +44,7 @@ def _concatenate_with_negation(row):
     else:
         # concatenate and merge sublists in the row if it is matrix
         return numpy.concatenate((row, ones - row), int(len(row.shape) != 1))
+
 
 def _normalize_input_space(X):
     x_max = X.max()
@@ -170,7 +172,9 @@ class MLARAM(MLClassifierBase):
             neuron_vc = _concatenate_with_negation(X[0])
             self.neurons.append(Neuron(neuron_vc, y_0))
             start_index = 1
-            label_combination_to_class_map[_get_label_combination_representation(y_0)] = [0]
+            label_combination_to_class_map[
+                _get_label_combination_representation(y_0)
+            ] = [0]
         else:
             start_index = 0
 
@@ -183,7 +187,9 @@ class MLARAM(MLClassifierBase):
             fc = _concatenate_with_negation(input_vector)
             activationn = [0] * len(self.neurons)
             activationi = [0] * len(self.neurons)
-            label_combination = _get_label_combination_representation(label_assignment_vector)
+            label_combination = _get_label_combination_representation(
+                label_assignment_vector
+            )
 
             if label_combination in label_combination_to_class_map:
                 fcs = fc.sum()
@@ -194,12 +200,16 @@ class MLARAM(MLClassifierBase):
                         minnfs = umath.minimum(self.neurons[class_number].vc, fc).sum()
 
                     activationi[class_number] = minnfs / fcs
-                    activationn[class_number] = minnfs / self.neurons[class_number].vc.sum()
+                    activationn[class_number] = (
+                        minnfs / self.neurons[class_number].vc.sum()
+                    )
 
             if numpy.max(activationn) == 0:
                 last_used_label_combination_class_id += 1
                 self.neurons.append(Neuron(fc, label_assignment_vector))
-                label_combination_to_class_map.setdefault(label_combination, []).append(len(self.neurons) - 1)
+                label_combination_to_class_map.setdefault(label_combination, []).append(
+                    len(self.neurons) - 1
+                )
 
                 continue
 
@@ -208,16 +218,16 @@ class MLARAM(MLClassifierBase):
 
             if indc.shape[0] == 0:
                 self.neurons.append(Neuron(fc, label_assignment_vector))
-                label_combination_to_class_map.setdefault(label_combination, []).append(len(self.neurons) - 1)
+                label_combination_to_class_map.setdefault(label_combination, []).append(
+                    len(self.neurons) - 1
+                )
                 continue
 
-            winner = inds[::- 1][indc[0]]
+            winner = inds[::-1][indc[0]]
             if issparse(self.neurons[winner].vc):
                 self.neurons[winner].vc = self.neurons[winner].vc.minimum(fc)
             else:
-                self.neurons[winner].vc = umath.minimum(
-                    self.neurons[winner].vc, fc
-                )
+                self.neurons[winner].vc = umath.minimum(self.neurons[winner].vc, fc)
 
             # 1 if winner neuron won a given label 0 if not
             labels_won_indicator = numpy.zeros(y_0.shape, dtype=y_0.dtype)
@@ -305,9 +315,17 @@ class MLARAM(MLClassifierBase):
             fc = _concatenate_with_negation(input_vector)
 
             if issparse(fc):
-                activity = (fc.minimum(all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
+                activity = (
+                    (fc.minimum(all_neurons).sum(1) / all_neurons_sum)
+                    .squeeze()
+                    .tolist()
+                )
             else:
-                activity = (umath.minimum(fc, all_neurons).sum(1) / all_neurons_sum).squeeze().tolist()
+                activity = (
+                    (umath.minimum(fc, all_neurons).sum(1) / all_neurons_sum)
+                    .squeeze()
+                    .tolist()
+                )
 
             if is_matrix:
                 activity = activity[0]
@@ -320,7 +338,9 @@ class MLARAM(MLClassifierBase):
             par_t = self.threshold
 
             for i in range(1, len(self.neurons)):
-                activity_change = (activity[winner] - activity[sorted_activity[i]]) / activity[winner]
+                activity_change = (
+                    activity[winner] - activity[sorted_activity[i]]
+                ) / activity[winner]
                 if activity_change > par_t * activity_difference:
                     break
 
@@ -334,8 +354,10 @@ class MLARAM(MLClassifierBase):
             activity_among_activated.append(activity[winner])
 
             for i in range(1, largest_activity):
-                rank += activity[sorted_activity[i]] * self.neurons[
-                    sorted_activity[i]].label
+                rank += (
+                    activity[sorted_activity[i]]
+                    * self.neurons[sorted_activity[i]].label
+                )
                 activated.append(sorted_activity[i])
                 activity_among_activated.append(activity[sorted_activity[i]])
 

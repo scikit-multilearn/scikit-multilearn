@@ -82,26 +82,33 @@ class MajorityVotingClassifier(LabelSpacePartitioningClassifier):
             :code:`(n_samples, n_labels)`
         """
         predictions = [
-            self._ensure_input_format(self._ensure_input_format(
-                c.predict(X)), sparse_format='csc', enforce_sparse=True)
+            self._ensure_input_format(
+                self._ensure_input_format(c.predict(X)),
+                sparse_format="csc",
+                enforce_sparse=True,
+            )
             for c in self.classifiers_
         ]
 
-        voters = np.zeros(self._label_count, dtype='int')
+        voters = np.zeros(self._label_count, dtype="int")
         votes = sparse.lil_matrix(
-            (predictions[0].shape[0], self._label_count), dtype='int')
+            (predictions[0].shape[0], self._label_count), dtype="int"
+        )
         for model in range(self.model_count_):
             for label in range(len(self.partition_[model])):
-                votes[:, self.partition_[model][label]] = votes[
-                                                         :, self.partition_[model][label]] + predictions[model][:, label]
+                votes[:, self.partition_[model][label]] = (
+                    votes[:, self.partition_[model][label]]
+                    + predictions[model][:, label]
+                )
                 voters[self.partition_[model][label]] += 1
 
         nonzeros = votes.nonzero()
         for row, column in zip(nonzeros[0], nonzeros[1]):
-            votes[row, column] = np.round(
-                votes[row, column] / float(voters[column]))
+            votes[row, column] = np.round(votes[row, column] / float(voters[column]))
 
         return self._ensure_output_format(votes, enforce_sparse=False)
 
     def predict_proba(self, X):
-        raise NotImplemented("The voting scheme does not define a method for calculating probabilities")
+        raise NotImplemented(
+            "The voting scheme does not define a method for calculating probabilities"
+        )
