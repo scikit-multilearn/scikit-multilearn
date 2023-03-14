@@ -24,6 +24,7 @@ jobs:
           pip install -r requirements/meka.txt
           pip install -r requirements/keras.txt
           pip install -r requirements/test.txt
+          pip install 'openne @ git+https://github.com/thunlp/OpenNE.git@master#subdirectory=src'
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
