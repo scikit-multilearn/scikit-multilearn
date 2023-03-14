@@ -18,7 +18,7 @@ jobs:
       - name: Install graph-tool
         uses: myci-actions/add-deb-repo@10
         with:
-          repo: deb [ arch=amd64 ] https://downloads.skewed.de/apt debian-$(lsb_release -cs) main
+          repo: deb [ arch=amd64 ] https://downloads.skewed.de/apt $(lsb_release -cs) main
           repo-name: skewed
           keys-asc: https://keys.openpgp.org/vks/v1/by-fingerprint/793CEFE14DBC851A2BFB1222612DEFB798507F25
           install: python3-graph-tool
