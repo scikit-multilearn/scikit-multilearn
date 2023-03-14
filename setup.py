@@ -28,6 +28,7 @@ setup(
         "future>=0.16.0",
         "scikit_learn>=0.19.2",
         "requests>=2.18.4",
+        "joblib",
     ],
     extras_require={
         "gpl":  [
