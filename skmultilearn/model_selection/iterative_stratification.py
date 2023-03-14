@@ -104,7 +104,7 @@ def iterative_train_test_split(X, y, test_size, random_state=None):
     X_train, y_train = X[train_indexes, :], y[train_indexes, :]
     X_test, y_test = X[test_indexes, :], y[test_indexes, :]
 
-    return X_train, y_train, X_test, y_test
+    return X_train, X_test, y_train, y_test
 
 
 def _fold_tie_break(desired_samples_per_fold, M, random_state=check_random_state(None)):
