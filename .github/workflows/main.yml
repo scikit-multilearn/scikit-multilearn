@@ -19,8 +19,7 @@ jobs:
         uses: myci-actions/add-deb-repo@10
         with:
           repo: deb https://downloads.skewed.de/apt debian-$(lsb_release -cs) main
-          keys: 612DEFB798507F25
-          update: true
+          keys-asc: https://keys.openpgp.org/vks/v1/by-fingerprint/793CEFE14DBC851A2BFB1222612DEFB798507F25
           install: python3-graph-tool
       - name: Install dependencies
         run: |
