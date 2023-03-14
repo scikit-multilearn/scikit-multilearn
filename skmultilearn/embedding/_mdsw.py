@@ -12,8 +12,8 @@ import warnings
 from sklearn.base import BaseEstimator
 from sklearn.metrics import euclidean_distances
 from sklearn.utils import check_random_state, check_array, check_symmetric
-from sklearn.externals.joblib import Parallel
-from sklearn.externals.joblib import delayed
+from joblib import Parallel
+from joblib import delayed
 from sklearn.isotonic import IsotonicRegression
 
 
@@ -83,7 +83,8 @@ def _smacof_single_w(similarities, n_uq, uq_weight, metric=True, n_components=2,
     V[np.arange(len(V)), np.arange(len(V))] = W.sum(axis=1)
     e = np.ones((n_samples, 1))
 
-    Vp = np.linalg.inv(V + np.dot(e, e.T) / n_samples) - np.dot(e, e.T) / n_samples
+    Vp = np.linalg.inv(V + np.dot(e, e.T) / n_samples) - \
+        np.dot(e, e.T) / n_samples
     # Vp = np.linalg.pinv(V)
 
     sim_flat = ((1 - np.tri(n_samples)) * similarities).ravel()
@@ -123,7 +124,8 @@ def _smacof_single_w(similarities, n_uq, uq_weight, metric=True, n_components=2,
 
         # Compute stress
         # stress = ((dis.ravel() - disparities.ravel()) ** 2).sum() / 2
-        _stress = (W.ravel() * ((dis.ravel() - disparities.ravel()) ** 2)).sum() / 2
+        _stress = (
+            W.ravel() * ((dis.ravel() - disparities.ravel()) ** 2)).sum() / 2
 
         # Update X using the Guttman transform
         # dis[dis == 0] = 1e-5
@@ -144,12 +146,12 @@ def _smacof_single_w(similarities, n_uq, uq_weight, metric=True, n_components=2,
         dis = np.sqrt((X ** 2).sum(axis=1)).sum()
 
         if verbose >= 2:
-            print('it: %d, stress %s' % (it, stress))
+            print('it: %d, stress %s' % (it, _stress))
         if old_stress is not None:
             if (old_stress - _stress / dis) < eps:
                 if verbose:
                     print('breaking at iteration %d with stress %s' % (it,
-                                                                       stress))
+                                                                       _stress))
                 break
         old_stress = _stress / dis
 
