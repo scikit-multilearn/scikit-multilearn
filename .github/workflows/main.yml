@@ -6,6 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false # we want all the matrix tests to continue even if one fails
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
 
