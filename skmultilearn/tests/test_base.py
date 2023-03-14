@@ -12,7 +12,6 @@ from ..base import ProblemTransformationBase
 
 
 class ProblemTransformationBaseTest(unittest.TestCase):
-
     def ensure_output_spaces_contain_the_same_data(self, y, y_ensured):
         stride = y.shape[1]
         self.assertEqual(y.shape[0] * y.shape[1], y_ensured.shape[0])
@@ -45,14 +44,25 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         self.assertTrue((X != ensured_X).nnz == 0)
 
     def test_if_require_dense_is_correctly_set(self):
-        values = [True, False, [True, False], [
-            True, True], [False, False], [False, True]]
-        expected_values = [[True, True], [False, False], [
-            True, False], [True, True], [False, False], [False, True]]
+        values = [
+            True,
+            False,
+            [True, False],
+            [True, True],
+            [False, False],
+            [False, True],
+        ]
+        expected_values = [
+            [True, True],
+            [False, False],
+            [True, False],
+            [True, True],
+            [False, False],
+            [False, True],
+        ]
 
         for value, expected_value in zip(values, expected_values):
-            classifier = ProblemTransformationBase(
-                classifier=None, require_dense=value)
+            classifier = ProblemTransformationBase(classifier=None, require_dense=value)
             self.assertEqual(classifier.require_dense, expected_value)
 
     def test_if_require_dense_is_correctly_inferred_when_none_passed(self):
@@ -60,8 +70,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
         expected_values = [[True, True], [False, False]]
 
         for value, expected_value in zip(values, expected_values):
-            classifier = ProblemTransformationBase(
-                classifier=value, require_dense=None)
+            classifier = ProblemTransformationBase(classifier=value, require_dense=None)
             self.assertEqual(classifier.require_dense, expected_value)
 
     def test_make_sure_abstract_methods_are_not_implemented_in_base(self):
@@ -76,7 +85,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
     def test_make_sure_params_include_all_params(self):
         classifier = ProblemTransformationBase()
         classifier_params = classifier.get_params(deep=False)
-        expected_params = ['classifier', 'require_dense']
+        expected_params = ["classifier", "require_dense"]
 
         for param in expected_params:
             self.assertIn(param, classifier_params)
@@ -144,12 +153,12 @@ class ProblemTransformationBaseTest(unittest.TestCase):
     def test_ensure_input_format_returns_sparse_in_format_from_dense_if_enforced(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
             for require_dense in [True, False]:
-                classifier = ProblemTransformationBase(
-                    require_dense=require_dense)
+                classifier = ProblemTransformationBase(require_dense=require_dense)
 
                 X = np.zeros((2, 3))
                 ensured_X = classifier._ensure_input_format(
-                    X, sparse_format=sparse_format, enforce_sparse=True)
+                    X, sparse_format=sparse_format, enforce_sparse=True
+                )
 
                 self.assertTrue(sp.issparse(ensured_X))
                 self.assertEqual(ensured_X.format, sparse_format)
@@ -159,8 +168,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=False)
 
             X = np.zeros((2, 3))
-            ensured_X = classifier._ensure_input_format(
-                X, sparse_format=sparse_format)
+            ensured_X = classifier._ensure_input_format(X, sparse_format=sparse_format)
 
             self.assertTrue(sp.issparse(ensured_X))
             self.assertEqual(ensured_X.format, sparse_format)
@@ -224,12 +232,12 @@ class ProblemTransformationBaseTest(unittest.TestCase):
     def test_ensure_output_format_returns_sparse_in_format_from_dense_if_enforced(self):
         for sparse_format in SPARSE_MATRIX_FORMATS:
             for require_dense in [True, False]:
-                classifier = ProblemTransformationBase(
-                    require_dense=require_dense)
+                classifier = ProblemTransformationBase(require_dense=require_dense)
 
                 y = np.zeros((2, 3))
                 ensured_y = classifier._ensure_output_format(
-                    y, sparse_format=sparse_format, enforce_sparse=True)
+                    y, sparse_format=sparse_format, enforce_sparse=True
+                )
 
                 self.assertTrue(sp.issparse(ensured_y))
                 self.assertEqual(ensured_y.format, sparse_format)
@@ -239,8 +247,7 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             classifier = ProblemTransformationBase(require_dense=False)
 
             y = np.zeros((2, 3))
-            ensured_y = classifier._ensure_output_format(
-                y, sparse_format=sparse_format)
+            ensured_y = classifier._ensure_output_format(y, sparse_format=sparse_format)
 
             self.assertTrue(sp.issparse(ensured_y))
             self.assertEqual(ensured_y.format, sparse_format)
@@ -261,5 +268,5 @@ class ProblemTransformationBaseTest(unittest.TestCase):
             self.assertEqual(ensured_y_single.shape[0], shape[0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

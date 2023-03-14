@@ -106,7 +106,8 @@ class LabelPowerset(ProblemTransformationBase):
 
     def __init__(self, classifier=None, require_dense=None):
         super(LabelPowerset, self).__init__(
-            classifier=classifier, require_dense=require_dense)
+            classifier=classifier, require_dense=require_dense
+        )
         self._clean()
 
     def _clean(self):
@@ -134,11 +135,9 @@ class LabelPowerset(ProblemTransformationBase):
         -----
         .. note :: Input matrices are converted to sparse format internally if a numpy representation is passed
         """
-        X = self._ensure_input_format(
-            X, sparse_format='csr', enforce_sparse=True)
+        X = self._ensure_input_format(X, sparse_format="csr", enforce_sparse=True)
 
-        self.classifier.fit(self._ensure_input_format(X),
-                            self.transform(y))
+        self.classifier.fit(self._ensure_input_format(X), self.transform(y))
 
         return self
 
@@ -175,10 +174,8 @@ class LabelPowerset(ProblemTransformationBase):
             matrix with label assignment probabilities
         """
 
-        lp_prediction = self.classifier.predict_proba(
-            self._ensure_input_format(X))
-        result = sparse.lil_matrix(
-            (X.shape[0], self._label_count), dtype='float')
+        lp_prediction = self.classifier.predict_proba(self._ensure_input_format(X))
+        result = sparse.lil_matrix((X.shape[0], self._label_count), dtype="float")
         for row in range(len(lp_prediction)):
             assignment = lp_prediction[row]
             for combination_id in range(len(assignment)):
@@ -205,8 +202,7 @@ class LabelPowerset(ProblemTransformationBase):
 
         """
 
-        y = self._ensure_output_format(
-            y, sparse_format='lil', enforce_sparse=True)
+        y = self._ensure_output_format(y, sparse_format="lil", enforce_sparse=True)
 
         self._clean()
         self._label_count = y.shape[1]
@@ -242,7 +238,7 @@ class LabelPowerset(ProblemTransformationBase):
             binary indicator matrix with label assignments
         """
         n_samples = len(y)
-        result = sparse.lil_matrix((n_samples, self._label_count), dtype='i8')
+        result = sparse.lil_matrix((n_samples, self._label_count), dtype="i8")
         for row in range(n_samples):
             assignment = y[row]
             result[row, self.reverse_combinations_[assignment]] = 1

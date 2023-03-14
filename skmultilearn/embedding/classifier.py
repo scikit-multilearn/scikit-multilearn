@@ -3,6 +3,7 @@ import numpy as np
 import scipy.sparse as sp
 from copy import copy
 
+
 class EmbeddingClassifier(ProblemTransformationBase):
     """Embedding-based classifier
 
@@ -79,7 +80,14 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
     """
 
-    def __init__(self, embedder, regressor, classifier, regressor_per_dimension=False, require_dense=None):
+    def __init__(
+        self,
+        embedder,
+        regressor,
+        classifier,
+        regressor_per_dimension=False,
+        require_dense=None,
+    ):
         super(EmbeddingClassifier, self).__init__()
         self.embedder = embedder
         self.regressor = regressor
@@ -91,7 +99,13 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
         self.require_dense = require_dense
 
-        self.copyable_attrs = ['embedder', 'regressor', 'classifier', 'regressor_per_dimension', 'require_dense']
+        self.copyable_attrs = [
+            "embedder",
+            "regressor",
+            "classifier",
+            "regressor_per_dimension",
+            "require_dense",
+        ]
 
     def fit(self, X, y):
         """Fits classifier to training data
@@ -178,11 +192,13 @@ class EmbeddingClassifier(ProblemTransformationBase):
 
     def _predict_embedding(self, X):
         if self.regressor_per_dimension:
-            y_embedded = [self.regressors_[i].predict(X) for i in range(self.n_regressors_)]
+            y_embedded = [
+                self.regressors_[i].predict(X) for i in range(self.n_regressors_)
+            ]
             if sp.issparse(X):
-                y_embedded=sp.csr_matrix(y_embedded).T
+                y_embedded = sp.csr_matrix(y_embedded).T
             else:
-                y_embedded=np.matrix(y_embedded).T
+                y_embedded = np.matrix(y_embedded).T
         else:
             y_embedded = self.regressor.predict(X)
 

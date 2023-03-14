@@ -10,7 +10,7 @@ import shutil
 from collections import defaultdict
 
 
-def get_data_home(data_home=None, subdirectory=''):
+def get_data_home(data_home=None, subdirectory=""):
     """Return the path of the scikit-multilearn data dir.
 
     This folder is used by some large dataset loaders to avoid
@@ -42,9 +42,14 @@ def get_data_home(data_home=None, subdirectory=''):
     """
     if data_home is None:
         if len(subdirectory) > 0:
-            data_home = os.environ.get('SCIKIT_ML_LEARN_DATA', os.path.join('~', 'scikit_ml_learn_data', subdirectory))
+            data_home = os.environ.get(
+                "SCIKIT_ML_LEARN_DATA",
+                os.path.join("~", "scikit_ml_learn_data", subdirectory),
+            )
         else:
-            data_home = os.environ.get('SCIKIT_ML_LEARN_DATA', os.path.join('~', 'scikit_ml_learn_data'))
+            data_home = os.environ.get(
+                "SCIKIT_ML_LEARN_DATA", os.path.join("~", "scikit_ml_learn_data")
+            )
     data_home = os.path.expanduser(data_home)
     if not os.path.exists(data_home):
         os.makedirs(data_home)
@@ -67,7 +72,7 @@ def clear_data_home(data_home=None):
 def _get_download_base_url():
     """Returns base URL for data sets."""
 
-    return 'http://scikit.ml/datasets/'
+    return "http://scikit.ml/datasets/"
 
 
 def available_data_sets():
@@ -79,18 +84,20 @@ def available_data_sets():
         available datasets and their variants with the key pertaining
         to the :code:`(set_name, variant_name)` and values include md5 and file name on server
     """
-    r = requests.get(_get_download_base_url() + 'data.list')
+    r = requests.get(_get_download_base_url() + "data.list")
     if r.status_code != 200:
         r.raise_for_status()
     else:
         raw_data_list = r.text
 
         variant_information = defaultdict(list)
-        for row in raw_data_list.split('\n'):
-            md5, file_name = row.split(';')
-            set_name, variant = file_name.split('.')[0].split('-')
+        for row in raw_data_list.split("\n"):
+            md5, file_name = row.split(";")
+            set_name, variant = file_name.split(".")[0].split("-")
             if (set_name, variant) in variant_information:
-                raise Exception('Data file broken, files doubled, please file bug report.')
+                raise Exception(
+                    "Data file broken, files doubled, please file bug report."
+                )
             variant_information[(set_name, variant)] = [md5, file_name]
         return variant_information
 
@@ -115,7 +122,11 @@ def download_dataset(set_name, variant, data_home=None):
 
     data_sets = available_data_sets()
     if (set_name, variant) not in data_sets:
-        raise ValueError('The set {} in variant {} does not exist on server.'.format(set_name, variant))
+        raise ValueError(
+            "The set {} in variant {} does not exist on server.".format(
+                set_name, variant
+            )
+        )
 
     md5, name = data_sets[set_name, variant]
 
@@ -126,10 +137,14 @@ def download_dataset(set_name, variant, data_home=None):
 
     if os.path.exists(target_name):
         if md5 == _get_md5(target_name):
-            print ("{}:{} - exists, not redownloading".format(set_name, variant))
+            print("{}:{} - exists, not redownloading".format(set_name, variant))
             return target_name
         else:
-            print ("{}:{} - exists, but MD5 sum mismatch - redownloading".format(set_name, variant))
+            print(
+                "{}:{} - exists, but MD5 sum mismatch - redownloading".format(
+                    set_name, variant
+                )
+            )
     else:
         print("{}:{} - does not exists downloading".format(set_name, variant))
 
@@ -138,7 +153,10 @@ def download_dataset(set_name, variant, data_home=None):
     found_md5 = _get_md5(target_name)
     if md5 != found_md5:
         raise Exception(
-            "{}: MD5 mismatch {} vs {} - possible download error".format(name, md5, found_md5))
+            "{}: MD5 mismatch {} vs {} - possible download error".format(
+                name, md5, found_md5
+            )
+        )
 
     print("Downloaded {}-{}".format(set_name, variant))
 
@@ -171,9 +189,15 @@ def load_dataset(set_name, variant, data_home=None):
     return None
 
 
-def load_from_arff(filename, label_count, label_location="end",
-                   input_feature_type='float', encode_nominal=True, load_sparse=False,
-                   return_attribute_definitions=False):
+def load_from_arff(
+    filename,
+    label_count,
+    label_location="end",
+    input_feature_type="float",
+    encode_nominal=True,
+    load_sparse=False,
+    return_attribute_definitions=False,
+):
     """Method for loading ARFF files as numpy array
 
     Parameters
@@ -213,30 +237,34 @@ def load_from_arff(filename, label_count, label_location="end",
 
     if not load_sparse:
         arff_frame = arff.load(
-            open(filename, 'r'), encode_nominal=encode_nominal, return_type=arff.DENSE
+            open(filename, "r"), encode_nominal=encode_nominal, return_type=arff.DENSE
         )
-        matrix = sparse.csr_matrix(
-            arff_frame['data'], dtype=input_feature_type
-        )
+        matrix = sparse.csr_matrix(arff_frame["data"], dtype=input_feature_type)
     else:
         arff_frame = arff.load(
-            open(filename, 'r'), encode_nominal=encode_nominal, return_type=arff.COO
+            open(filename, "r"), encode_nominal=encode_nominal, return_type=arff.COO
         )
-        data = arff_frame['data'][0]
-        row = arff_frame['data'][1]
-        col = arff_frame['data'][2]
+        data = arff_frame["data"][0]
+        row = arff_frame["data"][1]
+        col = arff_frame["data"][2]
         matrix = sparse.coo_matrix(
             (data, (row, col)), shape=(max(row) + 1, max(col) + 1)
         )
 
     if label_location == "start":
-        X, y = matrix.tocsc()[:, label_count:].tolil(), matrix.tocsc()[:, :label_count].astype(int).tolil()
-        feature_names = arff_frame['attributes'][label_count:]
-        label_names = arff_frame['attributes'][:label_count]
+        X, y = (
+            matrix.tocsc()[:, label_count:].tolil(),
+            matrix.tocsc()[:, :label_count].astype(int).tolil(),
+        )
+        feature_names = arff_frame["attributes"][label_count:]
+        label_names = arff_frame["attributes"][:label_count]
     elif label_location == "end":
-        X, y = matrix.tocsc()[:, :-label_count].tolil(), matrix.tocsc()[:, -label_count:].astype(int).tolil()
-        feature_names = arff_frame['attributes'][:-label_count]
-        label_names = arff_frame['attributes'][-label_count:]
+        X, y = (
+            matrix.tocsc()[:, :-label_count].tolil(),
+            matrix.tocsc()[:, -label_count:].astype(int).tolil(),
+        )
+        feature_names = arff_frame["attributes"][:-label_count]
+        label_names = arff_frame["attributes"][-label_count:]
     else:
         # unknown endian
         return None
@@ -276,10 +304,8 @@ def save_to_arff(X, y, label_location="end", save_sparse=True, filename=None):
     x_prefix = 0
     y_prefix = 0
 
-    x_attributes = [(u'X{}'.format(i), u'NUMERIC')
-                    for i in range(X.shape[1])]
-    y_attributes = [(u'y{}'.format(i), [str(0), str(1)])
-                    for i in range(y.shape[1])]
+    x_attributes = [("X{}".format(i), "NUMERIC") for i in range(X.shape[1])]
+    y_attributes = [("y{}".format(i), [str(0), str(1)]) for i in range(y.shape[1])]
 
     if label_location == "end":
         y_prefix = X.shape[1]
@@ -297,8 +323,7 @@ def save_to_arff(X, y, label_location="end", save_sparse=True, filename=None):
     if save_sparse:
         data = [{} for r in range(X.shape[0])]
     else:
-        data = [[0 for c in range(X.shape[1] + y.shape[1])]
-                for r in range(X.shape[0])]
+        data = [[0 for c in range(X.shape[1] + y.shape[1])] for r in range(X.shape[0])]
 
     for keys, value in list(X.items()):
         data[keys[0]][x_prefix + keys[1]] = value
@@ -307,10 +332,10 @@ def save_to_arff(X, y, label_location="end", save_sparse=True, filename=None):
         data[keys[0]][y_prefix + keys[1]] = value
 
     dataset = {
-        u'description': u'traindata',
-        u'relation': u'traindata: -C {}'.format(y.shape[1] * relation_sign),
-        u'attributes': attributes,
-        u'data': data
+        "description": "traindata",
+        "relation": "traindata: -C {}".format(y.shape[1] * relation_sign),
+        "attributes": attributes,
+        "data": data,
     }
 
     arff_data = arff.dumps(dataset)
@@ -318,7 +343,7 @@ def save_to_arff(X, y, label_location="end", save_sparse=True, filename=None):
     if filename is None:
         return arff_data
 
-    with open(filename, 'w') as fp:
+    with open(filename, "w") as fp:
         fp.write(arff_data)
 
 
@@ -341,10 +366,15 @@ def save_dataset_dump(input_space, labels, feature_names, label_names, filename=
         Path to dump file, if without .bz2, the .bz2 extension will be
         appended.
     """
-    data = {'X': input_space, 'y': labels, 'features': feature_names, 'labels': label_names}
+    data = {
+        "X": input_space,
+        "y": labels,
+        "features": feature_names,
+        "labels": label_names,
+    }
 
     if filename is not None:
-        if filename[-4:] != '.bz2':
+        if filename[-4:] != ".bz2":
             filename += ".bz2"
 
         with bz2.BZ2File(filename, "wb") as file_handle:
@@ -374,22 +404,24 @@ def load_dataset_dump(filename):
     """
 
     if not os.path.exists(filename):
-        raise IOError("File {} does not exist, use load_dataset to download file".format(filename))
+        raise IOError(
+            "File {} does not exist, use load_dataset to download file".format(filename)
+        )
 
-    if filename[-4:] != '.bz2':
+    if filename[-4:] != ".bz2":
         filename += ".bz2"
 
     with bz2.BZ2File(filename, "r") as file_handle:
         data = pickle.load(file_handle)
 
-    return data['X'], data['y'], data['features'], data['labels']
+    return data["X"], data["y"], data["features"], data["labels"]
 
 
 def _download_single_file(data_file_name, target_file_name, base_url=None):
     base_url = base_url or _get_download_base_url()
     r = requests.get(base_url + data_file_name, stream=True)
     if r.status_code == 200:
-        with open(target_file_name, 'wb') as f:
+        with open(target_file_name, "wb") as f:
             r.raw.decode_content = True
             shutil.copyfileobj(r.raw, f)
     else:

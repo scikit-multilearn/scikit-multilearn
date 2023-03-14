@@ -138,12 +138,20 @@ class IGraphLabelGraphClusterer(LabelGraphClustererBase):
     """
 
     _METHODS = {
-        'fastgreedy': lambda graph, w=None: graph.community_fastgreedy(weights=w).as_clustering(),
-        'infomap': lambda graph, w=None: graph.community_infomap(edge_weights=w),
-        'label_propagation': lambda graph, w=None: graph.community_label_propagation(weights=w),
-        'leading_eigenvector': lambda graph, w=None: graph.community_leading_eigenvector(weights=w),
-        'multilevel': lambda graph, w=None: graph.community_multilevel(weights=w),
-        'walktrap': lambda graph, w=None: graph.community_walktrap(weights=w).as_clustering(),
+        "fastgreedy": lambda graph, w=None: graph.community_fastgreedy(
+            weights=w
+        ).as_clustering(),
+        "infomap": lambda graph, w=None: graph.community_infomap(edge_weights=w),
+        "label_propagation": lambda graph, w=None: graph.community_label_propagation(
+            weights=w
+        ),
+        "leading_eigenvector": lambda graph, w=None: graph.community_leading_eigenvector(
+            weights=w
+        ),
+        "multilevel": lambda graph, w=None: graph.community_multilevel(weights=w),
+        "walktrap": lambda graph, w=None: graph.community_walktrap(
+            weights=w
+        ).as_clustering(),
     }
 
     def __init__(self, graph_builder, method):
@@ -152,7 +160,8 @@ class IGraphLabelGraphClusterer(LabelGraphClustererBase):
 
         if method not in IGraphLabelGraphClusterer._METHODS:
             raise ValueError(
-                "{} not a supported igraph community detection method".format(method))
+                "{} not a supported igraph community detection method".format(method)
+            )
 
     def fit_predict(self, X, y):
         """Performs clustering on y and returns list of label lists
@@ -184,9 +193,11 @@ class IGraphLabelGraphClusterer(LabelGraphClustererBase):
         self.graph_ = Graph(
             edges=[x for x in edge_map],
             vertex_attrs=dict(name=list(range(1, y.shape[1] + 1))),
-            edge_attrs=self.weights_
+            edge_attrs=self.weights_,
         )
 
         return np.array(
-            IGraphLabelGraphClusterer._METHODS[self.method](self.graph_, self.weights_['weight'])
+            IGraphLabelGraphClusterer._METHODS[self.method](
+                self.graph_, self.weights_["weight"]
+            )
         )

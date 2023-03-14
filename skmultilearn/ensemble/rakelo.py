@@ -80,16 +80,25 @@ class RakelO(MLClassifierBase):
 
     """
 
-    def __init__(self, base_classifier=None, model_count=None, labelset_size=3, base_classifier_require_dense=None):
+    def __init__(
+        self,
+        base_classifier=None,
+        model_count=None,
+        labelset_size=3,
+        base_classifier_require_dense=None,
+    ):
         super(RakelO, self).__init__()
 
         self.model_count = model_count
         self.labelset_size = labelset_size
         self.base_classifier = base_classifier
         self.base_classifier_require_dense = base_classifier_require_dense
-        self.copyable_attrs = ['model_count', 'labelset_size',
-                               'base_classifier_require_dense',
-                               'base_classifier']
+        self.copyable_attrs = [
+            "model_count",
+            "labelset_size",
+            "base_classifier_require_dense",
+            "base_classifier",
+        ]
 
     def fit(self, X, y):
         """Fits classifier to training data
@@ -109,14 +118,14 @@ class RakelO(MLClassifierBase):
         self.classifier = MajorityVotingClassifier(
             classifier=LabelPowerset(
                 classifier=self.base_classifier,
-                require_dense=self.base_classifier_require_dense
+                require_dense=self.base_classifier_require_dense,
             ),
             clusterer=RandomLabelSpaceClusterer(
                 cluster_size=self.labelset_size,
                 cluster_count=self.model_count,
-                allow_overlap=True
+                allow_overlap=True,
             ),
-            require_dense=[False, False]
+            require_dense=[False, False],
         )
         return self.classifier.fit(X, y)
 
