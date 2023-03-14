@@ -31,17 +31,17 @@ from .matrix import MatrixLabelSpaceClusterer
 from .random import RandomLabelSpaceClusterer
 
 __all__ = [
-    'FixedLabelSpaceClusterer',
-    'LabelCooccurrenceGraphBuilder',
-    'MatrixLabelSpaceClusterer',
-    'RandomLabelSpaceClusterer'
+    "FixedLabelSpaceClusterer",
+    "LabelCooccurrenceGraphBuilder",
+    "MatrixLabelSpaceClusterer",
+    "RandomLabelSpaceClusterer",
 ]
 
 # graphtool import optional (is GPL-ed, does not work on windows)
 try:
     from .graphtool import GraphToolLabelGraphClusterer, StochasticBlockModel
 
-    __all__ += ['GraphToolLabelGraphClusterer', 'StochasticBlockModel']
+    __all__ += ["GraphToolLabelGraphClusterer", "StochasticBlockModel"]
 except ImportError:
     pass
 
@@ -49,7 +49,7 @@ except ImportError:
 try:
     from .igraph import IGraphLabelGraphClusterer
 
-    __all__ += ['IGraphLabelGraphClusterer']
+    __all__ += ["IGraphLabelGraphClusterer"]
 except ImportError:
     pass
 
@@ -57,6 +57,6 @@ except ImportError:
 try:
     from .networkx import NetworkXLabelGraphClusterer
 
-    __all__ += ['NetworkXLabelGraphClusterer']
+    __all__ += ["NetworkXLabelGraphClusterer"]
 except ImportError:
     pass

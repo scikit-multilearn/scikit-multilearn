@@ -10,6 +10,7 @@ import scipy.sparse as sp
 # inspired by implementation by Kuan-Hao Huang
 # https://github.com/ej0cl6/csmlc
 
+
 class CLEMS(BaseEstimator):
     """Embed the label space using a label network embedder from OpenNE
 
@@ -110,22 +111,28 @@ class CLEMS(BaseEstimator):
         delta = np.zeros((2 * n_unique, 2 * n_unique))
         for i in range(n_unique):
             for j in range(n_unique):
-                delta[i, n_unique + j] = np.sqrt(self.measure(y_unique[None, i], y_unique[None, j]))
+                delta[i, n_unique + j] = np.sqrt(
+                    self.measure(y_unique[None, i], y_unique[None, j])
+                )
                 delta[n_unique + j, i] = delta[i, n_unique + j]
 
         # calculate MDS embedding
         params = copy(self.params)
-        params['n_components'] = y.shape[1]
-        params['n_uq'] = n_unique
-        params['uq_weight'] = nearest_points_counts
-        params['dissimilarity'] = "precomputed"
+        params["n_components"] = y.shape[1]
+        params["n_uq"] = n_unique
+        params["uq_weight"] = nearest_points_counts
+        params["dissimilarity"] = "precomputed"
         self.embedder_ = _MDSW(**params)
 
         y_unique_embedded = self.embedder_.fit(delta).embedding_
         y_unique_limited_to_before_trick = y_unique_embedded[n_unique:]
 
         knn_to_extend_embeddings_to_other_combinations = NearestNeighbors(n_neighbors=1)
-        knn_to_extend_embeddings_to_other_combinations.fit(y_unique_limited_to_before_trick)
-        neighboring_embeddings_indices = knn_to_extend_embeddings_to_other_combinations.kneighbors(y)[1][:, 0]
+        knn_to_extend_embeddings_to_other_combinations.fit(
+            y_unique_limited_to_before_trick
+        )
+        neighboring_embeddings_indices = (
+            knn_to_extend_embeddings_to_other_combinations.kneighbors(y)[1][:, 0]
+        )
 
         return X, y_unique_embedded[neighboring_embeddings_indices]

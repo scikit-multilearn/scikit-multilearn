@@ -83,14 +83,22 @@ class MLTSVM(MLClassifierBase):
 
     """
 
-    def __init__(self, c_k=0, sor_omega=1.0, threshold=1e-6, lambda_param=1.0, max_iteration=500):
+    def __init__(
+        self, c_k=0, sor_omega=1.0, threshold=1e-6, lambda_param=1.0, max_iteration=500
+    ):
         super(MLClassifierBase, self).__init__()
         self.max_iteration = max_iteration
         self.threshold = threshold
         self.lambda_param = lambda_param  # TODO: possibility to add different lambda to different labels
         self.c_k = c_k
         self.sor_omega = sor_omega
-        self.copyable_attrs = ['c_k', 'sor_omega', 'lambda_param', 'threshold', 'max_iteration']
+        self.copyable_attrs = [
+            "c_k",
+            "sor_omega",
+            "lambda_param",
+            "threshold",
+            "max_iteration",
+        ]
 
     def fit(self, X, Y):
         n_labels = Y.shape[1]
@@ -110,7 +118,9 @@ class MLTSVM(MLClassifierBase):
             # Calculate the parameter Q for overrelaxation
             H_k = _get_x_class_instances(X_bias, Y, label)
             G_k = _get_x_noclass_instances(X_bias, Y, label)
-            Q_knoPrefixGk = _inv((H_k.T).dot(H_k) + self.lambda_param * identity_matrix).dot(G_k.T)
+            Q_knoPrefixGk = _inv(
+                (H_k.T).dot(H_k) + self.lambda_param * identity_matrix
+            ).dot(G_k.T)
             Q_k = G_k.dot(Q_knoPrefixGk).A
             Q_k = (Q_k + Q_k.T) / 2.0
 
@@ -126,7 +136,9 @@ class MLTSVM(MLClassifierBase):
 
     def predict(self, X):
         X_with_bias = _hstack(X, np.ones((X.shape[0], 1), dtype=X.dtype))
-        wk_norms_multiplicated = self.wk_norms[np.newaxis, :]  # change to form [[wk1, wk2, ..., wkk]]
+        wk_norms_multiplicated = self.wk_norms[
+            np.newaxis, :
+        ]  # change to form [[wk1, wk2, ..., wkk]]
         all_distances = (-X_with_bias.dot(self.wk_bk.T)) / wk_norms_multiplicated
         predicted_y = np.where(all_distances < self.treshold, 1, 0)
         # TODO: It's possible to add condition to: add label if no labels is in row.
@@ -147,15 +159,19 @@ class MLTSVM(MLClassifierBase):
         while is_not_enough:  # do while
             oldAlpha = oldnew_alpha
             for j in range(0, small_l):  # It's from last alpha to first
-                oldnew_alpha[j] = oldAlpha[j] - omegaW * D_inv[j] * (Q[j, :].T.dot(oldnew_alpha) - 1)
+                oldnew_alpha[j] = oldAlpha[j] - omegaW * D_inv[j] * (
+                    Q[j, :].T.dot(oldnew_alpha) - 1
+                )
             oldnew_alpha = oldnew_alpha.clip(0.0, self.c_k)
             alfa_norm_change = norm(oldnew_alpha - oldAlpha)
 
             if not was_going_down and last_alfa_norm_change > alfa_norm_change:
                 was_going_down = True
-            is_not_enough = alfa_norm_change > self.threshold and \
-                            nr_iter < self.max_iteration \
-                            and ((not was_going_down) or last_alfa_norm_change > alfa_norm_change)
+            is_not_enough = (
+                alfa_norm_change > self.threshold
+                and nr_iter < self.max_iteration
+                and ((not was_going_down) or last_alfa_norm_change > alfa_norm_change)
+            )
             # TODO: maybe add any(oldnew_alpha != oldAlpha)
 
             last_alfa_norm_change = alfa_norm_change

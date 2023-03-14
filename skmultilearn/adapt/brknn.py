@@ -12,7 +12,7 @@ class _BinaryRelevanceKNN(MLClassifierBase):
     def __init__(self, k=10):
         super(_BinaryRelevanceKNN, self).__init__()
         self.k = k  # Number of neighbours
-        self.copyable_attrs = ['k']
+        self.copyable_attrs = ["k"]
 
     def fit(self, X, y):
         """Fit classifier with training data
@@ -33,10 +33,10 @@ class _BinaryRelevanceKNN(MLClassifierBase):
         self
             fitted instance of self
         """
-        self.train_labelspace = get_matrix_in_format(y, 'csc')
+        self.train_labelspace = get_matrix_in_format(y, "csc")
         self._n_samples = self.train_labelspace.shape[0]
         self._n_labels = self.train_labelspace.shape[1]
-        self.knn_ = NearestNeighbors(self.k).fit(X)
+        self.knn_ = NearestNeighbors(n_neighbors=self.k).fit(X)
         return self
 
     def predict(self, X):
@@ -54,7 +54,12 @@ class _BinaryRelevanceKNN(MLClassifierBase):
             :code:`(n_samples, n_labels)`
         """
         self.neighbors_ = self.knn_.kneighbors(X, self.k, return_distance=False)
-        self.confidences_ = np.vstack([self.train_labelspace[n, :].tocsc().sum(axis=0) / self.k for n in self.neighbors_])
+        self.confidences_ = np.vstack(
+            [
+                self.train_labelspace[n, :].tocsc().sum(axis=0) / self.k
+                for n in self.neighbors_
+            ]
+        )
         return self._predict_variant(X)
 
 
@@ -131,7 +136,7 @@ class BRkNNaClassifier(_BinaryRelevanceKNN):
 
     def _predict_variant(self, X):
         # TODO: find out if moving the sparsity to compute confidences_ boots speed
-        return sparse.csr_matrix(np.rint(self.confidences_), dtype='i8')
+        return sparse.csr_matrix(np.rint(self.confidences_), dtype="i8")
 
 
 class BRkNNbClassifier(_BinaryRelevanceKNN):
@@ -206,14 +211,18 @@ class BRkNNbClassifier(_BinaryRelevanceKNN):
     """
 
     def _predict_variant(self, X):
-        avg_labels = [int(np.average(self.train_labelspace[n, :].sum(axis=1)).round()) for n in self.neighbors_]
+        avg_labels = [
+            int(np.average(self.train_labelspace[n, :].sum(axis=1)).round())
+            for n in self.neighbors_
+        ]
 
-        prediction = sparse.lil_matrix((X.shape[0], self._n_labels), dtype='i8')
-        top_labels = np.argpartition(self.confidences_, kth=min(avg_labels + [len(self.confidences_[0])]),
-                                     axis=1).tolist()
+        prediction = sparse.lil_matrix((X.shape[0], self._n_labels), dtype="i8")
+        top_labels = np.argpartition(
+            self.confidences_, kth=min(avg_labels + [len(self.confidences_[0])]), axis=1
+        ).tolist()
 
         for i in range(X.shape[0]):
-            for j in top_labels[i][-avg_labels[i]:]:
+            for j in top_labels[i][-avg_labels[i] :]:
                 prediction[i, j] += 1
 
         return prediction

@@ -8,8 +8,9 @@ SPARSE_FORMAT_TO_CONSTRUCTOR = {
     "csr": sp.csr_matrix,
     "dia": sp.dia_matrix,
     "dok": sp.dok_matrix,
-    "lil": sp.lil_matrix
+    "lil": sp.lil_matrix,
 }
+
 
 def get_matrix_in_format(original_matrix, matrix_format):
     """Converts matrix to format
@@ -44,6 +45,7 @@ def matrix_creation_function_for_format(sparse_format):
 
     return SPARSE_FORMAT_TO_CONSTRUCTOR[sparse_format]
 
+
 def measure_per_label(measure, y_true, y_predicted):
     """
     Return per label results of a scikit-learn compatible quality measure
@@ -63,9 +65,6 @@ def measure_per_label(measure, y_true, y_predicted):
         score from a given measure depending on what the measure returns
     """
     return [
-        measure(
-            y_true[:, i].toarray(),
-            y_predicted[:, i].toarray()
-        )
+        measure(y_true[:, i].toarray(), y_predicted[:, i].toarray())
         for i in range(y_true.shape[1])
     ]

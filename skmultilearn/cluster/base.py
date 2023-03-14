@@ -4,6 +4,7 @@ from builtins import object
 from ..utils import get_matrix_in_format
 from sklearn.base import BaseEstimator
 
+
 class GraphBuilderBase(object):
     """An abstract base class for a graph building class used in Label Space clustering.
 
@@ -15,7 +16,7 @@ class GraphBuilderBase(object):
         super(GraphBuilderBase, self).__init__()
 
     def transform(self, y):
-        """ Abstract method for graph edge map builder for a label space clusterer
+        """Abstract method for graph edge map builder for a label space clusterer
 
         Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
@@ -38,7 +39,7 @@ class LabelSpaceClustererBase(BaseEstimator):
         super(LabelSpaceClustererBase, self).__init__()
 
     def fit_predict(self, X, y):
-        """ Abstract method for clustering label space
+        """Abstract method for clustering label space
 
         Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
@@ -69,7 +70,7 @@ class LabelGraphClustererBase(object):
         self.graph_builder = graph_builder
 
     def fit_predict(self, X, y):
-        """ Abstract method for clustering label space
+        """Abstract method for clustering label space
 
         Implement it in your classifier according to`developer guide <../developer.ipynb>`_.
 
@@ -150,7 +151,9 @@ class LabelCooccurrenceGraphBuilder(GraphBuilderBase):
 
     """
 
-    def __init__(self, weighted=None, include_self_edges=None, normalize_self_edges=None):
+    def __init__(
+        self, weighted=None, include_self_edges=None, normalize_self_edges=None
+    ):
         super(LabelCooccurrenceGraphBuilder, self).__init__()
 
         if weighted not in [True, False]:
@@ -158,16 +161,23 @@ class LabelCooccurrenceGraphBuilder(GraphBuilderBase):
 
         if include_self_edges not in [True, False]:
             raise ValueError(
-                "Decision whether to include self edges needs to be a boolean")
+                "Decision whether to include self edges needs to be a boolean"
+            )
 
         if include_self_edges and (normalize_self_edges not in [True, False]):
-            raise ValueError("Decision whether to normalize self edges needs to be a boolean")
+            raise ValueError(
+                "Decision whether to normalize self edges needs to be a boolean"
+            )
 
         if normalize_self_edges and not include_self_edges:
-            raise ValueError("Include self edges must be set to true if normalization is true")
+            raise ValueError(
+                "Include self edges must be set to true if normalization is true"
+            )
 
         if normalize_self_edges and not weighted:
-            raise ValueError("Normalizing self-edge weights_ does not make sense in an unweighted graph")
+            raise ValueError(
+                "Normalizing self-edge weights_ does not make sense in an unweighted graph"
+            )
 
         self.is_weighted = weighted
         self.include_self_edges = include_self_edges
@@ -190,7 +200,7 @@ class LabelCooccurrenceGraphBuilder(GraphBuilderBase):
         Dict[(int, int), float]
             weight map with a tuple of label indexes as keys and a the number of samples in which the two co-occurred
         """
-        label_data = get_matrix_in_format(y, 'lil')
+        label_data = get_matrix_in_format(y, "lil")
         label_count = label_data.shape[1]
         edge_map = {}
 

@@ -25,8 +25,8 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
     def _generate_data_subset(self, y, subset, axis):
         """Subset rows or columns from matrix
 
-        This function subsets the array of binary label vectors to 
-        include only certain labels. 
+        This function subsets the array of binary label vectors to
+        include only certain labels.
 
         Parameters
         ----------
@@ -35,7 +35,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         subset: array-like of integers
             array of integers, indices that will be subsetted from
             array-likes in y
-        axis: integer 0 for 'rows', 1 for 'labels', 
+        axis: integer 0 for 'rows', 1 for 'labels',
             control variable for whether to return rows or labels as
             indexed by subset
 
@@ -53,11 +53,11 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         return return_data
 
-    def _ensure_input_format(self, X, sparse_format='csr', enforce_sparse=False):
+    def _ensure_input_format(self, X, sparse_format="csr", enforce_sparse=False):
         """Ensure the desired input format
 
         This function ensures that input format follows the
-        density/sparsity requirements of base classifier. 
+        density/sparsity requirements of base classifier.
 
         Parameters
         ----------
@@ -72,10 +72,10 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         -------
         array-like or sparse matrix
             Transformed X values of shape :code:`(n_samples, n_features)`
-            
+
         .. note:: If :code:`require_dense` was set to :code:`True` for
             input features in the constructor, the returned value is an
-            array-like of array-likes. If :code:`require_dense` is 
+            array-like of array-likes. If :code:`require_dense` is
             set to :code:`false`, a sparse matrix of format
             :code:`sparse_format` is returned, if possible - without cloning.
         """
@@ -96,11 +96,11 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
             else:
                 return matrix_creation_function_for_format(sparse_format)(X)
 
-    def _ensure_output_format(self, matrix, sparse_format='csr', enforce_sparse=False):
+    def _ensure_output_format(self, matrix, sparse_format="csr", enforce_sparse=False):
         """Ensure the desired output format
 
         This function ensures that output format follows the
-        density/sparsity requirements of base classifier. 
+        density/sparsity requirements of base classifier.
 
         Parameters
         ----------
@@ -122,10 +122,10 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         -------
         array-like or sparse matrix
             Transformed X values of shape :code:`(n_samples, n_features)`
-            
+
         .. note:: If :code:`require_dense` was set to :code:`True` for
             input features in the constructor, the returned value is an
-            array-like of array-likes. If :code:`require_dense` is 
+            array-like of array-likes. If :code:`require_dense` is
             set to :code:`false`, a sparse matrix of format
             :code:`sparse_format` is returned, if possible - without cloning.
         """
@@ -218,7 +218,7 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         Returns
         -------
         out : dict
-            dictionary of all parameters and their values. If 
+            dictionary of all parameters and their values. If
             :code:`deep=True` the dictionary also holds the parameters
             of the parameters.
         """
@@ -227,16 +227,16 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
         for attr in self.copyable_attrs:
             out[attr] = getattr(self, attr)
 
-            if hasattr(getattr(self, attr), 'get_params') and deep:
+            if hasattr(getattr(self, attr), "get_params") and deep:
                 deep_items = list(getattr(self, attr).get_params().items())
-                out.update((attr + '__' + k, val) for k, val in deep_items)
+                out.update((attr + "__" + k, val) for k, val in deep_items)
 
         return out
 
     def set_params(self, **parameters):
         """Propagate parameters to sub-objects
 
-        Set parameters as returned by :code:`get_params`. Please 
+        Set parameters as returned by :code:`get_params`. Please
         see this `link`_.
 
         .. _link: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/base.py#L243
@@ -247,29 +247,31 @@ class MLClassifierBase(BaseEstimator, ClassifierMixin):
 
         valid_params = self.get_params(deep=True)
 
-        parameters_current_level = [x for x in parameters if '__' not in x]
+        parameters_current_level = [x for x in parameters if "__" not in x]
         for parameter in parameters_current_level:
             value = parameters[parameter]
 
             if parameter in valid_params:
                 setattr(self, parameter, value)
             else:
-                raise ValueError('Invalid parameter %s for estimator %s. '
-                                 'Check the list of available parameters '
-                                 'with `estimator.get_params().keys()`.' %
-                                 (parameter, self))
+                raise ValueError(
+                    "Invalid parameter %s for estimator %s. "
+                    "Check the list of available parameters "
+                    "with `estimator.get_params().keys()`." % (parameter, self)
+                )
 
-        parameters_below_current_level = [x for x in parameters if '__' in x]
+        parameters_below_current_level = [x for x in parameters if "__" in x]
         parameters_grouped_by_current_level = {object: {} for object in valid_params}
 
         for parameter in parameters_below_current_level:
-            object_name, sub_param = parameter.split('__', 1)
+            object_name, sub_param = parameter.split("__", 1)
 
             if object_name not in parameters_grouped_by_current_level:
-                raise ValueError('Invalid parameter %s for estimator %s. '
-                                 'Check the list of available parameters '
-                                 'with `estimator.get_params().keys()`.' %
-                                 (object_name, self))
+                raise ValueError(
+                    "Invalid parameter %s for estimator %s. "
+                    "Check the list of available parameters "
+                    "with `estimator.get_params().keys()`." % (object_name, self)
+                )
 
             value = parameters[parameter]
             parameters_grouped_by_current_level[object_name][sub_param] = value

@@ -11,5 +11,4 @@ Two base classifier classes are in use currently in scikit-multilearn:
 from .base import MLClassifierBase
 from .problem_transformation import ProblemTransformationBase
 
-__all__ = ["MLClassifierBase", 
-           "ProblemTransformationBase"]
+__all__ = ["MLClassifierBase", "ProblemTransformationBase"]
