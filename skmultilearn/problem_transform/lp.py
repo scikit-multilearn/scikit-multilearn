@@ -50,7 +50,7 @@ class LabelPowerset(ProblemTransformationBase):
         from sklearn.ensemble import RandomForestClassifier
 
         # initialize LabelPowerset multi-label classifier with a RandomForest
-        classifier = ClassifierChain(
+        classifier = LabelPowerset(
             classifier = RandomForestClassifier(n_estimators=100),
             require_dense = [False, True]
         )
