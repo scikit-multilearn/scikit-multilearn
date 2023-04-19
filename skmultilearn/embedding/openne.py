@@ -149,7 +149,7 @@ class OpenNetworkEmbedder:
         self.fit_transform(X, y)
 
     def fit_transform(self, X, y):
-        tf.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
         self._init_openne_graph(y)
         embedding_class, dimension_key = self._EMBEDDINGS[self.embedding]
         param_dict = copy(self.param_dict)
