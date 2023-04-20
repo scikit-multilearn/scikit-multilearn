@@ -76,7 +76,7 @@ import itertools
 from sklearn.utils import check_random_state
 
 
-def iterative_train_test_split(X, y, test_size, random_state=None):
+def iterative_train_test_split(X, y, test_size, random_state=None, shuffle=False):
     """Iteratively stratified train/test split
 
     Parameters
@@ -86,6 +86,10 @@ def iterative_train_test_split(X, y, test_size, random_state=None):
 
     random_state : None | int | np.random.RandomState
         the random state seed (optional)
+
+    shuffle : bool
+        Whether to shuffle the data before splitting into batches. Note that the samples within each split
+        will not be shuffled.
 
     Returns
     -------
@@ -99,6 +103,12 @@ def iterative_train_test_split(X, y, test_size, random_state=None):
         sample_distribution_per_fold=[test_size, 1.0 - test_size],
         random_state=random_state,
     )
+    if shuffle:
+        indices = list(y.index)
+        check_random_state(random_state).shuffle(indices)
+        X = X.loc[indices]
+        y = y.loc[indices]
+
     train_indexes, test_indexes = next(stratifier.split(X, y))
 
     X_train, y_train = X.iloc[train_indexes, :], y.iloc[train_indexes, :]
