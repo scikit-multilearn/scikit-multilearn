@@ -126,7 +126,7 @@ class MLkNN(MLClassifierBase):
         self.s = s  # Smooth parameter
         self.ignore_first_neighbours = ignore_first_neighbours
         self.n_jobs = n_jobs
-        self.knn_ = NearestNeighbors(self.k, n_jobs=self.n_jobs)
+        self.knn_ = NearestNeighbors(n_neighbors=self.k)
         self.copyable_attrs = ["k", "s", "ignore_first_neighbours", "n_jobs"]
 
     def _compute_prior(self, y):
