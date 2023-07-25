@@ -145,7 +145,7 @@ class MLkNN(MLClassifierBase):
             the prior probability given false
         """
         prior_prob_true = np.array(
-            (self.s + y.sum(axis=0)) / (self.s * 2 + self._num_instances)
+            (self.s + y.sum(axis=0)) / (self.s * 2 + y.isfinite().sum(axis=0))
         )[0]
         prior_prob_false = 1 - prior_prob_true
 
@@ -188,7 +188,7 @@ class MLkNN(MLClassifierBase):
             for label in range(self._num_labels):
                 if label_info[instance, label] == 1:
                     c[label, deltas[0, label]] += 1
-                else:
+                elif label_info[instance, label] == 0:
                     cn[label, deltas[0, label]] += 1
 
         c_sum = c.sum(axis=1)
