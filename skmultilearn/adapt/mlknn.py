@@ -1,6 +1,5 @@
 from builtins import range
 from ..base import MLClassifierBase
-from ..utils import get_matrix_in_format
 
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
@@ -126,7 +125,7 @@ class MLkNN(MLClassifierBase):
         self.s = s  # Smooth parameter
         self.ignore_first_neighbours = ignore_first_neighbours
         self.n_jobs = n_jobs
-        self.knn_ = NearestNeighbors(self.k, n_jobs=self.n_jobs)
+        self.knn_ = NearestNeighbors(n_neighbors=self.k, n_jobs=self.n_jobs)
         self.copyable_attrs = ["k", "s", "ignore_first_neighbours", "n_jobs"]
 
     def _compute_prior(self, y):
@@ -134,7 +133,7 @@ class MLkNN(MLClassifierBase):
 
         Parameters
         ----------
-        y : numpy.ndarray or scipy.sparse
+        y : numpy.ndarray
             the training labels
 
         Returns
@@ -144,9 +143,9 @@ class MLkNN(MLClassifierBase):
         numpy.ndarray
             the prior probability given false
         """
-        prior_prob_true = np.array(
-            (self.s + y.sum(axis=0)) / (self.s * 2 + y.isfinite().sum(axis=0))
-        )[0]
+
+        # Exclude NaNs from the computation of # examples for each label in the denominator
+        prior_prob_true = (self.s + np.nansum(y, axis=0)) / (self.s * 2 + np.isfinite(y).sum(axis=0))
         prior_prob_false = 1 - prior_prob_true
 
         return (prior_prob_true, prior_prob_false)
@@ -159,7 +158,7 @@ class MLkNN(MLClassifierBase):
         X : numpy.ndarray or scipy.sparse
             input features, can be a dense or sparse matrix of size
             :code:`(n_samples, n_features)`
-        y : numpy.ndaarray or scipy.sparse {0,1}
+        y : numpy.ndaarray {0,1}
             binary indicator matrix with label assignments.
 
         Returns
@@ -171,35 +170,35 @@ class MLkNN(MLClassifierBase):
         """
 
         self.knn_.fit(X)
+        # c represents the distribution of count of positive labels by number of neighbors for each label
+        # TODO: Change to dense?
         c = sparse.lil_matrix((self._num_labels, self.k + 1), dtype="i8")
+        # cn represents the distribution of count of negative labels by number of neighbors for each label
+        # TODO: Change to dense?
         cn = sparse.lil_matrix((self._num_labels, self.k + 1), dtype="i8")
 
-        label_info = get_matrix_in_format(y, "dok")
-
-        neighbors = [
-            a[self.ignore_first_neighbours :]
-            for a in self.knn_.kneighbors(
-                X, self.k + self.ignore_first_neighbours, return_distance=False
-            )
-        ]
+        neighbors = self.knn_.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)
+        neighbors = [a[self.ignore_first_neighbours :] for a in neighbors]
 
         for instance in range(self._num_instances):
-            deltas = label_info[neighbors[instance], :].sum(axis=0)
+            # Deltas is the number of neighbors that have positive label for each label for this instance
+            # Shape: (1, num_labels)
+            deltas = np.nansum(y[neighbors[instance], :], axis=0).astype(int)
             for label in range(self._num_labels):
-                if label_info[instance, label] == 1:
-                    c[label, deltas[0, label]] += 1
-                elif label_info[instance, label] == 0:
-                    cn[label, deltas[0, label]] += 1
+                # Based on whether the instance's ground truth label is 0 or 1, increment the corresponding count
+                # for [this label] and [number of neighbors of this instance that are positive for this label]
+                if y[instance, label] == 1:
+                    c[label, deltas[label]] += 1
+                elif y[instance, label] == 0:
+                    cn[label, deltas[label]] += 1
 
-        c_sum = c.sum(axis=1)
-        cn_sum = cn.sum(axis=1)
+        c_sum = c.sum(axis=1)  # Sum of positive labels for each label
+        cn_sum = cn.sum(axis=1)  # Sum of negative labels for each label
 
-        cond_prob_true = sparse.lil_matrix(
-            (self._num_labels, self.k + 1), dtype="float"
-        )
-        cond_prob_false = sparse.lil_matrix(
-            (self._num_labels, self.k + 1), dtype="float"
-        )
+        # TODO: Change to dense?
+        cond_prob_true = sparse.lil_matrix((self._num_labels, self.k + 1), dtype="float")
+        # TODO: Change to dense?
+        cond_prob_false = sparse.lil_matrix((self._num_labels, self.k + 1), dtype="float")
         for label in range(self._num_labels):
             for neighbor in range(self.k + 1):
                 cond_prob_true[label, neighbor] = (self.s + c[label, neighbor]) / (
@@ -218,7 +217,7 @@ class MLkNN(MLClassifierBase):
         X : numpy.ndarray or scipy.sparse
             input features, can be a dense or sparse matrix of size
             :code:`(n_samples, n_features)`
-        y : numpy.ndaarray or scipy.sparse {0,1}
+        y : numpy.ndarray {0,1}
             binary indicator matrix with label assignments.
 
         Returns
@@ -227,17 +226,13 @@ class MLkNN(MLClassifierBase):
             fitted instance of self
         """
 
-        self._label_cache = get_matrix_in_format(y, "lil")
+        self._label_cache = y
         self._num_instances = self._label_cache.shape[0]
         self._num_labels = self._label_cache.shape[1]
         # Computing the prior probabilities
-        self._prior_prob_true, self._prior_prob_false = self._compute_prior(
-            self._label_cache
-        )
+        self._prior_prob_true, self._prior_prob_false = self._compute_prior(self._label_cache)
         # Computing the posterior probabilities
-        self._cond_prob_true, self._cond_prob_false = self._compute_cond(
-            X, self._label_cache
-        )
+        self._cond_prob_true, self._cond_prob_false = self._compute_cond(X, self._label_cache)
         return self
 
     def predict(self, X):
@@ -256,24 +251,14 @@ class MLkNN(MLClassifierBase):
         """
 
         result = sparse.lil_matrix((X.shape[0], self._num_labels), dtype="i8")
-        neighbors = [
-            a[self.ignore_first_neighbours :]
-            for a in self.knn_.kneighbors(
-                X, self.k + self.ignore_first_neighbours, return_distance=False
-            )
-        ]
+        neighbors = self.knn_.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)
+        neighbors = [a[self.ignore_first_neighbours :] for a in neighbors]
         for instance in range(X.shape[0]):
-            deltas = self._label_cache[neighbors[instance],].sum(axis=0)
+            deltas = np.nansum(self._label_cache[neighbors[instance], :], axis=0).astype(int)
 
             for label in range(self._num_labels):
-                p_true = (
-                    self._prior_prob_true[label]
-                    * self._cond_prob_true[label, deltas[0, label]]
-                )
-                p_false = (
-                    self._prior_prob_false[label]
-                    * self._cond_prob_false[label, deltas[0, label]]
-                )
+                p_true = self._prior_prob_true[label] * self._cond_prob_true[label, deltas[label]]
+                p_false = self._prior_prob_false[label] * self._cond_prob_false[label, deltas[label]]
                 result[instance, label] = int(p_true >= p_false)
 
         return result
@@ -293,24 +278,14 @@ class MLkNN(MLClassifierBase):
             with shape :code:`(n_samples, n_labels)`
         """
         result = sparse.lil_matrix((X.shape[0], self._num_labels), dtype="float")
-        neighbors = [
-            a[self.ignore_first_neighbours :]
-            for a in self.knn_.kneighbors(
-                X, self.k + self.ignore_first_neighbours, return_distance=False
-            )
-        ]
+        neighbors = self.knn_.kneighbors(X, self.k + self.ignore_first_neighbours, return_distance=False)
+        neighbors = [a[self.ignore_first_neighbours :] for a in neighbors]
         for instance in range(X.shape[0]):
-            deltas = self._label_cache[neighbors[instance],].sum(axis=0)
+            deltas = np.nansum(self._label_cache[neighbors[instance], :], axis=0).astype(int)
 
             for label in range(self._num_labels):
-                p_true = (
-                    self._prior_prob_true[label]
-                    * self._cond_prob_true[label, deltas[0, label]]
-                )
-                p_false = (
-                    self._prior_prob_false[label]
-                    * self._cond_prob_false[label, deltas[0, label]]
-                )
+                p_true = self._prior_prob_true[label] * self._cond_prob_true[label, deltas[label]]
+                p_false = self._prior_prob_false[label] * self._cond_prob_false[label, deltas[label]]
                 result[instance, label] = p_true / (p_true + p_false)
 
         return result
