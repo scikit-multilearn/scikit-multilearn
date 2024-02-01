@@ -159,10 +159,11 @@ def _get_most_desired_combination(samples_with_combination):
         number_of_combinations, support_size = (len(set(combination)), len(evidence))
         if support_size == 0:
             continue
-        if currently_chosen is None or (
-            best_number_of_combinations < number_of_combinations
-            and best_support_size > support_size
-        ):
+        if currently_chosen is None or
+            number_of_combinations > best_number_of_combinations or (
+                number_of_combinations == best_number_of_combinations
+                and support_size < best_support_size
+            ):
             currently_chosen = combination
             best_number_of_combinations, best_support_size = (
                 number_of_combinations,
